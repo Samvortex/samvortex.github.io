@@ -1,0 +1,11 @@
+*+html{overflow:auto;}
+.img_inner, .img_inner img,  a.btn, #pagination a, .socials a {behavior:url(js/PIE.htc); position: relative;}
+
+ul.sf-menu>li:first-child:hover, .logos a:hover  {
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+
+.projects img:hover {
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=10);
+}
+

@@ -1,90 +1,184 @@
- <!DOCTYPE html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博客网站</title>
-    <link rel="stylesheet" href="hstyles.css">
-    <script defer src="hscript.js"></script>
+<title>Home</title>
+<meta charset="utf-8">
+<meta name="description" content="Your description">
+<meta name="keywords" content="Your keywords">
+<meta name="author" content="Your name">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/superfish.css">
+<link rel="stylesheet" href="css/grid.css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/superfish.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/jquery.cycle.all.js"></script>
+<script>
+$(function() {
+    $('#cycle').cycle({
+        fx:     'fade',
+        speed:  1000,
+        timeout: 4000,
+        pager:  '#pagination',
+    });
+});
+</script>
+<!--[if lt IE 8]>
+   <div style=' clear: both; text-align:center; position: relative;'>
+     <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+       <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
+       <link href='http://fonts.googleapis.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
+       <link href='http://fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
+       <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+    </a>
+  </div>
+<![endif]-->
+<!--[if lt IE 9]>
+	<script src="js/html5.js"></script>
+	<link rel="stylesheet" href="css/ie.css">
+<![endif]-->
 </head>
 <body>
-    <header>
-        <h1>博客网站</h1>
-        <nav>
+<!-- Header -->
+<header>
+  <div class="container_12">
+    <div class="grid_12">
+      <h1><a href="index.html">Dolmar</a></h1>
+      <nav>
+        <ul class="sf-menu">
+          <li class="current"><a href="index.html"></a></li>
+          <li><a href="index-1.html">About us</a>
             <ul>
-                <li><a href="#tech-discussions">技术讨论</a></li>
-                <li><a href="#hot-topics">热点讨论</a></li>
-                <li><a href="#interactive-learning">互动学习</a></li>
-                <li><a href="#knowledge-accumulation">知识积累</a></li>
-                <li><a href="#growth-records">成长记录</a></li>
+              <li><a href="#">Dolore ipsu</a></li>
+              <li><a href="#">Consecte</a>
+                <ul>
+                  <li><a href="#">Dolore ipsu</a></li>
+                  <li><a href="#">Consecte</a></li>
+                  <li><a href="#">Elit Conseq</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Elit Conseq</a></li>
             </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="tech-discussions">
-            <h2>技术讨论</h2>
-            <article>
-                <h3>最新技术</h3>
-                <p>这里讨论最新的技术趋势和发展。</p>
-            </article>
-            <article>
-                <h3>技术分享</h3>
-                <p>分享你的技术经验和心得。</p>
-            </article>
-        </section>
-
-        <section id="hot-topics">
-            <h2>热点讨论</h2>
-            <article>
-                <h3>行业新闻</h3>
-                <p>讨论最新的行业新闻和动态。</p>
-            </article>
-            <article>
-                <h3>热门话题</h3>
-                <p>参与热门话题的讨论和分析。</p>
-            </article>
-        </section>
-
-        <section id="interactive-learning">
-            <h2>互动学习</h2>
-            <article>
-                <h3>在线课程</h3>
-                <p>参与在线课程，提升技能。</p>
-            </article>
-            <article>
-                <h3>学习资源</h3>
-                <p>分享和获取有价值的学习资源。</p>
-            </article>
-        </section>
-
-        <section id="knowledge-accumulation">
-            <h2>知识积累</h2>
-            <article>
-                <h3>知识库</h3>
-                <p>构建和维护你的个人知识库。</p>
-            </article>
-            <article>
-                <h3>文档整理</h3>
-                <p>整理和管理你的文档和资料。</p>
-            </article>
-        </section>
-
-        <section id="growth-records">
-            <h2>成长记录</h2>
-            <article>
-                <h3>成长日记</h3>
-                <p>记录你的成长历程和心得。</p>
-            </article>
-            <article>
-                <h3>目标设定</h3>
-                <p>设定和追踪你的个人目标。</p>
-            </article>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 博客网站. 保留所有权利.</p>
-    </footer>
+          </li>
+          <li><a href="index-2.html">works</a></li>
+          <li><a href="index-3.html">clients</a></li>
+          <li><a href="index-4.html">Contacts</a></li>
+        </ul>
+        <div class="clear"></div>
+      </nav>
+    </div>
+    <div class="clear"></div>
+  </div>
+</header>
+<div class="banner">
+  <div class="container_12">
+    <div class="grid_12">
+      <h2>We design, develop and deliver.</h2>
+      <div class="center"> <img src="images/banner_img.png" alt=""><br>
+        <a href="#" class="btn">More Info</a> </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="block1">
+  <div class="container_12">
+    <div class="grid_12">
+      <h2>shortly about us</h2>
+    </div>
+    <div class="clear"></div>
+    <div class="grid_3 center">
+      <h3>Web</h3>
+      HTML 5 / CSS 3 Integration<br>
+      Web Design &amp; Illustration<br>
+      CMS Websites (ExpressionEngine)<br>
+      Seo &amp; Analytics<br>
+      UI Design &amp; Icons <br>
+      Mobile Friendly </div>
+    <div class="grid_3 center">
+      <h3>identity</h3>
+      Research &amp; Strategy<br>
+      Brand Identity Development<br>
+      Logo Design<br>
+      Business Cards<br>
+      Portfolio Albums<br>
+      Letterheads </div>
+    <div class="grid_6">
+      <h3 class="green">We are top rated web design bureau with real experts showing excellence in professional web design & development.</h3>
+      Mes cuml dia sed in lacus ut eniascet ingerto aliiqt es sitet amet eismod ictor ut ligulate ameti dapibus ticdu nt mtsent justo dolor ltissim comme. 
+      Mes cuml dia sed inertio lacus ut eniascet ingerto aliiqt. </div>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="content">
+  <div class="container_12">
+    <div class="grid_12">
+      <h2 class="center head1"> featured works </h2>
+      <div id="cycle">
+        <div> <img src="images/page1_img1.png" alt="">
+          <div class="wrapper">
+            <h3>dolore ipsum</h3>
+            <p>Mes cuml dia sed in lacus ut eniascet ingerto aliiqt es sitetel amet eismod ictor ut ligulate ameti dapibus ticdu nt mtsent et  dolore ipsum usto dolor ltissim comme. </p>
+            <ul class="list">
+              <li><a href="#">Lorem ipsum dolor sit amet. </a></li>
+              <li><a href="#">Consectetur adipiscing elit. </a></li>
+              <li><a href="#">Quisque congue mi at ipsu. </a></li>
+              <li><a href="#">Ullamcorper consectet proin.</a></li>
+            </ul>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div> <img src="images/page1_img2.png" alt="">
+          <div class="wrapper">
+            <h3>Lorem ipsum</h3>
+            <p>Nulla sollicitudin, velit at rhoncus aliquet, nibh eros convallis nunc, id lobortis risus neque dui, luctus at porta ut, elementum et ipsum.Morbi eget nisl metus.</p>
+             Cras dapibus rhoncus tincidunt.Vivamus nec sapien condimentum fringilla. Integer ac lectus leo; a tincidunt diam. Vestibulum rhoncus aliquam ultrices. Maecenas non libero porttitor neque condimentum mattis. Nunc libero turpis.
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div> <img src="images/page1_img3.png" alt="">
+          <div class="wrapper">
+            <h3>Mes cuml dia</h3>
+            <p>Mes cuml dia sed in lacus ut eniascet ingerto aliiqt es sitetel amet eismod ictor ut ligulate ameti dapibus ticdu nt mtsent et  dolore ipsum usto dolor ltissim comme. Nulla sollicitudin, velit at rhoncus aliquet, nibh eros convallis nunc, id lobortis risus neque dui, luctus at porta ut, elementum et ipsum. Morbi eget nisl metus </p>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div> <img src="images/page1_img4.png" alt="">
+          <div class="wrapper">
+            <h3>Vestibulum ipsum</h3>
+            <p>Mes cuml dia sed in lacus ut eniascet ingerto aliiqt es sitetel amet eismod ictor ut ligulate ameti dapibus ticdu nt mtsent et  dolore ipsum usto dolor ltissim comme. </p>
+            <ul class="list">
+              <li><a href="#">Lorem ipsum dolor sit amet. </a></li>
+              <li><a href="#">Consectetur adipiscing elit. </a></li>
+              <li><a href="#">Quisque congue mi at ipsu. </a></li>
+              <li><a href="#">Ullamcorper consectet proin.</a></li>
+            </ul>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="pagination"></div>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+<!--Footer-->
+<footer>
+  <div class="container_12">
+    <div class="grid_12">
+      <div class="footer">
+        <h3>Say hello</h3>
+        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit. Vestibulum ut tortor urnati dunt dolor. Nunc vulputate ultrices con sect etur donec semper lacinia ultri  dolore cie<br>
+          lorem ipsum commete.</p>
+        <div class="socials"> <a class="m0" href="#"><img src="images/mess.png" alt=""></a> <a href="#"><img src="images/fb.png" alt=""></a> <a href="#"><img src="images/twr.png" alt=""></a> <a href="#"><img src="images/gplus.png" alt=""></a> </div>
+        <div class="copy"><a href="index.html" class="footer_logo">Dolmar</a>&copy; 2013 | <a href="index-5.html">Privacy Policy</a> <!--{%FOOTER_LINK} --></div></div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</footer>
+<!-- Footer end-->
 </body>
 </html>

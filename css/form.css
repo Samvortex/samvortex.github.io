@@ -1,0 +1,92 @@
+/****Form****/
+
+#form {
+	padding-top: 8px;
+}
+#form input {
+	border: 1px solid #dadada;
+	font-size:14px;
+	color:#978e7c;
+	padding: 7px 12px 7px;
+	outline: medium none;
+	width: 274px;
+	height:18px;
+	float:left;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#form textarea {
+	border: 1px solid #dadada;
+	font-size:14px;
+	color:#978e7c;
+	height: 224px !important;
+	outline: medium none;
+	overflow: auto;
+	padding: 7px 12px 7px;
+	width: 274px;
+	position: relative;
+	resize:none;
+	float:left;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+}
+#form label {
+	position:relative;
+	display: block;
+	min-height: 44px;
+	float: left;
+	clear: left;
+}
+#form .error, #form .empty {
+	color: #FF0000;
+	display: none;
+	font-size: 11px;
+	line-height:14px;
+	width:auto;
+	position: absolute;
+	z-index: 999;
+	right: 5px;
+	top: 6px;
+	float:left;
+	margin-top:2px;
+}
+#form .error-empty {
+	margin: 4px 0 4px 5px !important;
+	display:none;
+	float:left;
+}
+
+.btns {
+	position:relative;
+	overflow:hidden;
+	padding-top: 6px;
+	text-align: left;
+	padding-bottom: 20px;
+}
+.btns a {
+	margin: 0 20px 0 0  !important;
+	cursor: pointer;
+	float: left;
+
+}
+
+.message {
+	min-height: 268px !important;	
+}
+
+.message br {
+	height: 0;
+	line-height: 0;
+}
+
+#form .success {
+	display: none;
+	position: absolute;
+	width: 274px;
+	border: 1px solid #dadada;
+	background: #fff;
+	text-align: center;
+	padding: 20px 12px;
+	z-index: 999;
+	
+}
+
