@@ -27,7 +27,8 @@ $(function() {
     });
 
     // Display current date
-    var currentDate = new Date().toLocaleDateString();
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    var currentDate = new Date().toLocaleDateString('en-US', options);
     document.getElementById('current-date').innerText = currentDate;
 });
 </script>
