@@ -25,6 +25,10 @@ $(function() {
         timeout: 4000,
         pager:  '#pagination',
     });
+
+    // Display current date
+    var currentDate = new Date().toLocaleDateString();
+    document.getElementById('current-date').innerText = currentDate;
 });
 </script>
 <!--[if lt IE 8]>
@@ -79,7 +83,7 @@ $(function() {
     <div class="grid_12">
       <h2>Ideas? Let's Talk.</h2>
       <div class="center"> <img src="images/banner_img.png" alt=""><br>
-        <a href="#" class="btn">More Info</a> </div>
+        <a href="#" class="btn">Share your thoughts</a> </div>
     </div>
     <div class="clear"></div>
   </div>
@@ -87,29 +91,17 @@ $(function() {
 <div class="block1">
   <div class="container_12">
     <div class="grid_12">
-      <h2>share your thoughts</h2>
+      <h2>News Update</h2>
     </div>
     <div class="clear"></div>
     <div class="grid_3 center">
-      <h3>Web</h3>
-      HTML 5 / CSS 3 Integration<br>
-      Web Design &amp; Illustration<br>
-      CMS Websites (ExpressionEngine)<br>
-      Seo &amp; Analytics<br>
-      UI Design &amp; Icons <br>
-      Mobile Friendly </div>
-    <div class="grid_3 center">
-      <h3>identity</h3>
-      Research &amp; Strategy<br>
-      Brand Identity Development<br>
-      Logo Design<br>
-      Business Cards<br>
-      Portfolio Albums<br>
-      Letterheads </div>
-    <div class="grid_6">
-      <h3 class="green">We are top rated web design bureau with real experts showing excellence in professional web design & development.</h3>
-      Mes cuml dia sed in lacus ut eniascet ingerto aliiqt es sitet amet eismod ictor ut ligulate ameti dapibus ticdu nt mtsent justo dolor ltissim comme. 
-      Mes cuml dia sed inertio lacus ut eniascet ingerto aliiqt. </div>
+      <h3><span id="current-date"></span></h3>
+      Meta's Future Multimodal AI Models.<br>
+      Microsoft has introduced new creative features powered by AI in its Microsoft Designer tool. <br>
+      Tencent has launched an AI-powered app that can turn selfies into printable 3D characters.<br>
+      Andrej Karpathy, a prominent AI researcher, has launched Eureka Labs, an AI+Education company. <br>
+      Anthropic has released the Claude app for Android.  <br>
+      SenseTime has unveiled SenseNova 5.5, China's first real-time multimodal AI model. </div>
     <div class="clear"></div>
   </div>
 </div>
