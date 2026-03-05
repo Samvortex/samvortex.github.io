@@ -700,6 +700,7 @@ footer {
     border-bottom: 1px solid rgba(255,255,255,0.1);
     font-size: 14px;
     line-height: 1.4;
+    color: #ddd;
 }
 
 .news-list li:last-child {
@@ -707,10 +708,11 @@ footer {
 }
 
 .news-list a {
-    color: white;
+    color: #ddd;
     text-decoration: none;
 }
 
 .news-list a:hover {
     text-decoration: underline;
+    color: white;
 }
