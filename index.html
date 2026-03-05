@@ -144,24 +144,30 @@ $(function() {
         const majorNewsList = document.getElementById('major-news-list');
         
         try {
-            // Fetch AI/Tech news from Hacker News
-            const hnResponse = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+            // Fetch from HN API via CORS proxy
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const hnUrl = 'https://hacker-news.firebaseio.com/v0/topstories.json';
+            
+            const hnResponse = await fetch(proxyUrl + encodeURIComponent(hnUrl));
             const hnStories = await hnResponse.json();
             
-            // Get top 5 tech/AI related stories
+            // Get top 20 stories details
             const topStories = await Promise.all(
                 hnStories.slice(0, 20).map(id => 
-                    fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
+                    fetch(proxyUrl + encodeURIComponent(`https://hacker-news.firebaseio.com/v0/item/${id}.json`))
+                        .then(r => r.json())
                 )
             );
             
             // Filter for AI/Tech related stories
             const aiStories = topStories.filter(s => s && (
-                s.title.toLowerCase().includes('ai') || 
+                s.title && (s.title.toLowerCase().includes('ai') || 
                 s.title.toLowerCase().includes('openai') ||
                 s.title.toLowerCase().includes('google') ||
                 s.title.toLowerCase().includes('microsoft') ||
-                s.title.toLowerCase().includes('tech')
+                s.title.toLowerCase().includes('tech') ||
+                s.title.toLowerCase().includes('nvidia') ||
+                s.title.toLowerCase().includes('apple'))
             )).slice(0, 5);
             
             if (aiStories.length > 0) {
