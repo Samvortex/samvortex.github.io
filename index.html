@@ -31,6 +31,16 @@ $(function() {
     var currentDate = new Date().toLocaleDateString('en-US', options);
     document.getElementById('current-date').innerText = currentDate;
 
+    // Update current time with pulse effect
+    function updateTime() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        const timeEl = document.getElementById('current-time');
+        if (timeEl) timeEl.innerText = timeStr;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
     // Fetch weather data
     fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Shanghai&forecast_days=7')
         .then(response => response.json())
@@ -201,6 +211,9 @@ $(function() {
             <div id="weather-desc" class="weather-desc"></div>
             <div id="weather-wind" class="weather-wind"></div>
           </div>
+        </div>
+        <div class="weather-time">
+          <span id="current-time" class="pulse-time"></span>
         </div>
         <div id="days-until-weekend" class="weekend-countdown"></div>
       </div>

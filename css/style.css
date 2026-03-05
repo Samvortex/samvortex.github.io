@@ -570,10 +570,29 @@ footer {
 
 .current-weather {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    justify-content: space-between;
     flex-wrap: wrap;
+    gap: 20px;
+}
+
+.weather-time {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.pulse-time {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
 }
 
 .weather-main {
