@@ -43,10 +43,14 @@ $(function() {
     updateTime();
     setInterval(updateTime, 1000);
 
+    console.log('Starting weather fetch...');
+    
     // Fetch weather data
-    console.log('Fetching weather...');
     fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Shanghai&forecast_days=7')
-        .then(response => response.json())
+        .then(response => {
+            console.log('Weather response status:', response.status);
+            return response.json();
+        })
         .then(data => {
             const current = data.current;
             const daily = data.daily;
