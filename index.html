@@ -144,25 +144,40 @@ $(function() {
         const majorNewsList = document.getElementById('major-news-list');
         
         try {
-            // Fetch AI news
-            const aiResponse = await fetch('https://gnews.io/api/v4/search?q=AI&lang=en&max=5&apikey=demo');
-            const aiData = await aiResponse.json();
+            // Fetch AI/Tech news from Hacker News
+            const hnResponse = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+            const hnStories = await hnResponse.json();
             
-            if (aiData.articles) {
-                aiNewsList.innerHTML = aiData.articles.slice(0, 5).map(article => 
+            // Get top 5 tech/AI related stories
+            const topStories = await Promise.all(
+                hnStories.slice(0, 20).map(id => 
+                    fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
+                )
+            );
+            
+            // Filter for AI/Tech related stories
+            const aiStories = topStories.filter(s => s && (
+                s.title.toLowerCase().includes('ai') || 
+                s.title.toLowerCase().includes('openai') ||
+                s.title.toLowerCase().includes('google') ||
+                s.title.toLowerCase().includes('microsoft') ||
+                s.title.toLowerCase().includes('tech')
+            )).slice(0, 5);
+            
+            if (aiStories.length > 0) {
+                aiNewsList.innerHTML = aiStories.map(article => 
                     `<li><a href="${article.url}" target="_blank">${article.title}</a></li>`
                 ).join('');
+            } else {
+                aiNewsList.innerHTML = '<li><a href="https://news.ycombinator.com/" target="_blank">Hacker News Top Stories</a></li>';
             }
             
-            // Fetch major/world news
-            const worldResponse = await fetch('https://gnews.io/api/v4/search?q=world&lang=en&max=5&apikey=demo');
-            const worldData = await worldResponse.json();
+            // Major news - use Hacker News top stories
+            const majorStories = topStories.slice(0, 5);
+            majorNewsList.innerHTML = majorStories.map(article => 
+                `<li><a href="${article.url}" target="_blank">${article.title}</a></li>`
+            ).join('');
             
-            if (worldData.articles) {
-                majorNewsList.innerHTML = worldData.articles.slice(0, 5).map(article => 
-                    `<li><a href="${article.url}" target="_blank">${article.title}</a></li>`
-                ).join('');
-            }
         } catch (err) {
             console.error('News fetch error:', err);
             aiNewsList.innerHTML = '<li>Unable to load AI news</li>';
