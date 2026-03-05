@@ -100,6 +100,7 @@ $(function() {
 
             // Weekly forecast
             const forecastContainer = document.getElementById('forecast-container');
+            const forecastDays = [];
             
             for (let i = 0; i < daily.time.length; i++) {
                 const dayDate = new Date(daily.time[i]);
@@ -111,14 +112,16 @@ $(function() {
                 const isToday = i === 0;
                 const dayClass = isToday ? 'forecast-day today' : 'forecast-day';
                 
-                forecastContainer.innerHTML += `
+                forecastDays.push(`
                     <div class="${dayClass}">
                         <div class="day-name">${isToday ? 'Today' : dayName}</div>
                         <div class="day-icon">${getWeatherIcon(code)}</div>
                         <div class="day-temp">${maxTemp}° / ${minTemp}°</div>
                     </div>
-                `;
+                `);
             }
+            
+            forecastContainer.innerHTML = forecastDays.join('');
         })
         .catch(err => {
             console.error('Weather fetch error:', err);
