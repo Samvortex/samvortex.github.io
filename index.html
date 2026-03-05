@@ -30,6 +30,100 @@ $(function() {
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
     var currentDate = new Date().toLocaleDateString('en-US', options);
     document.getElementById('current-date').innerText = currentDate;
+
+    // Fetch weather data
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Shanghai&forecast_days=7')
+        .then(response => response.json())
+        .then(data => {
+            const current = data.current;
+            const daily = data.daily;
+            
+            // Weather code mapping
+            const weatherCodes = {
+                0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+                45: 'Fog', 48: 'Depositing rime fog',
+                51: 'Light drizzle', 53: 'Drizzle', 54: 'Dense drizzle',
+                55: 'Freezing drizzle', 56: 'Light freezing drizzle', 57: 'Dense freezing drizzle',
+                61: 'Slight rain', 63: 'Rain', 64: 'Heavy rain',
+                65: 'Freezing rain', 66: 'Light freezing rain', 67: 'Heavy freezing rain',
+                71: 'Slight snow', 73: 'Snow', 75: 'Heavy snow',
+                77: 'Snow grains', 80: 'Slight rain showers', 81: 'Rain showers', 82: 'Violent rain showers',
+                85: 'Slight snow showers', 86: 'Heavy snow showers', 95: 'Thunderstorm',
+                96: 'Thunderstorm with slight hail', 99: 'Thunderstorm with heavy hail'
+            };
+            
+            const getWeatherIcon = (code) => {
+                if (code === 0 || code === 1) return '☀️';
+                if (code === 2) return '⛅';
+                if (code === 3) return '☁️';
+                if (code >= 45 && code <= 48) return '🌫️';
+                if (code >= 51 && code <= 57) return '🌧️';
+                if (code >= 61 && code <= 67) return '🌧️';
+                if (code >= 71 && code <= 77) return '❄️';
+                if (code >= 80 && code <= 82) return '🌦️';
+                if (code >= 85 && code <= 86) return '🌨️';
+                if (code >= 95) return '⛈️';
+                return '🌤️';
+            };
+
+            // Get day of week
+            const getDayName = (dateStr) => {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-US', { weekday: 'short' });
+            };
+
+            // Current weather
+            const currentTemp = Math.round(current.temperature_2m);
+            const currentCode = current.weather_code;
+            const currentWind = current.wind_speed_10m;
+            const currentWeather = weatherCodes[currentCode] || 'Unknown';
+            
+            document.getElementById('weather-current').innerHTML = 
+                `<span class="weather-icon">${getWeatherIcon(currentCode)}</span> ${currentTemp}°C`;
+            document.getElementById('weather-desc').innerText = currentWeather;
+            document.getElementById('weather-wind').innerText = `Wind: ${currentWind} km/h`;
+
+            // Calculate days until weekend
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            
+            let daysUntilWeekend = 0;
+            if (dayOfWeek === 0) daysUntilWeekend = 0;
+            else if (dayOfWeek === 6) daysUntilWeekend = 0;
+            else daysUntilWeekend = 6 - dayOfWeek;
+            
+            if (dayOfWeek === 5) daysUntilWeekend = 1;
+
+            document.getElementById('days-until-weekend').innerText = 
+                isWeekend ? 'Weekend!' : `${daysUntilWeekend} day${daysUntilWeekend > 1 ? 's' : ''} until weekend`;
+
+            // Weekly forecast
+            const forecastContainer = document.getElementById('forecast-container');
+            
+            for (let i = 0; i < daily.time.length; i++) {
+                const dayDate = new Date(daily.time[i]);
+                const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
+                const maxTemp = Math.round(daily.temperature_2m_max[i]);
+                const minTemp = Math.round(daily.temperature_2m_min[i]);
+                const code = daily.weather_code[i];
+                
+                const isToday = i === 0;
+                const dayClass = isToday ? 'forecast-day today' : 'forecast-day';
+                
+                forecastContainer.innerHTML += `
+                    <div class="${dayClass}">
+                        <div class="day-name">${isToday ? 'Today' : dayName}</div>
+                        <div class="day-icon">${getWeatherIcon(code)}</div>
+                        <div class="day-temp">${maxTemp}° / ${minTemp}°</div>
+                    </div>
+                `;
+            }
+        })
+        .catch(err => {
+            console.error('Weather fetch error:', err);
+            document.getElementById('weather-current').innerText = 'Weather unavailable';
+        });
 });
 </script>
 <!--[if lt IE 8]>
@@ -91,6 +185,26 @@ $(function() {
 </div>
 <div class="block1">
   <div class="container_12">
+    <!-- Weather Section -->
+    <div class="grid_12">
+      <h2>Weather</h2>
+    </div>
+    <div class="clear"></div>
+    <div class="grid_12 weather-section">
+      <div class="current-weather">
+        <div class="weather-main">
+          <span id="weather-current" class="weather-temp"></span>
+          <div class="weather-details">
+            <div id="weather-desc" class="weather-desc"></div>
+            <div id="weather-wind" class="weather-wind"></div>
+          </div>
+        </div>
+        <div id="days-until-weekend" class="weekend-countdown"></div>
+      </div>
+      <div id="forecast-container" class="forecast-container"></div>
+    </div>
+    <div class="clear"></div>
+    <!-- News Update Section -->
     <div class="grid_12">
       <h2>News Update</h2>
     </div>
