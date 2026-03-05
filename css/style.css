@@ -558,6 +558,9 @@ footer {
     padding: 30px !important;
     margin: 20px 0 40px 0;
     color: white;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
 }
 
 .weather-section h2 {
@@ -617,16 +620,18 @@ footer {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
 }
 
 .forecast-day {
     background: rgba(255,255,255,0.15);
     border-radius: 10px;
-    padding: 15px 20px;
+    padding: 15px 12px;
     text-align: center;
     flex: 1;
     min-width: 70px;
+    max-width: 100px;
 }
 
 .forecast-day.today {
