@@ -137,6 +137,44 @@ $(function() {
             console.error('Weather fetch error:', err);
             document.getElementById('weather-current').innerText = 'Weather unavailable';
         });
+
+    // News fetcher - updates every 8 hours (3 times per day)
+    async function fetchNews() {
+        const aiNewsList = document.getElementById('ai-news-list');
+        const majorNewsList = document.getElementById('major-news-list');
+        
+        try {
+            // Fetch AI news
+            const aiResponse = await fetch('https://gnews.io/api/v4/search?q=AI&lang=en&max=5&apikey=demo');
+            const aiData = await aiResponse.json();
+            
+            if (aiData.articles) {
+                aiNewsList.innerHTML = aiData.articles.slice(0, 5).map(article => 
+                    `<li><a href="${article.url}" target="_blank">${article.title}</a></li>`
+                ).join('');
+            }
+            
+            // Fetch major/world news
+            const worldResponse = await fetch('https://gnews.io/api/v4/search?q=world&lang=en&max=5&apikey=demo');
+            const worldData = await worldResponse.json();
+            
+            if (worldData.articles) {
+                majorNewsList.innerHTML = worldData.articles.slice(0, 5).map(article => 
+                    `<li><a href="${article.url}" target="_blank">${article.title}</a></li>`
+                ).join('');
+            }
+        } catch (err) {
+            console.error('News fetch error:', err);
+            aiNewsList.innerHTML = '<li>Unable to load AI news</li>';
+            majorNewsList.innerHTML = '<li>Unable to load news</li>';
+        }
+    }
+    
+    // Initial fetch
+    fetchNews();
+    
+    // Update every 8 hours (3 times per day)
+    setInterval(fetchNews, 8 * 60 * 60 * 1000);
 });
 </script>
 <!--[if lt IE 8]>
@@ -223,6 +261,19 @@ $(function() {
     <!-- News Update Section -->
     <div class="grid_12">
       <h2>News Update</h2>
+    </div>
+    <div class="clear"></div>
+    <div class="grid_6 news-card">
+      <h3>🤖 AI News Top 5</h3>
+      <ul id="ai-news-list" class="news-list">
+        <li>Loading AI news...</li>
+      </ul>
+    </div>
+    <div class="grid_6 news-card">
+      <h3>📰 Today's Top News</h3>
+      <ul id="major-news-list" class="news-list">
+        <li>Loading major news...</li>
+      </ul>
     </div>
     <div class="clear"></div>
     <div class="grid_3 center">
