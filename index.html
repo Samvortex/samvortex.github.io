@@ -52,6 +52,7 @@ $(function() {
         })
         .then(data => {
             console.log('Weather data:', data);
+            document.getElementById('weather-current').innerText = 'Debug: ' + JSON.stringify(data);
             const current = data.current;
             const daily = data.daily;
             
@@ -266,7 +267,7 @@ $(function() {
   <div class="container_12">
     <!-- Weather Section -->
     <div class="grid_12">
-      <h2>Information</h2>
+      <h2>Weather</h2>
     </div>
     <div class="clear"></div>
     <div class="grid_12 weather-section">
