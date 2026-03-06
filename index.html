@@ -43,24 +43,33 @@ $(function() {
     updateTime();
     setInterval(updateTime, 1000);
 
+    // Weather + Time in nav
+    function updateNavWeather() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        const navWeather = document.getElementById('nav-weather');
+        if (navWeather && navWeather.dataset.loaded) {
+            navWeather.innerHTML = navWeather.dataset.weather + ' <span class="nav-time">' + timeStr + '</span>';
+        }
+    }
+    setInterval(updateNavWeather, 1000);
+
     // Weather - just today
-    console.log('Weather: Starting fetch');
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia/Shanghai')
-        .then(r => {
-            console.log('Weather: Response', r.status);
-            return r.json();
-        })
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code&timezone=Asia/Shanghai')
+        .then(r => r.json())
         .then(d => {
-            console.log('Weather: Data', d);
             const t = Math.round(d.current.temperature_2m);
             const c = d.current.weather_code;
-            const w = d.current.wind_speed_10m;
             const icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',51:'🌧️',61:'🌧️',71:'❄️',95:'⛈️'};
+            const icon = icons[c] || '🌤️';
+            const navWeather = document.getElementById('nav-weather');
+            if (navWeather) {
+                navWeather.dataset.weather = icon + ' ' + t + '°C';
+                navWeather.dataset.loaded = 'true';
+                updateNavWeather();
+            }
             const el = document.getElementById('weather-temp');
-            console.log('Weather temp element:', el);
-            if (el) el.innerText = (icons[c] || '🌤️') + ' ' + t + '°C';
-            const infoEl = document.getElementById('weather-info');
-            if (infoEl) infoEl.innerText = 'Wind: ' + w + ' km/h';
+            if (el) el.innerText = icon + ' ' + t + '°C';
         })
         .catch(e => console.error('Weather error:', e));
 
@@ -165,6 +174,7 @@ $(function() {
           <li><a href="index-3.html">clients</a></li>
           <li><a href="index-4.html">Contacts</a></li>
         </ul>
+        <div id="nav-weather" class="nav-weather"></div>
         <div class="clear"></div>
       </nav>
     </div>
