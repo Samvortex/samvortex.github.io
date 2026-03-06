@@ -1,42 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Works</title>
+<title>Hub - Sam's Space</title>
 <meta charset="utf-8">
-<meta name="description" content="Your description">
-<meta name="keywords" content="Your keywords">
-<meta name="author" content="Your name">
+<meta name="description" content="Sam's personal hub for thoughts and ideas">
+<meta name="keywords" content="Sam, personal, thoughts, ideas, journal">
+<meta name="author" content="Sam">
 <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="css/reset.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/superfish.css">
 <link rel="stylesheet" href="css/grid.css" />
-<link rel="stylesheet" href="css/prettyPhoto.css">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/superfish.js"></script>
 <script src="js/jquery.easing.1.3.js"></script>
-<script src="js/jquery.prettyPhoto.js"></script>
 <script>
-	$(function(){
-	  $('.lightbox-image').prettyPhoto({theme:'facebook',autoplay_slideshow:false,social_tools:false,animation_speed:'normal'}).append('<span></span>').hover(function(){$(this).find('>img').stop().animate({opacity:.5})},function(){$(this).find('>img').stop().animate({opacity:1})})
-    })
+$(function(){
+    // Mobile menu
+    $('.sf-menu').superfish({
+        animation: {opacity:'show',height:'show'},
+        speed: 'normal',
+        autoArrows: false
+    });
+    
+    // Get current date
+    var now = new Date();
+    var options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+    document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+    
+    // Time
+    function updateTime() {
+        var time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        document.getElementById('current-time').textContent = time;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+});
 </script>
-<!--[if lt IE 8]>
-   <div style=' clear: both; text-align:center; position: relative;'>
-     <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-       <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
-       <link href='http://fonts.googleapis.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
-       <link href='http://fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
-       <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
-    </a>
-  </div>
-<![endif]-->
-<!--[if lt IE 9]>
-	<script src="js/html5.js"></script>
-	<link rel="stylesheet" href="css/ie.css">
-<![endif]-->
+<style>
+.hub-header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 30px;
+}
+.hub-header h2 {
+    color: white !important;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+.hub-header .date-time {
+    font-size: 18px;
+    opacity: 0.9;
+}
+.thought-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.thought-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.thought-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.thought-card .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.tag.thought { background: #e3f2fd; color: #1976d2; }
+.tag.done { background: #e8f5e9; color: #388e3c; }
+.tag.idea { background: #fff3e0; color: #f57c00; }
+.tag.rant { background: #fce4ec; color: #c2185b; }
+.thought-content {
+    color: #555;
+    line-height: 1.8;
+}
+.thought-content p {
+    margin-bottom: 10px;
+}
+.hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+@media (max-width: 768px) {
+    .hub-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
 <body>
 <!-- Header -->
@@ -46,22 +115,10 @@
       <h1><a href="index.html">Dolmar</a></h1>
       <nav>
         <ul class="sf-menu">
-          <li><a href="index.html"></a></li>
-          <li><a href="index-1.html">About us</a>
-            <ul>
-              <li><a href="#">Dolore ipsu</a></li>
-              <li><a href="#">Consecte</a>
-                <ul>
-                  <li><a href="#">Dolore ipsu</a></li>
-                  <li><a href="#">Consecte</a></li>
-                  <li><a href="#">Elit Conseq</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Elit Conseq</a></li>
-            </ul>
-          </li>
-          <li class="current"><a href="index-2.html">works</a></li>
-          <li><a href="index-3.html">clients</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index-1.html">About</a></li>
+          <li class="current"><a href="index-2.html">Hub</a></li>
+          <li><a href="index-3.html">Clients</a></li>
           <li><a href="index-4.html">Contacts</a></li>
         </ul>
         <div class="clear"></div>
@@ -70,66 +127,73 @@
     <div class="clear"></div>
   </div>
 </header>
-<div class="block2"></div>
-<div class="content pad1 projects">
-  <div class="container_12">
-  	<div class="grid_12">
-  		<h2 class="head1 w1">pojects overview</h2>
-  	</div>
-    <div class="clear"></div>
-  	<div class="grid_4">
-	    <div class="img_inner"><a data-gal="prettyPhoto[1]" class="lightbox-image " href="images/image-blank.png"><img src="images/gal1.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #1</a><br>Mes cuml dia sed in lacus ut eniascet ingerto 
-aliiqt es sitetel amet eismod ictor ut ligulate.
-	   <div class="img_inner marg1"> <a data-gal="prettyPhoto[1]" class="lightbox-image " href="images/image-blank.png"><img src="images/gal4.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #4</a><br>Donec massa nulla, vulputate vel ultricies vel, convallis non purus. Donec neque orci mollis.
-	    <div class="img_inner marg1"><a data-gal="prettyPhoto[1]" class="lightbox-image " href="images/image-blank.png"><img src="images/gal7.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #7</a><br>Sem velit ultricies nisl; dapibus accumsan dui 
-arcu in nunc! Proin ornare, sapien ac rutru.
-    </div>
-  	<div class="grid_4">
-	    <div class="img_inner"><a data-gal="prettyPhoto[1]" class="lightbox-image" href="images/image-blank.png"><img src="images/gal2.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #2</a><br>Nunc posuere ultrices accumsan. Donec mas
-sanulla, vulputate vel ultricies vel, convallis.
-	    <div class="img_inner marg1"><a data-gal="prettyPhoto[1]" class="lightbox-image " href="images/image-blank.png"><img src="images/gal5.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #5</a><br>Proin ornare, sapien ac rutrum sollicitu magna diam luctus orci, ac lacinia eros sem in nulla. 
-	    <div class="img_inner marg1"><a data-gal="prettyPhoto[1]" class="lightbox-image " href="images/image-blank.png"><img src="images/gal8.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #8</a><br>Mes cuml dia sed inertio lacus ut eniascet inge
-rto aliiqt. Es sit amet eism odictor ut ligulate.	
-    </div>
-  	<div class="grid_4">
-    	<div class="img_inner"><a data-gal="prettyPhoto[1]" class="lightbox-image" href="images/image-blank.png"><img src="images/gal3.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #3</a><br>Donec neque orci, mollis at tincidunt rutrumuis ante! In fringilla, ligula eget feugiat interdum.
-	    <div class="img_inner marg1"><a data-gal="prettyPhoto[1]" class="lightbox-image " href="images/image-blank.png"><img src="images/gal6.jpg" alt="" class=""></a></div>
-	    <div class="clear"></div>
-	    <a href="#" class="link1">Project #6</a><br>Mes cuml dia sed inertio lacus ut eniascet inge
-rto aliiqt. Es sit amet eism odictor ut ligulate.
-  </div>
-  <div class="clear">
-  </div>
-</div>
-</div>
-<!--Footer-->
-<footer>
+
+<!-- Main Content -->
+<div class="block1">
   <div class="container_12">
     <div class="grid_12">
-      <div class="footer">
-        <h3>Say hello</h3>
-        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit. Vestibulum ut tortor urnati dunt dolor. Nunc vulputate ultrices con sect etur donec semper lacinia ultri  dolore cie<br>
-          lorem ipsum commete.</p>
-        <div class="socials"> <a class="m0" href="#"><img src="images/mess.png" alt=""></a> <a href="#"><img src="images/fb.png" alt=""></a> <a href="#"><img src="images/twr.png" alt=""></a> <a href="#"><img src="images/gplus.png" alt=""></a> </div>
-        <div class="copy"><a href="index.html" class="footer_logo">Dolmar</a>&copy; 2013 | <a href="index-5.html">Privacy Policy</a></div></div>
+      <div class="hub-header">
+        <h2>🌟 Sam's Hub</h2>
+        <div class="date-time">
+            <span id="current-date"></span> | <span id="current-time"></span>
+        </div>
+      </div>
     </div>
     <div class="clear"></div>
+    
+    <div class="hub-grid">
+        <!-- Thoughts -->
+        <div class="thought-card">
+            <h3>💭 Thoughts <span class="tag thought">今日思考</span></h3>
+            <div class="thought-content">
+                <p>今天在处理网站天气模块时，发现 CloudFlare 缓存可能导致更新延迟。下次可以先在本地测试再部署。</p>
+                <p>GitHub Pages + CloudFlare 的组合需要特别注意缓存策略。</p>
+            </div>
+        </div>
+        
+        <!-- Done -->
+        <div class="thought-card">
+            <h3>✅ Done <span class="tag done">已完成</span></h3>
+            <div class="thought-content">
+                <p>✅ 网站天气模块重新开发</p>
+                <p>✅ 新闻模块 RSS 接入</p>
+                <p>✅ 导航栏优化</p>
+                <p>✅ ISTE 门票报销</p>
+            </div>
+        </div>
+        
+        <!-- Ideas -->
+        <div class="thought-card">
+            <h3>💡 Ideas <span class="tag idea">想法</span></h3>
+            <div class="thought-content">
+                <p>🔹 官网可以加入动态背景效果</p>
+                <p>🔹 增加访客计数器</p>
+                <p>🔹 添加暗色模式切换</p>
+                <p>🔹 接入 ChatGPT API 做智能客服</p>
+            </div>
+        </div>
+        
+        <!-- Rant -->
+        <div class="thought-card">
+            <h3>😤 Rant <span class="tag rant">吐槽</span></h3>
+            <div class="thought-content">
+                <p>免费的新闻 API 太少了！大部分都需要付费或 API Key。</p>
+                <p>CloudFlare 缓存真是让人又爱又恨 😅</p>
+            </div>
+        </div>
+    </div>
+    
   </div>
-</footer>
-<!-- Footer end-->
+</div>
+
+<!-- Footer -->
+<div class="block2">
+  <div class="container_12">
+    <div class="grid_12">
+      <p class="center">© 2026 Sam's Hub. Built with OpenClaw.</p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
