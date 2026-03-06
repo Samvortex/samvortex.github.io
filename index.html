@@ -86,7 +86,7 @@ $(function() {
     // RSS News Fetcher
     function fetchRSS() {
         var proxy = 'https://api.allorigins.win/raw?url=';
-        var aiFeed = 'https://feeds.feedburner.com/TechCrunch/';
+        var aiFeed = 'https://www.theverge.com/rss/index.xml';
         var newsFeed = 'https://feeds.bbci.co.uk/news/world/rss.xml';
         
         // Fetch AI/Tech news
@@ -103,7 +103,7 @@ $(function() {
                     var desc = items[i].querySelector('description') ? items[i].querySelector('description').textContent : '';
                     // Clean HTML tags from description
                     desc = desc.replace(/<[^>]*>/g, '').substring(0, 35);
-                    if (title.length > 15) title = title.substring(0, 12) + '...';
+                    if (title.length > 25) title = title.substring(0, 22) + '...';
                     html += '<li><a href="' + link + '" target="_blank"><strong>' + title + '</strong></a><br>' + desc + '</li>';
                 }
                 var el = document.getElementById('ai-news-list');
@@ -124,7 +124,7 @@ $(function() {
                     var link = items[i].querySelector('link').textContent;
                     var desc = items[i].querySelector('description') ? items[i].querySelector('description').textContent : '';
                     desc = desc.replace(/<[^>]*>/g, '').substring(0, 35);
-                    if (title.length > 15) title = title.substring(0, 12) + '...';
+                    if (title.length > 25) title = title.substring(0, 22) + '...';
                     html += '<li><a href="' + link + '" target="_blank"><strong>' + title + '</strong></a><br>' + desc + '</li>';
                 }
                 var el = document.getElementById('major-news-list');
