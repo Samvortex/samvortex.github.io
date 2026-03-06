@@ -44,10 +44,12 @@ $(function() {
     setInterval(updateTime, 1000);
 
     // Weather + Time in nav
+    console.log('Setting up weather...');
     function updateNavWeather() {
         const now = new Date();
         const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
         const navWeather = document.getElementById('nav-weather');
+        console.log('updateNavWeather:', navWeather, navWeather ? navWeather.dataset.loaded : 'no el');
         if (navWeather && navWeather.dataset.loaded) {
             navWeather.innerHTML = navWeather.dataset.weather + ' <span class="nav-time">' + timeStr + '</span>';
         }
@@ -55,6 +57,7 @@ $(function() {
     setInterval(updateNavWeather, 1000);
 
     // Weather - just today
+    console.log('Fetching weather...');
     fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code&timezone=Asia/Shanghai')
         .then(r => r.json())
         .then(d => {
@@ -62,7 +65,9 @@ $(function() {
             const c = d.current.weather_code;
             const icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',51:'🌧️',61:'🌧️',71:'❄️',95:'⛈️'};
             const icon = icons[c] || '🌤️';
+            console.log('Weather icon:', icon, 'temp:', t);
             const navWeather = document.getElementById('nav-weather');
+            console.log('navWeather element:', navWeather);
             if (navWeather) {
                 navWeather.dataset.weather = icon + ' ' + t + '°C';
                 navWeather.dataset.loaded = 'true';
