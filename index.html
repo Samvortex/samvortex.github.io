@@ -43,6 +43,19 @@ $(function() {
     updateTime();
     setInterval(updateTime, 1000);
 
+    // Weather - just today
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia/Shanghai')
+        .then(r => r.json())
+        .then(d => {
+            const t = Math.round(d.current.temperature_2m);
+            const c = d.current.weather_code;
+            const w = d.current.wind_speed_10m;
+            const icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',51:'🌧️',61:'🌧️',71:'❄️',95:'⛈️'};
+            document.getElementById('weather-temp').innerText = (icons[c] || '🌤️') + ' ' + t + '°C';
+            document.getElementById('weather-info').innerText = 'Wind: ' + w + ' km/h';
+        })
+        .catch(e => console.error(e));
+
     // News fetcher - updates every 8 hours (3 times per day)
     async function fetchNews() {
         const aiNewsList = document.getElementById('ai-news-list');
@@ -162,6 +175,12 @@ $(function() {
 </div>
 <div class="block1">
   <div class="container_12">
+    <!-- Weather -->
+    <div class="grid_12" style="text-align:center;margin:20px 0;">
+      <span id="weather-temp" style="font-size:24px;font-weight:bold;"></span>
+      <span id="weather-info" style="margin-left:10px;color:#666;"></span>
+    </div>
+    <div class="clear"></div>
     <!-- News Update Section -->
     <div class="grid_12">
       <h2>News Update</h2>
