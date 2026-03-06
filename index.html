@@ -83,6 +83,59 @@ $(function() {
     xhr.onerror = function(e) { console.error('XHR error:', e); };
     xhr.send();
 
+    // RSS News Fetcher
+    function fetchRSS() {
+        var proxy = 'https://api.allorigins.win/raw?url=';
+        var aiFeed = 'https://feeds.feedburner.com/TechCrunch/';
+        var newsFeed = 'https://feeds.bbci.co.uk/news/world/rss.xml';
+        
+        // Fetch AI/Tech news
+        fetch(proxy + encodeURIComponent(aiFeed))
+            .then(function(r) { return r.text(); })
+            .then(function(xml) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(xml, 'text/xml');
+                var items = doc.querySelectorAll('item');
+                var html = '';
+                for (var i = 0; i < Math.min(5, items.length); i++) {
+                    var title = items[i].querySelector('title').textContent;
+                    var link = items[i].querySelector('link').textContent;
+                    var desc = items[i].querySelector('description') ? items[i].querySelector('description').textContent : '';
+                    // Clean HTML tags from description
+                    desc = desc.replace(/<[^>]*>/g, '').substring(0, 35);
+                    if (title.length > 15) title = title.substring(0, 12) + '...';
+                    html += '<li><a href="' + link + '" target="_blank"><strong>' + title + '</strong></a><br>' + desc + '</li>';
+                }
+                var el = document.getElementById('ai-news-list');
+                if (el && html) el.innerHTML = html;
+            })
+            .catch(function(e) { console.error('RSS error:', e); });
+        
+        // Fetch World news
+        fetch(proxy + encodeURIComponent(newsFeed))
+            .then(function(r) { return r.text(); })
+            .then(function(xml) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(xml, 'text/xml');
+                var items = doc.querySelectorAll('item');
+                var html = '';
+                for (var i = 0; i < Math.min(5, items.length); i++) {
+                    var title = items[i].querySelector('title').textContent;
+                    var link = items[i].querySelector('link').textContent;
+                    var desc = items[i].querySelector('description') ? items[i].querySelector('description').textContent : '';
+                    desc = desc.replace(/<[^>]*>/g, '').substring(0, 35);
+                    if (title.length > 15) title = title.substring(0, 12) + '...';
+                    html += '<li><a href="' + link + '" target="_blank"><strong>' + title + '</strong></a><br>' + desc + '</li>';
+                }
+                var el = document.getElementById('major-news-list');
+                if (el && html) el.innerHTML = html;
+            })
+            .catch(function(e) { console.error('RSS error:', e); });
+    }
+    // Fetch on load and every 8 hours
+    fetchRSS();
+    setInterval(fetchRSS, 8 * 60 * 60 * 1000);
+
     // News section is now static HTML
     
 });
