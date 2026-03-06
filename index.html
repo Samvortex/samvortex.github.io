@@ -43,108 +43,36 @@ $(function() {
     updateTime();
     setInterval(updateTime, 1000);
 
-    // Fetch weather data
-    console.log('Fetching weather data...');
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Shanghai&forecast_days=7')
-        .then(response => {
-            console.log('Weather response:', response);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Weather data:', data);
-            document.getElementById('weather-current').innerText = 'Debug: ' + JSON.stringify(data);
-            const current = data.current;
-            const daily = data.daily;
+    // Simple weather fetch
+    async function loadWeather() {
+        try {
+            const resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Shanghai&forecast_days=7');
+            const data = await resp.json();
             
-            // Weather code mapping
-            const weatherCodes = {
-                0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
-                45: 'Fog', 48: 'Depositing rime fog',
-                51: 'Light drizzle', 53: 'Drizzle', 54: 'Dense drizzle',
-                55: 'Freezing drizzle', 56: 'Light freezing drizzle', 57: 'Dense freezing drizzle',
-                61: 'Slight rain', 63: 'Rain', 64: 'Heavy rain',
-                65: 'Freezing rain', 66: 'Light freezing rain', 67: 'Heavy freezing rain',
-                71: 'Slight snow', 73: 'Snow', 75: 'Heavy snow',
-                77: 'Snow grains', 80: 'Slight rain showers', 81: 'Rain showers', 82: 'Violent rain showers',
-                85: 'Slight snow showers', 86: 'Heavy snow showers', 95: 'Thunderstorm',
-                96: 'Thunderstorm with slight hail', 99: 'Thunderstorm with heavy hail'
-            };
+            const temp = Math.round(data.current.temperature_2m);
+            const code = data.current.weather_code;
+            const wind = data.current.wind_speed_10m;
             
-            const getWeatherIcon = (code) => {
-                if (code === 0 || code === 1) return '☀️';
-                if (code === 2) return '⛅';
-                if (code === 3) return '☁️';
-                if (code >= 45 && code <= 48) return '🌫️';
-                if (code >= 51 && code <= 57) return '🌧️';
-                if (code >= 61 && code <= 67) return '🌧️';
-                if (code >= 71 && code <= 77) return '❄️';
-                if (code >= 80 && code <= 82) return '🌦️';
-                if (code >= 85 && code <= 86) return '🌨️';
-                if (code >= 95) return '⛈️';
-                return '🌤️';
-            };
-
-            // Get day of week
-            const getDayName = (dateStr) => {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('en-US', { weekday: 'short' });
-            };
-
-            // Current weather
+            const icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌦️',95:'⛈️'};
+            const icon = icons[code] || '🌤️';
+            
+            document.getElementById('weather-current').innerHTML = icon + ' ' + temp + '°C';
+            document.getElementById('weather-desc').innerText = code >= 45 && code <= 48 ? 'Fog' : code >= 51 ? 'Rain' : code >= 61 ? 'Rain' : code >= 71 ? 'Snow' : code >= 95 ? 'Storm' : 'Clear';
+            document.getElementById('weather-wind').innerText = 'Wind: ' + wind + ' km/h';
+            
+            console.log('Weather loaded:', temp, code);
+        } catch(e) {
+            console.error('Weather error:', e);
+            document.getElementById('weather-current').innerText = 'Error: ' + e.message;
+        }
+    }
+    loadWeather();
             const currentTemp = Math.round(current.temperature_2m);
             const currentCode = current.weather_code;
             const currentWind = current.wind_speed_10m;
             const currentWeather = weatherCodes[currentCode] || 'Unknown';
             
-            document.getElementById('weather-current').innerHTML = 
-                `<span class="weather-icon">${getWeatherIcon(currentCode)}</span> ${currentTemp}°C`;
-            document.getElementById('weather-desc').innerText = currentWeather;
-            document.getElementById('weather-wind').innerText = `Wind: ${currentWind} km/h`;
-
-            // Calculate days until weekend
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-            
-            let daysUntilWeekend = 0;
-            if (dayOfWeek === 0) daysUntilWeekend = 0;
-            else if (dayOfWeek === 6) daysUntilWeekend = 0;
-            else daysUntilWeekend = 6 - dayOfWeek;
-            
-            if (dayOfWeek === 5) daysUntilWeekend = 1;
-
-            document.getElementById('days-until-weekend').innerText = 
-                isWeekend ? 'Weekend!' : `${daysUntilWeekend} day${daysUntilWeekend > 1 ? 's' : ''} until weekend`;
-
-            // Weekly forecast
-            const forecastContainer = document.getElementById('forecast-container');
-            const forecastDays = [];
-            
-            for (let i = 0; i < daily.time.length; i++) {
-                const dayDate = new Date(daily.time[i]);
-                const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
-                const maxTemp = Math.round(daily.temperature_2m_max[i]);
-                const minTemp = Math.round(daily.temperature_2m_min[i]);
-                const code = daily.weather_code[i];
-                
-                const isToday = i === 0;
-                const dayClass = isToday ? 'forecast-day today' : 'forecast-day';
-                
-                forecastDays.push(`
-                    <div class="${dayClass}">
-                        <div class="day-name">${isToday ? 'Today' : dayName}</div>
-                        <div class="day-icon">${getWeatherIcon(code)}</div>
-                        <div class="day-temp">${maxTemp}° / ${minTemp}°</div>
-                    </div>
-                `);
-            }
-            
-            forecastContainer.innerHTML = forecastDays.join('');
-        })
-        .catch(err => {
-            console.error('Weather fetch error:', err);
-            document.getElementById('weather-current').innerText = 'Weather unavailable';
-        });
+    loadWeather();
 
     // News fetcher - updates every 8 hours (3 times per day)
     async function fetchNews() {
