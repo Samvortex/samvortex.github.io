@@ -32,9 +32,12 @@ $(function() {
     });
 
     // Display current date
-    var options = { year: 'numeric', month: 'long', day: 'numeric' };
-    var currentDate = new Date().toLocaleDateString('en-US', options);
-    document.getElementById('current-date').innerText = currentDate;
+    var currentDateEl = document.getElementById('current-date');
+    if (currentDateEl) {
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+        var currentDate = new Date().toLocaleDateString('en-US', options);
+        currentDateEl.innerText = currentDate;
+    }
 
     // Update current time with pulse effect
     function updateTime() {
@@ -51,6 +54,7 @@ $(function() {
     console.log('navWeatherEl:', navWeatherEl);
     
     function showWeatherTime() {
+        if (!navWeatherEl) return;
         var now = new Date();
         var timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
         if (window.weatherData) {
