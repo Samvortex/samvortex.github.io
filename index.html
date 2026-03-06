@@ -19,8 +19,11 @@
 <script src="js/jquery.cycle.all.js"></script>
 <script>
 console.log('Inline script starting...');
+window.onerror = function(msg, url, line) {
+    console.error('JS Error:', msg, 'at line', line);
+};
 $(function() {
-    console.log('jQuery ready fired');
+    console.log('jQuery ready fired - NOW IN HANDLER');
     $('#cycle').cycle({
         fx:     'fade',
         speed:  1000,
