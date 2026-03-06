@@ -725,11 +725,14 @@ footer {
 
 
 .nav-weather {
-    color: #222 !important;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
     font-size: 14px;
     font-weight: bold;
-    padding: 0 10px;
-    line-height: 36px;
+    z-index: 100;
 }
 .nav-weather .nav-time {
     font-weight: bold;
