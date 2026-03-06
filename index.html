@@ -43,37 +43,6 @@ $(function() {
     updateTime();
     setInterval(updateTime, 1000);
 
-    // Simple weather fetch
-    async function loadWeather() {
-        try {
-            const resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Shanghai&forecast_days=7');
-            const data = await resp.json();
-            
-            const temp = Math.round(data.current.temperature_2m);
-            const code = data.current.weather_code;
-            const wind = data.current.wind_speed_10m;
-            
-            const icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌦️',95:'⛈️'};
-            const icon = icons[code] || '🌤️';
-            
-            document.getElementById('weather-current').innerHTML = icon + ' ' + temp + '°C';
-            document.getElementById('weather-desc').innerText = code >= 45 && code <= 48 ? 'Fog' : code >= 51 ? 'Rain' : code >= 61 ? 'Rain' : code >= 71 ? 'Snow' : code >= 95 ? 'Storm' : 'Clear';
-            document.getElementById('weather-wind').innerText = 'Wind: ' + wind + ' km/h';
-            
-            console.log('Weather loaded:', temp, code);
-        } catch(e) {
-            console.error('Weather error:', e);
-            document.getElementById('weather-current').innerText = 'Error: ' + e.message;
-        }
-    }
-    loadWeather();
-            const currentTemp = Math.round(current.temperature_2m);
-            const currentCode = current.weather_code;
-            const currentWind = current.wind_speed_10m;
-            const currentWeather = weatherCodes[currentCode] || 'Unknown';
-            
-    loadWeather();
-
     // News fetcher - updates every 8 hours (3 times per day)
     async function fetchNews() {
         const aiNewsList = document.getElementById('ai-news-list');
@@ -193,28 +162,6 @@ $(function() {
 </div>
 <div class="block1">
   <div class="container_12">
-    <!-- Weather Section -->
-    <div class="grid_12">
-      <h2>Weather</h2>
-    </div>
-    <div class="clear"></div>
-    <div class="grid_12 weather-section">
-      <div class="current-weather">
-        <div class="weather-main">
-          <span id="weather-current" class="weather-temp"></span>
-          <div class="weather-details">
-            <div id="weather-desc" class="weather-desc"></div>
-            <div id="weather-wind" class="weather-wind"></div>
-          </div>
-        </div>
-        <div class="weather-time">
-          <span id="current-time" class="pulse-time"></span>
-        </div>
-        <div id="days-until-weekend" class="weekend-countdown"></div>
-      </div>
-      <div id="forecast-container" class="forecast-container"></div>
-    </div>
-    <div class="clear"></div>
     <!-- News Update Section -->
     <div class="grid_12">
       <h2>News Update</h2>
