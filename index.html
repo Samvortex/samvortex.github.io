@@ -43,40 +43,38 @@ $(function() {
     updateTime();
     setInterval(updateTime, 1000);
 
-    // Weather + Time in nav
-    console.log('Setting up weather...');
-    function updateNavWeather() {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-        const navWeather = document.getElementById('nav-weather');
-        console.log('updateNavWeather:', navWeather, navWeather ? navWeather.dataset.loaded : 'no el');
-        if (navWeather && navWeather.dataset.loaded) {
-            navWeather.innerHTML = navWeather.dataset.weather + ' <span class="nav-time">' + timeStr + '</span>';
+    // Weather + Time in nav - SIMPLIFIED
+    var navWeatherEl = document.getElementById('nav-weather');
+    console.log('navWeatherEl:', navWeatherEl);
+    
+    function showWeatherTime() {
+        var now = new Date();
+        var timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        if (window.weatherData) {
+            navWeatherEl.innerHTML = window.weatherData + ' <span class="nav-time">' + timeStr + '</span>';
         }
     }
-    setInterval(updateNavWeather, 1000);
-
-    // Weather - just today
-    console.log('Fetching weather...');
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code&timezone=Asia/Shanghai')
-        .then(r => r.json())
-        .then(d => {
-            const t = Math.round(d.current.temperature_2m);
-            const c = d.current.weather_code;
-            const icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',51:'🌧️',61:'🌧️',71:'❄️',95:'⛈️'};
-            const icon = icons[c] || '🌤️';
-            console.log('Weather icon:', icon, 'temp:', t);
-            const navWeather = document.getElementById('nav-weather');
-            console.log('navWeather element:', navWeather);
-            if (navWeather) {
-                navWeather.dataset.weather = icon + ' ' + t + '°C';
-                navWeather.dataset.loaded = 'true';
-                updateNavWeather();
-            }
-            const el = document.getElementById('weather-temp');
-            if (el) el.innerText = icon + ' ' + t + '°C';
-        })
-        .catch(e => console.error('Weather error:', e));
+    setInterval(showWeatherTime, 1000);
+    
+    // Fetch weather
+    console.log('Starting fetch...');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,weather_code&timezone=Asia/Shanghai');
+    xhr.onload = function() {
+        console.log('XHR load:', xhr.status);
+        if (xhr.status === 200) {
+            var d = JSON.parse(xhr.responseText);
+            var t = Math.round(d.current.temperature_2m);
+            var c = d.current.weather_code;
+            var icons = {0:'☀️',1:'☀️',2:'⛅',3:'☁️',45:'🌫️',51:'🌧️',61:'🌧️',71:'❄️',95:'⛈️'};
+            var icon = icons[c] || '🌤️';
+            window.weatherData = icon + ' ' + t + '°C';
+            console.log('Weather set:', window.weatherData);
+            showWeatherTime();
+        }
+    };
+    xhr.onerror = function(e) { console.error('XHR error:', e); };
+    xhr.send();
 
     // News fetcher - updates every 8 hours (3 times per day)
     async function fetchNews() {
