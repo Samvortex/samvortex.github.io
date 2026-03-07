@@ -302,6 +302,12 @@ $(function() {
     // Clouds rotate slightly faster
     cloudSphere.rotation.y = rotation + 0.0003;
     
+    // Dynamic sun position based on real time
+    var sunAngle = rotation + Math.PI * 0.3; // Offset to match real sun direction
+    sun.position.x = Math.cos(sunAngle) * 5;
+    sun.position.z = Math.sin(sunAngle) * 5;
+    sun.position.y = Math.sin(sunAngle * 0.5) * 2;
+    
     // Update timezone display
     var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     var timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
