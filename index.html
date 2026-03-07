@@ -311,9 +311,16 @@ $(function() {
     requestAnimationFrame(animate);
     
     // Real-time rotation (24h = full rotation)
+    // Start from Shanghai position (UTC+8 = 1/3 of rotation offset)
     var now = new Date();
-    var seconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
-    var rotation = (seconds / 86400) * Math.PI * 2;
+    var utcHours = now.getUTCHours() + now.getUTCMinutes() / 60;
+    var shanghaiOffset = 8; // UTC+8
+    var localHours = (utcHours + shanghaiOffset) % 24;
+    
+    // Calculate rotation so that current local time position faces the sun
+    // Shanghai at localHours should face the light source
+    var rotation = ((24 - localHours) / 24) * Math.PI * 2;
+    
     earth.rotation.y = rotation;
     cloudSphere.rotation.y = rotation + 0.0005;
     
