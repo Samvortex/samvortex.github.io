@@ -191,7 +191,7 @@ $(function() {
     <div class="clear"></div>
   </div>
 </div>
-<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function() {
   var scene, camera, renderer, earth, cloudSphere;
@@ -210,29 +210,43 @@ $(function() {
     // Earth with texture
     var textureLoader = new THREE.TextureLoader();
     
-    // Earth map - using NASA Blue Marble style colors
-    var earthGeo = new THREE.SphereGeometry(1.3, 128, 128);
-    var earthMat = new THREE.MeshPhongMaterial({
-      map: textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-blue-marble.jpg'),
-      bumpMap: textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-topology.png'),
-      bumpScale: 0.04,
-      specular: new THREE.Color(0x333333),
-      shininess: 5
+    // Try loading texture, fallback to color
+    var earthMat = new THREE.MeshPhongMaterial({ 
+      color: 0x2255aa, 
+      specular: 0x333333, 
+      shininess: 5 
     });
+    var earthGeo = new THREE.SphereGeometry(1.3, 64, 64);
     earth = new THREE.Mesh(earthGeo, earthMat);
     scene.add(earth);
+    
+    // Try to load textures, ignore if fails
+    textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-blue-marble.jpg', 
+      function(texture) {
+        earth.material.map = texture;
+        earth.material.needsUpdate = true;
+      }
+    );
     
     // Cloud layer
     var cloudGeo = new THREE.SphereGeometry(1.32, 64, 64);
     var cloudMat = new THREE.MeshPhongMaterial({
-      map: textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-clouds.png'),
+      map: null,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.25,
       blending: THREE.AdditiveBlending,
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
+      color: 0xffffff
     });
     cloudSphere = new THREE.Mesh(cloudGeo, cloudMat);
     scene.add(cloudSphere);
+    
+    textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-clouds.png',
+      function(texture) {
+        cloudSphere.material.map = texture;
+        cloudSphere.material.needsUpdate = true;
+      }
+    );
     
     // Atmosphere glow
     var atmosGeo = new THREE.SphereGeometry(1.5, 64, 64);
