@@ -180,12 +180,113 @@ $(function() {
   <div class="container_12">
     <div class="grid_12">
       <h2>Ideas? Let's Talk.</h2>
-      <div class="center"> <img src="images/banner_img.png" alt=""><br>
-        <a href="#" class="btn">Share your thoughts</a> </div>
+      <div class="center">
+        <div id="earth-container" style="width:400px;height:400px;margin:0 auto;position:relative;">
+          <canvas id="earth-canvas"></canvas>
+          <div id="timezone-display" style="position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);color:#fff;font-size:16px;font-weight:bold;text-shadow:0 0 10px rgba(0,0,0,0.8);"></div>
+        </div>
+        <br>
+        <a href="contact.html" class="btn">Share your thoughts</a>
+      </div>
     </div>
     <div class="clear"></div>
   </div>
 </div>
+<script src="js/three.min.js"></script>
+<script>
+(function() {
+  var scene, camera, renderer, earth;
+  var container = document.getElementById('earth-container');
+  var canvas = document.getElementById('earth-canvas');
+  
+  function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+    camera.position.z = 3.5;
+    
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(400, 400);
+    
+    // Earth sphere
+    var geometry = new THREE.SphereGeometry(1.2, 64, 64);
+    var material = new THREE.MeshPhongMaterial({
+      color: 0x2266cc,
+      emissive: 0x112244,
+      specular: 0x333333,
+      shininess: 15
+    });
+    earth = new THREE.Mesh(geometry, material);
+    scene.add(earth);
+    
+    // Atmosphere glow
+    var atmosGeo = new THREE.SphereGeometry(1.25, 64, 64);
+    var atmosMat = new THREE.MeshPhongMaterial({
+      color: 0x4488ff,
+      transparent: true,
+      opacity: 0.15,
+      side: THREE.BackSide
+    });
+    var atmos = new THREE.Mesh(atmosGeo, atmosMat);
+    scene.add(atmos);
+    
+    // Lighting
+    var sun = new THREE.DirectionalLight(0xffffff, 1.2);
+    sun.position.set(5, 3, 5);
+    scene.add(sun);
+    
+    var ambient = new THREE.AmbientLight(0x404040, 0.5);
+    scene.add(ambient);
+    
+    // Add continent-like dots (simplified)
+    var dotsGeo = new THREE.BufferGeometry();
+    var dotPositions = [];
+    for (var i = 0; i < 300; i++) {
+      var lat = (Math.random() - 0.5) * Math.PI * 1.5;
+      var lon = Math.random() * Math.PI * 2;
+      var r = 1.21;
+      dotPositions.push(
+        r * Math.cos(lat) * Math.cos(lon),
+        r * Math.sin(lat),
+        r * Math.cos(lat) * Math.sin(lon)
+      );
+    }
+    dotsGeo.setAttribute('position', new THREE.Float32BufferAttribute(dotPositions, 3));
+    var dotsMat = new THREE.PointsMaterial({ color: 0x44aa66, size: 0.03 });
+    var dots = new THREE.Points(dotsGeo, dotsMat);
+    scene.add(dots);
+    
+    animate();
+  }
+  
+  function animate() {
+    requestAnimationFrame(animate);
+    
+    // Rotate based on real time (24h = full rotation)
+    var now = new Date();
+    var seconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+    var rotation = (seconds / 86400) * Math.PI * 2;
+    earth.rotation.y = rotation;
+    
+    // Update timezone display
+    var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    var timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    var dateStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    document.getElementById('timezone-display').innerHTML = tz + ' ' + timeStr + '<br>' + dateStr;
+    
+    renderer.render(scene, camera);
+  }
+  
+  init();
+  
+  // Handle resize
+  window.addEventListener('resize', function() {
+    var w = Math.min(400, container.offsetWidth);
+    renderer.setSize(w, w);
+    camera.aspect = 1;
+    camera.updateProjectionMatrix();
+  });
+})();
+</script>
 <div class="block1">
   <div class="container_12">
     <!-- Weather -->
