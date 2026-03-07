@@ -726,13 +726,16 @@ footer {
 
 .nav-weather {
     position: absolute;
-    right: 20px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     color: #333;
     font-size: 14px;
     font-weight: bold;
     z-index: 100;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 1px solid #ccc;
 }
 .nav-weather .nav-time {
     font-weight: bold;

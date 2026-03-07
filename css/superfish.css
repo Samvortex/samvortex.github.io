@@ -3,6 +3,7 @@
 header nav {
 	float: right;
 	padding-top: 9px;
+	margin-left: 180px;
 }
 
 .sf-menu {
@@ -43,11 +44,12 @@ ul.sf-menu>li {
 	font-size: 15px;
 	white-space: nowrap;
 	line-height: 24px;
-	margin-left: 27px;
+	margin-left: 35px;
 	
 }
 
 ul.sf-menu>li:first-child {
+	margin-left: 0;
 	background: none;	
 }
 
@@ -68,16 +70,18 @@ ul.sf-menu>li>a:hover, ul.sf-menu>li.sfHover>a, ul.sf-menu>li.current>a, ul.sf-m
 }
 
 ul.sf-menu>li:first-child {
-	background: url(../images/menu_marker.png) 0 0 no-repeat;
-	width: 13px;
-	height: 11px;	
+	/* background: url(../images/menu_marker.png) 0 0 no-repeat; */
+	/* width: 13px; */
+	/* height: 11px;	 */
 }
 
 
 ul.sf-menu>li:first-child>a {
-	display: block;
-	width: 13px;
-	height: 11px;		
+	/* display: block; */
+	/* width: 13px; */
+	/* height: 11px; */
+	display: inline;
+}		
 }
 
 ul.sf-menu>li:first-child:hover {
