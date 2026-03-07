@@ -183,77 +183,110 @@ $(function() {
       <div class="center">
         <div id="earth-container" style="width:400px;height:400px;margin:0 auto;position:relative;">
           <canvas id="earth-canvas"></canvas>
-          <div id="timezone-display" style="position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);color:#fff;font-size:16px;font-weight:bold;text-shadow:0 0 10px rgba(0,0,0,0.8);"></div>
+          <div id="timezone-display" style="position:absolute;bottom:-50px;left:50%;transform:translateX(-50%);color:#fff;font-size:16px;font-weight:bold;text-shadow:0 0 10px rgba(0,0,0,0.8);text-align:center;line-height:1.4;"></div>
         </div>
-        <br>
+        <br><br><br>
         <a href="contact.html" class="btn">Share your thoughts</a>
       </div>
     </div>
     <div class="clear"></div>
   </div>
 </div>
-<script src="js/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
 <script>
 (function() {
-  var scene, camera, renderer, earth;
+  var scene, camera, renderer, earth, cloudSphere;
   var container = document.getElementById('earth-container');
   var canvas = document.getElementById('earth-canvas');
   
   function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
-    camera.position.z = 3.5;
+    camera.position.z = 3.8;
     
     renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
     renderer.setSize(400, 400);
+    renderer.setPixelRatio(window.devicePixelRatio);
     
-    // Earth sphere
-    var geometry = new THREE.SphereGeometry(1.2, 64, 64);
-    var material = new THREE.MeshPhongMaterial({
-      color: 0x2266cc,
-      emissive: 0x112244,
-      specular: 0x333333,
-      shininess: 15
+    // Earth with texture
+    var textureLoader = new THREE.TextureLoader();
+    
+    // Earth map - using NASA Blue Marble style colors
+    var earthGeo = new THREE.SphereGeometry(1.3, 128, 128);
+    var earthMat = new THREE.MeshPhongMaterial({
+      map: textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-blue-marble.jpg'),
+      bumpMap: textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-topology.png'),
+      bumpScale: 0.04,
+      specular: new THREE.Color(0x333333),
+      shininess: 5
     });
-    earth = new THREE.Mesh(geometry, material);
+    earth = new THREE.Mesh(earthGeo, earthMat);
     scene.add(earth);
     
-    // Atmosphere glow
-    var atmosGeo = new THREE.SphereGeometry(1.25, 64, 64);
-    var atmosMat = new THREE.MeshPhongMaterial({
-      color: 0x4488ff,
+    // Cloud layer
+    var cloudGeo = new THREE.SphereGeometry(1.32, 64, 64);
+    var cloudMat = new THREE.MeshPhongMaterial({
+      map: textureLoader.load('https://unpkg.com/three-globe@2.24.10/example/img/earth-clouds.png'),
       transparent: true,
-      opacity: 0.15,
-      side: THREE.BackSide
+      opacity: 0.35,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+    cloudSphere = new THREE.Mesh(cloudGeo, cloudMat);
+    scene.add(cloudSphere);
+    
+    // Atmosphere glow
+    var atmosGeo = new THREE.SphereGeometry(1.5, 64, 64);
+    var atmosMat = new THREE.ShaderMaterial({
+      vertexShader: 'varying vec3 vNormal; void main() { vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: 'varying vec3 vNormal; void main() { float intensity = pow(0.7 - dot(vNormal, vec3(0, 0, 1.0)), 2.0); gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity * 0.6; }',
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      transparent: true
     });
     var atmos = new THREE.Mesh(atmosGeo, atmosMat);
     scene.add(atmos);
     
+    // Outer glow
+    var glowGeo = new THREE.SphereGeometry(1.7, 64, 64);
+    var glowMat = new THREE.ShaderMaterial({
+      vertexShader: 'varying vec3 vNormal; void main() { vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: 'varying vec3 vNormal; void main() { float intensity = pow(0.55 - dot(vNormal, vec3(0, 0, 1.0)), 3.5); gl_FragColor = vec4(0.4, 0.7, 1.0, 1.0) * intensity * 0.35; }',
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      transparent: true
+    });
+    var glow = new THREE.Mesh(glowGeo, glowMat);
+    scene.add(glow);
+    
+    // Starfield background
+    var starsGeo = new THREE.BufferGeometry();
+    var starPositions = [];
+    for (var i = 0; i < 2000; i++) {
+      var x = (Math.random() - 0.5) * 50;
+      var y = (Math.random() - 0.5) * 50;
+      var z = (Math.random() - 0.5) * 50;
+      if (Math.abs(x) > 3 || Math.abs(y) > 3 || Math.abs(z) > 3) {
+        starPositions.push(x, y, z);
+      }
+    }
+    starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+    var starsMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 });
+    var stars = new THREE.Points(starsGeo, starsMat);
+    scene.add(stars);
+    
     // Lighting
-    var sun = new THREE.DirectionalLight(0xffffff, 1.2);
+    var sun = new THREE.DirectionalLight(0xffffff, 1.3);
     sun.position.set(5, 3, 5);
     scene.add(sun);
     
-    var ambient = new THREE.AmbientLight(0x404040, 0.5);
+    var ambient = new THREE.AmbientLight(0x404040, 0.4);
     scene.add(ambient);
     
-    // Add continent-like dots (simplified)
-    var dotsGeo = new THREE.BufferGeometry();
-    var dotPositions = [];
-    for (var i = 0; i < 300; i++) {
-      var lat = (Math.random() - 0.5) * Math.PI * 1.5;
-      var lon = Math.random() * Math.PI * 2;
-      var r = 1.21;
-      dotPositions.push(
-        r * Math.cos(lat) * Math.cos(lon),
-        r * Math.sin(lat),
-        r * Math.cos(lat) * Math.sin(lon)
-      );
-    }
-    dotsGeo.setAttribute('position', new THREE.Float32BufferAttribute(dotPositions, 3));
-    var dotsMat = new THREE.PointsMaterial({ color: 0x44aa66, size: 0.03 });
-    var dots = new THREE.Points(dotsGeo, dotsMat);
-    scene.add(dots);
+    // Add specular light
+    var specLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    specLight.position.set(-3, -2, 2);
+    scene.add(specLight);
     
     animate();
   }
@@ -266,6 +299,9 @@ $(function() {
     var seconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
     var rotation = (seconds / 86400) * Math.PI * 2;
     earth.rotation.y = rotation;
+    
+    // Clouds rotate slightly faster
+    cloudSphere.rotation.y = rotation + 0.0003;
     
     // Update timezone display
     var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
