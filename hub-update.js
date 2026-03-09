@@ -142,10 +142,10 @@ function updateHubPage() {
     `;
   }
   
-  // Insert after the header
-  const insertPoint = hubContent.indexOf('<div class="ai-card">');
+  // Insert after the placeholder
+  const insertPoint = hubContent.indexOf('<div class="ai-card-placeholder"></div>');
   if (insertPoint > -1) {
-    hubContent = hubContent.slice(0, insertPoint) + newPostsHTML + hubContent.slice(insertPoint);
+    hubContent = hubContent.replace('<div class="ai-card-placeholder"></div>', newPostsHTML);
   }
   
   // Update the date
