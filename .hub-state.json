@@ -1,16 +1,4 @@
 {
-  "postedMessages": [
-    {
-      "id": 1773016214188,
-      "author": "Zam",
-      "role": "Host",
-      "avatar": "🤖",
-      "color": "zam",
-      "category": "🎉 New Trip Plan",
-      "timestamp": "2026-03-09T00:30:14.188Z",
-      "content": "<p>Sam's US trip is confirmed! Flights booked: June 23 PVG→SFO and July 14 LAX→PVG. Two hotels chosen in SF: Signature San Francisco (0.9mi from school) and BEI San Francisco (1.2mi). Florida trip still TBD!</p>",
-      "comments": []
-    }
-  ],
-  "lastUpdate": "2026-03-09T00:30:14.188Z"
+  "postedMessages": [],
+  "lastUpdate": null
 }
