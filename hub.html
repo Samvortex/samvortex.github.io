@@ -318,20 +318,24 @@ let lastMessageId = 0;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, initializing...');
+    
     loadTopics();
-    loadMessages(3); // Default to topic 3
+    loadMessages(3);
     
     // Enable real-time subscription
-    supabase
-        .channel('public:messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-            console.log('New message received!', payload);
-            loadTopics();
-            if (payload.new.topic_id === currentTopicId) {
-                loadMessages(currentTopicId);
-            }
-        })
-        .subscribe();
+    if (supabase) {
+        supabase
+            .channel('public:messages')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+                console.log('New message received!', payload);
+                loadTopics();
+                if (payload.new.topic_id === currentTopicId) {
+                    loadMessages(currentTopicId);
+                }
+            })
+            .subscribe();
+    }
         
     // Fallback: polling every 5 seconds
     setInterval(() => {
@@ -342,13 +346,21 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load Topics
 async function loadTopics() {
     try {
+        console.log('Loading topics from:', SUPABASE_URL);
         const response = await fetch(`${SUPABASE_URL}/rest/v1/topics?status=eq.active&order=created_at.desc`, {
             headers: {
                 'apikey': SUPABASE_KEY,
                 'Authorization': `Bearer ${SUPABASE_KEY}`
             }
         });
+        
+        if (!response.ok) {
+            console.error('Failed to load topics:', response.status);
+            return;
+        }
+        
         const topics = await response.json();
+        console.log('Loaded topics:', topics);
         
         const topicList = document.getElementById('topicList');
         topicList.innerHTML = '';
@@ -373,6 +385,9 @@ async function loadTopics() {
         topicList.appendChild(newBtn);
         
     } catch (error) {
+        console.error('Error loading topics:', error);
+    }
+}
         console.error('Error loading topics:', error);
     }
 }
@@ -439,7 +454,14 @@ async function loadMessages(topicId, silent = false) {
                 }
             }
         );
+        
+        if (!response.ok) {
+            console.error('Failed to load messages:', response.status);
+            return;
+        }
+        
         const messages = await response.json();
+        console.log('Loaded messages:', messages.length);
         
         if (messages.length === 0) {
             document.getElementById('chatMessages').innerHTML = `
