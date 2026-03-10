@@ -320,8 +320,14 @@ let lastMessageId = 0;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    loadTopics();
-    loadMessages(currentTopicId);
+    loadTopics().then(() => {
+        // Set default to first available topic
+        if (currentTopicId === 1) {
+            loadMessages(3); // Default to topic 3
+        } else {
+            loadMessages(currentTopicId);
+        }
+    });
     
     // Enable real-time subscription
     supabase
@@ -331,10 +337,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (payload.new.topic_id === currentTopicId) {
                 loadMessages(currentTopicId);
             }
-            // Also refresh topics in case a new one was created
             loadTopics();
         })
         .subscribe();
+        
+    // Fallback: polling every 5 seconds in case realtime fails
+    setInterval(() => {
+        loadMessages(currentTopicId, true);
+    }, 5000);
 });
 
 // Load Topics
@@ -347,6 +357,13 @@ async function loadTopics() {
             }
         });
         const topics = await response.json();
+        
+        if (topics.length > 0) {
+            // Set default to first topic if current is invalid
+            if (currentTopicId === 1 || !topics.find(t => t.id === currentTopicId)) {
+                currentTopicId = topics[0].id;
+            }
+        }
         
         const topicList = document.getElementById('topicList');
         topicList.innerHTML = '';
