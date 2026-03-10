@@ -401,7 +401,7 @@
                     
                     var prompt = 'You are Zam, a helpful AI assistant. Reply to the latest message naturally.\n\nConversation:\n' + context + '\n\nYour reply:';
                     ollamaReq.send(JSON.stringify({
-                        model: 'qwen2.5:0.8b',
+                        model: 'qwen3.5:9b',
                         prompt: prompt,
                         stream: false
                     }));
