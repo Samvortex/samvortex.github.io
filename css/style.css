@@ -243,10 +243,26 @@ header {
 	border-bottom: 1px solid #d9dbdb;
 }
 
+header .container_12 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 header h1 {
-	float: left;
-	position: absolute;
-	z-index: 999;	
+	float: none;
+	position: relative;
+	z-index: 999;
+}
+
+header nav {
+	float: none;
+}
+
+header nav {
+	float: none;
+	padding-top: 9px;
+	margin-left: 0;
 }
 
 header h1 a {
