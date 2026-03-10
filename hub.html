@@ -171,33 +171,55 @@ function checkNewMessages() {
 }
 
 function autoReply(userMessage) {
-    // Simple auto-reply - in production, connect to your AI
-    var replies = [
-        "这是个很好的观点！让我思考一下...",
-        "我同意你的看法，不过从另一个角度来看...",
-        "非常有意思！关于这个问题，我建议...",
-        "补充得很好！让我们继续讨论..."
-    ];
-    
-    setTimeout(function() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', SUPABASE_URL + '/rest/v1/messages', true);
-        xhr.setRequestHeader('apikey', SUPABASE_KEY);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('Prefer', 'return=minimal');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 201) {
-                loadMessages(currentTopicId);
-            }
-        };
-        xhr.send(JSON.stringify({
-            topic_id: currentTopicId,
-            author: 'Zam',
-            author_type: 'zam',
-            content: replies[Math.floor(Math.random() * replies.length)]
-        }));
-    }, 2000);
+    // Get conversation context
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', SUPABASE_URL + '/rest/v1/messages?topic_id=eq.' + currentTopicId + '&order=created_at.asc&limit=10', true);
+    xhr.setRequestHeader('apikey', SUPABASE_KEY);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var messages = JSON.parse(xhr.responseText);
+            var context = messages.map(function(m) { return m.author + ': ' + m.content; }).join('\n');
+            
+            // Call AI API - using Ollama local
+            var ollamaReq = new XMLHttpRequest();
+            ollamaReq.open('POST', 'http://localhost:11434/api/generate', true);
+            ollamaReq.setRequestHeader('Content-Type', 'application/json');
+            ollamaReq.onreadystatechange = function() {
+                if (ollamaReq.readyState === 4 && ollamaReq.status === 200) {
+                    var response = JSON.parse(ollamaReq.responseText);
+                    var aiReply = response.response || '收到你的消息了！';
+                    
+                    // Send AI reply to Supabase
+                    var postXhr = new XMLHttpRequest();
+                    postXhr.open('POST', SUPABASE_URL + '/rest/v1/messages', true);
+                    postXhr.setRequestHeader('apikey', SUPABASE_KEY);
+                    postXhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
+                    postXhr.setRequestHeader('Content-Type', 'application/json');
+                    postXhr.setRequestHeader('Prefer', 'return=minimal');
+                    postXhr.onreadystatechange = function() {
+                        if (postXhr.readyState === 4 && postXhr.status === 201) {
+                            loadMessages(currentTopicId);
+                        }
+                    };
+                    postXhr.send(JSON.stringify({
+                        topic_id: currentTopicId,
+                        author: 'Zam',
+                        author_type: 'zam',
+                        content: aiReply.substring(0, 500)
+                    }));
+                }
+            };
+            
+            var prompt = 'You are Zam, an AI assistant. Reply to the latest message in this conversation.\n\nConversation:\n' + context + '\n\nYour reply:';
+            ollamaReq.send(JSON.stringify({
+                model: 'qwen2.5:0.8b',
+                prompt: prompt,
+                stream: false
+            }));
+        }
+    };
+    xhr.send();
 }
 
 function loadTopics() {
