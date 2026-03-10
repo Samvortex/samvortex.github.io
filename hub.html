@@ -172,8 +172,11 @@
         // Page load
         window.onload = function() {
             loadTopics();
-            // Auto-reply polling every 5 seconds
-            setInterval(checkNewMessages, 5000);
+            // Messages are now auto-replied by local bot (auto-reply.js)
+            // Just poll for new messages every 5 seconds
+            setInterval(function() {
+                if (currentTopicId) loadMessages(currentTopicId, true);
+            }, 5000);
         };
 
         // ========== Topics ==========
@@ -333,81 +336,6 @@
                 author_type: 'human',
                 content: content
             }));
-        }
-
-        // ========== Auto Reply ==========
-        function checkNewMessages() {
-            if (!currentTopicId) return;
-            
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', SUPABASE_URL + '/rest/v1/messages?topic_id=eq.' + currentTopicId + '&order=created_at.desc&limit=1', true);
-            xhr.setRequestHeader('apikey', SUPABASE_KEY);
-            xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var messages = JSON.parse(xhr.responseText);
-                    if (messages && messages.length > 0) {
-                        var latestId = messages[0].id;
-                        if (latestId > lastMessageId && messages[0].author_type !== 'zam') {
-                            lastMessageId = latestId;
-                            triggerAutoReply();
-                        }
-                    }
-                }
-            };
-            xhr.send();
-        }
-
-        function triggerAutoReply() {
-            // Get conversation context
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', SUPABASE_URL + '/rest/v1/messages?topic_id=eq.' + currentTopicId + '&order=created_at.asc&limit=10', true);
-            xhr.setRequestHeader('apikey', SUPABASE_KEY);
-            xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var messages = JSON.parse(xhr.responseText);
-                    var context = messages.map(function(m) { return m.author + ': ' + m.content; }).join('\n');
-                    
-                    // Call Ollama
-                    var ollamaReq = new XMLHttpRequest();
-                    ollamaReq.open('POST', 'http://localhost:11434/api/generate', true);
-                    ollamaReq.setRequestHeader('Content-Type', 'application/json');
-                    ollamaReq.onreadystatechange = function() {
-                        if (ollamaReq.readyState === 4 && ollamaReq.status === 200) {
-                            var response = JSON.parse(ollamaReq.responseText);
-                            var aiReply = response.response || '收到你的消息了！';
-                            
-                            // Save AI reply
-                            var postXhr = new XMLHttpRequest();
-                            postXhr.open('POST', SUPABASE_URL + '/rest/v1/messages', true);
-                            postXhr.setRequestHeader('apikey', SUPABASE_KEY);
-                            postXhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
-                            postXhr.setRequestHeader('Content-Type', 'application/json');
-                            postXhr.setRequestHeader('Prefer', 'return=minimal');
-                            postXhr.onreadystatechange = function() {
-                                if (postXhr.readyState === 4 && postXhr.status === 201) {
-                                    loadMessages(currentTopicId);
-                                }
-                            };
-                            postXhr.send(JSON.stringify({
-                                topic_id: currentTopicId,
-                                author: 'Zam',
-                                author_type: 'zam',
-                                content: aiReply.substring(0, 500)
-                            }));
-                        }
-                    };
-                    
-                    var prompt = 'You are Zam, a helpful AI assistant. Reply to the latest message naturally.\n\nConversation:\n' + context + '\n\nYour reply:';
-                    ollamaReq.send(JSON.stringify({
-                        model: 'qwen3.5:9b',
-                        prompt: prompt,
-                        stream: false
-                    }));
-                }
-            };
-            xhr.send();
         }
 
         // ========== Utils ==========
