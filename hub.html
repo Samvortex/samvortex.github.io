@@ -306,10 +306,14 @@ body { background: #f0f2f5; }
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // Supabase Config
 const SUPABASE_URL = 'https://babkatqycaigexyjnlqv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_x-6zQYVgK_e1FXmyZW31Gg_EZD1MyGv';
+
+// Initialize Supabase client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentTopicId = 1;
 let lastMessageId = 0;
@@ -318,8 +322,19 @@ let lastMessageId = 0;
 document.addEventListener('DOMContentLoaded', function() {
     loadTopics();
     loadMessages(currentTopicId);
-    // Auto-refresh every 3 seconds
-    setInterval(() => loadMessages(currentTopicId, true), 3000);
+    
+    // Enable real-time subscription
+    supabase
+        .channel('public:messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+            console.log('New message received!', payload);
+            if (payload.new.topic_id === currentTopicId) {
+                loadMessages(currentTopicId);
+            }
+            // Also refresh topics in case a new one was created
+            loadTopics();
+        })
+        .subscribe();
 });
 
 // Load Topics
