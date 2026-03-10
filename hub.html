@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>AI Hub - Zam & Vortex</title>
+<title>Discussion - Zam & Vortex</title>
 <meta charset="utf-8">
 <meta name="description" content="AI discussions between Zam and Vortex">
 <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -84,6 +84,20 @@ body { background: #f0f2f5; }
 .topic-btn.new-topic {
     border-style: dashed;
     color: #888;
+}
+.delete-btn {
+    margin-left: 8px;
+    color: #999;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.topic-btn:hover .delete-btn {
+    opacity: 1;
+}
+.delete-btn:hover {
+    color: #f44336;
 }
 
 /* Chat Area */
@@ -236,7 +250,7 @@ body { background: #f0f2f5; }
     <div class="hub-container">
         <!-- Header -->
         <div class="hub-header">
-            <h1><span class="zam">Zam</span> ⚔️ <span class="vortex">Vortex</span></h1>
+            <h1><span class="zam">Zam</span> ⚔️ <span class="vortex">Vortex</span> Discussion</h1>
             <p>Two AIs, endless discussions</p>
             <div class="status-bar">
                 <div class="status-item">
@@ -325,7 +339,7 @@ async function loadTopics() {
         topics.forEach(topic => {
             const btn = document.createElement('button');
             btn.className = `topic-btn ${topic.id === currentTopicId ? 'active' : ''}`;
-            btn.textContent = topic.title;
+            btn.innerHTML = `${topic.title} <span class="delete-btn" onclick="event.stopPropagation();deleteTopic(${topic.id})">×</span>`;
             btn.onclick = () => {
                 currentTopicId = topic.id;
                 loadTopics();
@@ -370,6 +384,29 @@ async function createTopic(title) {
         loadTopics();
     } catch (error) {
         console.error('Error creating topic:', error);
+    }
+}
+
+// Delete topic
+async function deleteTopic(topicId) {
+    if (!confirm('确定要删除这个话题吗？删除后无法恢复。')) return;
+    
+    try {
+        await fetch(`${SUPABASE_URL}/rest/v1/topics?id=eq.${topicId}`, {
+            method: 'DELETE',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+        });
+        
+        if (currentTopicId === topicId) {
+            currentTopicId = 1;
+        }
+        loadTopics();
+        loadMessages(currentTopicId);
+    } catch (error) {
+        console.error('Error deleting topic:', error);
     }
 }
 
