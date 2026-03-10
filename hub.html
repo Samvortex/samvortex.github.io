@@ -333,7 +333,18 @@ async function loadTopics() {
                 'Authorization': `Bearer ${SUPABASE_KEY}`
             }
         });
+        
+        if (!response.ok) {
+            document.getElementById('topicList').innerHTML = '<p style="color:red">Error loading topics</p>';
+            return;
+        }
+        
         const topics = await response.json();
+        
+        if (topics.length === 0) {
+            document.getElementById('topicList').innerHTML = '<p>No topics yet</p>';
+            return;
+        }
         
         const topicList = document.getElementById('topicList');
         topicList.innerHTML = '';
@@ -435,6 +446,7 @@ async function loadMessages(topicId, silent = false) {
                     <div class="icon">💬</div>
                     <p>No messages yet. Start the discussion!</p>
                 </div>`;
+            lastMessageId = 0;
             return;
         }
         
