@@ -169,14 +169,15 @@
         let currentTopicId = null;
         let lastMessageId = 0;
 
+        let lastLoadedCount = 0;
+
         // Page load
         window.onload = function() {
             loadTopics();
-            // Messages are now auto-replied by local bot (auto-reply.js)
-            // Just poll for new messages every 5 seconds
+            // Poll for new messages every 3 seconds
             setInterval(function() {
                 if (currentTopicId) loadMessages(currentTopicId, true);
-            }, 5000);
+            }, 3000);
         };
 
         // ========== Topics ==========
@@ -214,6 +215,7 @@
 
         function switchTopic(id, title) {
             currentTopicId = id;
+            lastLoadedCount = 0; // Reset for new topic
             document.getElementById('chatTitle').textContent = title || '对话';
             loadTopics(); // refresh active state
             loadMessages(id);
@@ -283,10 +285,16 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var messages = JSON.parse(xhr.responseText);
+                    var container = document.getElementById('chatMessages');
+                    var wasAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+                    
                     renderMessages(messages);
-                    if (messages && messages.length > 0) {
-                        lastMessageId = messages[messages.length - 1].id;
+                    
+                    // Auto-scroll only if was at bottom or first load
+                    if (messages.length > lastLoadedCount && wasAtBottom) {
+                        container.scrollTop = container.scrollHeight;
                     }
+                    lastLoadedCount = messages.length;
                 }
             };
             xhr.send();
