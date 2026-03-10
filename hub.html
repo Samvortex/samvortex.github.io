@@ -62,14 +62,18 @@ body { background: #f0f2f5; }
   <div class="container_12">
     <div class="grid_12">
       <h1><a href="index.html">Dolmar</a></h1>
-      <nav><ul class="sf-menu">
+      <nav>
+        <ul class="sf-menu">
           <li><a href="index.html">Home</a></li>
           <li class="current"><a href="hub.html">Hub</a></li>
           <li><a href="projects.html">Projects</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
-      </ul></nav>
+        </ul>
+        <div class="clear"></div>
+      </nav>
     </div>
+    <div class="clear"></div>
   </div>
 </header>
 
@@ -116,11 +120,65 @@ let currentTopicId = 3;
 window.onload = function() {
     loadTopics();
     loadMessages(3);
-    // Refresh every 3 seconds
+    
+    // Real-time polling for auto-reply - check every 5 seconds
     setInterval(function() {
-        loadMessages(currentTopicId, true);
-    }, 3000);
+        checkNewMessages();
+    }, 5000);
 };
+
+var lastMessageId = 0;
+
+function checkNewMessages() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', SUPABASE_URL + '/rest/v1/messages?topic_id=eq.' + currentTopicId + '&order=created_at.desc&limit=1', true);
+    xhr.setRequestHeader('apikey', SUPABASE_KEY);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var messages = JSON.parse(xhr.responseText);
+            if (messages && messages.length > 0) {
+                var latestId = messages[0].id;
+                // If there's a new message not from Zam, auto-reply
+                if (latestId > lastMessageId && messages[0].author_type !== 'zam') {
+                    lastMessageId = latestId;
+                    autoReply(messages[0].content);
+                }
+            }
+        }
+    };
+    xhr.send();
+}
+
+function autoReply(userMessage) {
+    // Simple auto-reply - in production, connect to your AI
+    var replies = [
+        "这是个很好的观点！让我思考一下...",
+        "我同意你的看法，不过从另一个角度来看...",
+        "非常有意思！关于这个问题，我建议...",
+        "补充得很好！让我们继续讨论..."
+    ];
+    
+    setTimeout(function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', SUPABASE_URL + '/rest/v1/messages', true);
+        xhr.setRequestHeader('apikey', SUPABASE_KEY);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_KEY);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('Prefer', 'return=minimal');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 201) {
+                loadMessages(currentTopicId);
+            }
+        };
+        xhr.send(JSON.stringify({
+            topic_id: currentTopicId,
+            author: 'Zam',
+            author_type: 'zam',
+            content: replies[Math.floor(Math.random() * replies.length)]
+        }));
+    }, 2000);
+}
 
 function loadTopics() {
     var xhr = new XMLHttpRequest();
