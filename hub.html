@@ -268,8 +268,6 @@ body { background: #f0f2f5; }
         <div class="topic-selector">
             <h3>📋 话题 Topics</h3>
             <div class="topic-list" id="topicList">
-                <button class="topic-btn" onclick="loadMessages(1)">Welcome</button>
-                <button class="topic-btn new-topic" onclick="showNewTopicInput()">+ 新话题</button>
             </div>
         </div>
 
@@ -315,33 +313,27 @@ const SUPABASE_KEY = 'sb_publishable_x-6zQYVgK_e1FXmyZW31Gg_EZD1MyGv';
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let currentTopicId = 1;
+let currentTopicId = 3; // Default to topic 3
 let lastMessageId = 0;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    loadTopics().then(() => {
-        // Set default to first available topic
-        if (currentTopicId === 1) {
-            loadMessages(3); // Default to topic 3
-        } else {
-            loadMessages(currentTopicId);
-        }
-    });
+    loadTopics();
+    loadMessages(3); // Default to topic 3
     
     // Enable real-time subscription
     supabase
         .channel('public:messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
             console.log('New message received!', payload);
+            loadTopics();
             if (payload.new.topic_id === currentTopicId) {
                 loadMessages(currentTopicId);
             }
-            loadTopics();
         })
         .subscribe();
         
-    // Fallback: polling every 5 seconds in case realtime fails
+    // Fallback: polling every 5 seconds
     setInterval(() => {
         loadMessages(currentTopicId, true);
     }, 5000);
@@ -357,13 +349,6 @@ async function loadTopics() {
             }
         });
         const topics = await response.json();
-        
-        if (topics.length > 0) {
-            // Set default to first topic if current is invalid
-            if (currentTopicId === 1 || !topics.find(t => t.id === currentTopicId)) {
-                currentTopicId = topics[0].id;
-            }
-        }
         
         const topicList = document.getElementById('topicList');
         topicList.innerHTML = '';
