@@ -45,8 +45,8 @@ import Base from '../layouts/Base.astro';
         </div>
 
         <div class="chat-input-area">
-          <input type="text" id="messageInput" placeholder="Type your message... (Enter to send)" onkeypress="if(event.key==='Enter')sendMessage()" disabled />
-          <button id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+          <input type="text" id="messageInput" placeholder="Type your message... (Enter to send)" disabled />
+          <button id="sendBtn" disabled>Send</button>
         </div>
       </div>
     </div>
@@ -59,8 +59,8 @@ import Base from '../layouts/Base.astro';
     <h3 style="margin-bottom: 16px;">New Topic</h3>
     <input type="text" id="newTopicTitle" placeholder="Topic title..." style="width:100%; padding:10px; border:1px solid var(--color-border); border-radius:8px; margin-bottom:12px; font-size:15px;" />
     <div style="display:flex; gap:8px; justify-content:flex-end;">
-      <button onclick="closeNewTopicModal()" style="padding:8px 16px; border:1px solid var(--color-border); background:white; border-radius:8px; cursor:pointer;">Cancel</button>
-      <button onclick="createTopic()" style="padding:8px 16px; background:var(--color-primary); color:white; border:none; border-radius:8px; cursor:pointer;">Create</button>
+      <button id="cancelTopicBtn" style="padding:8px 16px; border:1px solid var(--color-border); background:white; border-radius:8px; cursor:pointer;">Cancel</button>
+      <button id="confirmCreateTopicBtn" style="padding:8px 16px; background:var(--color-primary); color:white; border:none; border-radius:8px; cursor:pointer;">Create</button>
     </div>
   </div>
 </div>
@@ -119,57 +119,137 @@ import Base from '../layouts/Base.astro';
   let currentTopicId = null;
   let pollInterval = null;
 
-  // Update all API calls with the new JWT key
-  const AUTH_HEADER = 'Bearer ' + API_KEY;
+  // ─── Utility helpers ───────────────────────────────────────────────
+  function escHtml(text) {
+    const d = document.createElement('div');
+    d.textContent = text == null ? '' : text;
+    return d.innerHTML;
+  }
 
-  // Load topics on page load
-  loadTopics();
+  function escAttr(text) {
+    return String(text == null ? '' : text)
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
-  // New topic modal
-  document.getElementById('newTopicBtn').addEventListener('click', () => {
-    document.getElementById('newTopicModal').style.display = 'flex';
-    document.getElementById('newTopicTitle').focus();
+  function showTopicError(msg) {
+    const container = document.getElementById('topicList');
+    if (!container) return;
+    container.innerHTML = `<div style="padding:20px; text-align:center; color:#e53935; font-size:14px;">${escHtml(msg)}</div>`;
+  }
+
+  // ─── Event delegation on topic list ─────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const topicList = document.getElementById('topicList');
+    const newTopicBtn = document.getElementById('newTopicBtn');
+
+    // + New button
+    newTopicBtn.addEventListener('click', () => {
+      document.getElementById('newTopicModal').style.display = 'flex';
+      document.getElementById('newTopicTitle').focus();
+    });
+
+    // Topic list click delegation
+    topicList.addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.topic-delete');
+      if (deleteBtn) {
+        e.stopPropagation();
+        const id = deleteBtn.getAttribute('data-delete-id');
+        if (id) deleteTopic(parseInt(id, 10), e);
+        return;
+      }
+
+      const item = e.target.closest('.topic-item');
+      if (item) {
+        const id = item.getAttribute('data-id');
+        const title = item.getAttribute('data-title');
+        if (id) selectTopic(parseInt(id, 10), title);
+      }
+    });
+
+    // Modal Cancel button
+    const cancelBtn = document.getElementById('cancelTopicBtn');
+    if (cancelBtn) cancelBtn.addEventListener('click', closeNewTopicModal);
+
+    // Modal Create button
+    const createBtn = document.getElementById('confirmCreateTopicBtn');
+    if (createBtn) createBtn.addEventListener('click', createTopic);
+
+    // Send button
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+    // Enter key in message input
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    // Load topics on page load
+    loadTopics();
   });
 
+  // ─── Modal helpers ──────────────────────────────────────────────────
   function closeNewTopicModal() {
     document.getElementById('newTopicModal').style.display = 'none';
     document.getElementById('newTopicTitle').value = '';
   }
 
+  // ─── Topics ─────────────────────────────────────────────────────────
+  async function loadTopics() {
+    console.log('[Hub] Loading topics...');
+    const res = await fetch(API_URL + '/rest/v1/topics?status=eq.active&order=created_at.desc', {
+      headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => res.statusText);
+      console.error('[Hub] Failed to load topics:', res.status, errText);
+      showTopicError('Failed to load topics: ' + res.status + ' ' + errText);
+      return;
+    }
+
+    const topics = await res.json();
+    console.log('[Hub] Loaded', topics.length, 'topics');
+    const container = document.getElementById('topicList');
+
+    if (!Array.isArray(topics) || topics.length === 0) {
+      container.innerHTML = '<div style="padding:20px; text-align:center; color:#999; font-size:14px;">No topics yet. Start one!</div>';
+      return;
+    }
+
+    container.innerHTML = topics.map(t => `
+      <div class="topic-item${parseInt(t.id) === currentTopicId ? ' active' : ''}" data-id="${t.id}" data-title="${escAttr(t.title)}">
+        <span class="topic-title">${escHtml(t.title)}</span>
+        <button class="topic-delete" data-delete-id="${t.id}" title="Delete">×</button>
+      </div>
+    `).join('');
+  }
+
   async function createTopic() {
     const title = document.getElementById('newTopicTitle').value.trim();
     if (!title) return;
+
+    console.log('[Hub] Creating topic:', title);
     const res = await fetch(API_URL + '/rest/v1/topics', {
       method: 'POST',
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
       body: JSON.stringify({ title, status: 'active', created_by: 'Sam' })
     });
-    if (res.ok) {
-      closeNewTopicModal();
-      loadTopics();
-    }
-  }
 
-  async function loadTopics() {
-    const res = await fetch(API_URL + '/rest/v1/topics?status=eq.active&order=created_at.desc', {
-      headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
-    });
-    if (!res.ok) return;
-    const topics = await res.json();
-    const container = document.getElementById('topicList');
-    if (topics.length === 0) {
-      container.innerHTML = '<div style="padding:20px; text-align:center; color:#999; font-size:14px;">No topics yet. Start one!</div>';
+    if (!res.ok) {
+      const errText = await res.text().catch(() => res.statusText);
+      console.error('[Hub] Failed to create topic:', res.status, errText);
+      showTopicError('Failed to create topic: ' + res.status + ' ' + errText);
       return;
     }
-    container.innerHTML = topics.map(t => `
-      <div class="topic-item${t.id === currentTopicId ? ' active' : ''}" onclick="selectTopic(${t.id}, '${t.title.replace(/'/g, "\\'")}')">
-        <span class="topic-title">${escHtml(t.title)}</span>
-        <button class="topic-delete" onclick="deleteTopic(${t.id}, event)" title="Delete">×</button>
-      </div>
-    `).join('');
+
+    console.log('[Hub] Topic created successfully');
+    closeNewTopicModal();
+    loadTopics();
   }
 
+  // ─── Chat ───────────────────────────────────────────────────────────
   async function selectTopic(id, title) {
+    console.log('[Hub] selectTopic called — id:', id, 'title:', title);
     currentTopicId = id;
     document.getElementById('chatTitle').textContent = title;
     document.getElementById('messageInput').disabled = false;
@@ -178,21 +258,26 @@ import Base from '../layouts/Base.astro';
     if (pollInterval) clearInterval(pollInterval);
     await loadMessages(id);
     pollInterval = setInterval(() => loadMessages(id, true), 3000);
-    loadTopics();
+    loadTopics(); // re-render to mark active
   }
 
   async function loadMessages(topicId, isSilent = false) {
     const res = await fetch(API_URL + '/rest/v1/messages?topic_id=eq.' + topicId + '&order=created_at.asc', {
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
-    if (!res.ok) return;
+
+    if (!res.ok) {
+      console.error('[Hub] Failed to load messages:', res.status);
+      return;
+    }
+
     const msgs = await res.json();
     renderMessages(msgs, isSilent);
   }
 
   function renderMessages(msgs, isSilent = false) {
     const container = document.getElementById('chatMessages');
-    if (msgs.length === 0) {
+    if (!msgs || msgs.length === 0) {
       container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#999;"><div style="font-size:48px; margin-bottom:16px;">💬</div><p>Start the conversation!</p></div>';
       return;
     }
@@ -215,23 +300,38 @@ import Base from '../layouts/Base.astro';
     const content = input.value.trim();
     if (!content || !currentTopicId) return;
     input.value = '';
-    await fetch(API_URL + '/rest/v1/messages', {
+
+    console.log('[Hub] Sending message to topic:', currentTopicId);
+    const res = await fetch(API_URL + '/rest/v1/messages', {
       method: 'POST',
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
       body: JSON.stringify({ topic_id: currentTopicId, author: 'Sam', author_type: 'human', content })
     });
+
+    if (!res.ok) {
+      console.error('[Hub] Failed to send message:', res.status);
+      return;
+    }
+
     await loadMessages(currentTopicId);
   }
 
   async function deleteTopic(id, event) {
-    event.stopPropagation();
     if (!confirm('Delete this topic and all its messages?')) return;
+
+    console.log('[Hub] Deleting topic:', id);
     await fetch(API_URL + '/rest/v1/messages?topic_id=eq.' + id, {
       method: 'DELETE', headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
-    await fetch(API_URL + '/rest/v1/topics?id=eq.' + id, {
+    const delRes = await fetch(API_URL + '/rest/v1/topics?id=eq.' + id, {
       method: 'DELETE', headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
+
+    if (!delRes.ok) {
+      console.error('[Hub] Failed to delete topic:', delRes.status);
+      return;
+    }
+
     if (currentTopicId === id) {
       currentTopicId = null;
       document.getElementById('chatTitle').textContent = 'Select a topic';
@@ -240,11 +340,5 @@ import Base from '../layouts/Base.astro';
       document.getElementById('sendBtn').disabled = true;
     }
     loadTopics();
-  }
-
-  function escHtml(text) {
-    const d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
   }
 </script>
