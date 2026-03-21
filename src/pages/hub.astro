@@ -1,21 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-
-// Server-side: fetch initial topics
-let initialTopics = [];
-try {
-  const res = await fetch('https://babkatqycaigexyjnlqv.supabase.co/rest/v1/topics?status=eq.active&order=created_at.desc', {
-    headers: {
-      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhYmthdHF5Y2FpZ2V4eWpubHF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMzg4NjksImV4cCI6MjA4ODcxNDg2OX0.xnz8BHhA8dThSpwOBoeubNCIfUXLmEuknf3S0niuwCk',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhYmthdHF5Y2FpZ2V4eWpubHF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMzg4NjksImV4cCI6MjA4ODcxNDg2OX0.xnz8BHhA8dThSpwOBoeubNCIfUXLmEuknf3S0niuwCk',
-    }
-  });
-  if (res.ok) {
-    initialTopics = await res.json();
-  }
-} catch (e) {
-  console.error('Failed to load topics:', e);
-}
 ---
 
 <Base title="Discussion Hub — Sam's Space" currentPath="/hub">
@@ -34,18 +18,7 @@ try {
             <button class="new-topic-btn" id="newTopicBtn">+ New</button>
           </div>
           <div class="topic-list" id="topicList">
-            {initialTopics.length === 0 ? (
-              <div style="padding: 20px; text-align: center; color: var(--color-text-muted); font-size: 14px;">
-                No topics yet. Start one!
-              </div>
-            ) : (
-              initialTopics.map(topic => (
-                <div class="topic-item" data-id={topic.id} onclick={`selectTopic(${topic.id}, '${topic.title.replace(/'/g, "\\'")}')`}>
-                  <span class="topic-title">{topic.title}</span>
-                  <button class="topic-delete" onclick={`deleteTopic(${topic.id}, event)`} title="Delete topic">×</button>
-                </div>
-              ))
-            )}
+            <div id="topicListLoading" style="padding: 20px; text-align: center; color: var(--color-text-muted); font-size: 14px;">Loading...</div>
           </div>
         </div>
       </aside>
@@ -148,6 +121,9 @@ try {
 
   // Update all API calls with the new JWT key
   const AUTH_HEADER = 'Bearer ' + API_KEY;
+
+  // Load topics on page load
+  loadTopics();
 
   // New topic modal
   document.getElementById('newTopicBtn').addEventListener('click', () => {
