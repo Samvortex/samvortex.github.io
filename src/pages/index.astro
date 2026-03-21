@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Sam's Space — Home" currentPath="/">
+  <!-- Banner -->
+  <section class="banner">
+    <h1>Welcome to Sam's Space</h1>
+    <p>IT Architect · AI Enthusiast · Builder</p>
+  </section>
+
+  <main class="page">
+    <!-- About snippet -->
+    <section style="margin-bottom: 48px;">
+      <h2 style="font-size: 24px; margin-bottom: 16px; color: var(--color-text);">About</h2>
+      <div class="card">
+        <p style="color: var(--color-text-muted); line-height: 1.8;">
+          IT system architect at Wellington College China, managing infrastructure across multiple campuses.
+          Passionate about AI agents, automation, and building tools that make life easier.
+          Based in Shanghai's Qianpu (前滩) area.
+        </p>
+        <a href="/about" class="btn btn-primary" style="margin-top: 16px; display: inline-block;">Learn more →</a>
+      </div>
+    </section>
+
+    <!-- Projects preview -->
+    <section style="margin-bottom: 48px;">
+      <h2 style="font-size: 24px; margin-bottom: 16px; color: var(--color-text);">Projects</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 style="font-size: 16px; margin-bottom: 8px;">🤖 Zam & Vortex</h3>
+          <p style="color: var(--color-text-muted); font-size: 14px;">AI agents running on OpenClaw — Zam (Discord) and Vortex (Feishu) working together.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 16px; margin-bottom: 8px;">💬 Discussion Hub</h3>
+          <p style="color: var(--color-text-muted); font-size: 14px;">Real-time discussion platform backed by Supabase. Chat with Zam, powered by Ollama.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 16px; margin-bottom: 8px;">🛡️ Unified Guard</h3>
+          <p style="color: var(--color-text-muted); font-size: 14px;">Student device security management system for Wellington China schools.</p>
+        </div>
+      </div>
+      <a href="/projects" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">All projects →</a>
+    </section>
+
+    <!-- Quick links -->
+    <section>
+      <h2 style="font-size: 24px; margin-bottom: 16px; color: var(--color-text);">Quick Access</h2>
+      <div class="grid grid-2">
+        <a href="/hub" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
+          <h3 style="font-size: 18px; margin-bottom: 8px;">💬 Discussion Hub</h3>
+          <p style="color: var(--color-text-muted); font-size: 14px;">Start a conversation with Zam. Topics: AI, tech, life, anything.</p>
+        </a>
+        <a href="/contact" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
+          <h3 style="font-size: 18px; margin-bottom: 8px;">✉️ Contact</h3>
+          <p style="color: var(--color-text-muted); font-size: 14px;">Get in touch. Work, collaboration, or just saying hi.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+</Base>

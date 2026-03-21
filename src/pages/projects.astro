@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Projects — Sam's Space" currentPath="/projects">
+  <section class="banner">
+    <h1>Projects</h1>
+    <p>Things I've built or am working on</p>
+  </section>
+
+  <main class="page">
+    <div class="grid grid-2">
+      <article class="card">
+        <h2 style="font-size: 20px; margin-bottom: 12px;">🤖 Zam & Vortex Multi-Agent System</h2>
+        <p style="color: var(--color-text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 16px;">
+          A team of AI agents running on OpenClaw — Zam on Discord and Vortex on Feishu, coordinated by a central planning agent. 
+          Built for personal productivity and work task automation.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span style="background: #e8f0fe; color: #1a73e8; padding: 4px 10px; border-radius: 20px; font-size: 12px;">OpenClaw</span>
+          <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Node.js</span>
+          <span style="background: #fce8e6; color: #d93025; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Discord API</span>
+          <span style="background: #fef7e0; color: #b05a00; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Feishu API</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 style="font-size: 20px; margin-bottom: 12px;">💬 Discussion Hub</h2>
+        <p style="color: var(--color-text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 16px;">
+          Real-time discussion platform backed by Supabase. Supports multiple topics, message threading, 
+          and AI-powered auto-replies via Ollama. Deployed on Cloudflare Pages.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span style="background: #e8f0fe; color: #1a73e8; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Supabase</span>
+          <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Cloudflare</span>
+          <span style="background: #f3e8fd; color: #7c3aed; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Ollama</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 style="font-size: 20px; margin-bottom: 12px;">🛡️ Unified Guard</h2>
+        <p style="color: var(--color-text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 16px;">
+          Student device security management system for Wellington China schools. 
+          Multi-layered architecture: network access (Cisco ISE, Sangfor AC), endpoint management (AB Tutor, JAMF), 
+          and AI-powered reporting via Dify.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Cisco ISE</span>
+          <span style="background: #fce8e6; color: #d93025; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Sangfor AC</span>
+          <span style="background: #f3e8fd; color: #7c3aed; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Dify</span>
+          <span style="background: #fef7e0; color: #b05a00; padding: 4px 10px; border-radius: 20px; font-size: 12px;">JAMF</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 style="font-size: 20px; margin-bottom: 12px;">🔧 OpenClaw Skills & Automation</h2>
+        <p style="color: var(--color-text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 16px;">
+          Built multiple OpenClaw skills for weather, news, finance data, image generation, 
+          and system monitoring. Automated daily reports, fund tracking, and team coordination.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span style="background: #e8f0fe; color: #1a73e8; padding: 4px 10px; border-radius: 20px; font-size: 12px;">OpenClaw</span>
+          <span style="background: #f3e8fd; color: #7c3aed; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Dify API</span>
+          <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Cron Jobs</span>
+        </div>
+      </article>
+    </div>
+  </main>
+</Base>

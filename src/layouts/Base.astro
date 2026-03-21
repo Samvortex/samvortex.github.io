@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+  currentPath?: string;
+}
+
+const { title, currentPath = '/' } = Astro.props;
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/hub', label: 'Hub' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sam's personal space — projects, thoughts, and experiments." />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>{title}</title>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">⚡ Sam's Space</a>
+      <ul class="nav-links">
+        {navLinks.map(link => (
+          <li>
+            <a href={link.href} class={currentPath === link.href ? 'active' : ''}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+
+  <slot />
+
+  <footer class="footer">
+    <p>© {new Date().getFullYear()} Sam Vortex · Powered by Astro + Cloudflare</p>
+  </footer>
+</body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>
