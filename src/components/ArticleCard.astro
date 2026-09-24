@@ -7,7 +7,7 @@ interface Props {
   featured?: boolean;
 }
 const { article, featured = false } = Astro.props;
-const { data, id } = article;
+const { data } = article;
 const cat = CATEGORIES[data.category];
 ---
 <article class={`group ${featured ? 'md:col-span-2' : ''}`}>
