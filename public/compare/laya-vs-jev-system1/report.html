@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Laya vs Jev · System 1 Models 全面对比</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;510;590;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---------- design tokens (Linear.app + small adjustments) ---------- */
+  :root {
+    --bg:           #08090a;
+    --bg-panel:    #0f1011;
+    --bg-elevated: #191a1b;
+    --bg-secondary:#28282c;
+    --ink:         #f7f8f8;
+    --ink-soft:    #d0d6e0;
+    --ink-mid:     #8a8f98;
+    --ink-dim:     #62666d;
+    --border:      rgba(255,255,255,0.08);
+    --border-subtle:rgba(255,255,255,0.05);
+    --border-strong:rgba(255,255,255,0.12);
+    --accent-jev:  #5e6ad2;     /* primary purple, Jev brand */
+    --accent-jev-h:#7170ff;
+    --accent-jev-l:#828fff;
+    --accent-laya: #10b981;     /* Laya accent */
+    --accent-laya-h:#34d399;
+    --accent-laya-d:rgba(16,185,129,0.15);
+    --accent-jev-d: rgba(94,106,210,0.15);
+    --warn:        #fb7185;
+    --tie:         #4b5563;
+    --font-sans:   'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono:   'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --radius-sm:   6px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-xl:   18px;
+    --shadow-rim:  rgba(0,0,0,0.2) 0px 0px 0px 1px;
+    --shadow-pop:  rgba(0,0,0,0.4) 0px 8px 24px -8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv01","ss03";
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* layout container */
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- typography ---------- */
+  .display { font-weight: 510; line-height: 1.02; letter-spacing: -0.04em; }
+  .h-d1 { font-size: 56px; }
+  .h-h1 { font-size: 32px; font-weight: 510; letter-spacing: -0.022em; line-height: 1.15; }
+  .h-h2 { font-size: 22px; font-weight: 510; letter-spacing: -0.02em; line-height: 1.25; }
+  .h-h3 { font-size: 16px; font-weight: 590; letter-spacing: -0.01em; }
+  .body  { font-size: 15px; font-weight: 400; line-height: 1.6; color: var(--ink-soft); }
+  .meta  { font-size: 12px; font-weight: 510; color: var(--ink-mid); letter-spacing: 0.02em; text-transform: uppercase; }
+  .dim   { color: var(--ink-mid); }
+  .dimm  { color: var(--ink-dim); }
+  .mono  { font-family: var(--font-mono); font-feature-settings: "zero","ss01"; }
+
+  /* ---------- top header ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px);
+    background: rgba(8,9,10,0.78);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .topbar-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px;
+    max-width: 1240px; margin: 0 auto;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 590; font-size: 14px; letter-spacing: -0.01em; }
+  .brand-mark {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent-laya) 0%, var(--accent-jev) 100%);
+    display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 12px;
+  }
+  .topnav { display: flex; gap: 18px; font-size: 13px; color: var(--ink-mid); }
+  .topnav a { color: var(--ink-soft); text-decoration: none; }
+  .topnav a:hover { color: var(--ink); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    padding: 96px 0 56px;
+    border-bottom: 1px solid var(--border-subtle);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(94,106,210,0.12), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 30% 50%, rgba(16,185,129,0.08), transparent 70%);
+    pointer-events: none;
+84  }
+  .hero-inner { position: relative; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--ink-mid); margin-bottom: 24px; background: rgba(255,255,255,0.02); }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-laya); box-shadow: 0 0 8px var(--accent-laya); animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+  .hero h1 {
+    font-size: 64px;
+    font-weight: 510;
+    line-height: 1.02;
+    letter-spacing: -1.408px;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .hero h1 em { font-style: normal; color: var(--ink-mid); }
+  .hero h1 .laya { color: var(--accent-laya); }
+  .hero h1 .jev  { color: var(--accent-jev-h); }
+  .hero .lede { font-size: 19px; line-height: 1.55; max-width: 760px; color: var(--ink-soft); font-weight: 400; letter-spacing: -0.165px; }
+  .hero-meta { display: flex; gap: 24px; margin-top: 32px; font-size: 13px; color: var(--ink-mid); }
+  .hero-meta span strong { color: var(--ink); font-weight: 590; margin-left: 4px; }
+
+  /* ---------- section ---------- */
+  section { padding: 80px 0; border-bottom: 1px solid var(--border-subtle); }
+  section .h2-wrap { margin-bottom: 36px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  section .label { font-size: 11px; font-weight: 510; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 10px; display: block; }
+  section h2 { font-size: 38px; font-weight: 510; line-height: 1.1; letter-spacing: -0.84px; }
+  section h2 .laya { color: var(--accent-laya); }
+  section h2 .jev  { color: var(--accent-jev-h); }
+  .section-desc { color: var(--ink-soft); font-size: 16px; max-width: 720px; margin-top: 10px; line-height: 1.6; }
+
+  /* ---------- identity snapshot (compare grid) ---------- */
+  .identity-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-panel);
+  }
+  .identity-col { padding: 28px 32px; position: relative; }
+  .identity-col.laya { border-right: 1px solid var(--border-subtle); background: linear-gradient(180deg, rgba(16,185,129,0.03), transparent 200px); }
+  .identity-col.jev  { background: linear-gradient(180deg, rgba(94,106,210,0.04), transparent 200px); }
+  .identity-col h3 { font-size: 24px; font-weight: 510; letter-spacing: -0.288px; margin-bottom: 6px; }
+  .identity-col.laya h3 { color: var(--accent-laya-h); }
+  .identity-col.jev  h3 { color: var(--accent-jev-h); }
+  .identity-col .vendor { color: var(--ink-mid); font-size: 13px; margin-bottom: 24px; font-family: var(--font-mono); }
+  .identity-row {
+    display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 10px 0;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 13.5px;
+  }
+  .identity-row:first-of-type { border-top: none; }
+  .identity-row .k { color: var(--ink-mid); font-weight: 510; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 2px; }
+  .identity-row .v { color: var(--ink-soft); }
+  .identity-row .v code { background: rgba(255,255,255,0.04); padding: 1px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; }
+
+  /* ---------- cascade diagram ---------- */
+  .cascade {
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    background: var(--bg-panel); padding: 32px;
+    position: relative;
+    min-height: 520px;
+  }
+  .cascade-grid {
+    display: grid; grid-template-columns: 220px 1fr 220px; gap: 24px; align-items: start;
+  }
+  .cascade-legend {
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+    padding: 16px; font-size: 12.5px;
+  }
+  .cascade-legend .row { display: flex; align-items: center; gap: 10px; padding: 7px 0; color: var(--ink-soft); }
+  .cascade-legend .swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .cascade-legend h4 { font-size: 11px; font-weight: 510; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 12px; }
+  .cascade-stats {
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-subtle);
+    font-size: 12px; color: var(--ink-mid);
+  }
+  .stat-row { display: flex; justify-content: space-between; padding: 4px 0; font-family: var(--font-mono); font-size: 11.5px; }
+  .stat-row strong { color: var(--ink); font-weight: 590; }
+
+  .cascade-svg {
+    width: 100%; height: 460px;
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+    background: #060708;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    display: block;
+  }
+
+  .cascade-controls { display: flex; flex-direction: column; gap: 8px; }
+  .ctrl-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 8px 12px; border-radius: var(--radius-sm);
+    cursor: pointer; font-family: var(--font-sans); font-size: 12.5px; font-weight: 510;
+    transition: all 0.15s ease;
+    text-align: left;
+  }
+  .ctrl-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-strong); }
+  .ctrl-btn.active { background: var(--accent-jev); border-color: var(--accent-jev); color: white; }
+  .ctrl-btn .tag { display: inline-block; font-size: 10px; color: var(--ink-mid); margin-left: 6px; font-family: var(--font-mono); }
+
+  .cascade-readout {
+    margin-top: 24px;
+    padding: 16px 18px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono); font-size: 12.5px;
+    color: var(--ink-soft);
+    min-height: 88px;
+  }
+  .cascade-readout .step { display: flex; gap: 12px; align-items: baseline; padding: 4px 0; }
+  .cascade-readout .step .t { color: var(--ink-dim); font-size: 11px; min-width: 60px; }
+  .cascade-readout .step .v strong { color: var(--ink); font-weight: 590; }
+  .cascade-readout .step .v .laya-tag { color: var(--accent-laya-h); font-weight: 590; }
+  .cascade-readout .step .v .jev-tag { color: var(--accent-jev-h); font-weight: 590; }
+  .cascade-readout .step .v .llm-tag { color: var(--warn); font-weight: 590; }
+
+  /* ---------- benchmark table ---------- */
+  .bench-wrap { overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  table.bench { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.bench thead th {
+    background: var(--bg-elevated);
+    color: var(--ink-mid);
+    text-align: left;
+    padding: 14px 18px;
+    font-size: 11px; font-weight: 510; letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 57px;
+  }
+  table.bench thead th.num { text-align: right; }
+  table.bench tbody td {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+  table.bench tbody tr:hover { background: rgba(255,255,255,0.02); }
+  table.bench tbody td.task { color: var(--ink); font-weight: 590; }
+  table.bench tbody td.num { text-align: right; font-family: var(--font-mono); font-size: 13px; }
+  table.bench tbody td .win { color: var(--ink-dim); font-weight: 510; }
+  table.bench tbody td .bar { display: inline-block; height: 6px; background: var(--ink-dim); border-radius: 3px; margin-right: 8px; vertical-align: middle; transition: width 0.6s cubic-bezier(.2,.8,.2,1); }
+  table.bench tbody td.laya .bar { background: var(--accent-laya); }
+  table.bench tbody td.jev  .bar { background: var(--accent-jev-h); }
+  table.bench tbody td .gain-laya { color: var(--accent-laya-h); font-weight: 510; }
+  table.bench tbody td .gain-jev { color: var(--accent-jev-h); font-weight: 510; }
+  table.bench .summary-row td {
+    background: var(--bg-elevated);
+    border-top: 2px solid var(--border);
+    font-weight: 590;
+    padding: 18px;
+    color: var(--ink);
+  }
+  .legend-inline { display: flex; gap: 20px; align-items: center; font-size: 12px; color: var(--ink-mid); margin-top: 16px; }
+  .legend-inline .key { display: flex; align-items: center; gap: 6px; }
+  .legend-inline .swatch { width: 10px; height: 6px; border-radius: 2px; }
+
+  /* ---------- decision matrix ---------- */
+  .decision { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .decision-cell {
+    padding: 22px 24px;
+    background: var(--bg-panel);
+    display: flex; flex-direction: column; gap: 8px;
+    transition: background 0.15s ease;
+  }
+  .decision-cell:hover { background: var(--bg-elevated); }
+  .decision-cell .scenario { font-size: 11px; font-weight: 510; color: var(--ink-mid); letter-spacing: 0.08em; text-transform: uppercase; }
+  .decision-cell .question { font-size: 15px; font-weight: 510; color: var(--ink); }
+  .decision-cell .verdict {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 590;
+    width: fit-content; margin-top: 4px;
+  }
+  .verdict.laya { background: var(--accent-laya-d); color: var(--accent-laya-h); border: 1px solid rgba(16,185,129,0.3); }
+  .verdict.jev  { background: var(--accent-jev-d); color: var(--accent-jev-h); border: 1px solid rgba(94,106,210,0.3); }
+  .verdict.cascade { background: rgba(251,113,133,0.12); color: var(--warn); border: 1px solid rgba(251,113,133,0.3); }
+  .verdict.tie  { background: rgba(75,85,99,0.18); color: #94a3b8; border: 1px solid rgba(75,85,99,0.3); }
+  .decision-cell .reason { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .decision-cell .reason code { background: rgba(255,255,255,0.04); padding: 1px 5px; border-radius: 3px; font-family: var(--font-mono); font-size: 11.5px; }
+
+  /* ---------- arch rows / callout ---------- */
+  .callout {
+    background: linear-gradient(135deg, rgba(94,106,210,0.08), rgba(16,185,129,0.06));
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex; gap: 28px; align-items: flex-start;
+    margin-top: 32px;
+  }
+  .callout .icon { font-family: var(--font-mono); font-size: 22px; flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(255,255,255,0.06); display: grid; place-items: center; color: var(--accent-jev-h); }
+  .callout h3 { color: var(--ink); font-size: 18px; font-weight: 590; letter-spacing: -0.18px; margin-bottom: 8px; }
+  .callout p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
+
+  /* ---------- footer ---------- */
+  footer { padding: 56px 0 64px; }
+  footer .grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+  footer h4 { font-size: 11px; font-weight: 510; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); margin-bottom: 14px; }
+  footer ul { list-style: none; }
+  footer li { padding: 4px 0; }
+  footer a { color: var(--ink-soft); text-decoration: none; font-size: 13.5px; }
+  footer a:hover { color: var(--accent-jev-h); }
+  footer .license { color: var(--ink-dim); font-size: 12px; }
+  footer .legal { padding-top: 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-dim); }
+
+  /* ---------- scroll-reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.6s cubic-bezier(.2,.8,.2,1), transform 0.6s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .wrap { padding: 0 20px; }
+    .hero h1 { font-size: 40px; letter-spacing: -0.88px; }
+    .hero .lede { font-size: 16px; }
+    section h2 { font-size: 26px; }
+    .identity-grid, .decision { grid-template-columns: 1fr; }
+    .cascade-grid { grid-template-columns: 1fr; }
+    .cascade-svg { height: 360px; }
+    .topnav { display: none; }
+    footer .grid { grid-template-columns: 1fr; gap: 28px; }
+  }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================= TOP BAR ========================= -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">L</div>
+      Laya <span style="color:var(--ink-mid); font-weight:400; margin: 0 8px;">vs</span> Jev
+      <span class="mono" style="color:var(--ink-dim); margin-left: 6px; font-size: 12px;">System 1 models</span>
+    </div>
+    <nav class="topnav">
+      <a href="#identity">Identity</a>
+      <a href="#cascade">Cascade</a>
+      <a href="#bench">Benchmark</a>
+      <a href="#decision">Decisions</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ========================= HERO ========================= -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow reveal"><span class="dot"></span>Comparative · 22 Sep 2026</div>
+    <h1 class="reveal">
+      两个 <span class="laya">System 1</span> 模型,<br>
+      同一份设计哲学, 完全不同的<em>交付取舍</em>。
+    </h1>
+    <p class="lede reveal">
+      Laya 与 Jev 都解决同一个问题——把"决策"从 LLM 的工作流里拿出来,以<strong style="color:var(--ink);">亚秒级延迟 + 校准概率 + 类型化输出</strong>的形式直接喂给你的代码。本文拆开看: 当 Jev 给出 76.4% 而 Laya 给出 66.8%、当邮件不能出境、当你的场景是路由 vs 推理——取舍完全不同。
+    </p>
+    <div class="hero-meta reveal">
+      <span>阅读时长<strong>6 min</strong></span>
+      <span>500 例独立评测<strong>Laya 66.8% · Jev 76.4%</strong></span>
+      <span>延迟中位数<strong>Laya 45 ms · Jev 279 ms</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= IDENTITY SNAPSHOT ========================= -->
+<section id="identity">
+  <div class="wrap">
+    <div class="h2-wrap reveal">
+      <div>
+        <span class="label">§1 · Identity Snapshot</span>
+        <h2>它们是<em style="font-style:italic;">同一类</em>东西,但分发方式<em style="font-style:italic;">不同</em>。</h2>
+        <p class="section-desc">两边都在 System 1 model 范畴, 都用同一个术语、同一套 API 形状、同一套训练思路 (reinforcement learning for calibrated decisions)。三家接 OpenAI-compat endpoints (OpenRouter, Vercel AI Gateway, LangChain) 表明: 真正的差异化不在功能, 在 <strong style="color:var(--ink);">部署边界</strong>。</p>
+      </div>
+    </div>
+
+    <div class="identity-grid reveal">
+      <!-- LAYA COL -->
+      <div class="identity-col laya">
+        <h3>Laya</h3>
+        <div class="vendor">convaiinnovations/laya · Apache-2.0 · HF Hub</div>
+        <div class="identity-row"><div class="k">Maker</div><div class="v">Nandakishor M (Convai Innovations)</div></div>
+        <div class="identity-row"><div class="k">Released</div><div class="v">论文 March 2025 (Jev 早 18 个月)</div></div>
+        <div class="identity-row"><div class="k">Params</div><div class="v"><code>322M</code> (English 421M)</div></div>
+        <div class="identity-row"><div class="k">Weights</div><div class="v"><code style="color:var(--accent-laya-h);">Open</code> · Apache-2.0</div></div>
+        <div class="identity-row"><div class="k">Runtime</div><div class="v">本地 · pip install laya · 离线</div></div>
+        <div class="identity-row"><div class="k">Data path</div><div class="v"><code style="color:var(--accent-laya-h);">出域 = 0</code> · 处理在用户进程内</div></div>
+        <div class="identity-row"><div class="k">API shape</div><div class="v"><code>choice</code> · <code>score</code> · <code>noul</code></div></div>
+        <div class="identity-row"><div class="k">Latency</div><div class="v">21–66 ms (M1 Max GPU) · 60–140 ms (CPU)</div></div>
+        <div class="identity-row"><div class="k">Calibration</div><div class="v">English ✓ · Multilingual ✗ (temp=1.0)</div></div>
+        <div class="identity-row"><div class="k">Cost</div><div class="v"><code style="color:var(--accent-laya-h);">$0 / call</code></div></div>
+        <div class="identity-row"><div class="k">Ecosystem</div><div class="v">裸模型 + 1 份 SKILL.md</div></div>
+      </div>
+
+      <!-- JEV COL -->
+      <div class="identity-col jev">
+        <h3>Jev</h3>
+        <div class="vendor">typesafe-ai/jev · 闭源 · Hosted API</div>
+        <div class="identity-row"><div class="k">Maker</div><div class="v">TypeSafe AI (Diogo Almeida, ex-OpenAI)</div></div>
+        <div class="identity-row"><div class="k">Released</div><div class="v">2026-09-15 早访问 · 09-21 API 公开</div></div>
+        <div class="identity-row"><div class="k">Params</div><div class="v">未公开 · 推测基于开源 LLM</div></div>
+        <div class="identity-row"><div class="k">Weights</div><div class="v"><code style="color:var(--warn);">Closed</code> · 不公开架构</div></div>
+        <div class="identity-row"><div class="k">Runtime</div><div class="v">Hosted API · OpenRouter / Vercel / LangChain</div></div>
+        <div class="identity-row"><div class="k">Data path</div><div class="v">Token 出境 · Zero Data Retention 可选</div></div>
+        <div class="identity-row"><div class="k">API shape</div><div class="v"><code>Choice</code> · <code>Score</code> · <code>Boolean</code></div></div>
+        <div class="identity-row"><div class="k">Latency</div><div class="v">70–500 ms end-to-end · ≈279 ms 中位 (HF Hub 评测)</div></div>
+        <div class="identity-row"><div class="k">Calibration</div><div class="v">全模型 ✓ · 训练目标 (RLCD) 内置</div></div>
+        <div class="identity-row"><div class="k">Cost</div><div class="v"><code style="color:var(--accent-jev-h);">$0.042 / MTok</code> (output free) · ≈$0.0004 / decision</div></div>
+        <div class="identity-row"><div class="k">Ecosystem</div><div class="v">OpenRouter · Vercel AI Gateway · LangChain · TypeSafe SDK</div></div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top: 32px;">
+      <div class="icon">§</div>
+      <div>
+        <h3>设计哲学相等 ≠ 工程取舍相等</h3>
+        <p>两边都叫自己 <strong style="color:var(--ink);">System 1 model</strong>, 同样的训练目标 (RL for calibrated decisions), 同样的 API 形状。但 Laya 把权重的命运交给你 (合规可审计、Apache-2.0), Jev 把权重的命运留在自家 (闭源、SLA 可期、生态成熟)。这是 <strong>deployment boundary</strong> 层面的根本分歧, 不是性能差异。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= CASCADE DIAGRAM ========================= -->
+<section id="cascade">
+  <div class="wrap">
+    <div class="h2-wrap reveal">
+      <div>
+        <span class="label">§2 · Cascade Mechanics</span>
+        <h2>配合 <span class="laya">Laya</span> 守门, <span class="jev">Jev</span> 兜底, <span class="llm" style="color:var(--warn);">LLM</span> 留个面子。</h2>
+        <p class="section-desc">Cascade 不是把两个模型堆在一起, 是让每个在它最准的位置干活。下面是它的注意力路径——点不同按钮看不同决策流。</p>
+      </div>
+    </div>
+
+    <div class="cascade reveal">
+      <div class="cascade-grid">
+        <!-- LEFT: legend -->
+        <div class="cascade-legend">
+          <h4>Components</h4>
+          <div class="row"><div class="swatch" style="background:var(--accent-laya);"></div><span><strong>Laya</strong> · 本地 · System 1</span></div>
+          <div class="row"><div class="swatch" style="background:var(--accent-jev-h);"></div><span><strong>Jev</strong> · Hosted · 高 confidence</span></div>
+          <div class="row"><div class="swatch" style="background:var(--warn);"></div><span><strong>LLM</strong> · Slow thinking · 人</span></div>
+          <div class="row"><div class="swatch" style="background:var(--border-strong); border:1px dashed var(--ink-mid);"></div><span>置信度 < threshold · cascade 触发</span></div>
+          <div class="row"><div class="swatch" style="background:#1f2937;"></div><span>请求包 (包头 = 决策 ID)</span></div>
+
+          <div class="cascade-stats">
+            <div class="stat-row"><span>p50 latency</span><strong>—</strong></div>
+            <div class="stat-row"><span>p95 latency</span><strong>—</strong></div>
+            <div class="stat-row"><span>est. cost/req</span><strong>—</strong></div>
+            <div class="stat-row"><span>escalation %</span><strong>—</strong></div>
+          </div>
+        </div>
+
+        <!-- MID: SVG -->
+        <div>
+          <svg class="cascade-svg" id="cascadeSvg" viewBox="0 0 760 460" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <marker id="dot-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <circle cx="5" cy="5" r="3.5" fill="#f7f8f8"/>
+              </marker>
+              <marker id="dot-end-laya" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <circle cx="5" cy="5" r="3.5" fill="#34d399"/>
+              </marker>
+              <marker id="dot-end-jev" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <circle cx="5" cy="5" r="3.5" fill="#7170ff"/>
+              </marker>
+            </defs>
+
+            <!-- input packet -->
+            <g id="g-input">
+              <rect x="20" y="210" width="100" height="44" rx="8"
+                    fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.12)" stroke-dasharray="3 3"/>
+              <text x="70" y="232" text-anchor="middle" fill="#d0d6e0" font-size="11" font-weight="510" letter-spacing="0.04em">REQUEST</text>
+              <text x="70" y="247" text-anchor="middle" fill="#62666d" font-size="10" font-family="JetBrains Mono">state + questions</text>
+            </g>
+
+            <!-- arrow input → diamond -->
+            <g id="g-arrow-in">
+              <line x1="120" y1="232" x2="220" y2="232" stroke="#f7f8f8" stroke-width="1.5" marker-end="url(#dot-end)"/>
+              <text x="170" y="222" text-anchor="middle" fill="#62666d" font-size="10" font-family="JetBrains Mono">~ 0 ms</text>
+            </g>
+
+            <!-- decision diamond (Laya) -->
+            <g id="g-diamond" transform="translate(380 232)">
+              <rect x="-80" y="-44" width="160" height="88" rx="14"
+                    fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="0" y="-15" text-anchor="middle" fill="#34d399" font-size="11" font-weight="590" letter-spacing="0.06em">DECISION POINT</text>
+              <text x="0" y="4" text-anchor="middle" fill="#f7f8f8" font-size="15" font-weight="510">Laya</text>
+              <text x="0" y="22" text-anchor="middle" fill="#8a8f98" font-size="10" font-family="JetBrains Mono">21 ms · 1 forward · 0 token</text>
+            </g>
+
+            <!-- branch A: Laya confidence high → ACT (down-right) -->
+            <g id="g-branch-a" opacity="0.25">
+              <path d="M 460 232 Q 540 232 580 290 L 670 290" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+              <line x1="580" y1="290" x2="665" y2="290" stroke="#10b981" stroke-width="2" marker-end="url(#dot-end-laya)"/>
+              <text x="610" y="276" text-anchor="middle" fill="#10b981" font-size="10" font-weight="510">confidence &gt; τ</text>
+              <text x="610" y="308" text-anchor="middle" fill="#8a8f98" font-size="10" font-family="JetBrains Mono">act · no LLM call</text>
+            </g>
+
+            <!-- branch B: cascade Jev (up-right) -->
+            <g id="g-branch-b" opacity="0.25">
+              <path d="M 460 232 Q 540 232 580 150 L 670 150" fill="none" stroke="#7170ff" stroke-width="2" stroke-linecap="round"/>
+              <line x1="580" y1="150" x2="665" y2="150" stroke="#7170ff" stroke-width="2" marker-end="url(#dot-end-jev)"/>
+              <text x="610" y="136" text-anchor="middle" fill="#7170ff" font-size="10" font-weight="510">τ_lower &lt; conf &lt; τ</text>
+              <text x="610" y="170" text-anchor="middle" fill="#8a8f98" font-size="10" font-family="JetBrains Mono">cascade → Jev · 279 ms</text>
+            </g>
+
+            <!-- branch C: LLM (up-left, long detour) -->
+            <g id="g-branch-c" opacity="0.25">
+              <path d="M 300 232 Q 220 80 130 80 L 130 110 L 130 80 Q 220 50 380 50" fill="none" stroke="#fb7185" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+              <line x1="130" y1="80" x2="375" y2="50" stroke="#fb7185" stroke-width="0" />
+              <line x1="375" y1="50" x2="380" y2="50" stroke="#fb7185" stroke-width="0" />
+              <!-- replaced with clean curve to LLM box -->
+            </g>
+
+            <!-- LLM box (top) -->
+            <g id="g-llm" transform="translate(380 60)">
+              <rect x="-72" y="-30" width="144" height="60" rx="10"
+                    fill="rgba(251,113,133,0.06)" stroke="#fb7185" stroke-width="1" stroke-dasharray="4 3"/>
+              <text x="0" y="-8" text-anchor="middle" fill="#fb7185" font-size="11" font-weight="590" letter-spacing="0.06em">HUMAN / LLM</text>
+              <text x="0" y="10" text-anchor="middle" fill="#f7f8f8" font-size="13" font-weight="510">System 2 review</text>
+              <text x="0" y="24" text-anchor="middle" fill="#8a8f98" font-size="10" font-family="JetBrains Mono">4 s · $0.01+ · last resort</text>
+            </g>
+
+            <!-- arrow diamond → LLM (when both uncertain or low-conf on critical) -->
+            <g id="g-arrow-llm" opacity="0.25">
+              <path d="M 380 188 L 380 92" fill="none" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round"/>
+              <line x1="380" y1="188" x2="380" y2="98" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#dot-end)" />
+              <text x="395" y="150" fill="#fb7185" font-size="10" font-weight="510">conf &lt; τ_lower</text>
+              <text x="395" y="164" fill="#8a8f98" font-size="10" font-family="JetBrains Mono">+ 不可逆 / 高 cost</text>
+            </g>
+
+            <!-- three columns: input / decision / output zones -->
+            <g>
+              <text x="70" y="430" text-anchor="middle" fill="#62666d" font-size="9" letter-spacing="0.08em">STREAM IN</text>
+              <text x="380" y="430" text-anchor="middle" fill="#62666d" font-size="9" letter-spacing="0.08em">DECISION (LOCAL)</text>
+              <text x="670" y="430" text-anchor="middle" fill="#62666d" font-size="9" letter-spacing="0.08em">ACT / ESCALATE</text>
+            </g>
+
+            <!-- the walking packet (animated) -->
+            <circle id="packet" cx="120" cy="232" r="5" fill="#f7f8f8" opacity="0">
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.05;0.95;1" dur="3.6s" repeatCount="indefinite"/>
+              <animate attributeName="cx" values="120;220;380;380;670;670;380;120" keyTimes="0;0.18;0.32;0.5;0.7;0.78;0.92;1" dur="3.6s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="232;232;232;188;150;290;60;232" keyTimes="0;0.18;0.32;0.55;0.7;0.78;0.92;1" dur="3.6s" repeatCount="indefinite"/>
+              <animate attributeName="fill" values="#f7f8f8;#f7f8f8;#34d399;#7170ff;#34d399;#fb7185;#f7f8f8;#f7f8f8" keyTimes="0;0.18;0.35;0.7;0.78;0.92;0.95;1" dur="3.6s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+
+          <div class="cascade-controls" style="display:grid; grid-template-columns: repeat(3, 1fr); margin-top: 16px;">
+            <button class="ctrl-btn active" data-scenario="easy">Easy: high conf<span class="tag">p99 low-cost</span></button>
+            <button class="ctrl-btn" data-scenario="medium">Medium: τ_lower–τ<span class="tag">cascade → Jev</span></button>
+            <button class="ctrl-btn" data-scenario="critical">Critical: conf &lt; τ_lower<span class="tag">→ LLM</span></button>
+          </div>
+
+          <div class="cascade-readout" id="cascadeReadout">
+            <div class="step"><div class="t">[t=0 ms]</div><div class="v">request stream <strong>state + questions</strong> enters the local decision point</div></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: empty placeholder for balance; legend already on left -->
+        <div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= BENCHMARK ========================= -->
+<section id="bench">
+  <div class="wrap">
+    <div class="h2-wrap reveal">
+      <div>
+        <span class="label">§3 · Independent Benchmark · 2026-09-20</span>
+        <h2>同样的 500 条样本: <span class="jev">Jev 76.4%</span> · <span class="laya">Laya 66.8%</span></h2>
+        <p class="section-desc">每行进入视口时, 进度条从 0 tween 到实测值。每格颜色代表该任务的"赢家": 绿 < Laya 赢 / 平, 紫 < Jev 赢 / 平。bar 长度 = 准确率; 迟延数字单独标。</p>
+      </div>
+    </div>
+
+    <div class="bench-wrap reveal">
+      <table class="bench" id="benchTable">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Type</th>
+            <th class="num">Laya accuracy</th>
+            <th class="num">Jev accuracy</th>
+            <th class="num">Laya latency</th>
+            <th class="num">Jev latency</th>
+            <th class="num">Calib. (ECE)</th>
+            <th>Winner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-laya="93" data-jev="92">
+            <td class="task">News topic (in-mix)*</td>
+            <td><span class="mono">choice × 4</span></td>
+            <td class="num laya"><span class="bar" style="width:0px"></span><strong class="laya-acc">0</strong>%</td>
+            <td class="num jev"><span class="bar" style="width:0px"></span><span class="win jev-acc">0</span>%</td>
+            <td class="num mono dimm">44 ms</td>
+            <td class="num mono dimm">288 ms</td>
+            <td class="num mono">0.061 / 0.073</td>
+            <td><span class="win">≈ tie · Laya</span></td>
+          </tr>
+          <tr data-laya="96" data-jev="96">
+            <td class="task">SMS spam</td>
+            <td><span class="mono">noul</span></td>
+            <td class="num laya"><span class="bar" style="width:0px"></span><strong class="laya-acc">0</strong>%</td>
+            <td class="num jev"><span class="bar" style="width:0px"></span><span class="win jev-acc">0</span>%</td>
+            <td class="num mono dimm">35 ms</td>
+            <td class="num mono dimm">275 ms</td>
+            <td class="num mono">0.052 / 0.071</td>
+            <td><span class="win gain-laya">tie · both strong</span></td>
+          </tr>
+          <tr data-laya="45" data-jev="53">
+            <td class="task">Emotion</td>
+            <td><span class="mono">choice × 6</span></td>
+            <td class="num laya"><span class="bar" style="width:0px"></span><strong class="laya-acc">0</strong>%</td>
+            <td class="num jev"><span class="bar" style="width:0px"></span><span class="win jev-acc">0</span>%</td>
+            <td class="num mono dimm">54 ms</td>
+            <td class="num mono dimm">276 ms</td>
+            <td class="num mono">0.341 / 0.293</td>
+            <td><span class="win gain-jev">Jev (+8pp)</span></td>
+          </tr>
+          <tr data-laya="35" data-jev="70">
+            <td class="task">Review star rating</td>
+            <td><span class="mono">score × 5</span></td>
+            <td class="num laya"><span class="bar" style="width:0px"></span><strong class="laya-acc">0</strong>%</td>
+            <td class="num jev"><span class="bar" style="width:0px"></span><span class="win jev-acc">0</span>%</td>
+            <td class="num mono dimm">66 ms</td>
+            <td class="num mono dimm">283 ms</td>
+            <td class="num mono">0.399 / 0.134</td>
+            <td><span class="win gain-jev">Jev (+35pp)</span></td>
+          </tr>
+          <tr data-laya="65" data-jev="71">
+            <td class="task">Prompt injection</td>
+            <td><span class="mono">noul</span></td>
+            <td class="num laya"><span class="bar" style="width:0px"></span><strong class="laya-acc">0</strong>%</td>
+            <td class="num jev"><span class="bar" style="width:0px"></span><span class="win jev-acc">0</span>%</td>
+            <td class="num mono dimm">45 ms</td>
+            <td class="num mono dimm">279 ms</td>
+            <td class="num mono">0.353 / 0.163</td>
+            <td><span class="win gain-jev">Jev (+6pp)</span></td>
+          </tr>
+          <tr class="summary-row" data-laya="66.8" data-jev="76.4">
+            <td class="task">All 500 examples</td>
+            <td><span class="mono">mixed</span></td>
+            <td class="num laya"><span class="bar" style="width:0px"></span><strong class="laya-acc">0</strong>%</td>
+            <td class="num jev"><span class="bar" style="width:0px"></span><span class="win jev-acc">0</span>%</td>
+            <td class="num mono">45 ms</td>
+            <td class="num mono">279 ms</td>
+            <td class="num mono">0.241 / 0.147</td>
+            <td><span class="win gain-jev">Jev (+9.6pp, 6.2× cost)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="legend-inline">
+      <div class="key"><span class="swatch" style="background:var(--accent-laya);"></span>Laya 准确率 bar</div>
+      <div class="key"><span class="swatch" style="background:var(--accent-jev-h);"></span>Jev 准确率 bar</div>
+      <div class="key">* 该 dataset 在 Laya 训练集里, 所以不是 zero-shot</div>
+    </div>
+
+    <p class="dim mono" style="margin-top: 14px; font-size: 11px; line-height: 1.6;">
+      Source: brainfunctioncollapse.com/laya 独立评测, 2026-09-20, Apple M1 Max GPU (MPS). Laya 0.3.4 English ckpt · Jev 1.13.0 hosted (HTTPS keep-alive, ≈190 ms RTT). Calibration error = Expected Calibration Error (ECE), 越低越好.
+    </p>
+  </div>
+</section>
+
+<!-- ========================= DECISION MATRIX ========================= -->
+<section id="decision">
+  <div class="wrap">
+    <div class="h2-wrap reveal">
+      <div>
+        <span class="label">§4 · When to use which</span>
+        <h2>这是 Compare 表——你拿哪个, 取决于<em style="font-style:italic;">约束</em>, 不是性能。</h2>
+        <p class="section-desc">下面 12 个判断点, 大多数 WCC / 教育行业的真实场景答案都是 <strong style="color:var(--accent-laya-h);">Laya 主</strong> + <strong style="color:var(--accent-jev-h);">Jev cascade 兜底</strong>。</p>
+      </div>
+    </div>
+
+    <div class="decision reveal">
+      <div class="decision-cell">
+        <div class="scenario">Constraint · 数据出域</div>
+        <div class="question">数据不能出境 (合规 / 客户隐私 / 学生数据)</div>
+        <div class="verdict laya">Laya</div>
+        <div class="reason">本地推理, <code>pip install laya</code> 后完全离线, Apache-2.0 可审计</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Constraint · 延迟</div>
+        <div class="question">实时 agent 守门 / 游戏 / 串行决策链</div>
+        <div class="verdict laya">Laya</div>
+        <div class="reason">21–66 ms vs 200–290 ms. 高频决策链累乘后差异巨大, Jev 的 HTTPS RTT 是稳定 6 倍 overhead</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Constraint · 成本</div>
+        <div class="question">决策频率高 (&gt;10k/天), 边际成本敏感</div>
+        <div class="verdict laya">Laya</div>
+        <div class="reason">$0/call, only 一次性 2.3 GB 权重下载. Jev $0.0004/decision 也是真便宜, 但不是零</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Constraint · 校准</div>
+        <div class="question">多语言 (中/西/日) 邮件 / 跨语种通知</div>
+        <div class="verdict jev">Jev</div>
+        <div class="reason">Jev 多语言统一 + 校准; Laya multilingual 是 uncalibrated (temp=1.0), 数字不能信</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Constraint · 准确率</div>
+        <div class="question">Ordinal score / 多分级判断 (1–5 星, 优先级 0–4)</div>
+        <div class="verdict jev">Jev</div>
+        <div class="reason">Laya 35% on star rating, Jev 70% – 序数任务是 Laya 的弱势面</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Constraint · SLA</div>
+        <div class="question">需要商业支持 / SLA / 长期维护承诺</div>
+        <div class="verdict jev">Jev</div>
+        <div class="reason">TypeSafe 是有商业化承诺的公司 (OpenRouter / Vercel / LangChain 集成); Laya 单点人风险</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Task · 路由 / 分类</div>
+        <div class="question">邮件 routing, 团队分派, 简单 category</div>
+        <div class="verdict laya">Laya</div>
+        <div class="reason">96% SMS spam, 93% news topic – 这种事上 Laya 跟 LLM 持平或更好</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Task · 是非判断</div>
+        <div class="question">Phishing / spam / 提示注入 / 数据外泄 yes-no gate</div>
+        <div class="verdict cascade">Cascade</div>
+        <div class="reason">两边都答对, 但 Jev +6pp calibration 关键. 用 Laya 拦大概率 case, Jev 守低 confidence 边界</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Task · 序数 score</div>
+        <div class="question">Urgency 0–2, severity 0–4, lead score 1–5</div>
+        <div class="verdict cascade">Cascade</div>
+        <div class="reason">Laya 在 score type 上 weakest (35% on star). 用 Laya 粗分箱, borderline → Jev 复评</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Ecosystem · 集成</div>
+        <div class="question">已经在用 LangChain / Vercel AI Gateway</div>
+        <div class="verdict jev">Jev</div>
+        <div class="reason"><code>typesafe-ai/jev</code> 已经在 AI SDK 7 / LangChain 一行接入; Laya 要自己包</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Ecosystem · Fine-tune</div>
+        <div class="question">需要在自己标签数据上 fine-tune</div>
+        <div class="verdict laya">Laya</div>
+        <div class="reason">开放权重, 上游 Kaggle free GPU notebook 现成; Jev 闭源不能 fine-tune</div>
+      </div>
+      <div class="decision-cell">
+        <div class="scenario">Risk · 单点故障</div>
+        <div class="question">不让"哪个模型服务商关掉"变成业务中断</div>
+        <div class="verdict cascade">Cascade</div>
+        <div class="reason">Laya 本地 + Jev 云, 任何一个挂掉另一个能 5 min 切</div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top: 32px;">
+      <div class="icon">↑</div>
+      <div>
+        <h3>WCC / 教育行业默认推荐</h3>
+        <p>主路径 <strong style="color:var(--accent-laya-h);">Laya</strong> (本地, 合规, 几乎免费, 21 ms), 风险路径 <strong style="color:var(--accent-jev-h);">Jev</strong> (多语言 + ordinal score + SLA). <strong style="color:var(--warn);">不推荐</strong> 把 Laya multilingual 直接上生产 – 在 uncalibrated 的概率上下判定会埋雷.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= SOURCES ========================= -->
+<section id="sources">
+  <div class="wrap">
+    <div class="h2-wrap reveal">
+      <div>
+        <span class="label">§5 · Sources & Reproducibility</span>
+        <h2>每个数字都能点回原页面复核。</h2>
+      </div>
+    </div>
+
+    <div class="reveal" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+      <a class="source-card" href="https://brainfunctioncollapse.com/laya" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--accent-laya-h); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">Laya primary</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">brainfunctioncollapse.com/laya</div>
+        <div class="dim" style="font-size: 12.5px;">SKILL.md · 500-例 benchmark · multilingual warning</div>
+      </a>
+      <a class="source-card" href="https://github.com/NandhaKishorM/laya" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--accent-laya-h); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">Laya weights</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">github.com/NandhaKishorM/laya</div>
+        <div class="dim" style="font-size: 12.5px;">Apache-2.0 · fine-tune notebook · upstream paper Mar 2025</div>
+      </a>
+      <a class="source-card" href="https://jevmodel.org/" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--accent-jev-h); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">Jev primary</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">jevmodel.org</div>
+        <div class="dim" style="font-size: 12.5px;">API 公开日 · $0.042/MTok · jev-1.13.0 spec</div>
+      </a>
+      <a class="source-card" href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--accent-jev-h); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">Jev launch blog</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">typesafe.ai/blog/...</div>
+        <div class="dim" style="font-size: 12.5px;">System One naming · RLCD · 70–500 ms latency</div>
+      </a>
+      <a class="source-card" href="https://www.langchain.com/blog/building-a-harness-with-jev" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--accent-jev-h); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">LangChain integration</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">langchain.com/blog/...</div>
+        <div class="dim" style="font-size: 12.5px;">TypeSafeClassifier · AutoModeMiddleware</div>
+      </a>
+      <a class="source-card" href="https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--accent-jev-h); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">Vercel AI Gateway</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">vercel.com/changelog/...</div>
+        <div class="dim" style="font-size: 12.5px;">AI SDK 7 evaluate API · ZDR / No Training</div>
+      </a>
+      <a class="source-card" href="https://openrouter.ai/blog/insights/what-is-jev/" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--ink-dim); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">OpenRouter analysis · 2026-09-22</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">openrouter.ai/blog/...</div>
+        <div class="dim" style="font-size: 12.5px;">LLM vs Jev 对比 · 第三方 perspective</div>
+      </a>
+      <a class="source-card" href="https://github.com/wdobry/laya-playground" target="_blank" rel="noopener noreferrer" style="display:block; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-panel); text-decoration: none;">
+        <div style="color:var(--ink-dim); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight: 510;">Laya playground</div>
+        <div style="color:var(--ink); font-size: 14.5px; font-weight: 510; margin: 4px 0;">github.com/wdobry/laya-playground</div>
+        <div class="dim" style="font-size: 12.5px;">Local playground · eval/run_eval.py 复现脚本</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= FOOTER ========================= -->
+<footer>
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <h4>Take-aways</h4>
+        <p class="body" style="color:var(--ink-soft); max-width: 540px;">
+          Laya 和 Jev 在设计上是一对双胞胎, 但工程边界是反的: 一边把命运交给跑模型的机器 (Laya, Apache-2.0, 本地), 一边把命运交给跑模型的公司 (Jev, 闭源, hosted). 选哪个看的是 deployment boundary, 不是 benchmark 数字. 在 cascade 架构下, 它们甚至不是竞品, 而是同一个决策链上两个有意识分配的不同位置.
+        </p>
+      </div>
+      <div>
+        <h4>Next actions</h4>
+        <ul>
+          <li><a href="#cascade">重新读 cascade 段, 画你自己的决策路径</a></li>
+          <li><a href="https://brainfunctioncollapse.com/laya/skills/laya-integration/SKILL.md">下载 Laya SKILL.md</a></li>
+          <li><a href="https://openrouter.ai/settings/keys">拿 OpenRouter key 接 Jev fallback</a></li>
+          <li><a href="#bench">把 bench 数据拿去对账</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>License</h4>
+        <p class="license">
+          本文 derived from web sources, 数字所有 reproduction 走 <code>eval/run_eval.py</code>.<br><br>
+          Laya: Apache-2.0.<br>
+          Jev: TypeSafe AI 商业 API.<br>
+          本页面以"信息对比"为目的, 不附属任一方.
+        </p>
+      </div>
+    </div>
+    <div class="legal">
+      <span>页面生成于 2026-09-23 · Sam's working notes</span>
+      <span class="mono">last benchmark: 2026-09-20</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================== -->
+<!-- JS: scroll reveal + benchmark tween + cascade -->
+<!-- ============================================== -->
+<script>
+(function() {
+  // ---- 1. scroll reveal ----
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 60);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => io.observe(el));
+
+  // ---- 2. benchmark bar tween ----
+  function tweenNumber(el, target, duration, decimal = 0) {
+    const start = performance.now();
+    const startVal = 0;
+    function step(now) {
+      const t = Math.min((now - start) / duration, 1);
+      // ease out cubic
+      const e = 1 - Math.pow(1 - t, 3);
+      const cur = startVal + (target - startVal) * e;
+      el.textContent = decimal > 0 ? cur.toFixed(decimal) : Math.round(cur);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const benchRows = document.querySelectorAll('#benchTable tbody tr');
+  let benchAnimated = false;
+  const benchIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !benchAnimated) {
+        benchAnimated = true;
+        benchRows.forEach((row, idx) => {
+          const layaAcc = parseFloat(row.dataset.laya);
+          const jevAcc = parseFloat(row.dataset.jev);
+
+          const layaCell = row.querySelector('.laya-acc');
+          const jevCell = row.querySelector('.jev-acc');
+          const layaBar = row.querySelector('td.laya .bar');
+          const jevBar = row.querySelector('td.jev .bar');
+
+          // animate text
+          const dur = 900 + idx * 80;
+          tweenNumber(layaAcc, layaAcc, dur, layaAcc % 1 !== 0 ? 1 : 0);
+          tweenNumber(jevCell, jevAcc, dur, jevAcc % 1 !== 0 ? 1 : 0);
+        });
+
+        // bars animate via CSS transition (set final width)
+        requestAnimationFrame(() => {
+          benchRows.forEach((row) => {
+            const layaBar = row.querySelector('td.laya .bar');
+            const jevBar = row.querySelector('td.jev .bar');
+            const target = row.dataset;
+            const layaW = Math.max(2, parseFloat(target.laya) * 1.4);
+            const jevW = Math.max(2, parseFloat(target.jev) * 1.4);
+            layaBar.style.width = layaW + 'px';
+            jevBar.style.width = jevW + 'px';
+          });
+        });
+
+        benchIo.disconnect();
+      }
+    });
+  }, { threshold: 0.15 });
+  benchIo.observe(document.getElementById('benchTable'));
+
+  // ---- 3. cascade interactive ----
+  const scenarios = {
+    easy: {
+      branches: { a: 1, b: 0.15, c: 0.1, llm: 0.08 },
+      readout: [
+        { t: '[t=0 ms]', v: 'request → <strong>Laya</strong> decision point' },
+        { t: '[t=21 ms]', v: '<span class="laya-tag">Laya</span>: P(security) = 0.97 · P(phish) = 0.99 · confidence 0.91' },
+        { t: '[t=21 ms]', v: 'over <strong>τ = 0.85</strong> · act immediately' },
+        { t: '[t=21 ms]', v: '<span class="laya-tag">Laya</span> total: 21 ms · $0 · 0 token · <em>no LLM call</em>' }
+      ],
+      stats: { p50: '21 ms', p95: '66 ms', cost: '$0.0000', esc: '0%' }
+    },
+    medium: {
+      branches: { a: 0.15, b: 1, c: 0.15, llm: 0.1 },
+      readout: [
+        { t: '[t=0 ms]', v: 'request → <strong>Laya</strong> decision point' },
+        { t: '[t=21 ms]', v: '<span class="laya-tag">Laya</span>: P(billing) = 0.62 · P(sales) = 0.21 · <em>confidence low</em>' },
+        { t: '[t=21 ms]', v: 'in <strong>(τ_lower, τ) = (0.55, 0.85)</strong> band · cascade' },
+        { t: '[t=300 ms]', v: '<span class="jev-tag">Jev</span> · hosted: P(billing) = 0.91 · <em>decisive</em>' },
+        { t: '[t=300 ms]', v: 'cost: $0.000025 · avoid $0.01 LLM call' }
+      ],
+      stats: { p50: '300 ms', p95: '520 ms', cost: '$0.000025', esc: '≈18%' }
+    },
+    critical: {
+      branches: { a: 0.1, b: 0.15, c: 0.3, llm: 1 },
+      readout: [
+        { t: '[t=0 ms]', v: 'request → <strong>Laya</strong> decision point · <em>risk-tagged</em>' },
+        { t: '[t=21 ms]', v: '<span class="laya-tag">Laya</span>: P(delete) = 0.55 · confidence 0.21 · <em>broad spread</em>' },
+        { t: '[t=21 ms]', v: 'below <strong>τ_lower = 0.55</strong> on irreversible op' },
+        { t: '[t=21 ms]', v: '→ escalate to <span class="llm-tag">Human / LLM</span>' },
+        { t: '[t=4.2 s]', v: '<span class="llm-tag">LLM</span>: parse intent + suggest safe action · visible audit trail' }
+      ],
+      stats: { p50: '4.2 s', p95: '8 s', cost: '$0.01+', esc: '5–10% of total' }
+    }
+  };
+
+  const buttons = document.querySelectorAll('.ctrl-btn');
+  const readout = document.getElementById('cascadeReadout');
+
+  function paintScenario(name) {
+    const sc = scenarios[name];
+    // toggle branch opacities
+    document.getElementById('g-branch-a').setAttribute('opacity', sc.branches.a);
+    document.getElementById('g-branch-b').setAttribute('opacity', sc.branches.b);
+    document.getElementById('g-branch-c').setAttribute('opacity', sc.branches.c);
+    document.getElementById('g-arrow-llm').setAttribute('opacity', sc.branches.llm * 0.7);
+    document.getElementById('g-llm').setAttribute('opacity', sc.branches.llm);
+    // readout
+    readout.innerHTML = sc.readout.map(s => `
+      <div class="step">
+        <div class="t">${s.t}</div>
+        <div class="v">${s.v}</div>
+      </div>
+    `).join('');
+    // stats
+    const stats = document.querySelectorAll('.cascade-stats .stat-row strong');
+    if (stats.length >= 4) {
+      stats[0].textContent = sc.stats.p50;
+      stats[1].textContent = sc.stats.p95;
+      stats[2].textContent = sc.stats.cost;
+      stats[3].textContent = sc.stats.esc;
+    }
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      paintScenario(btn.dataset.scenario);
+    });
+  });
+
+  // initial state
+  paintScenario('easy');
+})();
+</script>
+</body>
+</html>
