@@ -1,0 +1,75 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import ArticleCard from '@components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIES, SITE } from '@config/site';
+import type { CategoryKey } from '@config/site';
+
+const all = await getCollection('articles', ({ data }) => !data.draft);
+all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const featured = all.find((a) => a.data.featured) ?? all[0];
+const recent = all.filter((a) => a.id !== featured?.id).slice(0, 6);
+
+// 每个分类取最新 4 篇
+const byCategory = (Object.keys(CATEGORIES) as CategoryKey[]).map((cat) => ({
+  cat,
+  items: all.filter((a) => a.data.category === cat).slice(0, 4),
+}));
+---
+<DefaultLayout>
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+    <div class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        <span class="text-brand-600 dark:text-brand-500">Samvortex</span> Hub
+      </h1>
+      <p class="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
+        {SITE.tagline}。记录我对技术、架构、产品的研究与思考。
+      </p>
+    </div>
+
+    {featured && (
+      <div class="mb-16">
+        <h2 class="text-xs uppercase tracking-wider text-neutral-500 mb-4">精选</h2>
+        <ArticleCard article={featured} featured />
+      </div>
+    )}
+
+    {recent.length > 0 && (
+      <div class="mb-16">
+        <h2 class="text-xs uppercase tracking-wider text-neutral-500 mb-4">最新</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {recent.map((a) => <ArticleCard article={a} />)}
+        </div>
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {byCategory.map(({ cat, items }) => (
+        <section class="p-6 rounded-xl border border-neutral-200 dark:border-neutral-800">
+          <div class="flex items-baseline justify-between mb-4">
+            <h2 class="text-lg font-semibold">{CATEGORIES[cat].label}</h2>
+            <a href={`/${cat}/`} class="text-sm text-brand-600 hover:underline">全部 →</a>
+          </div>
+          <p class="text-sm text-neutral-500 mb-4">{CATEGORIES[cat].description}</p>
+          {items.length > 0 ? (
+            <ul class="space-y-3">
+              {items.map((a) => (
+                <li>
+                  <a href={`/${a.data.category}/${a.data.slug}/`} class="block hover:text-brand-600">
+                    <div class="font-medium">{a.data.title}</div>
+                    <div class="text-xs text-neutral-500 mt-0.5">
+                      {a.data.date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-sm text-neutral-400">暂无内容</p>
+          )}
+        </section>
+      ))}
+    </div>
+  </section>
+</DefaultLayout>

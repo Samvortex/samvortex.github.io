@@ -1,0 +1,8 @@
+---
+import ListLayout from '@layouts/ListLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft && data.category === 'evaluation'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<ListLayout category="evaluation" articles={articles} title="评估" description="工具与平台的选型评估。" />

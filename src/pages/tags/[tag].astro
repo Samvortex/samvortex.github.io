@@ -1,0 +1,35 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import ArticleCard from '@components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('articles', ({ data }) => !data.draft);
+  const tagMap = new Map<string, typeof all>();
+  for (const a of all) {
+    for (const tag of a.data.tags) {
+      const list = tagMap.get(tag) ?? [];
+      list.push(a);
+      tagMap.set(tag, list);
+    }
+  }
+  return [...tagMap.entries()].map(([tag, articles]) => ({
+    params: { tag },
+    props: { tag, articles: articles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()) },
+  }));
+}
+
+const { tag, articles } = Astro.props;
+---
+<DefaultLayout title={`#${tag}`} description={`标签 ${tag} 下的所有文章`}>
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <a href="/" class="text-sm text-neutral-500 hover:text-brand-600">← 返回首页</a>
+    <h1 class="text-3xl md:text-4xl font-bold mt-4 mb-2">
+      <span class="text-neutral-500">#</span>{tag}
+    </h1>
+    <p class="text-neutral-500 mb-10">共 {articles.length} 篇文章</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {articles.map((a) => <ArticleCard article={a} />)}
+    </div>
+  </section>
+</DefaultLayout>

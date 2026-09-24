@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORIES } from '@config/site';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+  featured?: boolean;
+}
+const { article, featured = false } = Astro.props;
+const { data, id } = article;
+const cat = CATEGORIES[data.category];
+---
+<article class={`group ${featured ? 'md:col-span-2' : ''}`}>
+  <a href={`/${data.category}/${data.slug}/`} class="block p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-brand-500 dark:hover:border-brand-500 transition-colors h-full">
+    <div class="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+      <span class="text-brand-600 dark:text-brand-500 font-medium">{cat.label}</span>
+      <time datetime={data.date.toISOString()}>
+        {data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })}
+      </time>
+    </div>
+    <h3 class="text-lg font-semibold mb-1.5 group-hover:text-brand-600 dark:group-hover:text-brand-500">
+      {data.title}
+    </h3>
+    <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-3">
+      {data.summary}
+    </p>
+    {data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-1.5">
+        {data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
+      </div>
+    )}
+  </a>
+</article>

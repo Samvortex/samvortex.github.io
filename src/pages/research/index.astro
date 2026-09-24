@@ -1,0 +1,13 @@
+---
+import ListLayout from '@layouts/ListLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft && data.category === 'research'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<ListLayout
+  category="research"
+  articles={articles}
+  title="研究"
+  description="对某项技术或行业趋势的深度研究。"
+/>

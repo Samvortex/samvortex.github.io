@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-white text-neutral-800 dark:bg-neutral-950 dark:text-neutral-200;
+  }
+  /* 暗色模式下 prose 自动适配 */
+  .dark .prose {
+    --tw-prose-body: theme('colors.neutral.300');
+    --tw-prose-headings: theme('colors.neutral.50');
+    --tw-prose-links: theme('colors.brand.500');
+    --tw-prose-bold: theme('colors.neutral.50');
+    --tw-prose-code: theme('colors.neutral.50');
+    --tw-prose-borders: theme('colors.neutral.800');
+    --tw-prose-quotes: theme('colors.neutral.300');
+  }
+}
+
+@layer components {
+  .tag {
+    @apply inline-block px-2 py-0.5 text-xs font-medium rounded-md
+           bg-neutral-100 text-neutral-700
+           dark:bg-neutral-800 dark:text-neutral-300;
+  }
+  .tag:hover {
+    @apply bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-100;
+  }
+}

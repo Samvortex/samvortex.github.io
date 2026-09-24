@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { CATEGORIES } from '@config/site';
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+}
+const { article } = Astro.props;
+const { data } = article;
+const cat = CATEGORIES[data.category];
+const { Content } = await render(article);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  type="article"
+  publishedTime={data.date}
+  modifiedTime={data.updated}
+>
+  <Header />
+  <main class="flex-1">
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+      <nav class="text-sm text-neutral-500 mb-6">
+        <a href="/" class="hover:text-brand-600">首页</a>
+        <span class="mx-2">/</span>
+        <a href={`/${data.category}/`} class="hover:text-brand-600">{cat.label}</a>
+      </nav>
+
+      <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800">
+        <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+          <span class="text-brand-600 dark:text-brand-500 font-medium">{cat.label}</span>
+          <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+          {data.updated && (
+            <>
+              <span>·</span>
+              <span>更新于 {formatDate(data.updated)}</span>
+            </>
+          )}
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">{data.title}</h1>
+        <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">{data.summary}</p>
+        {data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-5">
+            {data.tags.map((t) => (
+              <a href={`/tags/${t}/`} class="tag">#{t}</a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <div class="prose prose-neutral dark:prose-invert max-w-none">
+        <Content />
+      </div>
+
+      <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500">
+        <div class="flex items-center gap-2">
+          <span>作者：</span>
+          <span class="font-medium text-neutral-700 dark:text-neutral-300">{data.author}</span>
+        </div>
+      </footer>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
