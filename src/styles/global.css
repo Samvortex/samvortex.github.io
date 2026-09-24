@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    color-scheme: light dark;
-  }
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
