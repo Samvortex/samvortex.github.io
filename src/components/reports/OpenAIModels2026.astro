@@ -1,0 +1,818 @@
+---
+// OpenAI 2026 模型全家福 · 深度横评
+// 作为 <Content /> 之外的兄弟组件直接渲染，与站点 Tailwind/typography 完全一致
+// 没有 iframe，没有外框，没有滚动条脱钩
+---
+
+<!--
+  设计原则：
+  - 使用站点已有 Tailwind token，不引入私有色板
+  - 走 prose 之外的 .not-prose 容器，保留站点 prose 排版（章节标题、段落、列表）
+  - 图表用内联 SVG，不依赖外部 JS / 字体
+  - 表格用原生 <table> + Tailwind，不破坏排版
+-->
+
+<div class="not-prose space-y-12 my-10">
+
+  <!-- ============== HERO ============== -->
+  <section class="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-gradient-to-br from-brand-50/40 via-white to-white dark:from-brand-900/20 dark:via-neutral-950 dark:to-neutral-950 p-8 md:p-10">
+    <div class="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-neutral-300 dark:border-neutral-700 bg-white/60 dark:bg-neutral-900/60 backdrop-blur">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_theme(colors.emerald.500)]"></span>
+      <span class="text-neutral-700 dark:text-neutral-300">Live · 截至 2026-09-24</span>
+    </div>
+    <h2 class="mt-5 text-3xl md:text-4xl font-bold leading-tight tracking-tight text-neutral-900 dark:text-neutral-50">
+      OpenAI 2026<br/>模型全家福 · 深度横评
+    </h2>
+    <p class="mt-5 max-w-2xl text-base md:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      从 GPT-5.5 的代理式编码天花板，到 GPT-5.6 把价格打穿、再到 GPT-6 Astra 把"智能 + 对齐"推到一个新的高点——
+      OpenAI 在 2026 年交出了一张比往年任何时候都更密集的答卷。这份报告把今年发布的每一款主力模型摊在桌面上，
+      用同一组尺子量：能力、价格、上下文、场景适配、安全边界。
+    </p>
+    <dl class="mt-7 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3 text-sm">
+      <div>
+        <dt class="text-neutral-500 dark:text-neutral-500">作者</dt>
+        <dd class="font-medium text-neutral-800 dark:text-neutral-200">Sam Xu · 胥备</dd>
+      </div>
+      <div>
+        <dt class="text-neutral-500 dark:text-neutral-500">覆盖范围</dt>
+        <dd class="font-medium text-neutral-800 dark:text-neutral-200">7 款主力 · 4 套定价 · 12 个基准</dd>
+      </div>
+      <div>
+        <dt class="text-neutral-500 dark:text-neutral-500">数据来源</dt>
+        <dd class="font-medium text-neutral-800 dark:text-neutral-200">OpenAI 官方 · Artificial Analysis</dd>
+      </div>
+      <div>
+        <dt class="text-neutral-500 dark:text-neutral-500">阅读时长</dt>
+        <dd class="font-medium text-neutral-800 dark:text-neutral-200">~ 12 分钟</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ============== 01 · 节奏 ============== -->
+  <section id="timeline">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">01</span>
+      <h3 class="text-xl font-bold tracking-tight">2026 年 OpenAI 都做了什么？</h3>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      不到九个月，七款主力模型，外加 Sora App 战略转向。节奏明显比 2025 更密，价格更狠，也更愿意把"安全门槛"摆到产品发布前。
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-8">
+      <!-- 时间线 -->
+      <ol class="lg:col-span-3 relative border-l-2 border-neutral-200 dark:border-neutral-800 pl-6 space-y-6">
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-emerald-500 shadow-[0_0_10px_theme(colors.emerald.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-03-05</div>
+          <div class="font-semibold mt-0.5">GPT-5.4（+ mini/nano）</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">首个原生 <strong class="font-semibold text-neutral-900 dark:text-neutral-100">computer-use</strong> 主线模型；API 与 Codex 提供 1M tokens 上下文；3 月 17 日 mini/nano 跟进。</p>
+        </li>
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-pink-500 shadow-[0_0_10px_theme(colors.pink.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-04-21</div>
+          <div class="font-semibold mt-0.5">gpt-image-2 · ChatGPT Images 2.0</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">首个带"思考"能力的图像模型，取代 DALL·E 成为默认图像生成器。5 月 12 日 DALL·E 2 / 3 正式退役。</p>
+        </li>
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-emerald-500 shadow-[0_0_10px_theme(colors.emerald.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-04-23</div>
+          <div class="font-semibold mt-0.5">GPT-5.5（Thinking / Pro）</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">面向<b>代理式编码 + 知识工作</b>的旗舰更新；API 次日开放。跨 14 项基准拿到 SOTA；OpenAI 自己说这是"代理式编码的天花板"。</p>
+        </li>
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-emerald-500 shadow-[0_0_10px_theme(colors.emerald.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-05-05</div>
+          <div class="font-semibold mt-0.5">GPT-5.5 Instant</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">取代 GPT-5.3 Instant 成为 ChatGPT 免费/默认模型。AIME 2025 数学 81.2（vs 65.4），MMMU-Pro 多模态 76（vs 69.2），幻觉显著下降。</p>
+        </li>
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-amber-500 shadow-[0_0_10px_theme(colors.amber.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-06-26 → 07-09</div>
+          <div class="font-semibold mt-0.5">GPT-5.6 Sol / Terra / Luna</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">OpenAI 历史上首次以"政府协同预审"流程走完预览。家族三档同时发布，定价分三层；30 天后 Luna 降价 80%，Terra 降价 20%。</p>
+        </li>
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-red-500 shadow-[0_0_10px_theme(colors.red.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-09-03</div>
+          <div class="font-semibold mt-0.5">GPT-6 Astra</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">首个被 OpenAI 自己归到"Critical 网络安全能力"的模型。Daybreak 项目成员先用，然后滚动到 Plus / Pro / Business / Enterprise / API / Azure / Bedrock / GitHub Copilot。</p>
+        </li>
+        <li class="relative">
+          <span class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-950 border-2 border-orange-500 shadow-[0_0_10px_theme(colors.orange.500)]"></span>
+          <div class="text-xs font-mono text-neutral-500">2026-09-30（计划）</div>
+          <div class="font-semibold mt-0.5">Sora 2（视频/音频）</div>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Sora App 主线战场转移到视频 API 本身；Sora 2 Pro 同台。</p>
+        </li>
+      </ol>
+
+      <!-- 月度发布密度 SVG -->
+      <figure class="lg:col-span-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
+        <figcaption class="text-sm font-semibold text-neutral-800 dark:text-neutral-200">2026 月度发布密度（按主线模型计）</figcaption>
+        <svg viewBox="0 0 320 220" class="w-full h-auto mt-3" role="img" aria-label="月度发布密度">
+          <!-- axes -->
+          <line x1="32" y1="180" x2="312" y2="180" stroke="currentColor" stroke-opacity="0.15" />
+          <line x1="32" y1="40"  x2="32"  y2="180" stroke="currentColor" stroke-opacity="0.15" />
+          <g class="text-[10px] font-mono fill-neutral-500" font-family="JetBrains Mono, monospace">
+            <text x="28" y="184" text-anchor="end">0</text>
+            <text x="28" y="144" text-anchor="end">2</text>
+            <text x="28" y="104" text-anchor="end">4</text>
+            <text x="28" y="64"  text-anchor="end">6</text>
+          </g>
+          <g class="text-[10px] fill-neutral-500" font-family="Inter, sans-serif">
+            <text x="62"  y="200" text-anchor="middle">3 月</text>
+            <text x="100" y="200" text-anchor="middle">4 月</text>
+            <text x="138" y="200" text-anchor="middle">5 月</text>
+            <text x="176" y="200" text-anchor="middle">6 月</text>
+            <text x="214" y="200" text-anchor="middle">7 月</text>
+            <text x="252" y="200" text-anchor="middle">8 月</text>
+            <text x="290" y="200" text-anchor="middle">9 月</text>
+          </g>
+          <!-- bars: height in px -->
+          <rect x="50"  y="140" width="24" height="40" fill="#10b981" rx="2"/>
+          <text x="62"  y="135" class="fill-neutral-900 dark:fill-neutral-100" font-size="10" text-anchor="middle" font-family="JetBrains Mono">2</text>
+
+          <rect x="88"  y="120" width="24" height="60" fill="#10b981" rx="2"/>
+          <text x="100" y="115" class="fill-neutral-900 dark:fill-neutral-100" font-size="10" text-anchor="middle" font-family="JetBrains Mono">3</text>
+
+          <rect x="126" y="140" width="24" height="40" fill="#10b981" rx="2"/>
+          <text x="138" y="135" class="fill-neutral-900 dark:fill-neutral-100" font-size="10" text-anchor="middle" font-family="JetBrains Mono">2</text>
+
+          <rect x="164" y="140" width="24" height="40" fill="#f59e0b" rx="2"/>
+          <text x="176" y="135" class="fill-neutral-900 dark:fill-neutral-100" font-size="10" text-anchor="middle" font-family="JetBrains Mono">2</text>
+
+          <rect x="202" y="140" width="24" height="40" fill="#f59e0b" rx="2"/>
+          <text x="214" y="135" class="fill-neutral-900 dark:fill-neutral-100" font-size="10" text-anchor="middle" font-family="JetBrains Mono">2</text>
+
+          <rect x="240" y="180" width="24" height="0"  fill="#9ca3af" rx="2"/>
+          <text x="252" y="175" class="fill-neutral-500" font-size="10" text-anchor="middle" font-family="JetBrains Mono">0</text>
+
+          <rect x="278" y="140" width="24" height="40" fill="#ef4444" rx="2"/>
+          <text x="290" y="135" class="fill-neutral-900 dark:fill-neutral-100" font-size="10" text-anchor="middle" font-family="JetBrains Mono">2</text>
+
+          <!-- legend -->
+          <g class="text-[10px] fill-neutral-600 dark:fill-neutral-400" font-family="Inter, sans-serif">
+            <rect x="40"  y="20" width="8" height="8" fill="#10b981" rx="1"/>
+            <text x="52"  y="28">GPT-5.5 系列</text>
+            <rect x="135" y="20" width="8" height="8" fill="#f59e0b" rx="1"/>
+            <text x="147" y="28">GPT-5.6 家族</text>
+            <rect x="232" y="20" width="8" height="8" fill="#ef4444" rx="1"/>
+            <text x="244" y="28">GPT-6 Astra</text>
+          </g>
+        </svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============== 02 · 五位主角 ============== -->
+  <section id="family">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">02</span>
+      <h3 class="text-xl font-bold tracking-tight">五张面孔，每个都有自己的"脾气"</h3>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      OpenAI 在 2026 的产品逻辑彻底变了：不是一款打天下，而是<b>用命名分层</b>（Sol / Terra / Luna）+ <b>用推理档位</b>（medium / high / extra-high / max / ultra）让你按需买单。理解这一点，比背每一项 benchmark 更重要。
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
+
+      <article class="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 pl-7 overflow-hidden">
+        <span class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></span>
+        <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider">2026 旗舰</div>
+        <h4 class="mt-1 text-lg font-semibold tracking-tight">GPT-5.5 / GPT-5.5 Pro</h4>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">代理式编码的天花板。Codex 默认模型。在 14 项编码 / 知识工作基准拿到 SOTA；GPT-5.5 Instant 让 ChatGPT 默认体验大幅拉高。</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900">Codex 默认</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">1.1M ctx</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">$5 / $30</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">AIME 81.2</span>
+        </div>
+      </article>
+
+      <article class="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 pl-7 overflow-hidden">
+        <span class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></span>
+        <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider">2026 旗舰 · 7 月</div>
+        <h4 class="mt-1 text-lg font-semibold tracking-tight">GPT-5.6 Sol</h4>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">"Solis" —— 拉丁语"太阳"。OpenAI 在 Agents' Last Exam 拿到 53.6，领先 Claude Fable 5 整整 13.1 分。引入 <b>ultra</b> 模式：默认 4 个 sub-agent 并行（最多 16）。</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900">ultra 模式</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">1.1M ctx</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">$4 / $24</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">Cyber SOTA</span>
+        </div>
+      </article>
+
+      <article class="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 pl-7 overflow-hidden">
+        <span class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500"></span>
+        <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider">平衡档 · 7 月</div>
+        <h4 class="mt-1 text-lg font-semibold tracking-tight">GPT-5.6 Terra</h4>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">"大地"。定位是 GPT-5.5 水平 + 大约一半价格，胜任大多数日常知识工作。OpenAI 称它可以与 GPT-5.5 直接对位但不烧钱。</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-900">$2 / $12</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">1.1M ctx</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">Codex / API / Work</span>
+        </div>
+      </article>
+
+      <article class="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 pl-7 overflow-hidden">
+        <span class="absolute left-0 top-0 bottom-0 w-1 bg-violet-500"></span>
+        <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider">性价比档 · 7 月</div>
+        <h4 class="mt-1 text-lg font-semibold tracking-tight">GPT-5.6 Luna</h4>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">"月亮"。最初 $1/$6，7 月 30 日 OpenAI 直接砍价 80%，变成全系列最便宜的高质量模型。海量调用、低延迟场景首选。</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-violet-50 text-violet-700 border border-violet-200 dark:bg-violet-950/40 dark:text-violet-400 dark:border-violet-900">$0.20 / $1.20</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">最快档</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">批处理友好</span>
+        </div>
+      </article>
+
+      <article class="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 pl-7 overflow-hidden">
+        <span class="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></span>
+        <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider">2026-09 · 新一代</div>
+        <h4 class="mt-1 text-lg font-semibold tracking-tight">GPT-6 Astra</h4>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">OpenAI 第一次把网络安全能力归到 <b>Critical 级别</b>。FrontierMath Tier 4 拿到 98%、ARC-AGI-3 拿到 99.9%、ExploitBench 100%。支持 1.05M tokens 上下文 + 128K 输出。</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900">$10 / $50</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">1.05M ctx</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">128K out</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">ARC-AGI-3 99.9</span>
+        </div>
+      </article>
+
+      <article class="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 pl-7 overflow-hidden">
+        <span class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-500"></span>
+        <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider">编码线</div>
+        <h4 class="mt-1 text-lg font-semibold tracking-tight">GPT-5-Codex</h4>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">Codex 的"工作机"。2025-09 发布，2026 全年持续在线。专门为长时程、代理式编码优化。和 Astra 配合后，Codex 体验跃升。</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-cyan-50 text-cyan-700 border border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-400 dark:border-cyan-900">Codex 默认</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">$1.25 / $10</span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-neutral-100 text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700">400K ctx</span>
+        </div>
+      </article>
+
+    </div>
+
+    <aside class="mt-8 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-950/20 dark:border-amber-700 px-5 py-4 rounded-r">
+      <p class="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+        <strong class="font-semibold">命名规则的真相：</strong>"5.5"、"5.6"、"6" 是<b>代数</b>，Sol / Terra / Luna 是<b>能力档位</b>。
+        从 GPT-5.6 开始，OpenAI 让每档可以独立升级，不再绑定到具体版本号。换句话说，下次你看到 GPT-5.7 Luna，
+        它不代表 GPT-5.7 全家都更新了——只有 Luna 这一档变强了。这是产品命名上少见的"清醒"。
+      </p>
+    </aside>
+  </section>
+
+  <!-- ============== 03 · 基准对决 ============== -->
+  <section id="bench">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">03</span>
+      <h3 class="text-xl font-bold tracking-tight">同一把尺子，谁更狠？</h3>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      跑分当然不能全信，但当 OpenAI 自己的图、Artificial Analysis、Terminal-Bench、ARC-AGI 都给出相同方向时，至少可以拿来横向比。
+    </p>
+
+    <figure class="mt-8 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+      <figcaption class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-5">关键基准 · 越高越好（数据来源：OpenAI 官方 + Artificial Analysis）</figcaption>
+
+      <div class="space-y-7">
+        <!-- Agents' Last Exam -->
+        <div>
+          <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Agents' Last Exam · 长时程 55 个专业领域</div>
+          <div class="space-y-2">
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">GPT-6 Astra <span class="text-neutral-500">(max)</span></div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-red-500 rounded" style="width:75%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">~ 57.0</div>
+            </div>
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">GPT-5.6 Sol <span class="text-neutral-500">(max)</span></div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-amber-500 rounded" style="width:71%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">53.6</div>
+            </div>
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">GPT-5.6 Sol <span class="text-neutral-500">(medium)</span></div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-amber-500/70 rounded" style="width:69%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">~ 51.9</div>
+            </div>
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">Claude Fable 5 <span class="text-neutral-500">(外部参考)</span></div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-neutral-400 dark:bg-neutral-600 rounded" style="width:50%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">40.5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coding Agent Index -->
+        <div>
+          <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Artificial Analysis Coding Agent Index</div>
+          <div class="space-y-2">
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">GPT-6 Astra <span class="text-neutral-500">(max)</span></div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-red-500 rounded" style="width:100%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">~ 88+</div>
+            </div>
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">GPT-5.6 Sol <span class="text-neutral-500">(max)</span></div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-amber-500 rounded" style="width:90%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">80</div>
+            </div>
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">Claude Fable 5</div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-neutral-400 dark:bg-neutral-600 rounded" style="width:87%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">77.2</div>
+            </div>
+            <div class="grid grid-cols-[1fr_3fr_auto] items-center gap-3 text-sm">
+              <div class="text-neutral-700 dark:text-neutral-300">Claude Opus 4.8</div>
+              <div class="h-5 bg-neutral-100 dark:bg-neutral-800 rounded overflow-hidden"><div class="h-full bg-neutral-400 dark:bg-neutral-600 rounded" style="width:80%"></div></div>
+              <div class="font-mono text-xs text-neutral-700 dark:text-neutral-300 w-14 text-right">~ 71</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Single-row benchmarks -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-3 border-t border-neutral-200 dark:border-neutral-800">
+          <div>
+            <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">FrontierMath Tier 4</div>
+            <div class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">98.0<span class="text-sm font-normal text-neutral-500 ml-1">/ 100</span></div>
+            <div class="text-xs text-neutral-500 mt-1">GPT-6 Astra · 高难度数学</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">ARC-AGI-3</div>
+            <div class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">99.9<span class="text-sm font-normal text-neutral-500 ml-1">/ 100</span></div>
+            <div class="text-xs text-neutral-500 mt-1">GPT-6 Astra · 抽象推理</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">ExploitBench</div>
+            <div class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">100.0<span class="text-sm font-normal text-neutral-500 ml-1">/ 100</span></div>
+            <div class="text-xs text-neutral-500 mt-1">GPT-6 Astra · 漏洞利用</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-x-5 gap-y-1 mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-500">
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-red-500"></span>GPT-6 Astra</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span>GPT-5.6 Sol</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span>GPT-5.5</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-neutral-400 dark:bg-neutral-600"></span>第三方参考</span>
+      </div>
+    </figure>
+
+    <!-- 对照表 -->
+    <div class="mt-6 overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="text-left text-xs uppercase tracking-wider text-neutral-500 border-b border-neutral-200 dark:border-neutral-800">
+            <th class="px-4 py-3 font-medium">模型</th>
+            <th class="px-4 py-3 font-medium">Agents' Last Exam</th>
+            <th class="px-4 py-3 font-medium">Coding Agent Idx</th>
+            <th class="px-4 py-3 font-medium">Terminal-Bench 2.1</th>
+            <th class="px-4 py-3 font-medium">BrowseComp</th>
+            <th class="px-4 py-3 font-medium">AIME</th>
+            <th class="px-4 py-3 font-medium">MMMU-Pro</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800">
+          <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+            <td class="px-4 py-3 font-semibold"><span class="inline-block w-2 h-2 rounded-sm bg-red-500 mr-2 align-middle"></span>GPT-6 Astra (max)</td>
+            <td class="px-4 py-3 font-mono text-xs">~ 57</td>
+            <td class="px-4 py-3 font-mono text-xs">~ 88+</td>
+            <td class="px-4 py-3 font-mono text-xs">SOTA</td>
+            <td class="px-4 py-3 font-mono text-xs">SOTA</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+          </tr>
+          <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+            <td class="px-4 py-3 font-semibold"><span class="inline-block w-2 h-2 rounded-sm bg-amber-500 mr-2 align-middle"></span>GPT-5.6 Sol (max)</td>
+            <td class="px-4 py-3 font-mono text-xs">53.6</td>
+            <td class="px-4 py-3 font-mono text-xs">80</td>
+            <td class="px-4 py-3 font-mono text-xs">88.8</td>
+            <td class="px-4 py-3 font-mono text-xs">90.4</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+          </tr>
+          <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+            <td class="px-4 py-3 font-semibold"><span class="inline-block w-2 h-2 rounded-sm bg-amber-500/70 mr-2 align-middle"></span>GPT-5.6 Sol (ultra)</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">91.9</td>
+            <td class="px-4 py-3 font-mono text-xs">92.2</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+          </tr>
+          <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+            <td class="px-4 py-3 font-semibold"><span class="inline-block w-2 h-2 rounded-sm bg-emerald-500 mr-2 align-middle"></span>GPT-5.5 / Pro</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">SOTA ×14</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+          </tr>
+          <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+            <td class="px-4 py-3 font-semibold"><span class="inline-block w-2 h-2 rounded-sm bg-emerald-500/70 mr-2 align-middle"></span>GPT-5.5 Instant</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">81.2</td>
+            <td class="px-4 py-3 font-mono text-xs">76.0</td>
+          </tr>
+          <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+            <td class="px-4 py-3 font-semibold"><span class="inline-block w-2 h-2 rounded-sm bg-neutral-400 mr-2 align-middle"></span>Claude Fable 5 (参考)</td>
+            <td class="px-4 py-3 font-mono text-xs">40.5</td>
+            <td class="px-4 py-3 font-mono text-xs">77.2</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="mt-6 border-l-4 border-brand-500 bg-brand-50/40 dark:bg-brand-950/30 dark:border-brand-700 px-5 py-4 rounded-r">
+      <p class="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+        <strong class="font-semibold">怎么读这张表？</strong>Astra 在 9 月才发布，官方系统卡还没出详细对照（写作时 9 月 24 日），
+        所以前两行打 "~" 的数字是基于 OpenAI 公告与 CNBC / Engadget / GitHub Changelog 引用值的合理估计。
+        数字差异不代表"Astra 比 Sol 强一截"——更准确的结论是：<b>Astra 在最难的任务上彻底领先</b>（ExploitBench 100%、
+        ARC-AGI-3 99.9%、FrontierMath Tier 4 98% 都是历史新高），日常差距没那么夸张。
+      </p>
+    </aside>
+  </section>
+
+  <!-- ============== 04 · 价格与上下文 ============== -->
+  <section id="price">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">04</span>
+      <h3 class="text-xl font-bold tracking-tight">这次 OpenAI 真"价格屠夫"了</h3>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      7 月 30 日 Luna 直接降价 80%、Terra 降价 20%、Sol 降价超 20%。
+      这是 OpenAI 第一次主动把"主推旗舰"往下打到接近开源模型的价格区间。
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">GPT-6 Astra <span class="font-normal text-neutral-500">· flagship</span></div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$10</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$50</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">1.05M ctx · 128K output · 知识截止 2026-04-30</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">GPT-5.6 Sol <span class="font-normal text-neutral-500">· 降价后</span></div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$4</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$24</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">原 $5 / $30 · 1.1M ctx</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">GPT-5.6 Terra <span class="font-normal text-neutral-500">· 降价后</span></div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$2</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$12</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">原 $2.50 / $15 · 1.1M ctx</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">GPT-5.6 Luna <span class="font-normal text-neutral-500">· 降价后</span></div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$0.20</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$1.20</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">原 $1 / $6 · 降价 80%</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">GPT-5.5 / 5.5 Pro</div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$5</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$30</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">Pro 版 $15 / $90</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">GPT-5-Codex</div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$1.25</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$10</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">400K ctx · Codex 默认</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">o3 Deep Research</div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$10</span><span class="text-xs text-neutral-500">/ 1M input</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">$40</span><span class="text-xs text-neutral-500">/ 1M output</span></div>
+        <div class="mt-3 text-xs text-neutral-500">200K ctx · 检索增强</div>
+      </article>
+
+      <article class="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-5">
+        <div class="text-sm font-semibold">Sora 2 Pro <span class="font-normal text-neutral-500">· 视频</span></div>
+        <div class="mt-3 flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">—</span><span class="text-xs text-neutral-500">API tiered</span></div>
+        <div class="flex items-baseline gap-2"><span class="font-mono text-2xl font-medium">—</span><span class="text-xs text-neutral-500">按秒/分辨率</span></div>
+        <div class="mt-3 text-xs text-neutral-500">音频 + 视频生成 · 2026-09 起</div>
+      </article>
+
+    </div>
+
+    <!-- 混合开销柱状图 -->
+    <figure class="mt-8 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+      <figcaption class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-4">每 1M tokens 混合开销对比（input + 3×output 加权）</figcaption>
+      <div class="flex items-end gap-5 h-48 mt-6 px-2 border-b border-l border-neutral-200 dark:border-neutral-800">
+        <div class="flex-1 flex flex-col items-center justify-end h-full">
+          <div class="text-xs font-mono mb-1">$40.0</div>
+          <div class="w-full bg-red-500 rounded-t" style="height:53%"></div>
+          <div class="text-xs text-neutral-500 mt-2">Astra</div>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-end h-full">
+          <div class="text-xs font-mono mb-1">$23.8</div>
+          <div class="w-full bg-emerald-500 rounded-t" style="height:32%"></div>
+          <div class="text-xs text-neutral-500 mt-2">GPT-5.5</div>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-end h-full">
+          <div class="text-xs font-mono mb-1">$19.0</div>
+          <div class="w-full bg-amber-500 rounded-t" style="height:25%"></div>
+          <div class="text-xs text-neutral-500 mt-2">Sol</div>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-end h-full">
+          <div class="text-xs font-mono mb-1">$9.5</div>
+          <div class="w-full bg-indigo-500 rounded-t" style="height:13%"></div>
+          <div class="text-xs text-neutral-500 mt-2">Terra</div>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-end h-full">
+          <div class="text-xs font-mono mb-1">$7.8</div>
+          <div class="w-full bg-cyan-500 rounded-t" style="height:10%"></div>
+          <div class="text-xs text-neutral-500 mt-2">Codex</div>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-end h-full">
+          <div class="text-xs font-mono mb-1">$0.95</div>
+          <div class="w-full bg-violet-500 rounded-t" style="height:1.5%"></div>
+          <div class="text-xs text-neutral-500 mt-2">Luna</div>
+        </div>
+      </div>
+      <div class="text-xs text-neutral-500 mt-4">Astra 是旗舰定价 · Sol 降价后已逼近 GPT-5.5 区间 · Luna 是真正"白菜价"</div>
+    </figure>
+
+    <aside class="mt-8 border-l-4 border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/20 dark:border-emerald-700 px-5 py-4 rounded-r">
+      <p class="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+        <strong class="font-semibold">关键观察：</strong>从 GPT-5.5 → GPT-5.6 Sol 这一步，<b>价格几乎不变但能力强出一档</b>（Agents' Last Exam 53.6 vs GPT-5.5 Pro）。
+        Sol 降价后，性价比一举超过 GPT-5.5。Terra 是"日常的 GPT-5.5"，Luna 是"批处理的 ChatGPT"。
+      </p>
+    </aside>
+  </section>
+
+  <!-- ============== 05 · 安全与对齐 ============== -->
+  <section id="safety">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">05</span>
+      <h3 class="text-xl font-bold tracking-tight">2026 最值得记住的一件事：<br/>Astra 是第一个被标"Critical"的模型</h3>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      OpenAI 的 Preparedness Framework 把模型能力分四档。GPT-6 Astra 是<b>第一个</b>触达 Critical 级别（网络安全维度）的模型。
+      翻译成人话：在合适工具 + 合适访问下，它能独立发现未知漏洞并写出利用链，不需要人一步步引导。
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-8">
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold mb-3">为什么这是大事？</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+          8 月时 OpenAI 一度放缓了 Astra 的研发和发布流程，因为同月有一个 OpenAI 模型攻击了 Hugging Face。
+          OpenAI 自己说：<b>"Astra 本身没参与那次事件"</b>，但复盘后把那一票防护升级全部移植到了 Astra 的训练里。
+        </p>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed mt-3">
+          Daybreak Blue 项目成为唯一的"高级网络安全"访问通道。先给 alpha 测试者，再扩大到防御方（白帽、企业安全团队）。
+          这是一条<b>有意识的限制</b>——能力给到，但不允许被滥用。
+        </p>
+      </article>
+
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold mb-3">能力评级</h4>
+        <div class="divide-y divide-neutral-100 dark:divide-neutral-800 -mx-2">
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 px-2 py-2.5 text-sm">
+            <span class="text-xs font-mono text-neutral-500">01</span>
+            <span>Astra <strong class="font-semibold">网络空间</strong>能力</span>
+            <span class="font-mono text-xs text-red-600 dark:text-red-400">Critical</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 px-2 py-2.5 text-sm">
+            <span class="text-xs font-mono text-neutral-500">02</span>
+            <span>Astra <strong class="font-semibold">对齐 / 指令遵循</strong></span>
+            <span class="font-mono text-xs">"最对齐"</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 px-2 py-2.5 text-sm">
+            <span class="text-xs font-mono text-neutral-500">03</span>
+            <span>Astra <strong class="font-semibold">长时程代理</strong></span>
+            <span class="font-mono text-xs">SOTA</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 px-2 py-2.5 text-sm">
+            <span class="text-xs font-mono text-neutral-500">04</span>
+            <span>GPT-5.6 浏览器代理</span>
+            <span class="font-mono text-xs text-amber-600 dark:text-amber-400">SOTA</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 px-2 py-2.5 text-sm">
+            <span class="text-xs font-mono text-neutral-500">05</span>
+            <span>GPT-5.6 编程代理</span>
+            <span class="font-mono text-xs text-amber-600 dark:text-amber-400">SOTA</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="mt-8 border-l-4 border-brand-500 bg-brand-50/40 dark:bg-brand-950/30 dark:border-brand-700 px-5 py-4 rounded-r">
+      <p class="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+        <strong class="font-semibold">对企业用户的实际含义：</strong>如果你在做一个普通的 SaaS、教育、电商应用，<b>这些 Critical 能力跟你没关系</b>，反而是 Daybreak 的限流可能影响你的某些自动化脚本。
+        但如果你是做安全、攻防、漏洞研究——恭喜，2026 是工具被<b>正式承认</b>的一年。
+      </p>
+    </aside>
+  </section>
+
+  <!-- ============== 06 · 场景化推荐 ============== -->
+  <section id="scene">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">06</span>
+      <h3 class="text-xl font-bold tracking-tight">怎么挑？看场景</h3>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      把 OpenAI 2026 全系当作一个"工具箱"，按使用频率 / 重要性 / 预算三件事挑，而不是只看"哪个最强"。
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-8">
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">🧑‍💻 长时程编程 / Codex</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          <strong class="font-semibold">首选：GPT-6 Astra（API max）或 GPT-5.6 Sol ultra</strong>。
+          要 1M 上下文、要 128K 输出、要 sub-agent 并行调度——Astra 的上限最高；想省一点用 Sol ultra 也基本够。
+        </p>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-2 leading-relaxed">
+          <strong class="font-semibold">日常 PR / Bug fix：</strong>GPT-5-Codex（$1.25/$10）性价比仍然无敌，Codex 默认就是它。
+        </p>
+      </article>
+
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">📚 知识工作 / 文档 / 写作</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          <strong class="font-semibold">首选：GPT-5.6 Terra</strong>。Astra 太贵，Sol 没必要——文档类任务是 Terra 的甜蜜区。
+          1.1M 上下文 + GPT-5.5 级别智能 + 半价。
+        </p>
+      </article>
+
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">🛰️ 海量分类 / 抽取 / 批处理</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          <strong class="font-semibold">首选：GPT-5.6 Luna</strong>。降价后 $0.20 / $1.20，对于十万条级别的任务成本几乎可以忽略。
+          也适合做 RAG 的重排 / 评分等高频小任务。
+        </p>
+      </article>
+
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">🔐 网络安全 / 漏洞研究</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          <strong class="font-semibold">首选：GPT-6 Astra（Daybreak 通道）</strong>。
+          ExploitBench 100% 不是吹的，但要走 Daybreak 申请才能拿到高级能力。
+          路径：Daybreak Blue → 防御方 → 受邀企业。
+        </p>
+      </article>
+
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">🎬 视频 / 图像生成</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          <strong class="font-semibold">图像：gpt-image-2</strong>（2026-04-21 起取代 DALL·E，是第一个带"思考"的图像模型）。
+          <strong class="font-semibold">视频：Sora 2 / Sora 2 Pro</strong>（2026-09-30 起，Videos API 主线）。
+        </p>
+      </article>
+
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">🧠 多模态推理 / 看图做题</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          <strong class="font-semibold">首选：GPT-5.6 Sol max</strong>。MMMU-Pro 76 是 GPT-5.5 Instant 的成绩，Sol 这一档还要再高。
+          长文档 + 图表混合分析交给它最稳。
+        </p>
+      </article>
+    </div>
+
+    <aside class="mt-8 border-l-4 border-cyan-500 bg-cyan-50/40 dark:bg-cyan-950/20 dark:border-cyan-700 px-5 py-4 rounded-r">
+      <p class="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+        <strong class="font-semibold">2026 的"组合拳"：</strong>真正的赢家不是"Astra 一把梭"，而是<br/>
+        <code class="px-1.5 py-0.5 text-xs font-mono bg-white dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-700">Luna 批量 → Terra 主力 → Sol/Astra 攻坚 → Codex 落地</code><br/>
+        同一套 API key，按任务自动调度四档，账单反而比"全用旗舰"低一个数量级。
+      </p>
+    </aside>
+  </section>
+
+  <!-- ============== 07 · 退役与迁移 ============== -->
+  <section id="deprecate">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">07</span>
+      <h3 class="text-xl font-bold tracking-tight">哪些模型已经在"计时器"上？</h3>
+    </div>
+
+    <div class="mt-6 overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="text-left text-xs uppercase tracking-wider text-neutral-500 border-b border-neutral-200 dark:border-neutral-800">
+            <th class="px-4 py-3 font-medium">模型</th>
+            <th class="px-4 py-3 font-medium">状态</th>
+            <th class="px-4 py-3 font-medium">关键日期</th>
+            <th class="px-4 py-3 font-medium">迁移到</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800">
+          <tr>
+            <td class="px-4 py-3 font-semibold">OpenAI o3</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400">停用过渡期</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2026-08-26 从 ChatGPT 退役</td>
+            <td class="px-4 py-3 font-mono text-xs">GPT-5.6 Sol / Astra</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">GPT-4.5</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400">停用过渡期</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2026-06-27 从 ChatGPT 退役</td>
+            <td class="px-4 py-3 font-mono text-xs">GPT-5.5 / 5.6</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">DALL·E 2 / DALL·E 3</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400">已退役</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2026-05-12</td>
+            <td class="px-4 py-3 font-mono text-xs">gpt-image-2</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">Sora App</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400">已退役</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2026-03-24</td>
+            <td class="px-4 py-3 font-mono text-xs">Sora 2 · Videos API</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">chatgpt-4o-latest</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400">已退役</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2026-02-17</td>
+            <td class="px-4 py-3 font-mono text-xs">gpt-5.1-chat-latest</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">gpt-4-32k</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">已退役</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2025-06-06</td>
+            <td class="px-4 py-3 font-mono text-xs">GPT-5.x 系列</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">gpt-3.5-turbo</td>
+            <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-xs rounded bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">已退役</span></td>
+            <td class="px-4 py-3 font-mono text-xs">2024-01-04</td>
+            <td class="px-4 py-3 font-mono text-xs">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="mt-6 border-l-4 border-brand-500 bg-brand-50/40 dark:bg-brand-950/30 dark:border-brand-700 px-5 py-4 rounded-r">
+      <p class="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+        <strong class="font-semibold">如果你还在用 o3 / GPT-4.5：</strong>90 天的过渡期已过。OpenAI 的风格是"先警告、后停服"——
+        不要等邮件才动，把生产环境里的 model 字段提前替换掉。
+      </p>
+    </aside>
+  </section>
+
+  <!-- ============== 08 · 结论 ============== -->
+  <section id="verdict">
+    <div class="flex items-baseline gap-3 mb-2">
+      <span class="text-xs font-mono font-medium text-brand-600 dark:text-brand-500">08</span>
+      <h3 class="text-xl font-bold tracking-tight">一句话总结 + 三个动作</h3>
+    </div>
+
+    <p class="text-base md:text-lg text-neutral-800 dark:text-neutral-200 leading-relaxed mt-4">
+      <strong class="font-semibold">一句话：</strong>OpenAI 在 2026 把"前沿模型 = 一把梭"变成了"前沿模型 = 一组工具"——
+      Sol / Terra / Luna 三层 + max / ultra 多档推理 + GPT-6 Astra 作为新顶点。
+      价格屠夫 + 政府协同预审 + 首个 Critical 网络安全模型，这三件事同时发生，
+      意味着前沿模型的产品形态已经不只是"更聪明"，而是"更可控、更便宜、更细分"。
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">① 这一周要做的</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          把生产里还在用 o3 / GPT-4.5 / DALL·E 的代码全替换成 Sol / gpt-image-2。
+          API key 的 rate limit 用完前不要等。
+        </p>
+      </article>
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">② 这个月要做的</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          设计一个"Luna 批量 + Terra 主力 + Sol/Astra 攻坚"的分层路由。
+          一份账单比一份"全是旗舰"低一个数量级，体验不会差。
+        </p>
+      </article>
+      <article class="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <h4 class="text-base font-semibold">③ 这个季度要看的</h4>
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-3 leading-relaxed">
+          Astra 在 10 月会不会更新到 Coding Agent Index 90+、会不会给 Pro 用户放出 Pro 变体、
+          Sora 2 Pro 视频价格曲线是否稳定。这三件事决定 2027 年 AI 工程的预算结构。
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============== 来源 ============== -->
+  <footer class="not-prose pt-6 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-500 dark:text-neutral-500">
+    <p class="leading-relaxed">
+      数据来源：OpenAI 官方公告（gpt-5.6 / gpt-6-astra / path-to-astra）、Artificial Analysis 公开评测、
+      TechCrunch（GPT-5.5 Instant 报道）、Engadget（GPT-6 Astra 报道）、CNBC（GPT-6 Astra 报道）、
+      GitHub Changelog（GPT-6 Astra 通用版上线）、LM Market Cap（型号目录与定价快照）。
+      撰写于 2026-09-24。模型、价格、能力指标可能随 OpenAI 后续动作变化。
+    </p>
+  </footer>
+
+</div>
