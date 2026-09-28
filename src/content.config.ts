@@ -1,5 +1,4 @@
 // 文章 Collection Schema — 给 AI 用的"内容契约"
-// 任何 .md 文件如果不符合这个 schema，build 会失败
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
@@ -8,9 +7,7 @@ const articles = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string().max(120),
-      slug: z
-        .string()
-        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'slug 必须是小写英文 + 短横线'),
+      slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
       date: z.coerce.date(),
       updated: z.coerce.date().optional(),
       category: z.enum(['research', 'compare', 'evaluation', 'notes']),
@@ -23,4 +20,34 @@ const articles = defineCollection({
     }),
 });
 
-export const collections = { articles };
+// Morning Brief — 独立位置，不在 src/content/ 下（避免被 articles glob 抢走）
+const morningBrief = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/morning-brief' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    description: z.string(),
+    ticker: z.array(z.string()),
+    lead: z.object({
+      headline: z.string(),
+      standfirst: z.string(),
+      source: z.string(),
+      url: z.string(),
+    }),
+    sections: z.array(z.object({
+      num: z.string(),
+      tag: z.string(),
+      tag_class: z.string().optional(),
+      color: z.string(),
+      headline: z.string(),
+      lede: z.string(),
+      quote: z.string().optional(),
+      items: z.array(z.string()).optional(),
+      chart: z.boolean().optional(),
+      source: z.string(),
+      url: z.string(),
+    })),
+  }),
+});
+
+export const collections = { articles, morningBrief };

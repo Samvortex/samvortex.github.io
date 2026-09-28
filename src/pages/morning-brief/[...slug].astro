@@ -1,0 +1,187 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const briefs = await getCollection('morningBrief');
+  return briefs.map((brief) => ({
+    params: { slug: brief.id },
+    props: { brief },
+  }));
+}
+
+const { brief } = Astro.props;
+const { Content } = await render(brief);
+const data = brief.data;
+const lead = data.lead;
+---
+<DefaultLayout
+  title={`早报 ${data.date}`}
+  description={lead.headline}
+>
+  <!-- Compact masthead -->
+  <div class="border-b border-brand-600 bg-neutral-900 text-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between">
+      <div class="font-semibold tracking-tight">
+        MORNING BRIEF
+        <span class="text-brand-400 italic font-normal text-sm ml-2">Sam's 每日早报 · 全球 10 大领域</span>
+      </div>
+      <div class="text-xs opacity-70 uppercase tracking-wider">
+        {data.date} · 上海
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticker -->
+  {data.ticker && data.ticker.length > 0 && (
+    <div class="bg-brand-600 text-white overflow-hidden">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 h-9 flex items-center relative">
+        <span class="bg-neutral-900 text-white px-3 py-1 text-xs font-bold tracking-wider z-10 shrink-0">BREAKING</span>
+        <div class="overflow-hidden flex-1 ml-3">
+          <div class="inline-block whitespace-nowrap animate-ticker text-sm">
+            {data.ticker.map((item) => (
+              <span class="mr-8">
+                <span class="opacity-60 mr-2">◆</span>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+    <!-- Lead -->
+    <section class="grid md:grid-cols-5 gap-6 mb-10 pb-8 border-b border-neutral-200 dark:border-neutral-800">
+      <div class="md:col-span-2">
+        <img
+          src={`/morning-brief/${data.date}/lead.png`}
+          alt={lead.headline}
+          class="w-full aspect-[2/1] object-cover rounded-lg"
+        />
+        <div class="text-xs text-neutral-500 italic mt-2 text-center">
+          头条配图（主题示意，非新闻原图）
+        </div>
+      </div>
+      <div class="md:col-span-3 flex flex-col justify-center">
+        <div class="inline-block bg-neutral-900 dark:bg-brand-600 text-white px-3 py-1 text-xs font-bold tracking-wider uppercase w-fit mb-4">
+          HEADLINE · 时事
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
+          {lead.headline}
+        </h1>
+        <p class="text-lg text-neutral-600 dark:text-neutral-400 italic leading-relaxed border-l-2 border-brand-600 pl-4 mb-4">
+          {lead.standfirst}
+        </p>
+        <div class="text-xs text-neutral-500 uppercase tracking-wider mb-3">
+          来源：{lead.source}
+        </div>
+        <a
+          href={lead.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block text-sm text-brand-600 dark:text-brand-500 font-semibold border-b border-transparent hover:border-brand-600 transition-colors w-fit"
+        >
+          深入阅读 →
+        </a>
+      </div>
+    </section>
+
+    <!-- Sections grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-lg overflow-hidden">
+      {data.sections.map((s) => (
+        <article class="p-6 border-b border-r border-neutral-200 dark:border-neutral-800 last:border-r-0 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+          <div class="flex items-center gap-2 mb-2 text-xs text-neutral-500 font-mono">
+            <span class="font-bold">{s.num}</span>
+            <span class="flex-1 h-px bg-neutral-200 dark:bg-neutral-800"></span>
+          </div>
+          <div class="mb-3">
+            <span
+              class={`tag ${s.tag_class || ''} inline-block px-2 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase`}
+              style={`color: ${s.color}; background: ${s.color}20;`}
+            >
+              {s.tag}
+            </span>
+          </div>
+          <h2 class="text-lg font-bold leading-snug mb-3">{s.headline}</h2>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-3">
+            {s.lede}
+          </p>
+
+          {s.chart && (
+            <div class="bg-neutral-50 dark:bg-neutral-800/50 p-3 rounded mb-3">
+              <div class="text-xs text-neutral-500 uppercase tracking-wider mb-2">
+                EV 运营成本 · 每英里（便士）
+              </div>
+              <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                <text x="0" y="22" font-family="Georgia,serif" font-size="13" fill="currentColor">燃油车</text>
+                <rect x="50" y="12" width="180" height="14" fill="#c4533a"/>
+                <text x="232" y="22" font-family="Georgia,serif" font-size="11" fill="currentColor" text-anchor="end">13.5p</text>
+                <text x="0" y="48" font-family="Georgia,serif" font-size="13" fill="currentColor">电动车</text>
+                <rect x="50" y="38" width="20" height="14" fill="#667eea"/>
+                <text x="74" y="48" font-family="Georgia,serif" font-size="11" fill="currentColor">1.5p</text>
+                <line x1="50" y1="68" x2="230" y2="68" stroke="currentColor" opacity="0.2"/>
+                <text x="140" y="84" font-family="Georgia,serif" font-size="10" fill="currentColor" opacity="0.6" text-anchor="middle">差距 = 9 倍</text>
+              </svg>
+            </div>
+          )}
+
+          {s.quote && (
+            <div class="border-l-2 border-brand-600 pl-3 py-1 mb-3 italic text-sm text-neutral-700 dark:text-neutral-300">
+              {s.quote}
+            </div>
+          )}
+
+          {s.items && s.items.length > 0 && (
+            <ul class="border-t border-dashed border-neutral-200 dark:border-neutral-800 pt-2 mb-3 space-y-1">
+              {s.items.map((it) => (
+                <li class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-3 relative before:content-['▸'] before:absolute before:left-0 before:text-brand-600 before:text-[10px]">
+                  {it}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div class="text-xs text-neutral-500 uppercase tracking-wider mb-2">
+            来源：{s.source}
+          </div>
+          <a
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block text-xs text-brand-600 dark:text-brand-500 font-semibold border-b border-transparent hover:border-brand-600 transition-colors"
+          >
+            深入阅读 →
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- Pull quote -->
+    <div class="my-12 py-8 border-y border-neutral-900 dark:border-neutral-100 text-center">
+      <p class="text-2xl italic font-serif leading-relaxed max-w-2xl mx-auto">
+        新闻不是被消费的产品，而是被理解的瞬间。
+      </p>
+    </div>
+
+    <!-- Footer / back link -->
+    <div class="text-center text-sm text-neutral-500 pt-8">
+      <a href="/research/morning-brief/" class="text-brand-600 dark:text-brand-500 hover:underline">
+        ← 返回早报归档
+      </a>
+    </div>
+  </article>
+
+  <Content />
+</DefaultLayout>
+
+<style>
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+  .animate-ticker {
+    animation: ticker 60s linear infinite;
+  }
+</style>
