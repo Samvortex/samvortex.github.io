@@ -38,6 +38,7 @@ const morningBrief = defineCollection({
       num: z.string(),
       tag: z.string(),
       tag_class: z.string().optional(),
+      slug: z.string().optional(),
       color: z.string(),
       headline: z.string(),
       lede: z.string(),

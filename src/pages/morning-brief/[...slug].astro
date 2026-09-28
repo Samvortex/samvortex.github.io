@@ -104,13 +104,13 @@ const lead = data.lead;
               {s.tag}
             </span>
           </div>
-          {s.tag_class && (
+          {s.slug && (
             <img
-              src={`/img/morning-brief/${data.date}/${s.tag_class.replace('tag-', '')}.jpg`}
+              src={`/img/morning-brief/${data.date}/${s.slug}.jpg`}
               alt={s.headline}
               class="w-full aspect-video object-cover rounded mb-3"
               loading="lazy"
-              onerror={`this.onerror=null;this.src='/img/morning-brief/${data.date}/${s.tag_class.replace('tag-', '')}.png'`}
+              onerror={`this.onerror=null;this.src='/img/morning-brief/${data.date}/${s.slug}.png'`}
             />
           )}
           <h2 class="text-lg font-bold leading-snumbg-gray-200 dark:border-neutral-800g mb-3">{s.headline}</h2>
