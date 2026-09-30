@@ -2,7 +2,7 @@
 title: '特斯拉中国全新 Model 3 即将发布'
 slug: 'tesla-model-3-2026-launch'
 date: '2026-09-30'
-category: 'news'
+category: 'notes'
 tags: ['特斯拉', 'Tesla', 'Model 3', '新能源车', '汽车']
 summary: '特斯拉中国新款 Model 3 已经过能耗备案，三款车均为双电机版本，前电机升级 TL2 高性能电机，功率 176kW。'
 author: 'Sam Xu'
