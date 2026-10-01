@@ -1,0 +1,254 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const briefs = await getCollection('morningBrief');
+  return briefs.map((brief) => ({
+    params: { slug: brief.id },
+    props: { brief },
+  }));
+}
+
+const { brief } = Astro.props;
+const { Content } = await render(brief);
+const data = brief.data;
+const lead = data.lead;
+
+// Publisher writes `available_images: ['slug1', 'slug2']` into frontmatter —
+// we render img tag only for slugs in this list. Sections without an image
+// render as text-only cards (per Sam's 2026-10-01 decision).
+const slugsWithImage = new Set<string>(data.available_images || []);
+---
+<DefaultLayout
+  title={`早报 ${data.date}`}
+  description={lead.headline}
+>
+  <!-- Compact masthead -->
+  <div class="border-b border-brand-600 bg-neutral-900 text-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between">
+      <div class="font-semibold tracking-tight">
+        MORNING BRIEF
+        <span class="text-brand-400 italic font-normal text-sm ml-2">Sam's 每日早报 · 全球 10 大领域</span>
+      </div>
+      <div class="text-xs opacity-70 uppercase tracking-wider">
+        {data.date} · 上海
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticker -->
+  {data.ticker && data.ticker.length > 0 && (
+    <div class="bg-brand-600 text-white overflow-hidden">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 h-9 flex items-center relative">
+        <span class="bg-neutral-900 text-white px-3 py-1 text-xs font-bold tracking-wider z-10 shrink-0">BREAKING</span>
+        <div class="overflow-hidden flex-1 ml-3 ticker-mask">
+          <div class="inline-block whitespace-nowrap animate-ticker text-sm">
+            {data.ticker.map((item) => (
+              <span class="mr-8">
+                <span class="opacity-60 mr-2">◆</span>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+    <!-- Lead -->
+    <section class="grid md:grid-cols-5 gap-6 mb-10 pb-8 border-b border-neutral-200 dark:border-neutral-800">
+      <div class="md:col-span-2">
+        <div class="w-full aspect-[2/1] overflow-hidden rounded-lg">
+          <img
+            src={`/img/morning-brief/${data.date}/lead.png`}
+            alt={lead.headline}
+            class="w-full h-full object-cover kenburns"
+          />
+        </div>
+        <div class="text-xs text-neutral-500 italic mt-2 text-center">
+          头条配图（主题示意，非新闻原图）
+        </div>
+      </div>
+      <div class="md:col-span-3 flex flex-col justify-center lead-anim">
+        <div class="inline-block bg-neutral-900 dark:bg-brand-600 text-white px-3 py-1 text-xs font-bold tracking-wider uppercase w-fit mb-4">
+          HEADLINE · 时事
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
+          {lead.headline}
+        </h1>
+        <p class="text-lg text-neutral-600 dark:text-neutral-400 italic leading-relaxed border-l-2 border-brand-600 pl-4 mb-4">
+          {lead.standfirst}
+        </p>
+        <div class="text-xs text-neutral-500 uppercase tracking-wider mb-3">
+          来源：{lead.source}
+        </div>
+        <a
+          href={lead.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block text-sm text-brand-600 dark:text-brand-500 font-semibold border-b border-transparent hover:border-brand-600 transition-colors w-fit"
+        >
+          深入阅读 →
+        </a>
+      </div>
+    </section>
+
+    <!-- Sections grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-lg overflow-hidden">
+      {data.sections.map((s) => (
+        <article class="reveal p-6 border-b border-r border-neutral-200 dark:border-neutral-800 last:border-r-0 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+          <div class="flex items-center gap-2 mb-2 text-xs text-neutral-500 font-mono">
+            <span class="font-bold">{s.num}</span>
+            <span class="flex-1 h-px bg-neutral-200 dark:bg-neutral-800"></span>
+          </div>
+          <div class="mb-3">
+            <span
+              class={`tag ${s.tag_class || ''} inline-block px-2 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase`}
+              style={`color: ${s.color}; background: ${s.color}20;`}
+            >
+              {s.tag}
+            </span>
+          </div>
+          {s.slug && slugsWithImage.has(s.slug) && (
+            <img
+              src={`/img/morning-brief/${data.date}/${s.slug}.jpg`}
+              alt={s.headline}
+              class="w-full aspect-video object-cover rounded mb-3"
+              loading="lazy"
+            />
+          )}
+          <h2 class="text-lg font-bold leading-snug mb-3">{s.headline}</h2>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-3">
+            {s.lede}
+          </p>
+
+          {s.quote && (
+            <div class="border-l-2 border-brand-600 pl-3 py-1 mb-3 italic text-sm text-neutral-700 dark:text-neutral-300">
+              {s.quote}
+            </div>
+          )}
+
+          {s.items && s.items.length > 0 && (
+            <ul class="border-t border-dashed border-neutral-200 dark:border-neutral-800 pt-2 mb-3 space-y-1">
+              {s.items.map((it) => (
+                <li class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-3 relative before:content-['▸'] before:absolute before:left-0 before:text-brand-600 before:text-[10px]">
+                  {it}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div class="text-xs text-neutral-500 uppercase tracking-wider mb-2">
+            来源：{s.source}
+          </div>
+          <a
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block text-xs text-brand-600 dark:text-brand-500 font-semibold border-b border-transparent hover:border-brand-600 transition-colors"
+          >
+            深入阅读 →
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- Pull quote -->
+    <div class="my-12 py-8 border-y border-neutral-900 dark:border-neutral-100 text-center">
+      <p class="text-2xl italic font-serif leading-relaxed max-w-2xl mx-auto">
+        新闻不是被消费的产品，而是被理解的瞬间。
+      </p>
+    </div>
+
+    <!-- Footer / back link -->
+    <div class="text-center text-sm text-neutral-500 pt-8">
+      <a href="/research/morning-brief/" class="text-brand-600 dark:text-brand-500 hover:underline">
+        ← 返回早报归档
+      </a>
+    </div>
+  </article>
+
+  <Content />
+</DefaultLayout>
+
+<style>
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+  .animate-ticker {
+    animation: ticker 60s linear infinite;
+  }
+
+  /* --- Ticker 渐变遮罩(两侧淡出) --- */
+  .ticker-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+  }
+
+  /* --- 板块卡片滚动入场 --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- Lead 头条入场(逐元素 stagger) --- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lead-anim > * {
+    opacity: 0;
+    animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .lead-anim > *:nth-child(1) { animation-delay: 0.05s; }
+  .lead-anim > *:nth-child(2) { animation-delay: 0.20s; }
+  .lead-anim > *:nth-child(3) { animation-delay: 0.35s; }
+  .lead-anim > *:nth-child(4) { animation-delay: 0.50s; }
+  .lead-anim > *:nth-child(5) { animation-delay: 0.65s; }
+  .lead-anim > *:nth-child(6) { animation-delay: 0.80s; }
+
+  /* --- 头条配图 Ken Burns 慢推 --- */
+  @keyframes kenburns {
+    0%   { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.08) translate(-1.5%, -1%); }
+  }
+  .kenburns {
+    animation: kenburns 14s ease-out forwards;
+  }
+
+  /* --- 减少动画偏好 --- */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ticker,
+    .reveal,
+    .lead-anim > *,
+    .kenburns {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  // 板块卡片 + lead 配图滚动入场
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => io.observe(el));
+</script>

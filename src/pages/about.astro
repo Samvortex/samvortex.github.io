@@ -1,62 +1,27 @@
 ---
-import Base from '../layouts/Base.astro';
+import DefaultLayout from '@layouts/DefaultLayout.astro';
 ---
-
-<Base title="About — Sam's Space" currentPath="/about">
-  <section class="banner">
-    <h1>About</h1>
-    <p>IT Architect · AI Enthusiast · Builder</p>
-  </section>
-
-  <main class="page">
-    <div class="grid grid-2" style="align-items: start;">
-      <div>
-        <div class="card" style="margin-bottom: 24px;">
-          <h2 style="font-size: 22px; margin-bottom: 16px;">Who I Am</h2>
-          <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 12px;">
-            IT System Architect at <strong>Wellington College China</strong>, managing infrastructure across the group's schools in Shanghai, Hangzhou, Nantong, andTianjin.
-          </p>
-          <p style="color: var(--color-text-muted); line-height: 1.8;">
-            Based in Shanghai's Qianpu (前滩) area, near the Oriental Sports Center. Passionate about AI agents, automation, and building tools that make life better.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 style="font-size: 22px; margin-bottom: 16px;">What I Do</h2>
-          <ul style="color: var(--color-text-muted); line-height: 2; padding-left: 20px;">
-            <li>Manage IT infrastructure across Wellington China schools</li>
-            <li>Build AI-powered tools (Zam, Vortex, Jira agents)</li>
-            <li>Explore automation, productivity, and local AI deployment</li>
-            <li>Personal projects: discussion hubs, monitoring systems</li>
-          </ul>
-        </div>
-      </div>
-
-      <div>
-        <div class="card" style="margin-bottom: 24px;">
-          <h2 style="font-size: 22px; margin-bottom: 16px;">⚡ AI Agents</h2>
-          <div style="margin-bottom: 16px;">
-            <strong>Zam</strong> — Discord assistant, my main AI agent running on OpenClaw
-          </div>
-          <div style="margin-bottom: 16px;">
-            <strong>Vortex</strong> — Feishu bot, work-focused agent
-          </div>
-          <div>
-            <strong>Jira</strong> — Feishu bot, second AI agent for specialized tasks
-          </div>
-        </div>
-
-        <div class="card">
-          <h2 style="font-size: 22px; margin-bottom: 16px;">🌍 Wellington College</h2>
-          <p style="color: var(--color-text-muted); line-height: 1.8;">
-            Part of the global Wellington College network, founded in 1859 by Queen Victoria. 
-            10+ schools across UK, China, India, Thailand, and more.
-          </p>
-          <p style="color: var(--color-text-muted); line-height: 1.8; margin-top: 12px;">
-            <strong>Core Values:</strong> Kindness · Responsibility · Respect · Courage · Integrity
-          </p>
-        </div>
-      </div>
+<DefaultLayout title="关于" description="关于 Sam Xu 与本站">
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="text-3xl md:text-4xl font-bold mb-6">关于</h1>
+    <div class="prose prose-neutral dark:prose-invert max-w-none">
+      <p>
+        你好，我是 Sam Xu（胥备），惠灵顿教育（中国）/ Wellington College China 的 IT 系统架构师，
+        常驻上海，负责集团旗下上海、天津、杭州、南通等校区的整体信息化规划与落地。
+      </p>
+      <p>
+        这个 <strong>Samvortex Hub</strong> 是我的个人技术发布中心，用来沉淀对技术、架构、产品、
+        选型对比的研究与思考。所有内容都基于真实工作场景与公开资料整理而成，欢迎同行交流。
+      </p>
+      <h2>内容分类</h2>
+      <ul>
+        <li><strong>研究</strong>：对某项技术或行业趋势的深度分析。</li>
+        <li><strong>对比</strong>：产品 / 方案的横向 / 纵向对比。</li>
+        <li><strong>评估</strong>：工具与平台的选型评估、PoC 总结。</li>
+        <li><strong>杂谈</strong>：短记录、随笔、思考碎片。</li>
+      </ul>
+      <h2>如何订阅</h2>
+      <p>推荐订阅 <a href="/rss.xml">RSS</a>；或在 GitHub <a href="https://github.com/Samvortex/samvortex.github.io" target="_blank" rel="noopener">源码仓库</a> 关注。</p>
     </div>
-  </main>
-</Base>
+  </section>
+</DefaultLayout>

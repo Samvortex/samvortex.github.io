@@ -1,115 +1,79 @@
-# Sam's Space — Refactored 🌟
+# Samvortex Hub
 
-Modern rebuild of [samvortex.github.io](https://samvortex.github.io) using **Astro** + **Cloudflare Pages**.
+`www.samvortex.com` 的源码。技术研究、产品对比、选型评估的信息发布中心。
 
-## Stack
+## 技术栈
 
-- **Framework:** Astro 6 (SSR mode)
-- **Adapter:** @astrojs/cloudflare
-- **Styling:** Pure CSS (no framework, no old jQuery)
-- **Backend:** Supabase (existing database)
-- **Hosting:** Cloudflare Pages
+- **Astro 5** — 静态站生成器，零 JS 默认
+- **Tailwind CSS** — utility-first 样式
+- **TypeScript** — 严格模式
+- **Pagefind** — 静态全文搜索
+- **Cloudflare Pages** — 自动构建 + 全球 CDN
 
-## Pages
-
-| Route | Description |
-|-------|-------------|
-| `/` | Home |
-| `/hub` | Discussion Hub (real-time chat) |
-| `/projects` | Project showcase |
-| `/about` | About Sam |
-| `/contact` | Contact form |
-
-## Local Development
+## 本地开发
 
 ```bash
 npm install
-npm run dev      # Dev server at localhost:4321
-npm run build    # Production build
-npm run preview  # Preview production build
+npm run dev          # http://localhost:4321
+npm run build        # 生产构建 + Pagefind 索引
+npm run preview      # 预览 dist/
 ```
 
-## Supabase Setup
+## 目录结构
 
-The site connects to an existing Supabase project (`babkatqycaigexyjnlqv`).
-
-Required environment variables (set in Cloudflare Pages dashboard):
-
-| Variable | Value |
-|----------|-------|
-| `SUPABASE_URL` | `https://babkatqycaigexyjnlqv.supabase.co` |
-| `PUBLIC_SUPABASE_ANON_KEY` | *(use the JWT anon key from Supabase Dashboard → Settings → API)* |
-
-## Deployment → Cloudflare Pages
-
-### Step 1: Push to GitHub
-
-```bash
-cd ~/Documents/Projects/samvortex-refactor
-git init
-git add .
-git commit -m "Initial commit: Astro refactor"
+```
+src/
+├── content/                 # 所有文章（Markdown）
+│   ├── research/            # 研究
+│   ├── compare/             # 对比
+│   ├── evaluation/          # 评估
+│   └── notes/               # 杂谈
+├── content.config.ts        # 文章 schema（AI 生成契约）
+├── config/site.ts           # 站点级常量
+├── components/              # 复用组件
+├── layouts/                 # 布局
+└── pages/                   # 路由
+    ├── index.astro          # 首页
+    ├── about.astro
+    ├── research/index.astro
+    ├── compare/index.astro
+    ├── evaluation/index.astro
+    ├── notes/index.astro
+    ├── tags/[tag].astro     # 标签聚合
+    ├── search.astro
+    ├── rss.xml.ts
+    └── [category]/[slug].astro  # 所有文章共用
 ```
 
-Then create a new repo on GitHub and push:
+## 内容生产流程
 
-```bash
-git remote add origin git@github.com:Samvortex/samvortex-refactor.git
-git branch -M main
-git push -u origin main
+1. 在 `src/content/{category}/` 下新建 `.md` 文件
+2. frontmatter 必填字段：`title / slug / date / category / tags / summary / author / draft`
+3. `npm run build` — Astro 自动校验 schema，失败立刻报错
+4. `git add . && git commit -m "content(research): xxx" && git push origin master`
+5. Cloudflare Pages 自动构建部署（约 60 秒）
+
+## 部署
+
+- **平台**：Cloudflare Pages
+- **GitHub**：https://github.com/Samvortex/samvortex.github.io
+- **域名**：samvortex.com
+- **Build 命令**：`npm run build`
+- **输出目录**：`dist`
+- **Node 版本**：22
+
+## 给 AI 的提示词模板
+
+把以下内容放进 AI 的 system prompt：
+
 ```
-
-*(Or use HTTPS if SSH key not set up: `git remote add origin https://github.com/Samvortex/samvortex-refactor.git`)*
-
-### Step 2: Connect to Cloudflare Pages
-
-1. Go to [dash.cloudflare.com](https://dash.cloudflare.com) → **Pages**
-2. Click **Create a project** → **Connect to Git**
-3. Select **GitHub** → Authorize Cloudflare
-4. Choose `samvortex-refactor` repo
-5. **Build settings:**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Root directory: `/`
-6. **Environment variables** (under Advanced):
-   - `SUPABASE_URL` = `https://babkatqycaigexyjnlqv.supabase.co`
-   - `PUBLIC_SUPABASE_ANON_KEY` = *(your Supabase anon JWT key)*
-7. Click **Deploy site**
-
-### Step 3: Custom Domain (optional)
-
-After deployment, set up your custom domain in Cloudflare Pages → Custom domains.
-
-## Database Schema (existing)
-
-Supabase tables already in use:
-
-```sql
--- topics
-CREATE TABLE topics (
-  id SERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
-  description TEXT,
-  status TEXT DEFAULT 'active',
-  created_by TEXT DEFAULT 'system',
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- messages
-CREATE TABLE messages (
-  id SERIAL PRIMARY KEY,
-  topic_id INTEGER REFERENCES topics(id) ON DELETE CASCADE,
-  author TEXT NOT NULL,
-  author_type TEXT CHECK (author_type IN ('zam', 'vortex', 'human')),
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+你正在为 Samvortex Hub 写文章。
+- 路径：src/content/{category}/{slug}.md
+- category ∈ { research, compare, notes, evaluation }
+- frontmatter 必填: title, slug, date, category, tags, summary, author, draft
+- slug: ^[a-z0-9]+(?:-[a-z0-9]+)*$，不超过 60 字符
+- 正文使用 GFM Markdown，表格优先于段落
+- 引用必须带链接
+- 代码块标语言
+- draft: true 时不发布
 ```
-
-## ⚠️ Security Notes
-
-- The Supabase **Service Role Key** must never be exposed to the client
-- All write operations should go through a Cloudflare Worker (Phase 2)
-- Enable Row-Level Security (RLS) on Supabase tables
-- Rotate the anon key if compromised

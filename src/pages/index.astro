@@ -1,61 +1,75 @@
 ---
-import Base from '../layouts/Base.astro';
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import ArticleCard from '@components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIES, SITE } from '@config/site';
+import type { CategoryKey } from '@config/site';
+
+const all = await getCollection('articles', ({ data }) => !data.draft);
+all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const featured = all.find((a) => a.data.featured) ?? all[0];
+const recent = all.filter((a) => a.id !== featured?.id).slice(0, 6);
+
+// 每个分类取最新 4 篇
+const byCategory = (Object.keys(CATEGORIES) as CategoryKey[]).map((cat) => ({
+  cat,
+  items: all.filter((a) => a.data.category === cat).slice(0, 4),
+}));
 ---
+<DefaultLayout>
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+    <div class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        <span class="text-brand-600 dark:text-brand-500">Samvortex</span> Hub
+      </h1>
+      <p class="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
+        {SITE.tagline}。记录我对技术、架构、产品的研究与思考。
+      </p>
+    </div>
 
-<Base title="Sam's Space — Home" currentPath="/">
-  <!-- Banner -->
-  <section class="banner">
-    <h1>Welcome to Sam's Space</h1>
-    <p>IT Architect · AI Enthusiast · Builder</p>
+    {featured && (
+      <div class="mb-16">
+        <h2 class="text-xs uppercase tracking-wider text-neutral-500 mb-4">精选</h2>
+        <ArticleCard article={featured} featured />
+      </div>
+    )}
+
+    {recent.length > 0 && (
+      <div class="mb-16">
+        <h2 class="text-xs uppercase tracking-wider text-neutral-500 mb-4">最新</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {recent.map((a) => <ArticleCard article={a} />)}
+        </div>
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {byCategory.map(({ cat, items }) => (
+        <section class="p-6 rounded-xl border border-neutral-200 dark:border-neutral-800">
+          <div class="flex items-baseline justify-between mb-4">
+            <h2 class="text-lg font-semibold">{CATEGORIES[cat].label}</h2>
+            <a href={`/${cat}/`} class="text-sm text-brand-600 hover:underline">全部 →</a>
+          </div>
+          <p class="text-sm text-neutral-500 mb-4">{CATEGORIES[cat].description}</p>
+          {items.length > 0 ? (
+            <ul class="space-y-3">
+              {items.map((a) => (
+                <li>
+                  <a href={`/${a.data.category}/${a.data.slug}/`} class="block hover:text-brand-600">
+                    <div class="font-medium">{a.data.title}</div>
+                    <div class="text-xs text-neutral-500 mt-0.5">
+                      {a.data.date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-sm text-neutral-400">暂无内容</p>
+          )}
+        </section>
+      ))}
+    </div>
   </section>
-
-  <main class="page">
-    <!-- About snippet -->
-    <section style="margin-bottom: 48px;">
-      <h2 style="font-size: 24px; margin-bottom: 16px; color: var(--color-text);">About</h2>
-      <div class="card">
-        <p style="color: var(--color-text-muted); line-height: 1.8;">
-          IT system architect at Wellington College China, managing infrastructure across multiple campuses.
-          Passionate about AI agents, automation, and building tools that make life easier.
-          Based in Shanghai's Qianpu (前滩) area.
-        </p>
-        <a href="/about" class="btn btn-primary" style="margin-top: 16px; display: inline-block;">Learn more →</a>
-      </div>
-    </section>
-
-    <!-- Projects preview -->
-    <section style="margin-bottom: 48px;">
-      <h2 style="font-size: 24px; margin-bottom: 16px; color: var(--color-text);">Projects</h2>
-      <div class="grid grid-3">
-        <div class="card">
-          <h3 style="font-size: 16px; margin-bottom: 8px;">🤖 Zam & Vortex</h3>
-          <p style="color: var(--color-text-muted); font-size: 14px;">AI agents running on OpenClaw — Zam (Discord) and Vortex (Feishu) working together.</p>
-        </div>
-        <div class="card">
-          <h3 style="font-size: 16px; margin-bottom: 8px;">💬 Discussion Hub</h3>
-          <p style="color: var(--color-text-muted); font-size: 14px;">Real-time discussion platform backed by Supabase. Chat with Zam, powered by Ollama.</p>
-        </div>
-        <div class="card">
-          <h3 style="font-size: 16px; margin-bottom: 8px;">🛡️ Unified Guard</h3>
-          <p style="color: var(--color-text-muted); font-size: 14px;">Student device security management system for Wellington China schools.</p>
-        </div>
-      </div>
-      <a href="/projects" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">All projects →</a>
-    </section>
-
-    <!-- Quick links -->
-    <section>
-      <h2 style="font-size: 24px; margin-bottom: 16px; color: var(--color-text);">Quick Access</h2>
-      <div class="grid grid-2">
-        <a href="/hub" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
-          <h3 style="font-size: 18px; margin-bottom: 8px;">💬 Discussion Hub</h3>
-          <p style="color: var(--color-text-muted); font-size: 14px;">Start a conversation with Zam. Topics: AI, tech, life, anything.</p>
-        </a>
-        <a href="/contact" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
-          <h3 style="font-size: 18px; margin-bottom: 8px;">✉️ Contact</h3>
-          <p style="color: var(--color-text-muted); font-size: 14px;">Get in touch. Work, collaboration, or just saying hi.</p>
-        </a>
-      </div>
-    </section>
-  </main>
-</Base>
+</DefaultLayout>

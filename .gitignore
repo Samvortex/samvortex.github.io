@@ -1,17 +1,29 @@
-# Dependencies
+# dependencies
 node_modules/
+.pnp
+.pnp.js
 
-# Build output
+# build output
 dist/
+.astro/
+.pagefind/
 
-# Environment
+# env
 .env
+.env.production
 .env.local
-.env.*.local
 
-# Editor
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
 .DS_Store
-*.log
+Thumbs.db
 
-# Cloudflare
-.wrangler/
+# editors
+.vscode/
+.idea/
+*.swp
