@@ -37,7 +37,7 @@ const lead = data.lead;
     <div class="bg-brand-600 text-white overflow-hidden">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 h-9 flex items-center relative">
         <span class="bg-neutral-900 text-white px-3 py-1 text-xs font-bold tracking-wider z-10 shrink-0">BREAKING</span>
-        <div class="overflow-hidden flex-1 ml-3">
+        <div class="overflow-hidden flex-1 ml-3 ticker-mask">
           <div class="inline-block whitespace-nowrap animate-ticker text-sm">
             {data.ticker.map((item) => (
               <span class="mr-8">
@@ -55,16 +55,18 @@ const lead = data.lead;
     <!-- Lead -->
     <section class="grid md:grid-cols-5 gap-6 mb-10 pb-8 border-b border-neutral-200 dark:border-neutral-800">
       <div class="md:col-span-2">
-        <img
-          src={`/img/morning-brief/${data.date}/lead.png`}
-          alt={lead.headline}
-          class="w-full aspect-[2/1] object-cover rounded-lg"
-        />
+        <div class="w-full aspect-[2/1] overflow-hidden rounded-lg">
+          <img
+            src={`/img/morning-brief/${data.date}/lead.png`}
+            alt={lead.headline}
+            class="w-full h-full object-cover kenburns"
+          />
+        </div>
         <div class="text-xs text-neutral-500 italic mt-2 text-center">
           头条配图（主题示意，非新闻原图）
         </div>
       </div>
-      <div class="md:col-span-3 flex flex-col justify-center">
+      <div class="md:col-span-3 flex flex-col justify-center lead-anim">
         <div class="inline-block bg-neutral-900 dark:bg-brand-600 text-white px-3 py-1 text-xs font-bold tracking-wider uppercase w-fit mb-4">
           HEADLINE · 时事
         </div>
@@ -91,7 +93,7 @@ const lead = data.lead;
     <!-- Sections grid -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-lg overflow-hidden">
       {data.sections.map((s) => (
-        <article class="p-6 border-b border-r border-neutral-200 dark:border-neutral-800 last:border-r-0 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+        <article class="reveal p-6 border-b border-r border-neutral-200 dark:border-neutral-800 last:border-r-0 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
           <div class="flex items-center gap-2 mb-2 text-xs text-neutral-500 font-mono">
             <span class="font-bold">{s.num}</span>
             <span class="flex-1 h-px bg-neutral-200 dark:bg-neutral-800"></span>
@@ -125,10 +127,10 @@ const lead = data.lead;
               </div>
               <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
                 <text x="0" y="22" font-family="Georgia,serif" font-size="13" fill="currentColor">燃油车</text>
-                <rect x="50" y="12" width="180" height="14" fill="#c4533a"/>
+                <line class="chart-bar" x1="50" y1="19" x2="230" y2="19" stroke="#c4533a" stroke-width="14" stroke-linecap="butt" style="--bar-len:180;" />
                 <text x="232" y="22" font-family="Georgia,serif" font-size="11" fill="currentColor" text-anchor="end">13.5p</text>
                 <text x="0" y="48" font-family="Georgia,serif" font-size="13" fill="currentColor">电动车</text>
-                <rect x="50" y="38" width="20" height="14" fill="#667eea"/>
+                <line class="chart-bar" x1="50" y1="45" x2="70" y2="45" stroke="#667eea" stroke-width="14" stroke-linecap="butt" style="--bar-len:20; animation-delay: 0.3s;" />
                 <text x="74" y="48" font-family="Georgia,serif" font-size="11" fill="currentColor">1.5p</text>
                 <line x1="50" y1="68" x2="230" y2="68" stroke="currentColor" opacity="0.2"/>
                 <text x="140" y="84" font-family="Georgia,serif" font-size="10" fill="currentColor" opacity="0.6" text-anchor="middle">差距 = 9 倍</text>
@@ -193,4 +195,86 @@ const lead = data.lead;
   .animate-ticker {
     animation: ticker 60s linear infinite;
   }
+
+  /* --- Ticker 渐变遮罩(两侧淡出) --- */
+  .ticker-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+  }
+
+  /* --- 板块卡片滚动入场 --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- Lead 头条入场(逐元素 stagger) --- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lead-anim > * {
+    opacity: 0;
+    animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .lead-anim > *:nth-child(1) { animation-delay: 0.05s; }
+  .lead-anim > *:nth-child(2) { animation-delay: 0.20s; }
+  .lead-anim > *:nth-child(3) { animation-delay: 0.35s; }
+  .lead-anim > *:nth-child(4) { animation-delay: 0.50s; }
+  .lead-anim > *:nth-child(5) { animation-delay: 0.65s; }
+  .lead-anim > *:nth-child(6) { animation-delay: 0.80s; }
+
+  /* --- 头条配图 Ken Burns 慢推 --- */
+  @keyframes kenburns {
+    0%   { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.08) translate(-1.5%, -1%); }
+  }
+  .kenburns {
+    animation: kenburns 14s ease-out forwards;
+  }
+
+  /* --- SVG 图表绘制描边 --- */
+  @keyframes drawBar {
+    from { stroke-dashoffset: var(--bar-len, 200); }
+    to   { stroke-dashoffset: 0; }
+  }
+  .chart-bar {
+    stroke-dasharray: var(--bar-len, 200);
+    stroke-dashoffset: var(--bar-len, 200);
+    animation: drawBar 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* --- 减少动画偏好 --- */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ticker,
+    .reveal,
+    .lead-anim > *,
+    .kenburns,
+    .chart-bar {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 </style>
+
+<script>
+  // 板块卡片 + lead 配图滚动入场
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => io.observe(el));
+</script>
