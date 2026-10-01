@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Contact — Sam's Space" currentPath="/contact">
+  <section class="banner">
+    <h1>Contact</h1>
+    <p>Get in touch — work, collaboration, or just saying hi</p>
+  </section>
+
+  <main class="page">
+    <div class="grid grid-2" style="max-width: 800px; margin: 0 auto;">
+      <div class="card">
+        <h2 style="font-size: 20px; margin-bottom: 20px;">Send a Message</h2>
+        <form id="contactForm" onsubmit="handleSubmit(event)">
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-text);">Name</label>
+            <input type="text" name="name" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; outline: none;" />
+          </div>
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-text);">Email</label>
+            <input type="email" name="email" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; outline: none;" />
+          </div>
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-text);">Message</label>
+            <textarea name="message" rows="5" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; outline: none; resize: vertical;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+          <p id="formStatus" style="margin-top: 12px; font-size: 14px; text-align: center;"></p>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size: 20px; margin-bottom: 20px;">Other Ways</h2>
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Work</div>
+          <div style="color: var(--color-text-muted); font-size: 14px;">sam@wellington.edu.cn</div>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">GitHub</div>
+          <a href="https://github.com/Samvortex" style="color: var(--color-primary); font-size: 14px; text-decoration: none;">github.com/Samvortex</a>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Location</div>
+          <div style="color: var(--color-text-muted); font-size: 14px;">Shanghai Qianpu (前滩), China</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">AI Agents</div>
+          <div style="color: var(--color-text-muted); font-size: 14px;">Zam ⚡ (Discord) · Vortex (Feishu)</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<script>
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const status = document.getElementById('formStatus');
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    status.textContent = '';
+    status.style.color = '#666';
+
+    // Collect form data
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      // TODO: Wire up to Cloudflare Worker for email delivery
+      // For now, show a success message
+      await new Promise(r => setTimeout(r, 1000));
+      status.textContent = '✅ Message sent! (Currently demo mode — wiring up email next)';
+      status.style.color = '#1e8e3e';
+      form.reset();
+    } catch (e) {
+      status.textContent = '❌ Failed to send. Please try again.';
+      status.style.color = '#d93025';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Send Message';
+  }
+</script>
