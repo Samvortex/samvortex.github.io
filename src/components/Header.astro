@@ -12,10 +12,7 @@ function active(href: string) {
 ---
 <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-    <a href="/" class="font-semibold tracking-tight text-lg flex items-center gap-2">
-      <Logo size={24} variant="header" />
-      <span>Samvortex Hub</span>
-    </a>
+    <Logo size={24} variant="header" label={true} />
     <nav class="hidden md:flex items-center gap-5 text-sm">
       <a href="/" class={`hover:text-brand-600 ${active('/')}`}>首页</a>
       {(Object.entries(CATEGORIES) as [CategoryKey, typeof CATEGORIES[CategoryKey]][])
