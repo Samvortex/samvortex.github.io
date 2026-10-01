@@ -14,6 +14,11 @@ const { brief } = Astro.props;
 const { Content } = await render(brief);
 const data = brief.data;
 const lead = data.lead;
+
+// Publisher writes `available_images: ['slug1', 'slug2']` into frontmatter —
+// we render img tag only for slugs in this list. Sections without an image
+// render as text-only cards (per Sam's 2026-10-01 decision).
+const slugsWithImage = new Set<string>(data.available_images || []);
 ---
 <DefaultLayout
   title={`早报 ${data.date}`}
@@ -106,37 +111,18 @@ const lead = data.lead;
               {s.tag}
             </span>
           </div>
-          {s.slug && (
+          {s.slug && slugsWithImage.has(s.slug) && (
             <img
               src={`/img/morning-brief/${data.date}/${s.slug}.jpg`}
               alt={s.headline}
               class="w-full aspect-video object-cover rounded mb-3"
               loading="lazy"
-              onerror={`this.onerror=null;this.src='/img/morning-brief/${data.date}/${s.slug}.png'`}
             />
           )}
-          <h2 class="text-lg font-bold leading-snumbg-gray-200 dark:border-neutral-800g mb-3">{s.headline}</h2>
+          <h2 class="text-lg font-bold leading-snug mb-3">{s.headline}</h2>
           <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-3">
             {s.lede}
           </p>
-
-          {s.chart && (
-            <div class="bg-neutral-50 dark:bg-neutral-800/50 p-3 rounded mb-3">
-              <div class="text-xs text-neutral-500 uppercase tracking-wider mb-2">
-                EV 运营成本 · 每英里（便士）
-              </div>
-              <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
-                <text x="0" y="22" font-family="Georgia,serif" font-size="13" fill="currentColor">燃油车</text>
-                <line class="chart-bar" x1="50" y1="19" x2="230" y2="19" stroke="#c4533a" stroke-width="14" stroke-linecap="butt" style="--bar-len:180;" />
-                <text x="232" y="22" font-family="Georgia,serif" font-size="11" fill="currentColor" text-anchor="end">13.5p</text>
-                <text x="0" y="48" font-family="Georgia,serif" font-size="13" fill="currentColor">电动车</text>
-                <line class="chart-bar" x1="50" y1="45" x2="70" y2="45" stroke="#667eea" stroke-width="14" stroke-linecap="butt" style="--bar-len:20; animation-delay: 0.3s;" />
-                <text x="74" y="48" font-family="Georgia,serif" font-size="11" fill="currentColor">1.5p</text>
-                <line x1="50" y1="68" x2="230" y2="68" stroke="currentColor" opacity="0.2"/>
-                <text x="140" y="84" font-family="Georgia,serif" font-size="10" fill="currentColor" opacity="0.6" text-anchor="middle">差距 = 9 倍</text>
-              </svg>
-            </div>
-          )}
 
           {s.quote && (
             <div class="border-l-2 border-brand-600 pl-3 py-1 mb-3 italic text-sm text-neutral-700 dark:text-neutral-300">
@@ -239,24 +225,12 @@ const lead = data.lead;
     animation: kenburns 14s ease-out forwards;
   }
 
-  /* --- SVG 图表绘制描边 --- */
-  @keyframes drawBar {
-    from { stroke-dashoffset: var(--bar-len, 200); }
-    to   { stroke-dashoffset: 0; }
-  }
-  .chart-bar {
-    stroke-dasharray: var(--bar-len, 200);
-    stroke-dashoffset: var(--bar-len, 200);
-    animation: drawBar 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
   /* --- 减少动画偏好 --- */
   @media (prefers-reduced-motion: reduce) {
     .animate-ticker,
     .reveal,
     .lead-anim > *,
-    .kenburns,
-    .chart-bar {
+    .kenburns {
       animation: none !important;
       transition: none !important;
       opacity: 1 !important;
