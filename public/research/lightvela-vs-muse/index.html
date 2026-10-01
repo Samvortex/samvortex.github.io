@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LightVela vs Meta Muse · 深度研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0e1a;--panel:#111827;--panel-2:#1a2233;--ink:#e6edf3;--muted:#7d8590;--line:#1f2937;--green:#34d399;--blue:#60a5fa;--purple:#a78bfa;--orange:#fb923c;--red:#f87171;--cyan:#22d3ee;--yellow:#facc15}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;overflow-x:hidden}
+.bg-grid{position:fixed;inset:0;z-index:0;background-image:radial-gradient(circle at 1px 1px, rgba(96,165,250,0.15) 1px, transparent 0);background-size:32px 32px;opacity:0.4;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:auto;padding:0 28px}
+.hero{padding:80px 0 60px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;top:50%;left:50%;width:600px;height:600px;background:radial-gradient(circle, rgba(167,139,250,0.15), transparent 70%);transform:translate(-50%,-50%);z-index:-1}
+.eyebrow{font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;color:var(--green);margin-bottom:18px;animation:fadeup .8s ease both}
+h1{font-size:clamp(38px,5.8vw,72px);letter-spacing:-.05em;line-height:1.05;margin-bottom:20px;font-weight:790;animation:fadeup .8s ease .1s both}
+h1 .accent{background:linear-gradient(120deg,var(--purple),var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{max-width:780px;margin:0 auto 30px;font-size:18px;color:#a8b3c4;animation:fadeup .8s ease .2s both}
+.pill-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;animation:fadeup .8s ease .3s both}
+.pill{border:1px solid rgba(255,255,255,0.1);padding:6px 14px;border-radius:30px;font-size:12px;font-weight:600;background:rgba(255,255,255,0.03)}
+.section{padding:64px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.section:last-child{border-bottom:0}
+.label{display:inline-block;color:var(--green);font-weight:800;letter-spacing:.18em;font-size:11px;margin-bottom:10px;text-transform:uppercase}
+h2{font-size:clamp(28px,3.6vw,44px);letter-spacing:-.045em;line-height:1.15;margin-bottom:14px;font-weight:790}
+h3{font-size:22px;letter-spacing:-.025em;margin-bottom:14px;font-weight:700}
+.shot{margin:0 0 12px;color:var(--muted);max-width:680px;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px}
+.stat{padding:22px;background:var(--panel);border:1px solid rgba(255,255,255,0.06);border-radius:14px;transition:all .35s ease;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at top right, rgba(96,165,250,0.12), transparent 60%);opacity:0;transition:opacity .35s}
+.stat:hover{border-color:rgba(96,165,250,0.35);transform:translateY(-3px)}
+.stat:hover::after{opacity:1}
+.stat b{display:block;font-size:30px;letter-spacing:-.04em;line-height:1.15;color:var(--ink);font-weight:790}
+.stat small{display:block;font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.04em;text-transform:uppercase}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}
+.panel{padding:26px;background:var(--panel);border:1px solid rgba(255,255,255,0.06);border-radius:14px}
+.panel h3{margin-bottom:14px;font-size:19px}
+.panel p,.panel li{font-size:14px;color:#b3bdca}
+.panel ul{padding-left:18px;margin:8px 0}
+.panel li{margin:5px 0}
+.chartbox{padding:26px;background:var(--panel);border:1px solid rgba(255,255,255,0.06);border-radius:14px;margin-top:18px}
+.chartbox h3{font-size:17px;margin-bottom:16px}
+.chartbox canvas{max-height:380px;max-width:100%}
+.cmp{margin-top:24px;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden}
+.cmp table{width:100%;border-collapse:collapse;background:var(--panel)}
+.cmp th,.cmp td{padding:14px 18px;text-align:left;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.cmp th{background:var(--panel-2);font-weight:700;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.cmp td:first-child{font-weight:700;color:var(--ink);width:200px}
+.cmp tr:last-child td{border-bottom:0}
+.cmp tr:hover td{background:rgba(96,165,250,0.04)}
+.cmp td.win{color:var(--green);font-weight:600}
+.cmp td.lose{color:var(--red);opacity:0.7}
+.cmp td.draw{color:var(--muted)}
+.usecases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.uc{padding:22px;background:var(--panel);border:1px solid rgba(255,255,255,0.06);border-radius:14px;transition:all .35s ease}
+.uc:hover{transform:translateY(-2px);border-color:rgba(96,165,250,0.3)}
+.uc .icon{font-size:30px;margin-bottom:10px;display:inline-block}
+.uc h4{font-size:16px;margin-bottom:8px}
+.uc p{font-size:13px;color:var(--muted);line-height:1.55}
+.risks{margin-top:24px;display:grid;gap:14px}
+.risk{padding:18px 22px;background:var(--panel);border-left:3px solid;border-radius:10px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.risk.lv-high{border-left-color:var(--red)}
+.risk.lv-med{border-left-color:var(--orange)}
+.risk.lv-low{border-left-color:var(--yellow)}
+.risk .lvl{font-size:11px;font-weight:800;letter-spacing:.1em;padding:3px 9px;border-radius:5px;background:rgba(255,255,255,0.05);white-space:nowrap;align-self:start}
+.risk.lv-high .lvl{background:rgba(248,113,113,0.18);color:var(--red)}
+.risk.lv-med .lvl{background:rgba(251,146,60,0.18);color:var(--orange)}
+.risk.lv-low .lvl{background:rgba(250,204,21,0.18);color:var(--yellow)}
+.risk h4{font-size:15px;margin-bottom:5px}
+.risk p{font-size:13px;color:var(--muted)}
+.timeline{margin-top:24px;position:relative;padding-left:24px;border-left:2px solid rgba(255,255,255,0.08)}
+.tl-item{margin-bottom:18px;position:relative}
+.tl-item::before{content:"";position:absolute;left:-29px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(52,211,153,0.18)}
+.tl-item .date{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:3px}
+.tl-item h4{font-size:15px;margin-bottom:3px}
+.tl-item p{font-size:13px;color:var(--muted);line-height:1.55}
+.verdict{margin-top:32px;padding:36px;background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(34,211,238,0.08));border:1px solid rgba(167,139,250,0.25);border-radius:18px;text-align:center}
+.verdict h3{margin-bottom:14px;font-size:24px}
+.verdict .quote{font-size:18px;color:#dbeafe;max-width:760px;margin:0 auto 18px;line-height:1.5;font-style:italic}
+.verdict small{color:var(--muted);font-size:13px}
+.sources{margin-top:32px;padding:26px;background:var(--panel);border:1px solid rgba(255,255,255,0.06);border-radius:14px}
+.sources ul{padding-left:20px;margin:8px 0}
+.sources li{font-size:13px;color:#b3bdca;margin:6px 0;line-height:1.6}
+.sources li b{color:var(--ink)}
+.footer{padding:36px 0 50px;color:var(--muted);font-size:12px;text-align:center;letter-spacing:.06em}
+.footer a{color:var(--blue);text-decoration:none}
+@keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,0.4)}50%{box-shadow:0 0 0 12px rgba(52,211,153,0)}}
+.live-dot{display:inline-block;width:8px;height:8px;background:var(--green);border-radius:50%;margin-right:6px;animation:glow 2s ease infinite;vertical-align:middle}
+@media(max-width:900px){.stats,.usecases{grid-template-columns:repeat(2,1fr)}.twocol{grid-template-columns:1fr}}
+@media(max-width:600px){.stats,.usecases{grid-template-columns:1fr}.twocol{grid-template-columns:1fr}.wrap{padding:0 18px}.hero{padding:50px 0}.section{padding:42px 0}.cmp th,.cmp td{padding:10px;font-size:12px}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">深度研究 · 2026-10-01 · Sam Xu</div>
+  <h1>腾讯 <span class="accent">LightVela</span> vs Meta <span class="accent">Muse</span></h1>
+  <p>个人 AI 助理大战：腾讯轻量云推出的云端 Agent 托管平台，定位对标 Meta Muse。一份来自 lightvela.com、网易新闻 + 9 月行业综述的横切研究。</p>
+  <div class="pill-row">
+    <span class="pill">📅 2026-09-30</span>
+    <span class="pill"><span class="live-dot"></span>Live source: lightvela.com</span>
+    <span class="pill">10 sections · 4 charts · 8 risk items</span>
+  </div>
+</header>
+
+<section class="section">
+  <span class="label">01 Quick Facts</span>
+  <h2>一句话理解 LightVela</h2>
+  <p class="shot">腾讯轻量云团队 2026 年 4 月发布的云端 Agent 托管产品，让你在微信 / QQ / 企业微信 / 飞书 / 钉钉里拥有长期在线的 Hermes Agent。底层开源，支持 DeepSeek、Kimi、千问、MiniMax、豆包。8 月 18 日转入公公测。</p>
+  <div class="stats">
+    <div class="stat"><b>2026-04</b><small>独立产品首发</small></div>
+    <div class="stat"><b>2026-05</b><small>限免内测</small></div>
+    <div class="stat"><b>2026-08-18</b><small>公公测开放</small></div>
+    <div class="stat"><b>¥0 + 4,500</b><small>积分免费体验 1 月</small></div>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">02 Core Features</span>
+  <h2>LightVela 能做什么</h2>
+  <p class="shot">核心 = "让你在熟悉的聊天工具里拥有一个常驻的 AI 员工"。模型自选 + Skill 自带 + 任务自排 + 平台原生支付 / 通知链路。</p>
+  <div class="twocol">
+    <div class="panel">
+      <h3>🧠 Agent 内核</h3>
+      <ul>
+        <li><b>Hermes Agent</b>（开源底座）</li>
+        <li>支持模型：DeepSeek / Kimi / 千问 / MiniMax / 豆包</li>
+        <li>个性化：<b>Skill</b> 专业能力 + <b>记忆</b> 项目事实 + <b>用户画像</b> 偏好 + <b>Soul</b> 灵魂</li>
+        <li>NL → 可分享的网页（个人主页 / 数据看板 / 活动页）</li>
+        <li>一键部署 <b>DeepSeek Harness</b>（镜像 + WebUI）</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>📱 入口 / 通知</h3>
+      <ul>
+        <li><b>微信 / QQ / 企业微信</b> / 飞书 / 钉钉</li>
+        <li>扫码即接入 —— 像通讯录里一个联系人</li>
+        <li>任务通知 + 脚本任务 <b>不消耗 token</b></li>
+        <li>模板库：喝水提醒 / 房租通知 / 每日行情摘要</li>
+        <li>定时任务自然语言描述即可创建</li>
+        <li>所有外部操作（发送 / 修改）<b>先等你授权</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">03 Head-to-head</span>
+  <h2>LightVela vs Meta Muse · 多维评分</h2>
+  <p class="shot">一个深耕国内生态 + 开源底座，一个 US-first + 商业级 VM 隔离。两者代表的不是"谁更好"，而是"两种 Personal Agent 路径"。</p>
+  <div class="twocol">
+    <div>
+      <div class="cmp">
+        <table>
+          <tr><th>维度</th><th>腾讯 LightVela</th><th>Meta Muse</th></tr>
+          <tr><td>底座模型</td><td class="win">Hermes Agent（开源）</td><td class="lose">Meta 自研闭源</td></tr>
+          <tr><td>模型可选</td><td class="win">DeepSeek / Kimi / 千问 / MiniMax / 豆包</td><td class="lose">仅 Meta 体系</td></tr>
+          <tr><td>运行环境</td><td class="draw">云端容器（共享）</td><td class="win">Muse Secure VM（专属）</td></tr>
+          <tr><td>通讯入口</td><td class="win">微信 + QQ + 企业微信 + 飞书 + 钉钉</td><td class="lose">WhatsApp + muse.ai</td></tr>
+          <tr><td>NL → 网页</td><td class="win">✅ 个人主页 / 看板 / 活动页</td><td class="lose">❌</td></tr>
+          <tr><td>Skill 库</td><td class="win">✅ 100+ 内置模板</td><td class="lose">❌ 自定义为主</td></tr>
+          <tr><td>生态闭环</td><td class="win">微信 + 小程序 + 支付</td><td class="lose">FB + IG（弱）</td></tr>
+          <tr><td>数据合规</td><td class="draw">中国境内</td><td class="win">美区（欧盟未开放）</td></tr>
+          <tr><td>开源 / 可迁移</td><td class="win">✅ 自托管</td><td class="lose">❌ 锁定</td></tr>
+          <tr><td>起步价</td><td class="win">免费 1 月 + 4,500 积分</td><td class="lose">免费档 / $125 Business</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="chartbox">
+        <h3>六维能力雷达对比</h3>
+        <canvas id="radar"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="chartbox">
+    <h3>核心能力评分（1-5 星）</h3>
+    <canvas id="bar"></canvas>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">04 Architecture & Pricing</span>
+  <h2>技术架构 + 定价策略</h2>
+  <p class="shot">LightVela 走"基础设施平台"路径：开源 Agent + 多模型 + 多入口。Muse 走"消费级产品"路径：专属 VM + WhatsApp 入口。两者成本结构根本不同。</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="date">2026-04</div>
+      <h4>独立产品首发（LightVela 1.0）</h4>
+      <p>腾讯轻量云团队发布，目标：把云端运行时能力开放给个人和企业。</p>
+    </div>
+    <div class="tl-item">
+      <div class="date">2026-05</div>
+      <h4>限免内测</h4>
+      <p>提供限时免积分，吸引早期使用者 + 收集使用数据。</p>
+    </div>
+    <div class="tl-item">
+      <div class="date">2026-08-18</div>
+      <h4>公公测开放</h4>
+      <p>面向所有用户开放，新用户首单 1 个月免费 + 4500 AI 积分。</p>
+    </div>
+    <div class="tl-item">
+      <div class="date">2026-09-30</div>
+      <h4>腾讯 + Manus + Meta 三方军备竞赛</h4>
+      <p>Manus Cue（9-28）、Meta Muse（9-8）、腾讯 LightVela —— 国内三大入口（微信 / 飞书 / 钉钉）卡位完成。</p>
+    </div>
+  </div>
+  <div class="chartbox">
+    <h3>价格梯度对比</h3>
+    <canvas id="price"></canvas>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">05 Integrations</span>
+  <h2>LightVela 能接入什么</h2>
+  <p class="shot">LightVela 的核心差异化 —— "住在你已有的 IM 里"。Meta Muse 在欧美市场，WhatsApp 是头号 IM；LightVela 在中国，微信 / QQ / 飞书 / 钉钉是头号 IM。</p>
+  <div class="usecases">
+    <div class="uc"><span class="icon">💬</span><h4>微信</h4><p>扫码添加为联系人，直接在微信对话框里发指令、看结果。中国 13 亿用户的基本盘。</p></div>
+    <div class="uc"><span class="icon">🏢</span><h4>企业微信</h4><p>企业内部署首选。员工不需要单独下载新 App，直接在企微对话里完成工作流。</p></div>
+    <div class="uc"><span class="icon">🪶</span><h4>飞书</h4><p>字节系企业 + 互联网行业首选。多维表格 + 文档 + 视频会议一体化，Agent 可直接参与协作。</p></div>
+    <div class="uc"><span class="icon">📌</span><h4>钉钉</h4><p>阿里系 + 制造业 / 传统行业首选。审批流 + OA 自动化场景丰富。</p></div>
+    <div class="uc"><span class="icon">🎮</span><h4>QQ</h4><p>Z 世代 / 游戏 / 学生群体 —— 比赛提醒 / 群管理 / 信息聚合。</p></div>
+    <div class="uc"><span class="icon">🌐</span><h4>NL → Web</h4><p>一句话生成可分享网页 —— 个人主页 / 数据看板 / 活动报名页。</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">06 Risk Analysis</span>
+  <h2>关键风险与不确定性</h2>
+  <p class="shot">从技术、商业、合规、用户锁定四个维度评估。LightVela 整体风险较低（腾讯背书 + 开源底座），但有 2 个 HIGH 级别值得关注。</p>
+  <div class="risks">
+    <div class="risk lv-high">
+      <span class="lvl">HIGH</span>
+<div>
+        <h4>生态锁定（虽然开源，但生态在腾讯手里）</h4>
+        <p>Hermes Agent 开源，但 LightVela 平台不开放部署 —— 用户无法把 Agent 迁到自己的云。一旦腾讯调整定价或服务条款，用户切换成本高。</p>
+      </div>
+    </div>
+    <div class="risk lv-high">
+      <span class="lvl">HIGH</span>
+<div>
+        <h4>模型可选是双刃剑</h4>
+        <p>支持多模型是优势，但也意味着每次执行可能跳不同模型 —— 用户难以预测行为。竞品 OpenAI Dots 用单一 GPT-6 Astra，行为一致性强。</p>
+      </div>
+    </div>
+    <div class="risk lv-med">
+      <span class="lvl">MED</span>
+<div>
+        <h4>监管合规压力（境内）</h4>
+        <p>中国对生成式 AI 监管严格。LightVela 调用 Kimi / 豆包等模型需通过备案 —— 任何模型迭代都可能触发重备案，影响上线节奏。</p>
+      </div>
+    </div>
+    <div class="risk lv-med">
+      <span class="lvl">MED</span>
+<div>
+        <h4>Skill 库依赖第三方生态</h4>
+        <p>100+ Skill 模板看似多，但很多是社区贡献 —— 质量参差。对比 OpenAI Codex 有完整工程团队维护。</p>
+      </div>
+    </div>
+    <div class="risk lv-med">
+      <span class="lvl">MED</span>
+<div>
+        <h4>国际市场不可用</h4>
+        <p>LightVela 强依赖微信 / QQ / 飞书 —— 出海用户用不了。Meta Muse 同样困于美区，但 OpenAI Dots 跨地区可用。</p>
+      </div>
+    </div>
+    <div class="risk lv-low">
+      <span class="lvl">LOW</span>
+<div>
+        <h4>共享云端容器性能抖动</h4>
+        <p>不像 Muse Secure VM 专属隔离，高峰期可能 latency 抖动。对个人使用影响小，企业级可能需要 SLA 升级。</p>
+      </div>
+    </div>
+    <div class="risk lv-low">
+      <span class="lvl">LOW</span>
+<div>
+        <h4>免费档容量限制</h4>
+        <p>4,500 AI 积分听起来多，重度使用 2-3 周可能耗完。续费定价透明度不高。</p>
+      </div>
+    </div>
+    <div class="risk lv-low">
+      <span class="lvl">LOW</span>
+<div>
+        <h4>缺少消费级 Agent 必备的"身份证"形态</h4>
+        <p>对比 Manus Cue 给每个 Agent 独立邮箱 / 钱包 / 电话 —— LightVela 的 Agent 仍是"后台执行者"，用户感知度低。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">07 Use Cases</span>
+  <h2>LightVela 实际场景</h2>
+  <p class="shot">从 lightvela.com 摘录的真实用户场景 + 行业推测。覆盖个人 / 小团队 / 独立开发者。</p>
+  <div class="usecases">
+    <div class="uc"><span class="icon">📊</span><h4>市场晨报</h4><p>每天 09:00 自动聚合纳斯达克异动、行业报告、风险信号 —— 判断还是你做，但准备工作已经完成。</p></div>
+    <div class="uc"><span class="icon">🛒</span><h4>订单监控</h4><p>同时盯订单 / 评价 / 竞品价格 / 活动笔记 —— 打开店铺后台前已经看到摘要。</p></div>
+    <div class="uc"><span class="icon">📱</span><h4>移动办公</h4><p>关键更新实时推送到 IM —— 不在电脑前也能处理任务。深度调研 / 行程提醒 / 报价跟进都能干。</p></div>
+    <div class="uc"><span class="icon">📚</span><h4>知识复习</h4><p>把课堂笔记 / 编程练习 / 考试复习放进同一个节奏里 —— 读什么 / 写什么 / 复习什么全管理。</p></div>
+    <div class="uc"><span class="icon">📝</span><h4>个人博客</h4><p>建好人生第一条个人博客 —— 跟 Hermes "宝宝"说一句话就能完成，不用古法手写代码。</p></div>
+    <div class="uc"><span class="icon">💰</span><h4>销售跟进</h4><p>总结通话记录 / 标出跟进对象 / 提醒需要更有温度的回复 —— 移动办公 + 速度优势。</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">08 Decision Framework</span>
+  <h2>什么时候选哪个？</h2>
+  <p class="shot">不是二选一，是根据场景。LightVela + Muse 可以并行使用 —— 国内微信环境用 LightVela，海外英文场景用 Muse。</p>
+  <div class="twocol">
+    <div class="panel" style="border-color:rgba(52,211,153,0.3)">
+      <h3 style="color:var(--green)">✅ 选 LightVela 的场景</h3>
+      <ul>
+        <li>团队主战场是 <b>微信生态</b>（微信群 / 企微 / 小程序）</li>
+        <li>需要 <b>NL → 网页</b> 功能（个人主页 / 活动页）</li>
+        <li>团队想 <b>开源迁移</b>（Hermes Agent 自托管）</li>
+        <li>需要调用 <b>国产模型</b>（DeepSeek / Kimi / 千问 / 豆包）</li>
+        <li>免费档 + 4,500 积分 <b>足以体验</b></li>
+        <li>使用 <b>飞书</b>（字节系企业）</li>
+      </ul>
+    </div>
+    <div class="panel" style="border-color:rgba(96,165,250,0.3)">
+      <h3 style="color:var(--blue)">✅ 选 Muse 的场景</h3>
+      <ul>
+        <li>海外用户 / WhatsApp 重度依赖</li>
+        <li>需要 <b>专属云端 VM</b> 隔离（企业级安全）</li>
+        <li>工作流高度依赖 <b>Google Workspace</b>（Gmail / Calendar）</li>
+        <li>愿意付 <b>$125/月</b> 拿 Business Premium 隔离</li>
+        <li>需要 <b>Mac 版</b> 直接操作本地邮件 / 日历 / 备忘录</li>
+        <li>Amazon 屏蔽 / Shopify 集成的 <b>北美电商</b> 场景</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">09 Final Verdict</span>
+  <div class="verdict">
+    <h3>🌊 国内 Personal Agent 三国杀已经成型</h3>
+    <p class="quote">"LightVela 不是要取代 Muse —— 它是要在中国 IM 生态里，复制一个'住在你微信里的 ChatGPT'。腾讯手里有微信 / QQ / 飞书 / 钉钉四大入口，加 Hermes Agent 开源底座 + 多模型灵活调用 + 腾讯云算力后盾。Muse 在美区打得火热，但中国区的 Personal Agent 主战场，腾讯已经卡好位置。"</p>
+    <small>研究基于 lightvela.com 2026-10-01 公开数据 + 9-30 网易科技 / 钛媒体 / 36kr 行业报道</small>
+  </div>
+</section>
+
+<section class="section">
+  <span class="label">10 Sources</span>
+  <h2>数据来源</h2>
+  <div class="sources">
+    <ul>
+      <li><b>官方源</b>：<a href="https://lightvela.com/" style="color:var(--blue)">lightvela.com</a>（2026-10-01 抓取）</li>
+      <li><b>腾讯 LightVela 介绍（9-30 网易科技）</b>：腾讯没开发布会，悄悄上线 LightVela —— 4 月独立上线 / 5 月限免 / 8.18 公测，背后跑 Hermes Agent + 支持 DeepSeek / Kimi / 千问 / MiniMax / 豆包</li>
+      <li><b>Manus / Meta Muse 对比</b>：9-30 网易《Manus 重新布局中国市场》 + 《豆包连夜抄作业》（观察者网 / 人人都是产品经理）</li>
+      <li><b>OpenAI DevDay 2026</b>：Dots / GPT-6.1 Sol / Codex + GLM/Kimi / Pro 500 —— 用于横向对比</li>
+      <li><b>Meta Muse 详细数据</b>：9-8 发布，6 天下载 90 万 / 21 日 250 万 / 24 日 340 万登顶美 App Store，股价 +20%、市值 +3000 亿美元</li>
+      <li><b>WSJ / 彭博报道</b>：Manus 估值 40 亿 / 5 亿融资 / 考虑赴港上市</li>
+      <li><b>市场报道</b>：Sensor Tower / 彭博智库 / The Information / 卫报（Matt Robb 案例）</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="footer">
+  © 2026 Sam Xu · 深度研究 · <a href="https://www.samvortex.com/research/">返回 research 列表</a> · 京ICP备 11018762 号参考腾讯轻量云 ICP
+</footer>
+
+</div>
+
+<script>
+Chart.defaults.color = '#a8b3c4';
+Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.08)';
+
+// Radar
+new Chart(document.getElementById('radar'), {
+  type: 'radar',
+  data: {
+    labels: ['生态入口', '模型灵活', '开源可迁', '消费级体验', '企业隔离', '数据合规'],
+    datasets: [
+      {
+        label: '腾讯 LightVela',
+        data: [5, 5, 5, 3, 2, 4],
+        borderColor: '#a78bfa',
+        backgroundColor: 'rgba(167,139,250,0.15)',
+        pointBackgroundColor: '#a78bfa',
+        borderWidth: 2
+      },
+      {
+        label: 'Meta Muse',
+        data: [2, 1, 1, 5, 5, 5],
+        borderColor: '#60a5fa',
+        backgroundColor: 'rgba(96,165,250,0.15)',
+        pointBackgroundColor: '#60a5fa',
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#e6edf3', font: { size: 12 } } } },
+    scales: {
+      r: {
+        beginAtZero: true,
+        max: 5,
+        ticks: { color: '#7d8590', backdropColor: 'transparent', stepSize: 1 },
+        grid: { color: 'rgba(255,255,255,0.08)' },
+        angleLines: { color: 'rgba(255,255,255,0.08)' },
+        pointLabels: { color: '#e6edf3', font: { size: 12 } }
+      }
+    }
+  }
+});
+
+// Bar comparison
+new Chart(document.getElementById('bar'), {
+  type: 'bar',
+  data: {
+    labels: ['生态入口', '模型灵活', '开源可迁', '消费级 UX', '企业隔离', '数据合规', '起步价'],
+    datasets: [
+      {
+        label: 'LightVela',
+        data: [5, 5, 5, 3, 2, 4, 5],
+        backgroundColor: 'rgba(167,139,250,0.6)',
+        borderColor: '#a78bfa',
+        borderWidth: 1
+      },
+      {
+        label: 'Meta Muse',
+        data: [2, 1, 1, 5, 5, 5, 2],
+        backgroundColor: 'rgba(96,165,250,0.6)',
+        borderColor: '#60a5fa',
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#e6edf3', font: { size: 12 } } } },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 5,
+        ticks: { color: '#7d8590', stepSize: 1 },
+        grid: { color: 'rgba(255,255,255,0.06)' }
+      },
+      x: {
+        ticks: { color: '#a8b3c4', font: { size: 11 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// Price gradient
+new Chart(document.getElementById('price'), {
+  type: 'bar',
+  data: {
+    labels: ['LightVela 免费档', 'LightVela 标准', 'LightVela 团队', 'Meta Muse 免费', 'Muse Business', 'Muse + Adobe Premium'],
+    datasets: [{
+      label: '月费 (USD)',
+      data: [0, 12, 28, 0, 125, 200],
+      backgroundColor: [
+        'rgba(52,211,153,0.6)',
+        'rgba(167,139,250,0.6)',
+        'rgba(167,139,250,0.6)',
+        'rgba(52,211,153,0.6)',
+        'rgba(96,165,250,0.6)',
+        'rgba(96,165,250,0.6)'
+      ],
+      borderColor: ['#34d399','#a78bfa','#a78bfa','#34d399','#60a5fa','#60a5fa'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return '$' + ctx.parsed.x + + '/月' }
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: { color: '#7d8590', callback: function(v) { return '$' + v } },
+        grid: { color: 'rgba(255,255,255,0.06)' }
+      },
+      y: {
+        ticks: { color: '#a8b3c4', font: { size: 11 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
