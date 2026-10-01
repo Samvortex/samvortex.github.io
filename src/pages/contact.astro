@@ -54,13 +54,16 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <script>
-  async function handleSubmit(event) {
+  async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
-    const form = event.target;
+    const form = event.target as HTMLFormElement;
     const status = document.getElementById('formStatus');
-    const btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true;
-    btn.textContent = 'Sending...';
+    if (!status) return;
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+    }
     status.textContent = '';
     status.style.color = '#666';
 
@@ -79,7 +82,9 @@ import Base from '../layouts/Base.astro';
       status.textContent = '❌ Failed to send. Please try again.';
       status.style.color = '#d93025';
     }
-    btn.disabled = false;
-    btn.textContent = 'Send Message';
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    }
   }
 </script>
