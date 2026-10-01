@@ -48,6 +48,9 @@ const morningBrief = defineCollection({
       source: z.string(),
       url: z.string(),
     })),
+    // Slugs that successfully fetched a real news image (template uses this
+    // to render <img> only when there's a real image — otherwise text-only card).
+    available_images: z.array(z.string()).default([]),
   }),
 });
 
