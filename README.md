@@ -76,4 +76,4 @@ src/
 - 引用必须带链接
 - 代码块标语言
 - draft: true 时不发布
-```
+```<!-- build-trigger: Fri Oct  2 09:17:27 CST 2026 -->
