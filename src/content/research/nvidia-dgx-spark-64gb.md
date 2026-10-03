@@ -4,7 +4,7 @@ slug: 'nvidia-dgx-spark-64gb'
 date: '2026-10-02'
 category: 'notes'
 tags: ['NVIDIA', 'DGX Spark 64GB', '桌面 AI 超算', '统一内存架构', 'NVFP4', 'KV Cache', '投机解码', 'ConnectX-7', '集群扩展', 'NVIDIA Sync', 'AIPerf SPEED-Bench', 'OEM', 'AI 智能体', '本地化部署', '27B 模型', 'MoE 多模态', 'AI 原生 PC']
-summary: '⭐ **NVIDIA 发布 DGX Spark 64GB**（2026-10-02，**4999 美元**，10-23 发售）。⭐ **统一内存架构**（CPU + GPU 共享 64GB 高带宽内存池，**预留 8GB 系统，可用 56GB**）—— ⭐ **27B / 35B 经典模型"黄金配置"**。⭐ **NVFP4 量化 + KV Cache 优化 + 投机解码** —— Perplexity llama.cpp/vLLM 优化后速度 **最高 1.9×**。⭐ **Artificial Analysis v4.3**：本地 Qwen3.8 27B 34 分 ≈ 云端 Flash 梯队（GLM-4.3-Flash 42 / Qwen3.8-Flash-Next 40）。⭐ **2 台集群 1.7× 吞吐**。⭐ **六大 OEM**（宏碁 / 华硕 / 戴尔 / 技嘉 / 惠普 / 微星）同步便携版。⭐ **Day-0 模型**：Qwen3.8 27B / LTX 2.5 / Meta Muse Glimmer / Gemma 4 / Poolside Laguna S 2.1 / Inkling-Small。'
+summary: '⭐ **NVIDIA 发布 DGX Spark 64GB**（2026-10-02，**4999 美元**，10-23 发售）。⭐ **统一内存架构**（CPU + GPU 共享 64GB 高带宽内存池，**预留 8GB 系统，可用 56GB**）—— ⭐ **27B / 35B 经典模型"黄金配置"**。⭐ **NVFP4 量化 + KV Cache 优化 + 投机解码** —— Perplexity llama.cpp/vLLM 优化后速度 **最高 1.9×**。'
 author: 'Sam Xu'
 featured: false
 draft: false

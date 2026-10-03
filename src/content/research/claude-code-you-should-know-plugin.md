@@ -4,7 +4,7 @@ slug: 'claude-code-you-should-know-plugin'
 date: '2026-10-03'
 category: 'notes'
 tags: ['Claude Code', '插件', 'You should know', 'cc-plugin-you-should-know@builtin', 'Mods', 'Anthropic', '插件体系', '二次处理', '改造 Claude Code', '能力边界', '遗漏信息']
-summary: '⭐ **Claude Code 内置 "You should know" 插件**：扫描 Claude 输出，把用户容易漏看的重要信息（限制条件 / 前提假设 / 更优解）单独拎出来。⭐ **一行命令启用**：`/plugin enable cc-plugin-you-should-know@builtin`。官方把它称为"Mods 能实现的那类事情的一个好例子" ⭐ —— 意味着插件 ⭐ **不只是加按钮 / 换主题，可以介入输出流程做二次处理**。⭐ **核心信号**：Claude Code 正在从"固定工具"变成"可被用户改造的东西" —— ⭐ **"You can really make Claude Code yours"**。'
+summary: '⭐ **Claude Code 内置 "You should know" 插件**：扫描 Claude 输出，把用户容易漏看的重要信息（限制条件 / 前提假设 / 更优解）单独拎出来。⭐ **一行命令启用**：`/plugin enable cc-plugin-you-should-know@builtin`。官方把它称为"Mods 能实现的那类事情的一个好例子" ⭐ —— 意味着插件 ⭐ **不只是加按钮 / 换主题，可以介入输出流程做二次处理**。'
 author: 'Sam Xu'
 featured: false
 draft: false

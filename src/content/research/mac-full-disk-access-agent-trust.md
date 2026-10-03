@@ -4,7 +4,7 @@ slug: 'mac-full-disk-access-agent-trust'
 date: '2026-10-03'
 category: 'notes'
 tags: ['Apple', 'macOS', '完全磁盘访问权限', 'Full Disk Access', 'FDA', 'AI Agent', 'Meta Muse', 'Anthropic Computer Use', 'Simon Willison', '致命三要素', 'ChatGPT Mac', 'Sentinel', '隐私']
-summary: '⭐ **2026-10-02 苹果公告**：macOS "完全磁盘访问权限"（FDA）将 ⭐ **新增控制措施** —— 用户必须通过 ⭐ **更明确的主动操作**才能授予 Agent 这级权限。背景是 ⭐ **Meta Muse** 主动推送专栏选题（读私人消息）+ ⭐ **ChatGPT Mac 应用漏洞**（WIRED 10-2 披露，已修复）+ ⭐ **Simon Willison"致命三要素"**（私人数据 + 不可信内容 + 外部通信）。大厂正在 ⭐ **把信任写进架构**（Meta Sentinel / Anthropic Computer Use 隔离 VM）。'
+summary: '⭐ **2026-10-02 苹果公告**：macOS "完全磁盘访问权限"（FDA）将 ⭐ **新增控制措施** —— 用户必须通过 ⭐ **更明确的主动操作**才能授予 Agent 这级权限。背景是 ⭐ **Meta Muse** 主动推送专栏选题（读私人消息）+ ⭐ **ChatGPT Mac 应用漏洞**（WIRED 10-2 披露，已修复）+ ⭐ **Simon Willison"致命三要素"**（私人数据 + 不可信内容 + 外部通信）。'
 author: 'Sam Xu'
 featured: false
 draft: false

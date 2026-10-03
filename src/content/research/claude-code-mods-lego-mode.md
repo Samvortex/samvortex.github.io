@@ -4,7 +4,7 @@ slug: 'claude-code-mods-lego-mode'
 date: '2026-10-03'
 category: 'notes'
 tags: ['Claude Code', 'Anthropic', 'Mods', '插件', 'Boris Cherny', 'Vibe Coding', 'Claude Marketplace', 'Minecraft', 'DeepSeek Harness', 'OpenAI Codex', 'pet 宠物', 'Storytime', 'claudemods.ai', '可控开放', 'CLI 光谱']
-summary: '⭐ **Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启** —— ⭐ **TypeScript 插件函数** 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ **像素宠物**：Claude 每调一次工具就吃一口饭 ∘ **打 Doom** ∘ **Storytime（26 万参数小模型 + Claude 工作的实时故事）** ∘ **4-7-8 呼吸引导** ∘ **发射密码**（破坏性命令需输入密码） ∘ **agent-race** ∘ **claudemods.ai** 已分类投票。⭐ **Claude Marketplace 2000+ 插件 / 商店 / 上架审核 / 开发者后台 — 10 天凑齐应用商店四件套**。对比 Codex（官方做宠物）vs DeepSeek Harness（MIT 一切皆插件）—— Claude Code 卡在 ⭐ **"可控的开放"光谱正中间**。'
+summary: '⭐ **Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启** —— ⭐ **TypeScript 插件函数** 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ **像素宠物**：Claude 每调一次工具就吃一口饭 ∘ **打 Doom** ∘ **Storytime（26 万参数小模型 + Claude 工作的实时故事）** ∘ **4-7-8 呼吸引导** ∘ **发射密码**（破坏性命令需输入密码） ∘ **agent-race** ∘ **claudemods.ai** 已分类投票。'
 author: 'Sam Xu'
 featured: false
 draft: false

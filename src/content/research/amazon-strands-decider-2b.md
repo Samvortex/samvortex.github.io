@@ -3,7 +3,7 @@ title: '亚马逊推出 Strands Decider 2B 开源决策模型'
 slug: 'amazon-strands-decider-2b'
 date: '2026-10-03'
 category: 'notes'
-tags: ['亚马逊', 'Amazon', 'Strands Agents', 'Strands Decider 2B', '开源', '决策模型', 'Qwen3.5-2B', 'LoRA rank-16', 'JevBench', 'CPU / GPU 本地推理', 'RTX 3090', 'Hugging Face', 'GitHub', '小模型']
+tags: ['亚马逊', 'Amazon', 'Strands Agents', 'Strands Decider 2B', '开源', '决策模型', 'Qwen3.5-2B', 'LoRA rank-16', 'JevBench', 'CPU + GPU 本地推理', 'RTX 3090', 'Hugging Face', 'GitHub', '小模型']
 summary: '⭐ **亚马逊 Strands Agents 团队（2026-10-01）开源 Strands Decider 2B 决策模型** —— ⭐ **基于 Qwen3.5-2B "躯干"** + ⭐ **评分功能指针"头部"**（替换原文本生成头，总参数 ⭐ **仅略超 100 万**）+ ⭐ **rank-16 LoRA 微调**。JevBench ⭐ **2B 级排名第 3** / 优于所有 ≤2B 对手。本地 ⭐ **113ms 决策时延** / RTX 3090 小型决策 ⭐ **153ms 中位数**。'
 author: 'Sam Xu'
 featured: false

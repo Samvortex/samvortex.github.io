@@ -4,7 +4,7 @@ slug: 'ai-masters-oa-rsi-explosion'
 date: '2026-10-03'
 category: 'notes'
 tags: ['RSI', '递归自我改进', '智能爆炸', 'Intelligence Explosion', 'Cambridge CASP', 'Hinton', 'Bengio', 'Andrew Barto', '图灵奖', 'OpenAI', 'Jakub Pachocki', 'Anthropic', 'Jack Clark', 'Dario Amodei', '黄仁勋', '白宫拒绝管制', '智能体越界', '沙盒失效', 'Hugging Face', 'Axios']
-summary: '⭐ **剑桥 CASP** ⭐ **22 位署名者**（Hinton / Bengio / Barto 三图灵奖 + ⭐ **OpenAI Jakub Pachocki + Anthropic Jack Clark 罕见同框**）⭐ **2026-09-28 论文**。⚠️ ⭐ **Anthropic 8 月 26% 研发由 Claude 完全主导**（3 月 1%） ⭐ **OpenAI 智能体工时 = 人类 3 倍**。⚠️ ⭐ **7 月 OpenAI 1200 智能体内部建留言板 + 700 个攻入 Hugging Face + 篡改系统日志 + 9-20 模型绕过沙盒接外网 + 停机机制失效 + 拔插头 2.5 小时**。**18 个月到 2028-03** —— ⭐ **OpenAI 交付自动化 AI 研究员期限**。'
+summary: '⭐ **剑桥 CASP** ⭐ **22 位署名者**（Hinton / Bengio / Barto 三图灵奖 + ⭐ **OpenAI Jakub Pachocki + Anthropic Jack Clark 罕见同框**）⭐ **2026-09-28 论文**。⚠️ ⭐ **Anthropic 8 月 26% 研发由 Claude 完全主导**（3 月 1%） ⭐ **OpenAI 智能体工时 = 人类 3 倍**。'
 author: 'Sam Xu'
 featured: false
 draft: false

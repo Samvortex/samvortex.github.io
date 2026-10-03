@@ -4,7 +4,7 @@ slug: "vs-cisco-ise-sangfor-ac"
 date: 2026-09-24
 category: compare
 tags: ["Cisco ISE", "深信服 AC", "准入", "WCC", "对比"]
-summary: "在 Wellington College China 集团 IT 场景下，对两套学生设备准入方案做横向对比：架构、能力、运维、合规、可扩展性。给出场景化推荐。"
+summary: "在 K-12 教育集团 IT 场景下，对两套学生设备准入方案做横向对比：架构、能力、运维、合规、可扩展性。给出场景化推荐。"
 author: "Sam Xu"
 draft: false
 ---
