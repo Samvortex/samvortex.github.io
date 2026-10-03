@@ -1,6 +1,6 @@
 ---
 title: 'NBA 重磅交易：斯玛特 + 范弗利特换欧文，火箭 → 独行侠'
-slug: 'sports-nba-trade-smart-vanvert-欧文-rockets'
+slug: 'sports-nba-trade-smart-vanvert-irving-rockets'
 date: '2026-10-03'
 category: 'sports'
 tags: ['NBA', '休斯敦火箭', '独行侠', '斯玛特', '范弗利特', '凯里·欧文', '凯文·杜兰特', '交易冷冻规则']
@@ -51,7 +51,7 @@ source_url: 'https://www.163.com/dy/article/L8AJVD900556099O.html'
 ## 配图
 
 <div style="margin: 2rem 0; text-align: center;">
-<img src="/img/research/sports-nba-trade-smart-vanvert-欧文-rockets/img3.png" alt="火箭独行侠交易：斯玛特 + 范弗利特 → 欧文" style="max-width: 100%; border-radius: 8px;" />
+<img src="/img/research/sports-nba-trade-smart-vanvert-irving-rockets/img3.png" alt="火箭独行侠交易：斯玛特 + 范弗利特 → 欧文" style="max-width: 100%; border-radius: 8px;" />
 <p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：NBA 火箭 ↔ 独行侠交易 —— 斯玛特 + 范弗利特换欧文（网易体育 · 2026-10-03）</p>
 </div>
 
