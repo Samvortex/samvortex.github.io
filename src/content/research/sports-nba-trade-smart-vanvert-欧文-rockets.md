@@ -48,6 +48,13 @@ source_url: 'https://www.163.com/dy/article/L8AJVD900556099O.html'
 
 > "**这笔涉及斯玛特、范弗利特和欧文的重磅交易，背后藏着两支球队完全不同的谋划**。"
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/sports-nba-trade-smart-vanvert-欧文-rockets/img3.png" alt="火箭独行侠交易：斯玛特 + 范弗利特 → 欧文" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：NBA 火箭 ↔ 独行侠交易 —— 斯玛特 + 范弗利特换欧文（网易体育 · 2026-10-03）</p>
+</div>
+
 ## 来源
 
 - [网易体育（网易订阅）· 原文](https://www.163.com/dy/article/L8AJVD900556099O.html)

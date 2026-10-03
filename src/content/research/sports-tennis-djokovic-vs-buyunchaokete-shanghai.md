@@ -47,6 +47,13 @@ source_url: 'https://www.163.com/dy/article/L8AGKREA05299JMD.html'
 | **德约** | "**续写传奇**" + "**反败为胜**" |
 | **现场体验** | 张奔斗："**只有现场聆听才有感受**" |
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/sports-tennis-djokovic-vs-buyunchaokete-shanghai/img3.png" alt="德约 vs 布云朝克特三盘大战" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：上海大师赛 —— 德约科维奇 vs 布云朝克特（小布）三盘大战（体坛周报 · 2026-10-03）</p>
+</div>
+
 ## 来源
 
 - [网易体育（体坛周报）· 原文](https://www.163.com/dy/article/L8AGKREA05299JMD.html)

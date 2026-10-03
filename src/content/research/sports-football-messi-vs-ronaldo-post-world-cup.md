@@ -45,6 +45,13 @@ source_url: 'https://www.163.com/dy/article/L8AM5QR505497048.html'
 
 > "**不仅如此，2026 年世界杯之后，梅西和 C 罗的参与进球数据也是天壤之别**。"
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/sports-football-messi-vs-ronaldo-post-world-cup/img3.png" alt="梅西 vs C 罗 世界杯后数据对比" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：2026 世界杯后梅罗数据 —— 梅西 13 场 18 球 vs C 罗 8 场 3 球（网易体育 · 2026-10-03）</p>
+</div>
+
 ## 来源
 
 - [网易体育（网易订阅）· 原文](https://www.163.com/dy/article/L8AM5QR505497048.html)

@@ -58,6 +58,13 @@ source_url: 'https://www.163.com/dy/article/L8AHJDMJ05299VFU.html'
 
 > "**王楚钦一句'苦中作乐'道出心酸**" —— 网友评
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/sports-tt-wangchuqin-asian-games-silver/img3.png" alt="王楚钦亚运男单摘银" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：王楚钦亚运会男单摘银 —— "失去了一些动力，现在打球跟以前不同"（央视《亚运之约》 · 2026-10-03）</p>
+</div>
+
 ## 来源
 
 - [网易体育（网易订阅）· 原文](https://www.163.com/dy/article/L8AHJDMJ05299VFU.html)
