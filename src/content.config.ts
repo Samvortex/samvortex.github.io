@@ -10,7 +10,7 @@ const articles = defineCollection({
       slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
       date: z.coerce.date(),
       updated: z.coerce.date().optional(),
-      category: z.enum(['research', 'compare', 'evaluation', 'notes']),
+      category: z.enum(['research', 'compare', 'evaluation', 'notes', 'sports']),
       tags: z.array(z.string()).default([]),
       summary: z.string().min(20).max(300),
       author: z.string().default('Sam Xu'),

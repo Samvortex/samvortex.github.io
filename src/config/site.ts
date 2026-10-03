@@ -43,6 +43,13 @@ export const CATEGORIES = {
     description: '短记录、随笔、思考碎片。',
     order: 4,
   },
+  sports: {
+    label: '体育',
+    singular: '体育',
+    plural: '体育',
+    description: '足球 / 篮球 / 游泳 / 乒乓等体坛动态。',
+    order: 5,
+  },
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORIES;

@@ -1,0 +1,8 @@
+---
+import ListLayout from '@layouts/ListLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft && data.category === 'sports'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<ListLayout category="sports" articles={articles} title="体育" description="足球 / 篮球 / 游泳 / 乒乓等体坛动态。" />
