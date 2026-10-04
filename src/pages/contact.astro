@@ -54,11 +54,10 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <script>
-  // Hook the contact form without inline JS (cleaner + accessible)
   const form = document.getElementById('contactForm') as HTMLFormElement | null;
   if (form) {
-    form.addEventListener('submit', async (ev) => {
-      ev.preventDefault();
+    form.addEventListener('submit', async (_ev) => {
+      _ev.preventDefault();
       const status = document.getElementById('formStatus') as HTMLParagraphElement | null;
       const btn = document.getElementById('contactSubmit') as HTMLButtonElement | null;
       if (!status) return;
@@ -68,7 +67,6 @@ import Base from '../layouts/Base.astro';
       }
       status.textContent = '';
       status.style.color = '#666';
-
 
       try {
         // TODO: Wire up to Cloudflare Worker for email delivery

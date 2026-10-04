@@ -1,8 +1,8 @@
 ---
+import { CATEGORIES } from '@config/site';
 import type { CategoryKey } from '@config/site';
 import Logo from './Logo.astro';
 
-const { CATEGORIES: _c } = { CATEGORIES };
 const path = Astro.url.pathname;
 function active(href: string) {
   if (href === '/') return path === '/' ? 'text-brand-600 dark:text-brand-500' : '';
