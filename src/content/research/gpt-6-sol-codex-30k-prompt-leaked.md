@@ -4,7 +4,7 @@ slug: 'gpt-6-sol-codex-30k-prompt-leaked'
 date: '2026-10-04'
 category: 'notes'
 tags: ['GPT-6 Sol', 'OpenAI Codex', '提示词泄露', '系统提示词', 'prompt leak', 'CL4R1T4S', 'elder_plinius', 'AI slop', 'ripgrep', 'SKILL.md', 'browser_use', 'token budget', 'auto-compact', '代码审查', 'Agent 系统工程', '安全策略']
-summary: '⭐ **GPT-6 Sol Codex**（⭐ **OpenAI 现役性价比产品线 GPT-5.6 Sol 王牌代码模型**）⭐ **30 万字符 / 1902 行系统提示词已泄露**。⭐ **6 大板块**：(1) ⭐ AI slop 词黑名单（Bottom Line / delve / foster / leverage / 重要的是 / 值得注意的是 全禁）+ (2) ⭐ 极端自主性（不要停下来问 / 不要半吊子）— (3) ⭐ 工具链（⭐ ripgrep / ⭐ Promise.allSettled 并行 / ⭐ SKILL.md 动态技能树 / ⭐ browser_use 浏览器接管）— (4) ⭐ 记忆与休眠（⭐ token_budget.guidance_message / ⭐ 上下文交接 / ⭐ 后台 heartbeat）— (5) ⭐ 代码审查铁律（不超 3 行 / suggestion 块 / 不拍马屁）— (6) ⭐ 4 级确认模式（Hand-off / Action-time / Pre-approval / Not-required）。⭐ **本质：提示词工程已死，系统工程永生**。'
+summary: '⭐ **GPT-6 Sol Codex**（⭐ **OpenAI 现役性价比产品线 GPT-5.6 Sol 王牌代码模型**）⭐ **30 万字符 / 1902 行系统提示词已泄露**。⭐ **6 大板块**：(1) ⭐ AI slop 词黑名单（Bottom Line / delve / foster / leverage / 重要的是 / 值得注意的是 全禁）+ (2) ⭐ 极端自主性（不要停下来问 / 不要半吊子）'
 author: 'Sam Xu'
 featured: false
 draft: false
