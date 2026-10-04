@@ -316,7 +316,7 @@ import Base from '../layouts/Base.astro';
     await loadMessages(currentTopicId);
   }
 
-  async function deleteTopic(id, event) {
+  async function deleteTopic(id) {
     if (!confirm('Delete this topic and all its messages?')) return;
 
     console.log('[Hub] Deleting topic:', id);

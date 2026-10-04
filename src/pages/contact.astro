@@ -12,7 +12,7 @@ import Base from '../layouts/Base.astro';
     <div class="grid grid-2" style="max-width: 800px; margin: 0 auto;">
       <div class="card">
         <h2 style="font-size: 20px; margin-bottom: 20px;">Send a Message</h2>
-        <form id="contactForm" onsubmit="handleSubmit(event)">
+        <form id="contactForm" >
           <div style="margin-bottom: 16px;">
             <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-text);">Name</label>
             <input type="text" name="name" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; outline: none;" />
@@ -25,7 +25,7 @@ import Base from '../layouts/Base.astro';
             <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-text);">Message</label>
             <textarea name="message" rows="5" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; outline: none; resize: vertical;"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+          <button type="submit" id="contactSubmit" class="btn btn-primary" style="width: 100%;">Send Message</button>
           <p id="formStatus" style="margin-top: 12px; font-size: 14px; text-align: center;"></p>
         </form>
       </div>
@@ -54,37 +54,36 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <script>
-  async function handleSubmit(event: SubmitEvent) {
-    event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const status = document.getElementById('formStatus');
-    if (!status) return;
-    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-    }
-    status.textContent = '';
-    status.style.color = '#666';
+  // Hook the contact form without inline JS (cleaner + accessible)
+  const form = document.getElementById('contactForm') as HTMLFormElement | null;
+  if (form) {
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const status = document.getElementById('formStatus') as HTMLParagraphElement | null;
+      const btn = document.getElementById('contactSubmit') as HTMLButtonElement | null;
+      if (!status) return;
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+      }
+      status.textContent = '';
+      status.style.color = '#666';
 
-    // Collect form data
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
 
-    try {
-      // TODO: Wire up to Cloudflare Worker for email delivery
-      // For now, show a success message
-      await new Promise(r => setTimeout(r, 1000));
-      status.textContent = '✅ Message sent! (Currently demo mode — wiring up email next)';
-      status.style.color = '#1e8e3e';
-      form.reset();
-    } catch (e) {
-      status.textContent = '❌ Failed to send. Please try again.';
-      status.style.color = '#d93025';
-    }
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Send Message';
-    }
+      try {
+        // TODO: Wire up to Cloudflare Worker for email delivery
+        await new Promise(r => setTimeout(r, 1000));
+        status.textContent = '✅ Message sent! (Currently demo mode — wiring up email next)';
+        status.style.color = '#1e8e3e';
+        form.reset();
+      } catch (_e) {
+        status.textContent = '❌ Failed to send. Please try again.';
+        status.style.color = '#d93025';
+      }
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    });
   }
 </script>
