@@ -4,7 +4,7 @@ slug: 'nvidia-rtx-spark-oct-7-launch'
 date: '2026-10-02'
 category: 'notes'
 tags: ['NVIDIA', 'RTX Spark', 'Grace CPU', 'Blackwell RTX GPU', 'LPDDR5X', '统一内存', 'DLSS 5', 'Reflex 2', 'G-SYNC', '本地 AI 推理', 'CUDA', 'Windows 11', 'Surface Laptop Ultra', 'ProArt P16', 'XPS 16', 'OmniBook Ultra', 'Yoga Pro 9n', 'Prestige N16 Flip AI+', '黄仁勋', '1 Petaflop', 'FP4']
-summary: '⭐ **英伟达 RTX Spark** —— ⭐ **Grace CPU + Blackwell RTX GPU 整合的 Windows PC 平台**，⭐ **10 月 7 日微软 + Surface 活动亮相**，⭐ **黄仁勋预计出席**。⭐ **两档笔记本**：⭐ **高配 20 核 Grace + 6144 核 Blackwell RTX + 最高 128GB LPDDR5X 统一内存** / 低配 18 核 + 5120 核 + 最高 64GB；⭐ **桌面 20 核 + 6144 核 + 128GB / TDP 140W / ⭐ FP4 1 Petaflop**。⭐ **首批 6 款**：⭐ **华硕 ProArt P16 / 戴尔 XPS 16 / 惠普 OmniBook Ultra 16 / 联想 Yoga Pro 9n / Surface Laptop Ultra / 微星 Prestige N16 Flip AI+**。'
+summary: '⭐ **英伟达 RTX Spark** —— ⭐ **Grace CPU + Blackwell RTX GPU 整合的 Windows PC 平台**，⭐ **10 月 7 日微软 + Surface 活动亮相**，⭐ **黄仁勋预计出席**。⭐ **两档笔记本**：⭐ **高配 20 核 Grace + 6144 核 Blackwell RTX + 最高 128GB LPDDR5X 统一内存** / 低配 18 核 + 5120 核 + 最高 64GB；⭐ **桌面 20 核 + 6144 核 + 128GB / TDP 140W / ⭐ FP4 1 Petaflop*'
 author: 'Sam Xu'
 featured: false
 draft: false
