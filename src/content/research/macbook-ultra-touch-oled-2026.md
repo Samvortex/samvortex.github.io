@@ -4,7 +4,7 @@ slug: 'macbook-ultra-touch-oled-2026'
 date: '2026-10-04'
 category: 'notes'
 tags: ['Apple', 'MacBook Ultra', 'MacBook Pro', 'OLED 屏幕', '触摸屏', 'M5 Pro', 'M5 Max', '灵动岛', 'macOS 27.2', 'Mark Gurman', '14 英寸', '16 英寸', '全新模具', '轻薄', '刘海屏取消']
-summary: '⭐ **Mark Gurman 爆料**：苹果计划 **2026 年 10-11 月推出 14/16 寸 OLED 屏 MacBook Ultra**（暂定名）。⭐ **macOS 27.2 Beta 内部测试中**，正式版预计 10 月底。⭐ **全新模具 + 更轻薄 + 取消刘海屏 + 灵动岛设计 + 边框缩窄**。⭐ **M5 Pro + M5 Max 芯片**。⭐ **OLED 屏 + 触控功能**（**不作为主要操作**，仅作补充）。⭐ **加固转轴防触屏晃动**。⭐ **价格：现款 M5 Pro MacBook Pro ¥19,999 起 / MacBook Ultra 预计 ¥23,999 起**。'
+summary: '⭐ **Mark Gurman 爆料**：苹果计划 **2026 年 10-11 月推出 14/16 寸 OLED 屏 MacBook Ultra**（暂定名）。⭐ **macOS 27.2 Beta 内部测试中**，正式版预计 10 月底。⭐ **全新模具 + 更轻薄 + 取消刘海屏 + 灵动岛设计 + 边框缩窄**。⭐ **M5 Pro + M5 Max 芯片**。⭐ **OLED 屏 + 触控功能**（**不作为主要操作**，仅作补充）。⭐ **加固转轴防触屏晃动**。'
 author: 'Sam Xu'
 featured: false
 draft: false
