@@ -1,0 +1,277 @@
+---
+/**
+ * WeatherWidget — 紧凑型天气小部件
+ * - 默认 IP 定位（ipapi.co 免费、无 key）
+ * - 用户点击 → 升级浏览器 Geolocation（精确 GPS）
+ * - 数据源：Open-Meteo（免费、无 key）
+ * - 位置 + 天气本地缓存 30 分钟
+ * - 全部 CSS 动画（太阳旋转、云漂浮、雨滴下落、雪花飘、雪人融化）
+ */
+---
+<div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading">
+  <button
+    id="weather-btn"
+    type="button"
+    class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+    aria-label="查看天气（点击升级到精确位置）"
+    title="点击升级到精确位置"
+  >
+    <span id="weather-icon" class="weather-icon weather-icon-loading">
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="4" class="weather-pulse"/>
+      </svg>
+    </span>
+    <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline">--°</span>
+    <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate">--</span>
+  </button>
+</div>
+
+<style>
+  /* === 通用图标容器 === */
+  .weather-icon { display: inline-flex; align-items: center; justify-content: center; }
+  .weather-icon svg { overflow: visible; }
+
+  /* === Loading 脉动 === */
+  .weather-pulse { animation: wp 1.4s ease-in-out infinite; transform-origin: 12px 12px; }
+  @keyframes wp { 0%,100% { opacity:.4; transform: scale(1) } 50% { opacity:1; transform: scale(1.15) } }
+
+  /* === 太阳（晴 / 少云）=== */
+  .weather-sun .sun-core { animation: sun-spin 12s linear infinite; transform-origin: 12px 12px; }
+  .weather-sun .sun-rays { animation: sun-pulse 2.5s ease-in-out infinite; transform-origin: 12px 12px; }
+  @keyframes sun-spin { to { transform: rotate(360deg); } }
+  @keyframes sun-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+
+  /* === 云（多云 / 阴）=== */
+  .weather-cloud .cloud-body { animation: cloud-float 4s ease-in-out infinite; transform-origin: 12px 12px; }
+  .weather-cloud .cloud-shadow { animation: cloud-float 4s ease-in-out infinite reverse; transform-origin: 12px 12px; opacity: .35; }
+  @keyframes cloud-float { 0%,100% { transform: translateX(-1px) } 50% { transform: translateX(2px) } }
+
+  /* === 雨（小雨 / 中雨 / 阵雨）=== */
+  .weather-rain .cloud-body { animation: cloud-float 4s ease-in-out infinite; transform-origin: 12px 12px; }
+  .weather-rain .drop { animation: rain-fall 1s linear infinite; transform-origin: center; opacity: 0; }
+  .weather-rain .drop:nth-child(2) { animation-delay: 0.25s; }
+  .weather-rain .drop:nth-child(3) { animation-delay: 0.5s; }
+  @keyframes rain-fall {
+    0%   { opacity:0; transform: translateY(-2px); }
+    25%  { opacity:1; }
+    100% { opacity:0; transform: translateY(7px); }
+  }
+
+  /* === 雷雨 === */
+  .weather-thunder .cloud-body { animation: cloud-float 4s ease-in-out infinite; transform-origin: 12px 12px; }
+  .weather-thunder .bolt { animation: thunder-flash 2s ease-in-out infinite; transform-origin: 12px 12px; }
+  @keyframes thunder-flash { 0%,40%,60%,100% { opacity:0 } 45%,55% { opacity:1 } }
+
+  /* === 雪（雪 / 阵雪）=== */
+  .weather-snow .cloud-body { animation: cloud-float 4s ease-in-out infinite; transform-origin: 12px 12px; }
+  .weather-snow .flake { animation: snow-fall 2.5s linear infinite; transform-origin: center; opacity:0; }
+  .weather-snow .flake:nth-child(2) { animation-delay: 0.8s; }
+  .weather-snow .flake:nth-child(3) { animation-delay: 1.6s; }
+  @keyframes snow-fall {
+    0%   { opacity:0; transform: translate(0,-2px); }
+    30%  { opacity:1; }
+    100% { opacity:0; transform: translate(2px,8px); }
+  }
+
+  /* === 雾 === */
+  .weather-fog .mist { animation: fog-drift 3.5s ease-in-out infinite; transform-origin: 12px 12px; opacity:.5; }
+  .weather-fog .mist:nth-child(2) { animation-delay: 1s; }
+  @keyframes fog-drift { 0%,100% { transform: translateX(-1.5px); opacity:.3 } 50% { transform: translateX(1.5px); opacity:.7 } }
+
+  /* === 错误状态 === */
+  .weather-error { color: #94a3b8; }
+</style>
+
+<script>
+(() => {
+  const widget = document.getElementById('weather-widget');
+  const btn = document.getElementById('weather-btn');
+  const icon = document.getElementById('weather-icon');
+  const tempEl = document.getElementById('weather-temp');
+  const locEl = document.getElementById('weather-loc');
+  if (!widget || !btn || !icon || !tempEl || !locEl) return;
+
+  const CACHE_KEY = 'swx.weather.v1';
+  const CACHE_TTL = 30 * 60 * 1000;  // 30 min
+
+  // WMO weather code → { icon class, label }
+  const WMO: Record<number, { cls: string; label: string }> = {
+    0:  { cls: 'weather-sun', label: '晴' },
+    1:  { cls: 'weather-sun', label: '少云' },
+    2:  { cls: 'weather-cloud', label: '多云' },
+    3:  { cls: 'weather-cloud', label: '阴' },
+    45: { cls: 'weather-fog', label: '雾' },
+    48: { cls: 'weather-fog', label: '冻雾' },
+    51: { cls: 'weather-rain', label: '小毛雨' },
+    53: { cls: 'weather-rain', label: '毛雨' },
+    55: { cls: 'weather-rain', label: '大毛雨' },
+    61: { cls: 'weather-rain', label: '小雨' },
+    63: { cls: 'weather-rain', label: '中雨' },
+    65: { cls: 'weather-rain', label: '大雨' },
+    71: { cls: 'weather-snow', label: '小雪' },
+    73: { cls: 'weather-snow', label: '中雪' },
+    75: { cls: 'weather-snow', label: '大雪' },
+    77: { cls: 'weather-snow', label: '雪粒' },
+    80: { cls: 'weather-rain', label: '阵雨' },
+    81: { cls: 'weather-rain', label: '强阵雨' },
+    82: { cls: 'weather-rain', label: '极强阵雨' },
+    85: { cls: 'weather-snow', label: '阵雪' },
+    86: { cls: 'weather-snow', label: '强阵雪' },
+    95: { cls: 'weather-thunder', label: '雷雨' },
+    96: { cls: 'weather-thunder', label: '雷雨夹冰雹' },
+    99: { cls: 'weather-thunder', label: '强雷雨夹冰雹' },
+  };
+
+  // 内联 SVG 图标（与各 .cls 动画一一对应）
+  function svg(cls: string): string {
+    if (cls === 'weather-sun') return `
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <g class="sun-rays"><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g>
+      </svg>`;
+    if (cls === 'weather-cloud') return `
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path class="cloud-body" d="M17 18H7a4 4 0 0 1-.67-7.95A6 6 0 0 1 18 9.5a4.5 4.5 0 0 1-1 8.5z"/>
+      </svg>`;
+    if (cls === 'weather-rain') return `
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path class="cloud-body" d="M16 14a4 4 0 0 0 0-8 6 6 0 0 0-11.4 1.5A4 4 0 0 0 5 14"/>
+        <path class="drop" d="M8 17l-1 2" /><path class="drop" d="M12 17l-1 2" /><path class="drop" d="M16 17l-1 2" />
+      </svg>`;
+    if (cls === 'weather-thunder') return `
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path class="cloud-body" d="M17 13H7a4 4 0 0 1-.67-7.95A6 6 0 0 1 18 4.5a4.5 4.5 0 0 1-1 8.5z"/>
+        <path class="bolt" d="M12 14l-3 5h3l-1 3 4-6h-3l1-2z" fill="currentColor"/>
+      </svg>`;
+    if (cls === 'weather-snow') return `
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path class="cloud-body" d="M16 13a4 4 0 0 0 0-8 6 6 0 0 0-11.4 1.5A4 4 0 0 0 5 13"/>
+        <circle class="flake" cx="8" cy="18" r="1" fill="currentColor"/>
+        <circle class="flake" cx="12" cy="20" r="1" fill="currentColor"/>
+        <circle class="flake" cx="16" cy="18" r="1" fill="currentColor"/>
+      </svg>`;
+    if (cls === 'weather-fog') return `
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path class="mist" d="M4 10h12"/><path class="mist" d="M3 14h14"/><path d="M5 18h12"/>
+      </svg>`;
+    return '';
+  }
+
+  function render(state: string, cls: string, label: string, temp: string | null, loc: string) {
+    widget!.dataset.state = state;
+    icon!.className = 'weather-icon ' + cls;
+    icon!.innerHTML = svg(cls);
+    if (temp !== null) tempEl!.textContent = temp;
+    locEl!.textContent = loc;
+    btn!.setAttribute('title', label + (loc ? ' · ' + loc : '') + ' · 点击升级到精确位置');
+  }
+
+  function renderError(loc: string) {
+    render('error', 'weather-error', '获取失败', null, loc || '--');
+  }
+
+  async function fetchWeather(lat: number, lon: number) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`;
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('open-meteo ' + r.status);
+    return r.json();
+  }
+
+  async function reverseGeocode(lat: number, lon: number): Promise<string> {
+    try {
+      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&count=1&language=zh`);
+      if (!r.ok) return '';
+      const d = await r.json();
+      return d.results?.[0]?.name || '';
+    } catch { return ''; }
+  }
+
+  async function locateByIP(): Promise<{lat: number; lon: number; name: string} | null> {
+    try {
+      const r = await fetch('https://ipapi.co/json/');
+      if (!r.ok) return null;
+      const d = await r.json();
+      if (typeof d.latitude !== 'number') return null;
+      return { lat: d.latitude, lon: d.longitude, name: d.city || d.country_name || '' };
+    } catch { return null; }
+  }
+
+  async function locateByBrowser(): Promise<{lat: number; lon: number; name: string} | null> {
+    return new Promise((resolve) => {
+      if (!('geolocation' in navigator)) { resolve(null); return; }
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const name = await reverseGeocode(lat, lon);
+          resolve({ lat, lon, name });
+        },
+        () => resolve(null),
+        { timeout: 5000, maximumAge: 3600000 }
+      );
+    });
+  }
+
+  type Cache = { ts: number; lat: number; lon: number; loc: string; temp: number; code: number };
+
+  function readCache(): Cache | null {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      const c = JSON.parse(raw) as Cache;
+      if (Date.now() - c.ts > CACHE_TTL) return null;
+      return c;
+    } catch { return null; }
+  }
+
+  function writeCache(c: Cache) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch {}
+  }
+
+  async function show(lat: number, lon: number, loc: string) {
+    try {
+      const w = await fetchWeather(lat, lon);
+      const code = w.current.weather_code;
+      const temp = Math.round(w.current.temperature_2m);
+      const m = WMO[code] || { cls: 'weather-cloud', label: '未知' };
+      render('ready', m.cls, m.label, `${temp}°`, loc || '本地');
+      writeCache({ ts: Date.now(), lat, lon, loc, temp, code });
+    } catch (e) {
+      renderError(loc);
+    }
+  }
+
+  async function init() {
+    // 1. 缓存命中直接显示
+    const c = readCache();
+    if (c) {
+      const m = WMO[c.code] || { cls: 'weather-cloud', label: '' };
+      render('ready', m.cls, m.label, `${c.temp}°`, c.loc || '本地');
+      return;
+    }
+    // 2. IP 定位（自动无感）
+    const ip = await locateByIP();
+    if (ip) {
+      await show(ip.lat, ip.lon, ip.name);
+    } else {
+      renderError('--');
+    }
+  }
+
+  // 3. 点击升级到浏览器精确位置
+  btn.addEventListener('click', async () => {
+    if (widget!.dataset.state === 'upgrading') return;
+    widget!.dataset.state = 'upgrading';
+    const original = btn.innerHTML;
+    btn!.innerHTML = '<span class="weather-pulse text-xs">定位中…</span>';
+    const precise = await locateByBrowser();
+    btn!.innerHTML = original;
+    if (precise) {
+      await show(precise.lat, precise.lon, precise.name || '精确位置');
+    } else {
+      renderError('已拒绝');
+    }
+  });
+
+  init();
+})();
+</script>
