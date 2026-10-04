@@ -4,7 +4,7 @@ slug: 'halumem-memory-hallucination-eval'
 date: '2026-09-30'
 category: 'notes'
 tags: ['HaluMem', 'Agent Memory', '智能体记忆', '记忆幻觉', 'EMNLP 2026', 'MemTensor', '中国电信研究院', '记忆提取', '记忆更新', '记忆问答', 'Mem0', 'MemOS', 'Supermemory', 'Zep', '记忆评测基准', '召回率', '虚假记忆抵抗 FMR', '更新遗漏率', '操作性评测']
-summary: '⭐ **HaluMem** —— ⭐ **首个面向智能体记忆系统的操作级幻觉评测基准**（⭐ **EMNLP 2026 主会接收**）。⭐ **3 阶段拆分**：⭐ **记忆提取 / 记忆更新 / 记忆问答**，⭐ **不是只测最终答案**，⭐ **而是看错误在哪一步产生**。⭐ **6 套记忆系统实测**（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ **所有系统 Q&A 准确率都未达 70%**，⭐ **Mem0 从 Medium 53% 暴跌至 Long 28%**。⭐ **三大核心发现**：(1) ⭐ 高召回率 ≠ 可靠（虚假记忆抵抗 FMR 拖累）；(2) ⭐ 更新幻觉率 <1.2% 看似漂亮但 ⭐ **更新遗漏率高达 60-98%**；(3) ⭐ 上游记忆问题最终传递到答案。'
+summary: '⭐ **HaluMem** —— ⭐ **首个面向智能体记忆系统的操作级幻觉评测基准**（⭐ **EMNLP 2026 主会接收**）。⭐ **3 阶段拆分**：⭐ **记忆提取 / 记忆更新 / 记忆问答**，⭐ **不是只测最终答案**，⭐ **而是看错误在哪一步产生**。⭐ **6 套记忆系统实测**（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ **所有系统 Q&A 准确率都未达 70%**，⭐ **Mem0 从 Medium 53% 暴跌至 Long 28%**。'
 author: 'Sam Xu'
 featured: false
 draft: false
