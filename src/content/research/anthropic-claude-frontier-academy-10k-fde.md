@@ -4,7 +4,7 @@ slug: 'anthropic-claude-frontier-academy-10k-fde'
 date: '2026-10-04'
 category: 'notes'
 tags: ['Anthropic', 'FDE', 'Frontier Deployed Engineer', 'Claude', 'Frontier Academy', 'Claude Frontier Academy', '前沿部署工程师', '$1 亿投资', '埃森哲', 'Accenture', 'Palantir', 'FDE 培训', '医学住院医师模式', 'AI 落地', 'IPO', '摩根士丹利', '诺和诺德']
-summary: '⭐ **Anthropic 投资 $1 亿启动 Claude Frontier Academy**，⭐ **目标 2027 年底前培养 1 万名 FDE**（Frontier Deployed Engineer / ⭐ 前沿部署工程师）。⭐ **背景**：Anthropic 预期 IPO 时间点。⭐ **初期成员**：⭐ **来自埃森哲 / 摩根士丹利 / 诺和诺德 + 顶级咨询公司**的工程师。⭐ **培养模式 = 医学住院医师模式**：(1) ⭐ **数天线下课**（Anthropic 工程师带 + ⭐ **模拟企业部署全流程**：用例选择 → 安全审查 → 项目交接）→ (2) ⭐ **12 周驻训**（回到组织主导真实 Claude 项目）。⭐ **首批认证 2027 年初**。⭐ **行业意义**：⭐ **FDE 岗位 1 年涨 1,404 个 / 同期整体岗位 ↓24%** —— ⭐ **需求逆势涨**。⭐ **背景**：⭐ **Palantir 推广 FDE 概念** —— 直接与客户合作，技术适配现有系统 + 数据 + 工作流。⭐ **生态动作**：⭐ **Accenture 12-2025 成立 Anthropic Business Group，承诺培训 30,000 名 Claude 专业人员** + ⭐ **上个月 Accenture × Google Cloud 派 1,000 名工程师部署 AI 智能体**。'
+summary: '⭐ **Anthropic 投资 $1 亿启动 Claude Frontier Academy**，⭐ **目标 2027 年底前培养 1 万名 FDE**（Frontier Deployed Engineer / ⭐ 前沿部署工程师）。⭐ **背景**：Anthropic 预期 IPO 时间点。⭐ **初期成员**：⭐ **来自埃森哲 / 摩根士丹利 / 诺和诺德 + 顶级咨询公司**的工程师。⭐ **培养模式 = 医学住院医师模式**：(1) ⭐ **数天线下课**（Anthropic 工程师带 + ⭐ **模拟企业部署全流程**：用例选择 → 安全审查 → 项目交接）'
 author: 'Sam Xu'
 featured: false
 draft: false
