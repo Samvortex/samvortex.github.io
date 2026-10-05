@@ -4,7 +4,7 @@ slug: 'openai-codex-28-day-deadline-reset'
 date: '2026-10-05'
 category: 'notes'
 tags: ['OpenAI', 'Codex', 'Tibo', '军令状', '额度重置', 'GPT-6.1 Sol', 'Opus 5.5', 'Anthropic', 'Grok Bot', 'Lauren Tan', 'Agent 时代', '额度透明', 'DevDay', 'Codex Work', 'Claude 对手', 'Token Gremlin']
-summary: '⭐ **Codex 负责人 Tibo 在 X 公开 28 天承诺**：⭐ **每天要么交一项对大多数 Codex / Work 用户明显有用的改进，要么做一次完整额度重置**。⭐ **4 类重点**：⭐ 简化产品 / 效率换用量 / 突破性功能 / 新模型。⭐ **背景**：⭐ **GPT-6.1 Sol（9-29 DevDay）服务端负载过高 / 速度骤降** + ⭐ **9-22 Opus 5.5 发布后 90 分钟 OpenAI 才追上** + ⭐ **GPT-6.1 Sol 在最大推理等级下仍打不过 Opus 5.5**。⭐ **用户反馈**：⭐ **100 美元 Pro 一周撑不满 / Claude Opus 5.5 效率更高 / 额度更耐用**。⭐ **Grok Bot 团队 Lauren Tan**："⭐ **only you can win this battle**" + 上月 ⭐ **2,500 PR + 72 小时直播搭了一家公司**。⭐ **社区**：⭐ **Token Gremlin 直接说："⭐ 如果 28 个改进里没有一个真打过 Opus 5.5，对能力用户没意义**"。⭐ **核心矛盾**：⭐ **额度可反复送，能力欠账得靠模型补**。'
+summary: '⭐ **Codex 负责人 Tibo 在 X 公开 28 天承诺**：⭐ **每天要么交一项对大多数 Codex / Work 用户明显有用的改进，要么做一次完整额度重置**。⭐ **4 类重点**：⭐ 简化产品 / 效率换用量 / 突破性功能 / 新模型。⭐ **背景**：⭐ **GPT-6.1 Sol（9-29 DevDay）服务端负载过高 / 速度骤降** + ⭐ **9-22 Opus 5.5 发布后 90 分钟 OpenAI 才追上** + ⭐ **GPT-6.1 Sol 在最大推理等级下仍打不过 Opus 5.5**。'
 author: 'Sam Xu'
 featured: false
 draft: false
