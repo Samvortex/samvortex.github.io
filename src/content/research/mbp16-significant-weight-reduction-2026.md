@@ -4,7 +4,7 @@ slug: 'mbp16-significant-weight-reduction-2026'
 date: '2026-10-05'
 category: 'notes'
 tags: ['Apple', 'MacBook Pro', '16 寸 MacBook Pro', '减重', '重量', '4.8 磅', '2.2 千克', 'Mark Gurman', 'Bloomberg Power On', 'macOS 27.2', 'Tandem OLED', '叠层 OLED', 'M5 Pro', 'M5 Max', 'M6 跳过', 'M7', 'macOS Golden Gate', '灵动岛', '触控屏', '内部重设计', '便携性', '通勤']
-summary: '⭐ **Mark Gurman（Bloomberg Power On）爆料**：⭐ **新款 MacBook Pro 重量"显著"下降** ⭐ —— ⭐ **现款 16 寸 4.8 磅 / 2.2 kg**（⭐ 对比 15 寸 MacBook Air 1.5 kg 差 0.7 kg**）。⭐ **减重方法**：⭐ **重新设计内部结构 + 零部件小型化 + 元器件重新排布**。⭐ **发布窗口**：⭐ **下个月之前（11 月底前）**。⭐ **其他重大升级**：⭐ **首款支持触控屏的 MacBook + ⭐ 首款采用 Tandem OLED 屏幕的 MacBook** + ⭐ **M5 Pro / M5 Max（⭐ 跳过 M6 高端，加速 M7 推出）+ ⭐ macOS 27.2 + Golden Gate（⭐ 适配触控 + 灵动岛）**。⭐ **关键金句**："⭐ **决定笔记本每天被带出门体验的，不是参数表上的那几行，而是它压在包里的分量**"。'
+summary: '⭐ **Mark Gurman（Bloomberg Power On）爆料**：⭐ **新款 MacBook Pro 重量"显著"下降** ⭐ —— ⭐ **现款 16 寸 4.8 磅 / 2.2 kg**（⭐ 对比 15 寸 MacBook Air 1.5 kg 差 0.7 kg**）。⭐ **减重方法**：⭐ **重新设计内部结构 + 零部件小型化 + 元器件重新排布**。⭐ **发布窗口**：⭐ **下个月之前（11 月底前）**。'
 author: 'Sam Xu'
 featured: false
 draft: false
