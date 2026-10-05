@@ -4,7 +4,7 @@ slug: 'deepseek-harness-claude-mods-compat'
 date: '2026-10-04'
 category: 'notes'
 tags: ['DeepSeek', 'DeepSeek Harness', 'DSH', 'Claude Code', 'Mods', '插件架构', 'Everything is a Plugin', '崔添翼', 'Cui Tianyi', 'Boris Cherny', 'Anthropic', 'Agent Harness', 'Token Weather', 'Blast Radius', 'Replay Theater', 'Mods 兼容层', 'v0.2.1-alpha.1', '插件兼容', '知乎热榜']
-summary: '⭐ **DeepSeek Harness 国庆假期发布 v0.2.1-alpha.1** — ⭐ **首个非 Anthropic 项目加入 Claude Code Mods 兼容层**。⭐ **DSH 负责人崔添翼**：⭐ **"Mods 大致是 DSH 插件能力的一个子集"** —— ⭐ **"Everything is a Plugin" / 模型 / 工具 / Skills / 会话 / 沙箱 / 文件系统 / Agent Loop / 任务编排 / UI 全部可插拔**。⭐ **3 个桥接示例**：⭐ **Token Weather / Blast Radius / Replay Theater**（⭐ **复用 Claude Code Mods 接口**）。⭐ **新增"让 Agent 创建插件"入口** + 配套开发者工具包（日志 / 问题定位 / 调试）。⚠️ **尚不完整**：⭐ **Claude Code 内置 diff / agents-md / sec-default / telemetry 标"不可运行"**（⭐ **部分事件 / 接口 / 界面未接通**），⭐ **加载机制也需 DSH 适配**。⭐ **已上知乎热榜**。⭐ **战略意义**：⭐ **AI 工具"扩展接口标准化"竞争正式打响** —— ⭐ **Anthropic 用 Mods / DeepSeek 用"一切皆插件"互相印证可扩展性是 Agent Harness 必选**。'
+summary: '⭐ **DeepSeek Harness 国庆假期发布 v0.2.1-alpha.1** — ⭐ **首个非 Anthropic 项目加入 Claude Code Mods 兼容层**。⭐ **DSH 负责人崔添翼**：⭐ **"Mods 大致是 DSH 插件能力的一个子集"** —— ⭐ **"Everything is a Plugin" / 模型 / 工具 / Skills / 会话 / 沙箱 / 文件系统 / Agent Loop / 任务编排 / UI 全部可插拔**。'
 author: 'Sam Xu'
 featured: false
 draft: false
