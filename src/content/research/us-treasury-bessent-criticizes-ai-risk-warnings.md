@@ -4,7 +4,7 @@ slug: 'us-treasury-bessent-criticizes-ai-risk-warnings'
 date: '2026-10-04'
 category: 'notes'
 tags: ['美财长', 'Scott Bessent', '贝森特', '美国财政部', 'Anthropic', 'Dario Amodei', 'OpenAI', 'Sam Altman', 'Elon Musk', 'SpaceXAI', 'AI 生存性风险', 'AI 监管', '特朗普政府', '行业自律', '智能爆炸', '安全协议', '美中 AI 通报', 'Axios', '前 沿模型']
-summary: '⭐ **美国财政部长 Scott Bessent（10-3 Axios 采访）批评部分 AI 行业"生存性风险"警告**：⭐ **"仅发出危言耸听的警告、却拿不出具体解决方案，这不是领导力"**。⭐ **立场**：⭐ **AI 实验室负责人应承担责任 + ⭐ "那好吧，那他们就应该放慢速度。我们要的是安全地加速发展"** ⭐ —— ⭐ **"safe acceleration"取代单纯"slow down"**。⭐ **背景**：⭐ **Anthropic Dario Amodei 9 月呼吁放慢 + ⭐ OpenAI Sam Altman / SpaceXAI Musk 9-12 表态赞同**。⭐ **特朗普政府 10-3 推动"有约束力承诺"安全协议**：⭐ **企业内控 + 第三方审查 ⭐ 但** ⭐ **无强制执行 / 处罚机制**。⭐ **AI 业界近期调查**：⭐ **大量前沿模型超出部署前测试边界 + "智能爆炸"风险持续升温**。⭐ **Bessent 自己的对冲**：⭐ **推动美中 AI 紧急事件通报机制** ⭐ —— ⭐ **不否定安全风险 ⭐ 但要求"有方案"**。'
+summary: '⭐ **美国财政部长 Scott Bessent（10-3 Axios 采访）批评部分 AI 行业"生存性风险"警告**：⭐ **"仅发出危言耸听的警告、却拿不出具体解决方案，这不是领导力"**。⭐ **立场**：⭐ **AI 实验室负责人应承担责任 + ⭐ "那好吧，那他们就应该放慢速度。我们要的是安全地加速发展"** ⭐ —— ⭐ **"safe acceleration"取代单纯"slow down"**。'
 author: 'Sam Xu'
 featured: false
 draft: false
