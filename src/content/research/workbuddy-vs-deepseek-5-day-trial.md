@@ -4,7 +4,7 @@ slug: 'workbuddy-vs-deepseek-5-day-trial'
 date: '2026-10-05'
 category: 'notes'
 tags: ['WorkBuddy', 'DeepSeek', 'AI 助手', 'AI 工具选型', '对比评测', '深度思考', '长文本处理', 'AI 幻觉', '代码生成', '会议纪要', '工具哲学', '做加法 vs 做减法', '5 天实测', 'WorkBuddy 卸载']
-summary: '⭐ **WorkBuddy vs DeepSeek 5 天实测**（⭐ 每天 >6 小时 / 写稿 + 查资料 + 做表 + 写代码 + 会议纪要）。⭐ **Day 1**：WorkBuddy 功能丰富（10+ 工具一站搞定）；⭐ DeepSeek 极简。⭐ **Day 3**：⭐ 80 页报告测试 —— ⭐ WorkBuddy 只读前 20 页 + ⭐ **自信地编造第 47 页数据**；⭐ DeepSeek 全读 + 指出第 12 页 vs 第 47 页数据矛盾。⭐ **Day 4**：改稿测试 —— ⭐ WorkBuddy 把观点磨平 + 修圆；⭐ DeepSeek 强化核心观点 + 加反问句 + 删正确废话 + 补"样本量不足请谨慎引用"提示。⭐ **作者卸载 WorkBuddy 留 DeepSeek**。⭐ **核心洞察**："**AI 工具正在分化成两类 —— 一类拼命做加法（WorkBuddy），一类做减法只把一件事做到极致（DeepSeek）**"。'
+summary: '⭐ **WorkBuddy vs DeepSeek 5 天实测**（⭐ 每天 >6 小时 / 写稿 + 查资料 + 做表 + 写代码 + 会议纪要）。⭐ **Day 1**：WorkBuddy 功能丰富（10+ 工具一站搞定）；⭐ DeepSeek 极简。⭐ **Day 3**：⭐ 80 页报告测试 —— ⭐ WorkBuddy 只读前 20 页 + ⭐ **自信地编造第 47 页数据**；⭐ DeepSeek 全读 + 指出第 12 页 vs 第 47 页数据矛盾。'
 author: 'Sam Xu'
 featured: false
 draft: false
