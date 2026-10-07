@@ -4,7 +4,7 @@ slug: 'sports-other-3-0-2026-10-07'
 date: '2026-10-07'
 category: 'sports'
 tags: ["体育", "综合"]
-summary: 'AIGC 10-07 04:40'
+summary: '凯恩梅开二度助英格兰 3-0 完胜捷克，赛后老将希尔顿受访，盛赞英格兰锋线统治力'
 author: 'Sam Xu'
 featured: false
 draft: false
