@@ -5,7 +5,8 @@ date: '2026-10-07'
 category: 'notes'
 tags: ['微软', 'Microsoft', 'Surface Laptop Ultra', 'Surface', 'RTX Spark', 'Grace CPU', 'Blackwell GPU', '统一内存', 'CUDA', 'Windows 11', 'PixelSense Ultra', 'Dolby Vision', 'Dolby Atmos', '本地大模型', '120B 模型', 'FP4', 'AI PC', '轻薄本', '触觉反馈触控板', '24GB 入门', '128GB 高配']
 summary: |
-  微软 2026-10-07 旧金山发布会正式公布 Surface Laptop Ultra 完整配置——搭载英伟达 RTX Spark 超级芯片（Grace CPU + Blackwell RTX GPU 集成 + 完整 CUDA 生态 + 1 PFLOP FP4 AI 算力）。两档硬件：入门 18 核 Grace + 5120 核 Blackwell + 24GB / 32GB 统一内存（Win 11 家庭版）；高配 20 核 + 6144 核 + 32/48/64/128GB 四档（Win 11 专业版）。24GB 入门版无法跑微软宣传的"1200 亿参数本地大模型"（4-bit 量化需 ~60GB 权重 + KV 缓存 + 运行时 + 框架 + 系统空间），仅 64GB 以上版本可。15 寸 PixelSense Ultra 触控屏 2880×1920 / HDR 2000 尼特 / Dolby Vision / 262 PPI。机身 <18mm、<2kg、铂金银 + 夜幕黑配色。触觉触控板比上代大 30%。接口：3×USB-C + USB-A + HDMI + SD 读卡器 + 3.5mm。散热热容量是上代 2.5 倍，电池供电保 99.6% 满血性能。价格未公布；爆料 18 核 24GB 入门 > $2000，高端 $3000-$7000+。核心卖点不只是 CPU/GPU，而是把 128GB 统一内存 + CUDA 生态 + 移动形态结合。
+  微软 2026-10-07 旧金山发布会正式公布 Surface Laptop Ultra 完整配置——搭载英伟达 RTX Spark 超级芯片（Grace CPU + Blackwell RTX GPU 集成 + 完整 CUDA 生态 + 1 PFLOP FP4 AI 算力）。两档硬件：入门 18 核 Grace + 5120 核 Blackwell + 24GB / 32GB 统一内存（Win 11 家庭版）；高配 20 核 + 6144 核 + 32/48/64/128GB 四档（Win 11 专业版）。
+
 ---
 
 ## 一句话总结
