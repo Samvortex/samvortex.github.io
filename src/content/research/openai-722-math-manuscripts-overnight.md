@@ -5,7 +5,8 @@ date: '2026-10-07'
 category: 'notes'
 tags: ['OpenAI', '数学论文', '722 篇', '未发布内部模型', 'GitHub', '准黎曼猜想', '霍奇猜想', 'BSD 猜想', '千禧难题', '希尔伯特第十问题', 'π 的无理性指数', '卡塔兰常数', '唯一游戏猜想', '稀疏自旋玻璃', '量子磁性', '弗拉索夫—麦克斯韦方程', 'Fields 奖', 'Edward Witten', 'Gowers', 'Hairer', '陶哲轩', 'Cedric Villani', 'Bryant', 'OpenAI 28 天', 'Tibo', 'Decisions API', 'Auto-review']
 summary: |
-  OpenAI 一夜公开 722 篇数学手稿，全出自一个未发布的内部模型，归成 372 组结果，对应约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+ 源码 + 部分 Lean 证明 + 10 份推理摘要全部上 GitHub。三道千禧难题被同时下手：H003 准黎曼猜想（声称 ζ 函数与所有 Dirichlet L 函数在实部大于 7/8 区域无零点，把无区突破度推进一截；另一版给出实部大于 11/12 + 一致排除 Siegel 零点）；H004 有理数域 Hilbert 第十问题（宣布通用算法不存在，整数版 1970 年已被马季亚谢维奇解决，有理数版悬了半个世纪）；BSD 猜想（对满足 Selmer 余秩 0/1 的椭圆曲线给出完整公式，叠加另一组按密度统计覆盖大多数二次扭转）。第009组：Hodge 猜想（处理 CM Ab贝尔簇与 K3 曲面乘积，CM 部分声称覆盖所有维度余维但 Hodge 范围更广仅此覆盖）。常数难题：π 的无理性指数从 7.1 直接压到理论最优值 2；Catalan 常数无理数。理论计算机唯一游戏猜想 2002 年由 Khot 提出，2018 弱化版证明，这次声称拿全。其它结果：稀疏自旋玻璃 Mezard-Parisi、量子 Heisenberg 铁磁体磁化、自由群因子同构、三维单种粒子相对论性 Vlasov-Maxwell 整体光滑解。17 个数学方向铺满。反应：3 位菲尔兹得主（T. Gowers、Martin Hairer、Edward Witten）领衔的 9 人独立顾问组发声明——承认大事但未认可任何结果；UT Austin 数学家担忧提问者占比计算（人跟不上 AI 速度）；陶哲轩跟 Cedric Villani 接到 Giulio Tonello 与 Brian Acton 外部接应——THU 陶哲轩亲自以"世界末日从未见过的浩劫"形容；AI 公司加速太疯狂。同期 Codex 28 天挑战第二天发布 Auto-review（免费）/ API 三档简化 / Meetings 插件 / Decisions API 开放公测。
+  OpenAI 一夜公开 722 篇数学手稿，全出自一个未发布的内部模型，归成 372 组结果，对应约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+ 源码 + 部分 Lean 证明 + 10 份推理摘要全部上 GitHub。三道千禧难题被同时下手：H003 准黎曼猜想（声称 ζ 函数与所有 Dirichlet L 函数在实部大于 7/8 区域无零点，把无区突破度推进一截；另一版给出实部大于 11/12 + 一致排除 Siegel 零点）
+
 ---
 
 ## 一句话总结
