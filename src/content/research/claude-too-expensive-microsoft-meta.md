@@ -6,7 +6,8 @@ category: 'notes'
 tags: ['Claude', 'Anthropic', '微软', 'Microsoft', 'Meta', 'Claude Code', 'Copilot', 'MetaCode', 'Muse Code', 'Muse Spark', 'Token 计费', 'Agent', '算账期', '预算', 'Anthropic 上市', 'S-1', '基础设施采购', '314 亿美元', 'Claudeonomics', '60 万亿 Token', '算账期', '能力曲线', '成本曲线']
 scale: 'claude-too-expensive-microsoft-meta'
 summary: |
-  Anthropic 两个最大金主同时踩刹车。微软原本预计今年在 Claude 上超 10 亿美元内部预算已被砍掉三分之一以上，云部门人均 Claude 额度从 10 万美元降到约 1 万美元（一刀砍 90%），要求 6 月 30 日财年前全部迁完；Meta 内部 Claude Code 用户从 6 万掉到 3 万（腰斩），但 28 天仍烧掉 1.05 亿美元。更深原因是身份转变：Claude Code 越像 Office 替代品，越威胁微软命根子；Meta 自研 Muse Spark 把 Claude 需求顶掉，还想限制 Anthropic 接触自家训练数据。Anthropic 与微软有约 314 亿美元不可取消基础设施采购承诺。市场反问——当路演台下时，四分之一营收的两个客户同时收缩。9 月 Fable 5.1 缓存读取成本降 75%、典型负载便宜 25%、Agent 重活便宜 45%，并允许企业自留数据，但降价不能解决根本：巨头嫌的不是贵，是供应商变成竞争对手。行业进入能力与成本曲线赛跑，够用便宜可控的模型吃日常活儿，最强模型只留给最难那一小部分——光有最强还不够，得让人用得起。
+  Anthropic 两个最大金主同时踩刹车。微软原本预计今年在 Claude 上超 10 亿美元内部预算已被砍掉三分之一以上，云部门人均 Claude 额度从 10 万美元降到约 1 万美元（一刀砍 90%），要求 6 月 30 日财年前全部迁完；Meta 内部 Claude Code 用户从 6 万掉到 3 万（腰斩），但 28 天仍烧掉 1.05 亿美元。更深原因是身份转变：Claude Code 越像 Office 替代品，越威胁微软命根子；Meta 自研 Muse Spark 把 Claude 需求顶掉，还想限制 Anthropic 接触自家训练数据。
+
 ---
 
 ## 一句话总结
