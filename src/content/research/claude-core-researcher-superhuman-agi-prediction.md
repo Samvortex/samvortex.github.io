@@ -5,7 +5,8 @@ date: '2026-10-07'
 category: 'notes'
 tags: ['Anthropic', 'Sholto Douglas', 'Nick Marwell', 'Joe Lonsdale', 'AGI', 'AI 超越人类', '后稀缺', '4 万亿美元', 'GDP 翻倍', '资本开支', 'FrontierMath', 'Fable 5', 'Dario Amodei', 'Gary Marcus', 'Jürgen Schmidhuber', 'Jensen Huang', '机器人产业', '诺贝尔奖', '菲尔兹奖', 'Anthropic 政府合作', 'Fable 5 下线']
 summary: |
-  Anthropic 强化学习技术负责人 Sholto Douglas（节目 8 月录制，10-02 上线，被 Anthropic 公关拦下延期）在 Joe Lonsdale 节目中预测 AGI 几年内实现——能完成人类在电脑上做的所有工作，甚至覆盖机器人覆盖后的物理世界。他算账：过去 4-5 年 AI 算力年增 2-3 倍，今年 ≈1 万亿，明年 ≈2 万亿，2028 年 ≈4 万亿美元；2030 年代初全球 GDP 可能翻倍。理由：智能的经济回报是指数级，今天 AI 收入仅 1000 多亿美元，相对几万亿美元全球 GDP 只是首付。个人经验：18 个月前每行代码手敲 → 现在能把一两天的活整个交给模型"基本就像一个初级团队成员"；数学评测 FrontierMath 一年从 0% 升到 60%+。预计 2028 年家里有几万台人形机器人叠衣服做清洁、AI 获菲尔兹奖 / 十年内拿诺贝尔奖"很有可能"。回应"拖慢"质疑："到目前为止，被我们拖慢最多的，是我们自己"——Fable 5 上线 3 天因美国出口管制被迫全球下线，Anthropic 公开反对；批评：Gary Marcus 指为疯话（先讲算力涨到 4 万亿很可信 → 再讲不到十年 GDP 翻倍"两件事一样靠谱"是话术），Jürgen Schmidhuber 称"通胀下名义 GDP 翻倍不成问题"。同台 Nick Marwell 提醒：到 AI 不再需要人类搭档那天，他们自己都会对后果"非常紧张"。
+  Anthropic 强化学习技术负责人 Sholto Douglas（节目 8 月录制，10-02 上线，被 Anthropic 公关拦下延期）在 Joe Lonsdale 节目中预测 AGI 几年内实现——能完成人类在电脑上做的所有工作，甚至覆盖机器人覆盖后的物理世界。他算账：过去 4-5 年 AI 算力年增 2-3 倍，今年 ≈1 万亿，明年 ≈2 万亿，2028 年 ≈4 万亿美元；2030 年代初全球 GDP 可能翻倍。理由：智能的经济回报是指数级，今天 AI 收入仅 1000 多亿美元，相对几万亿美元全球 GDP 只是首付。
+
 ---
 
 ## 一句话总结
