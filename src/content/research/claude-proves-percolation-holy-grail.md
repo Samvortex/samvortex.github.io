@@ -5,7 +5,8 @@ date: '2026-10-07'
 category: 'notes'
 tags: ['Claude', 'Anthropic', '渗流理论', '连续相变', '临界概率', 'Hugo Duminil-Copin', '菲尔兹奖', 'Fields Medal', '概率论', 'Simon Broadbent', 'John Hammersley', 'Harry Kesten', 'Benedikt Jahnel', 'Gil Kalai', 'Justin Leder', 'Gady Kozma', 'Shahaf Nitzan', 'Ahmed Bou-Rabee', 'Lean 形式化', 'GitHub', 'formal-math', '70 年难题', '数学 AI', '圣杯猜想']
 summary: |
-  2026-08-30，菲尔兹奖得主 Hugo Duminil-Copin 在博客里感慨"最著名的概率论猜想倒在 AI 推土机轰鸣下只是时间问题"，几乎同时 Anthropic 工程师 Justin Leder 在 GitHub 上传了 Claude 自动生成 + Lean 形式化严格验证的代码，70 年概率论圣杯——渗流连续相变猜想——被 AI 证明。猜想核心是 p=p_c 临界点上无限大连通网络能否形成（=0 连续 vs >0 突变），1980 年 Harry Kesten 2D 证明到 p_c=1/2，11 维及以上高维同样连续，3-10 维中间维度 70 年未解。关键拼图是 2024 年 Kozma+Nitzan 论文把问题化简为证明一个特定代数不等式，Claude 接着这条跳板在 Lean 证明助手严苛约束下用数千行形式化代码完成致命一跳。Upenn 数学家 Bou-Rabee 借大模型辅助 1 天完成泛化修改（先前花了 8 年未果），称"AI 让我做到以前连想都不敢想的事"。原作者 Kozma 冷淡——"等人类能看懂的版本"。Jahnel 直接："如人类证明，大概率拿菲尔兹奖，但 AI 跨过了终点线"。Kalai："如获验证将非凡突破"。Duminil-Copin 自己多年失败也曾冒出主任务失败的副产物拿菲尔兹奖——预示新一代数学家角色从几十年推导转向挑选探索航线、指挥推理智能体大军、向世界阐释智慧碎片。
+  2026-08-30，菲尔兹奖得主 Hugo Duminil-Copin 在博客里感慨"最著名的概率论猜想倒在 AI 推土机轰鸣下只是时间问题"，几乎同时 Anthropic 工程师 Justin Leder 在 GitHub 上传了 Claude 自动生成 + Lean 形式化严格验证的代码，70 年概率论圣杯——渗流连续相变猜想——被 AI 证明。猜想核心是 p=p_c 临界点上无限大连通网络能否形成（=0 连续 vs >0 突变），1980 年 Harry Kesten 2D 证明到 p_c=1/2，11 维及以上高维同样连续，3-10 维中间维度 70 年未解。
+
 ---
 
 ## 一句话总结
