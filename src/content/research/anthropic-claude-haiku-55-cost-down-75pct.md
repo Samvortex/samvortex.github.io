@@ -5,7 +5,8 @@ date: '2026-10-08'
 category: 'notes'
 tags: ['Anthropic', 'Claude Haiku 5.5', 'Haiku 4.5', 'Claude Sonnet 5.5', '小模型', '成本', '运行成本', 'API 价格', 'Token 价格', '缓存读取', '可调节推理强度', '智能体', '摘要', '分类', '数据库查询', '客服', '浏览器操作', 'AI 智能体子任务', 'AWS', 'Google Cloud', 'Azure', 'Claude Platform', 'Max 用户', 'Team 用户', '小额 API 额度', 'Microsoft', 'Meta', '算账期']
 summary: |
-  2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。同期 Claude Sonnet 5.5 缓存读取价格下调 50%（$0.20 → $0.10/百万 tokens），多数智能体任务成本降低约 20%。Haiku 5.5 已在 Claude Platform / AWS / Google Cloud / Azure 上线；Anthropic 还面向所有 Max 与 Team 用户推出新的每月 API 额度。呼应此前微软 Meta 大幅削减 Claude 预算的"算账期"——Anthropic 正以成本回应市场：想留住中小负载的"长尾客户"。
+  2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。
+
 ---
 
 ## 一句话总结
