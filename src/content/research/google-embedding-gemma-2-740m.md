@@ -13,6 +13,30 @@ summary: |
 
 谷歌开源 EmbeddingGemma 2——首个原生多模态开源嵌入模型，参数总量 740M、Apache 2.0 协议、0.5 GB 内存消费级设备可本地跑。模型不是单一结构，由 270M 文本 + 170M 视觉 + 300M 音频三个组件组合拼成。核心能力是把文字/代码/图像/音频/视频统一到同一个共享向量空间，端侧可完成跨模态检索和匹配，不依赖云端。GGUF 权重托管在 Hugging Face，Unsloth 提供运行和训练。参数分配透露出多模态核心地位——音频占比最大(300M)、视觉次之(170M)、文本最小(270M)，多模态不是文本模型的附属功能。硬件门槛 0.5 GB 内存意味着本地运行跨模态检索/分类/匹配应用不再需要网络连接，覆盖到更多消费级设备。
 
+## 官方 benchmark（来自 HF model card，768d 全精度）
+
+| 模态 | 基准 | 指标 | EmbeddingGemma 2 | EmbeddingGemma 1 |
+|---|---|---|---|---|
+| Text | MTEB multilingual v2 | Mean(Task) | **61.36** | 61.15 |
+| Text | MTEB code v1 | Mean(Task), NDCG@10 | **78.68** | 68.76 |
+| Image | MIEB lite | Mean(TaskType) | 64.64 | — |
+| Image | MMEB v2 Image | Mean(Task), Hit@1 | 57.28 | — |
+| Image | MMEB v2 VisDoc | Mean(Task), NDCG@5 | 67.84 | — |
+| Video | MMEB v2 Video | Mean(Task), Hit@1 | 50.67 | — |
+| Audio | MSEB Retrieval | Mean(Task), MRR@10 | 69.54 | — |
+| Audio | MAEB | Mean(Task) | 49.39 | — |
+
+### MRL 截断后质量变化（multilingual v2）
+
+| 维度 | 压缩比 | MTEB 多语 v2 | MIEB lite | MMEB v2 总 | MSEB 取 |
+|---|---|---|---|---|---|
+| 768d（满）| 1:1 | 61.36 | 64.64 | 59.01 | 69.54 |
+| 512d | 1:1.5 | 61.17 | 64.32 | 58.38 | 69.18 |
+| 256d | 1:3 | 60.41 | 63.13 | 56.24 | 66.76 |
+| 128d | 1:6 | 57.89 | 59.06 | 45.65 | 56.71 |
+
+→ 256d 几乎无质量损失；128d 多模态明显下降。
+
 ---
 
 ## 一、嵌入模型在做什么
@@ -55,6 +79,46 @@ EmbeddingGemma 2 的定位：端侧嵌入——在设备本地完成这些计算
 | 1 | 音频 | 300M | 最大占比——多模态以音频为重 |
 | 2 | 视觉 | 170M | 次之 |
 | 3 | 文本 | 270M | 反而最小 |
+
+文本 backbone 进一步细分：130M transformer + 140M embedder = 270M 合计。
+
+### 架构补充（官方 model card）
+
+| 维度 | 数据 |
+|---|---|
+| 架构 | 24 层 / 模型维度 512 / 隐藏维度 2048 |
+| Sliding window | 1024 tokens |
+| 词表 | 262,144 |
+| KV heads | 2 本地 + 1 全局（5:1 比例）|
+| 注意力 | GQA/MQA |
+| 激活 | Gated FFN + GELU |
+| 池化 | Mean |
+| 投影 | 512 → 768 |
+| 语言 | 多语（100+ 语言）|
+| Context | 8,192 tokens |
+
+### Matryoshka Representation Learning (MRL)
+
+原生支持嵌入维度截断：768d / 512d / 256d / 128d，可重新归一化
+存储压缩比：1:1 / 1:1.5 / 1:3 / 1:6
+- 256d 几乎无质量损失
+- 128d 适合纯文本工作负载；多模态质量下降明显，需自验
+
+### Task-steered representations
+
+用轻量文本指令前缀优化不同任务：
+- **非对称任务（如检索）**：query 用 query 前缀，document 用 document 前缀
+- **对称任务（如分类、相似性）**：所有输入用同一前缀
+
+按任务类型前缀命名：search / classification / clustering / semantic similarity 等。
+
+### Selective Encoder Loading
+
+模块化设计——开发者可只加载所需模态的 encoder：
+- 仅文本任务：270M
+- 加视觉：+170M
+- 加音频：+300M
+- 完整多模态：740M
 
 > 多模态能力被放在了模型设计的核心位置，而不是作为文本模型的附属功能。
 
