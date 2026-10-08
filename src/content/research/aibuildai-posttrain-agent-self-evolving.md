@@ -5,7 +5,8 @@ date: '2026-10-07'
 category: 'notes'
 tags: ['AIBuildAI', 'PostTrain Agent', 'RSI', '递归自我改进', 'PostTrainBench', '后训练', 'Agent', '自我进化', 'MCP', '知识系统', '元搜索', '监督微调', 'SFT', 'DPO', 'GRPO', '强化学习', 'Qwen3-4B-Base', 'Qwen3-1.7B-Base', 'SmolLM3-3B-Base', 'gemma-3-4b-pt', 'Claude Opus 5', 'Claude Code', 'H100', 'ICML 2026', '零人类介入', 'AIME 2025', 'HealthBench', 'ArenaHard Writing', 'HumanEval', 'BFCL', 'Fan-in', '元 Agent', '拒绝采样', '权重平均']
 summary: |
-  AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。BFCL +94.3、ArenaHard Writing +12.1、HumanEval +9.2 三大增益——系统增益超过模型升级一代。BFCL（-95.8）唯一超过人类参考（85.0）的一项任务。核心组件：知识系统（MCP 服务 / 34 工作流 / 111 方法 / 215 数据集 / 108 框架文件 / 每条声明带 URL + 日期 + 评测基准文件剔除）+ 元搜索（元 Agent 调研任务后写出由 Agent / Program / Search 三种单元组成的搜索程序，可链式 / 扇出扇入 / 循环 / 分阶段 / 锦标赛，程序可阶段性地基于实测决定下一步）。两案例：HealthBench × Qwen3-4B-Base（基座 13.4 → 48.6）、ArenaHard Writing × SmolLM3-3B-Base（基座 0.4 → 74.6）。
+  AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。
+
 ---
 
 ## 一句话总结
