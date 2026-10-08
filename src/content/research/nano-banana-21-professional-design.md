@@ -5,7 +5,8 @@ date: '2026-10-08'
 category: 'notes'
 tags: ['Google', 'DeepMind', 'Nano Banana 2.1', 'Nano Banana Pro', 'Gemini 3.6 Flash', '图像生成', '图像编辑', '蒙版编辑', 'Mask-based Editing', 'Ink-Based Editing', '主体一致性', '多角色一致性', '设计感', '信息图', 'Infographic', '自然度', 'Realism', 'Flash 速度', 'API', '1K 2K 4K 输出', '宽幅', '14 张参考图', '专业设计师', 'Elo 评分', 'AutoRater', 'Factuality']
 summary: |
-  谷歌 DeepMind 2026-10-08 发布 Nano Banana 2.1（模型 ID gemini-nano-banana-2.1），底座 Gemini 3.6 Flash，延续 Flash 速度与成本路线但杀向专业图像生成/编辑。已分发到 Gemini App / AI Studio / Gemini API / Search AI Mode / Ads / Flow / Stitch。开发者侧支持 1K/2K/4K 输出、修复 1:4 / 4:1 / 1:8 / 8:1 宽幅平铺伪影、多图融合最多 14 张参考图 + 多角色多物体一致性。四大升级：(1) 设计感（Thinking Infographic Design 1048 vs 2 代 961 / Pro 912；整体偏好 1050 vs 990/935）；(2) 蒙版编辑（Mask/Ink 1049 vs 965/927；General Editing 1026 vs 938/939）；(3) 多角色一致性（单角色 1028 vs 981；多角色 1106 vs 978，超过 Pro 1011）；(4) 自然度（1K/2K/4K 微距昆虫 / 人物 / 自然 / 静物 / 绘画 — 材质 / 光线 / 空间关系）。信息图路线继续押注：可调 Gemini 知识 + Google 搜索 grounding，Infographic Factuality 0.521 vs 2 代 0.179 / Pro 0.265。遗留限制：小字号 1K 模糊 / 长段落渲染 / 蒙版指令执行不完整 / 空间位置判断 / 世界知识 3D 推理事实准确性仍有提升空间。
+  谷歌 DeepMind 2026-10-08 发布 Nano Banana 2.1（模型 ID gemini-nano-banana-2.1），底座 Gemini 3.6 Flash，延续 Flash 速度与成本路线但杀向专业图像生成/编辑。已分发到 Gemini App / AI Studio / Gemini API / Search AI Mode / Ads / Flow / Stitch。开发者侧支持 1K/2K/4K 输出、修复 1:4 / 4:1 / 1:8 / 8:1 宽幅平铺伪影、多图融合最多 14 张参考图 + 多角色多物体一致性。
+
 ---
 
 ## 一句话总结
