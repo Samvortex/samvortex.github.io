@@ -5,7 +5,8 @@ date: '2026-10-09'
 category: 'notes'
 tags: ['Mac Studio', 'M5 Ultra', 'M5 Max', 'M5 Pro', 'Apple Silicon', 'Qwen3.8 27B', 'MLX', 'oMLX', 'Lightning MTP', 'Weschera', 'Weschera M4 Max', '内存带宽', '1.2 TB/s', '4-bit', 'oQ4e', 'Q4e', 'Q8e', 'bf16', '6-bit', 'Apple specs', 'apple.com.cn', 'omlx.ai', 'benchmarks', 'performance', 'Native MTP', 'ANE prefill', 'Decode speed', 'Caveats']
 summary: |
-  Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，M5 Ultra 64c 标准 100.8 tok/s（1k）/ 77.5 tok/s（4k），M5 Max 40c 128 GB 95-96 tok/s。M5 Pro 不在 Mac Studio 产品线。6-bit 没有官方实测。
+  Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，
+
 ---
 
 ## 一句话总结
