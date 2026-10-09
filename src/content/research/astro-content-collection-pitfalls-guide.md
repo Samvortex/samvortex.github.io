@@ -5,7 +5,8 @@ date: '2026-10-09'
 category: 'notes'
 tags: ['Astro', 'Content Collection', 'Zod Schema', 'Frontmatter', 'YAML', 'Markdown', 'site-publish', 'Samvortex', '避坑', 'Guide', 'common-pitfalls', 'summary-length', 'tag-slug', 'image-path', 'frontmatter-collision']
 summary: |
-  Astro 内容集合 4 大避坑：summary 长度（schema 强制 20-300 字符，超 290 直接 build 失败）、YAML 引号转义（js-yaml 对单引号+中文+嵌套双引号+markdown 粗体解析出错，改用 `|` literal block scalar 最稳）、tag 值（`/` 和 `=` 让 Astro tag 路由生成崩溃——空间 OK 因为 Astro URL-encode，但斜杠断 URL 解析）、image 路径（frontmatter `image:` 引用相对路径，文件不存在 build 仍过但页面 404）。今天这 4 个错我一天踩完，写 pre-commit shell 脚本一次性校验全部 4 项：summary 长度 / YAML 语法 / tag 斜杠 / image 存在性。来源 docs.astro.build。
+  Astro 内容集合 4 大避坑：summary 长度（schema 强制 20-300 字符，超 290 直接 build 失败）、YAML 引号转义（js-yaml 对单引号+中文+嵌套双引号+markdown 粗体解析出错，改用 `|` literal block scalar 最稳）、tag 值（`/` 和 `=` 让 Astro tag 路由生成崩溃——空间 OK 因为 Astro URL-encode，但斜杠断 URL 解析）、image 路径（frontmatter `image:` 引用相对路径，文件不存在 build 仍过但页面 404）。
+
 ---
 
 ## 一句话总结
