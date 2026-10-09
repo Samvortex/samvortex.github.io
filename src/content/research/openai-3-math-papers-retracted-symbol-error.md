@@ -5,7 +5,8 @@ date: '2026-10-09'
 category: 'notes'
 tags: ['OpenAI', '撤回', '三篇', '符号错误', '数学手稿', '722', 'GitHub', 'github-openai-math', '预印本', '陶哲轩', 'Terence Tao', '人类数学协会', 'AHM', 'Mathematical Association for Human Mathematics', '停止合作', 'Alex Townsend', '康奈尔大学', 'Martin Bridson', '克莱数学研究所', 'Bryna Kra', 'Ken Ono', 'Axiom Math', '弗吉尼亚大学', '数学研究生学位', '同行业评审', 'peer review', '数学生态系统', '修订 14 篇', 'OpenAI 6.1', 'AI 数学', 'GPT-6', 'OpenAI DevDay', '撤回与修订', 'Industrial scale math', 'Reza Malek-Madani', 'Per Olof Persson', 'AP AI', 'student impact', 'Thomas Carlson', '蒙大拿州立大学']
 summary: |
-  OpenAI 发布 722 篇 AI 数学手稿不到 24 小时因"一个符号错误"撤回 3 篇（致 1 篇论证失效 + 2 篇构造失效），并修订另外 14 篇。康奈尔 Alex Townsend："一个错误连锁导致 3 篇不意外，怀疑还会发现更多"。人类数学协会（AHM）10-07 声明"数学家没要求做这项工作……我们敦促数学家停止与 OpenAI 合作，回归以人类理解为中心"，陶哲轩全文转载。克莱数学研究所所长 Martin Bridson（牛津）："对许多人兴奋，对其他人恐惧，对某些人毁灭性"；Northwestern Bryna Kra："同行业评审没有了" + "公司正在破坏原本支撑这项研究的生态系统"；弗吉尼亚 Ken Ono（Axiom Math 创始人）："被打在肚子上"；蒙大拿州立博士生 Thomas Carlson："2028 年毕业生学位价值如何保证"。撤销/修订成为 OpenAI 数学发布模式的常态。
+  OpenAI 发布 722 篇 AI 数学手稿不到 24 小时因"一个符号错误"撤回 3 篇（致 1 篇论证失效 + 2 篇构造失效），并修订另外 14 篇。康奈尔 Alex Townsend："一个错误连锁导致 3 篇不意外，怀疑还会发现更多"。人类数学协会（AHM）10-07 声明"数学家没要求做这项工作……我们敦促数学家停止与 OpenAI 合作，回归以人类理解为中心"，陶哲轩全文转载。克莱数学研究所所长 Martin Bridson（牛津）
+
 ---
 
 ## 一句话总结
