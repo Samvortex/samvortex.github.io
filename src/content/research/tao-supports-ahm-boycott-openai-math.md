@@ -5,7 +5,8 @@ date: '2026-10-09'
 category: 'notes'
 tags: ['陶哲轩', 'Terence Tao', 'AHM', 'Association for Human Mathematics', '人类数学协会', 'OpenAI', '菲尔兹奖', 'Fields Medal', '722 数学手稿', 'Mathocalypse', 'Scott Aaronson', 'Dana Moshkovitz', 'Bryna Kra', 'Martin Hairer', 'Raghu Meka', 'Tristan Buckmaster', 'AGMAI', 'Levent Alpöge', 'Anthropic', 'Codex', '纳维-斯托克斯', 'Navier-Stokes', '黎曼猜想', '挂谷猜想', 'Kakeya', '唯一博弈猜想', 'Unique Games', 'Quasi-Riemann', 'GPT-6.1 Sol', 'GPT-6.1 Astra', 'OpenAI 6.1 Astra', 'AI 数学', 'AGMAI', 'OpenAI 抢先', '学术规范', '科研自主权', '发布 722', '菲尔兹奖 25 人', '证明验证', 'Lean 形式化', '研究伦理', 'AI 实验室', 'Tool use']
 summary: |
-  2026-10-07 菲尔兹奖得主陶哲轩在博客转载"人类数学协会"（AHM）声明：呼吁数学家停止与 OpenAI 合作，批评其一次性发布 722 篇 AI 生成数学手稿"展示的是权力不是学术研究"。9 月底 OpenAI 在 GitHub 公开 372 个成果组覆盖千禧难题（准黎曼猜想 / 4 维挂谷 / 唯一博弈猜想），约 42% 已 Lean 形式化但已撤回 3 篇修订 14 篇。Scott Aaronson 妻子 Dana Moshkovitz（唯一博弈猜想专家）研读 OpenAI 论文后称"必须 AI 辅助才能读懂"。Bryna Kra 担忧：数学家被迫沦为"专职校对员"，商业资本决定研究议程。同期矛盾：8 月 OpenAI 10 项数学成果被指引用缺陷；9-8 OpenAI 称解决 NS 方程触发 Buckmaster vs Anthropic 学术优先权争议；25 位菲尔兹得主 9 月联名警告 AI 公司。陶哲轩立场复杂——既用 Codex 辅助研究，也反对把数学难题变成模型能力竞赛，关键诉求是数学家保有提出新问题 + 决定研究方向的主动权。
+  2026-10-07 菲尔兹奖得主陶哲轩在博客转载"人类数学协会"（AHM）声明：呼吁数学家停止与 OpenAI 合作，批评其一次性发布 722 篇 AI 生成数学手稿"展示的是权力不是学术研究"。9 月底 OpenAI 在 GitHub 公开 372 个成果组覆盖千禧难题（准黎曼猜想 / 4 维挂谷 / 唯一博弈猜想），约 42% 已 Lean 形式化但已撤回 3 篇修订 14 篇。Scott Aaronson 妻子 Dana Moshkovitz（唯一博弈猜想专家）研读 OpenAI 论文后称"必须 AI 辅助才能读懂"。
+
 ---
 
 ## 一句话总结
