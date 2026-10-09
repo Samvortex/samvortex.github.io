@@ -3,7 +3,7 @@ title: 'Mac Studio M5 Ultra 实测：Qwen3.8 27B 单流 token 速度可达 100+ 
 slug: 'mac-studio-m5-ultra-qwen3-8-27b-token-throughput-2026'
 date: '2026-10-09'
 category: 'notes'
-tags: ['Mac Studio', 'M5 Ultra', 'M5 Max', 'M5 Pro', 'Apple Silicon', 'Qwen3.8 27B', 'MLX', 'oMLX', 'Lightning MTP', 'Weschera', 'Weschera M4 Max', '内存带宽', '1.2 TB/s', '4-bit', 'oQ4e', 'Q4e', 'Q8e', 'bf16', '6-bit', 'Apple specs', 'apple.com.cn', 'omlx.ai', 'benchmarks', 'performance', 'Native MTP', 'ANE prefill', 'Decode speed', 'Caveats']
+tags: ['Mac Studio', 'M5 Ultra', 'M5 Max', 'M5 Pro', 'Apple Silicon', 'Qwen3-8-27B', 'MLX', 'oMLX', 'Lightning MTP', 'Weschera', 'Weschera-M4-Max', '内存带宽', 'bandwidth-1.2-TB-s', '4-bit', 'oQ4e', 'Q4e', 'Q8e', 'bf16', '6-bit', 'Apple specs', 'apple.com.cn', 'omlx.ai', 'benchmarks', 'performance', 'Native MTP', 'ANE prefill', 'Decode speed', 'Caveats']
 summary: |
   Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，
 
