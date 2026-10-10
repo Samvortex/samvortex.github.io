@@ -157,6 +157,13 @@ Claude Code 是「补你正在敲的字」，Composer Predictions 是「**替你
 | Composer Predictions 18+ / Pro 限定 | OpenAI 官方公告 | 待核——年龄限定是大模型常态，但需看官方 |
 | 25% / 90% 个人自述 | **不可信** | 仅为个体反馈，不作产品统计 |
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/openai-dots-codex-composer-predictions-2026-10-10/image-01.png" alt="OpenAI dots + Codex 协同网络示意图" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：OpenAI dots（Agent 节点）+ Codex（编程执行）的协同网络——多节点协作 + 流动代码信号</p>
+</div>
+
 ## 来源
 
 - [新智元（163 网易号上传）：dots 全面登陆手机 + 指挥 Codex](https://c.m.163.com/news/a/L8S1FGNK0511ABV6.html)

@@ -135,6 +135,13 @@ source_url: 'https://c.m.163.com/news/a/L8O7KI2V0524K8JC.html'
 | 「让软件适应人」是 Sam Altman 原话还是翻译 | OpenAI 公告原文 | 需核 openai.com/news |
 | 智能界面 demo（麻将 / 小游戏） | OpenAI 官方 X 账号 | **可信**——第二篇贴了截图 |
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/gpt-6-intelligent-ui-fact-check-2026-10-09/image-01.png" alt="GPT-6 智能界面（Intelligent UI）设计示意图" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：GPT-6 智能界面（Intelligent UI）设计示意图——对话气泡里直接生成可交互控件（滑块、切换、图表）</p>
+</div>
+
 ## 来源
 
 - [163 自媒体第一篇：12 亿人聊天框一夜注销](https://c.m.163.com/news/a/L8O7KI2V0524K8JC.html)

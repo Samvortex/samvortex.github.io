@@ -132,6 +132,13 @@ source_url: 'https://c.m.163.com/news/a/L8OLVPRR0511BLFD.html'
 | Claude 在 Google 平台被支持 | Anthropic 官方 + Google 联合公告 | **待核**——但 Anthropic + Google 关系本来就有合作 |
 | 「数字员工」定位是 Google 原话还是翻译 | Google 官方英文公告 | 待核 |
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/google-gemini-agent-vs-openai-dots-2026-10-10/image-01.png" alt="Google Gemini Agent 数字员工：Workspace 多模块协同示意图" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：Gemini Agent 作为「数字员工」统一编排 Workspace 多模块（邮件 / 文档 / 表格 / 日历 / 聊天）</p>
+</div>
+
 ## 来源
 
 - [163 网易号原文：Google Gemini Agent 数字员工](https://c.m.163.com/news/a/L8OLVPRR0511BLFD.html)
