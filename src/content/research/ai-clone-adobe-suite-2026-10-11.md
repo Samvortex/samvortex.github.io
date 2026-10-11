@@ -4,7 +4,7 @@ slug: 'ai-clone-adobe-suite-2026-10-11'
 date: '2026-10-11'
 category: 'notes'
 tags: ['Adobe', 'PhotoCraft', 'FilmCraft', 'ArtCraft', 'Photoshop', 'AI 克隆', 'AI coding', 'Claude Opus 5.5', 'Rust', '开源', '创意工具', 'GenOffice', 'Concat', 'Photon Studio', '评论']
-summary: '开发者 Brandon Thomas 用 Claude Opus 5.5 + Rust 写出 7 款 Adobe 克隆（PhotoCraft = Photoshop / FilmCraft = Premiere 等），GitHub 开源、本地运行、完全免费。本文拆 7 款产品矩阵 + Photoshop 智能滤镜 30 案例仅 5 个匹配的硬数据 + 同代生态（Photon Studio / Concat / GenOffice），论证 **AI coding 改变了人感知「完成度」的方式——UI 可速成，工程深度（智能滤镜、GPU 引擎、第三方插件生态）不可**。给 Sam 的启示：Adobe 订阅贵是事实，但「免费替代」≠「真替代」，学校 IT 决策要看长期可维护性，不是首屏 demo 速度。'
+summary: 'Brandon Thomas 用 Claude Opus 5.5 + Rust 写出 7 款 Adobe 克隆（PhotoCraft / FilmCraft 等），GitHub 开源、本地运行、免费。**PhotoCraft 智能滤镜 30 测试案例仅 5 个匹配 Photoshop**——这是核心证据：UI 可速成，工程深度不可。同代生态：Photon Studio / Concat / GenOffice。给 Sam 启示：学校 IT 别被首屏 demo 迷惑，看长期可维护性。'
 author: 'Sam Xu'
 featured: false
 draft: false

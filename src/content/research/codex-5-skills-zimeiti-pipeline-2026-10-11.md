@@ -4,7 +4,7 @@ slug: 'codex-5-skills-zimeiti-pipeline-2026-10-11'
 date: '2026-10-11'
 category: 'notes'
 tags: ['Codex', 'OpenAI Codex', '自媒体', '视频生成', 'Agent Skill', 'HyperFrames', 'Remotion', 'videocut-skills', 'seedance2-skill', '即梦', 'Seedance', '视频流水线', '拆解', '评论']
-summary: '163 自媒体账号「时尚弄潮（辽宁）」10-10 发布的 52 秒短视频，演示了 Codex + 5 个 Skill 拼出的完整视频流水线：**HyperFrames（1 句话 → 动效视频）/ Remotion Skills（代码批量生成）/ videocut-skills（中文剪辑 Agent）/ seedance2-skill（给即梦写专业提示词）/ 第 5 个 Skill**（OCR 未清晰识别，可能涉及字幕/封面/上传/分发等环节——**建议补查原视频**）。**核心论点：Codex 不再只是 IDE 里的编程 agent——配合 Skill 协议，它就是 1 个「视频自媒体流水线调度器」**。本文是视频内容拆解 + OCR 文本转写，所有数字 / Skill 名来自 52 秒视频帧的 OCR 结果。'
+summary: '52 秒视频（163「时尚弄潮 / 辽宁」账号，10-10）演示 Codex + 5 个 Skill 拼出的视频流水线：**HyperFrames（1 句话→动效）/ Remotion Skills（代码批量生成）/ videocut-skills（中文剪辑 Agent）/ seedance2-skill（给即梦写专业提示词）/ 第 5 个 Skill**（OCR 未识别）。**核心论点：Codex 不再只是 IDE 编程 agent——配合 Skill 协议它就是视频流水线调度器**。本文是视频拆解 + OCR 转写。'
 author: 'Sam Xu'
 featured: false
 draft: false
