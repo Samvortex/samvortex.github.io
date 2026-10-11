@@ -4,7 +4,7 @@ slug: 'alchaincyf-agent-skill-methodology-2026-10-11'
 date: '2026-10-11'
 category: 'notes'
 tags: ['alchaincyf', 'GitHub 10万+', 'Agent Skill', 'Skill Marketplace', '女娲', 'nuwa-skill', '达尔文', 'darwin-skill', 'huashu-design', 'huashu-chrome', 'huashu-mac-use', 'FanBox', 'Agent Skills 协议', 'Skill 蒸馏', 'Skill 迭代', '评论']
-summary: 'alchaincyf 64 仓库累计 101,808 stars（gitstar 全球 ~79）。起点 2026-04 开源女娲.skill。7 个核心 repo：**女娲（人→skill 蒸馏：六路并行 + 三重验证 + 5 层人物模型）** / **Huashu Design（5 限制设计 + 灰块占位 + 禁 AI Slop）** / **达尔文（棘轮机制 + 9 维打分，对齐微软 SkillOpt）** / **huashu-chrome + mac-use（OS 操控）** / **FanBox（含 Hermes Agent 的 11 个 coding agent）**。所有 Skill 走 Agent Skills 协议。'
+summary: 'alchaincyf 64 仓库累计 101,808 stars（gitstar 全球 ~79）。起点 2026-04 开源女娲.skill。**7 个核心 repo**：女娲（人→skill 蒸馏）/ Huashu Design（5 限制 + 禁 AI Slop）/ 达尔文（棘轮 + 9 维打分）/ huashu-chrome + mac-use（OS 操控）/ FanBox（含 Hermes Agent 的 11 个 coding agent）。所有 Skill 走 Agent Skills 协议。'
 author: 'Sam Xu'
 featured: false
 draft: false
