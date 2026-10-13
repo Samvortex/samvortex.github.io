@@ -4,7 +4,7 @@ slug: 'phai-labs-rsi-anything-2026-10-12'
 date: '2026-10-12'
 category: 'notes'
 tags: ['PhAI Labs', 'RSI', 'Recursive Self-Improvement', '递归自我改进', 'RSI-Anything', 'JEPA-Anything', 'World Model', '世界模型', 'OPF', '正交预测分解', 'AIBuildAI', 'OSWorld', 'LabHorizon', 'Suzuki-Miyaura', 'Agent Genesis', 'EvoIWM', '免疫科学', '评论']
-summary: 'PhAI Labs 10-12 发布 **RSI-Anything** 技术报告——**通过世界模型 + Agent + 真实反馈**实现**跨领域递归自我改进**。**延续 JEPA-Anything 路线**（OPF 正交预测分解跨视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气 7 域）。**4 个硬数据**——代码修复 26.3% → 31.2% / GUI Agent (OSWorld) +18.4% / LabHorizon 4B 规划 5 代改进 21.80% → 46.01% / 化学 Suzuki-Miyaura 40 次实验 96.15% (vs 贝叶斯 82.16%)。**核心创新**——Policy + World Model **异步更新 + 兼容性检查**——只有通过检验的更新才保留为下一轮起点。延伸应用：免疫科学——提出 **SIRPα 抑制 + IL-36γ 轴调节**候选联合干预假设。'
+summary: 'PhAI Labs 10-12 发布 **RSI-Anything** 技术报告——**通过世界模型 + Agent + 真实反馈**实现**跨领域递归自我改进**。**延续 JEPA-Anything 路线**（OPF 正交预测分解跨视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气 7 域）。**4 个硬数据**——代码修复 26.3% → 31.2% / GUI Agent (OSWorld) +18.4% / LabHorizon 4B 规划 5 代改进 21.80% → 46.01% / 化学 Suzuki-Miyaura 40 次...'
 author: 'Sam Xu'
 featured: false
 draft: false

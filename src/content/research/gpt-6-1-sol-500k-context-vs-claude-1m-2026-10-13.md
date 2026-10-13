@@ -4,7 +4,7 @@ slug: 'gpt-6-1-sol-500k-context-vs-claude-1m-2026-10-13'
 date: '2026-10-13'
 category: 'notes'
 tags: ['GPT-6.1 Sol', '上下文窗口', 'context window', '500k', '1M', 'Tibo', 'OpenAI', 'Anthropic', 'Claude Opus 5.5', 'Claude Sonnet 5.5', 'Google Gemini', 'AI 编程', 'Agent 上下文管理', '评论']
-summary: 'GPT-6.1 Sol **默认上下文从 272k 扩到 500k**（**+80%**），Tibo（CTO）宣布**订阅用户跑长上下文不收附加费**（API 仍按标准表）。本文对比 **2026 Q4 上下文窗口赛道**——**OpenAI 500k 默认 / 1M 上限** vs **Anthropic Claude Opus 5.5 / Sonnet 5.5 默认 1M** vs **Google Gemini**（具体未提）。**核心信号**——**窗口竞赛已从「**比谁大**」**转向「**比谁不压缩**」**——**Tibo 7 月踩过「**272k→372k 反而扣更多**」**的坑。**3 家的「**无限 vs 有限**」哲学**：(1) OpenAI 保守免费，谨慎扩 (2) Anthropic 默认 1M，1M 内不涨单价 (3) Google 待公布。**对开发者**——窗口还会变大——但**耐心不会跟着扩容**——**正确做法是「**压缩 + 缓存 + 子 Agent**」**而不是「**比上下文窗口**」**。'
+summary: 'GPT-6.1 Sol 默认上下文 272k → 500k（+80%），Tibo 宣布订阅用户免长上下文附加费。对比 2026 Q4 三家策略：OpenAI 500k 保守（避 7 月扣量翻车）vs Anthropic Claude 1M 激进（压缩算法领先）vs Google 待公布。核心信号：窗口竞赛从「比谁大」转向「比谁不压缩」。'
 author: 'Sam Xu'
 featured: false
 draft: false

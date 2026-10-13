@@ -4,7 +4,7 @@ slug: 'rea-reverse-engineer-anything-mcp-2026-10-12'
 date: '2026-10-12'
 category: 'notes'
 tags: ['REA', 'Reverse Engineer Anything', 'GitHub', 'MCP', 'Model Context Protocol', 'Agent Skills', 'Codex', 'Claude Code', 'Cursor', 'Hopper', 'Ghidra', 'IDA', '逆向工程', 'AI 克隆', '软件复刻', 'Electron', 'APK', 'IPA', '评论']
-summary: 'REA（Reverse Engineer Anything）**单日 +25,599 stars / 累计 12 万 / 登顶 GitHub Trending #1**。**让 AI Agent 无需源代码就能研究商业 App**——通过 **MCP 接口**把 Hopper / Ghidra / IDA 等逆向工具暴露给 AI Agent。**3 阶段**：Decompile（反编译）→ Understand（理解）→ Recreate（重新实现）。**支持目标**：桌面二进制 / JS / Electron / .NET / Android APK / iOS IPA / ASAR / 固件。**真实案例**：X 用户「爆裂队长 NEXT」用 **Codex + REA 半小时**逆向某马桶小程序蓝牙协议，做成 macOS 状态栏遥控器。**核心信号**——REA 把「MCP + Agent Skills + 现有专业工具」拼成**开箱即用**——**「Codex + REA = 任何开发者都能逆向商业 App」**——**与已有 Adobe 克隆 / Codex 5 Skills / alchaincyf Skills 同生态**——**但卡在 5 个边界（法律 / 代码混淆 / 动态加载 / 间接调用 / 假阳性）**。'
+summary: 'REA（Reverse Engineer Anything）**单日 +25,599 stars / 累计 12 万 / 登顶 GitHub Trending #1**。**让 AI Agent 无需源代码就能研究商业 App**——通过 **MCP 接口**把 Hopper / Ghidra / IDA 等逆向工具暴露给 AI Agent。**3 阶段**：Decompile（反编译）→ Understand（理解）→ Recreate（重新实现）。**支持目标**：桌面二进制 / JS / Electron / .NET / Android APK / iOS...'
 author: 'Sam Xu'
 featured: false
 draft: false

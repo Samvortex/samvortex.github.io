@@ -4,7 +4,7 @@ slug: 'math-as-profession-when-ai-solves-2026-10-12'
 date: '2026-10-12'
 category: 'notes'
 tags: ['AI vs 数学', '数学家', 'RSI', 'OpenAI', 'Anthropic', 'Scott Aaronson', 'Ken Ono', 'Daniel Litt', 'Pavel Etingof', 'Tasmin Chu', 'arXiv', 'MathOverflow', '菲尔兹奖', '职业未来', '文化危机', 'AI 时代', '评论']
-summary: '9-8 OpenAI 宣布 AI 解决数学界最著名难题，**触发数学作为职业的哲学危机**。本文综合 5 位数学家观点：**Scott Aaronson（UT Austin）「人类数学家已被永远取代」** / **Ken Ono（去 Axiom Math 创业）「学生的职业可能不复存在」** / **Daniel Litt（多伦多）「必须找到新平衡，50 年后可能没数学」** / **Pavel Etingof（MIT）「AI 凿矿 + 数学家阐释」** / **Tasmin Chu（Caltech）「它打破了我们的制度」**。**4 个生态被冲击**：arXiv 限流 / MathOverflow 活跃度下降 / OpenAI 100+ 结果保密 / 期刊被 AI 证明淹没。**3 个未来**：(1) **按按钮不读输出**——50 年后无数学 / (2) **AI 凿矿 + 人类阐释** / (3) **「作者之死」**（Barthes 1967）——读者才是意义创造者。**核心论点**——AI 证明 ≠ 理解——**数学的价值是过程不是结果**——**「被瞬间传送到山顶，浓雾弥漫」**不是登山。'
+summary: '9-8 OpenAI 宣布 AI 解决数学界最著名难题，**触发数学作为职业的哲学危机**。本文综合 5 位数学家观点：**Scott Aaronson（UT Austin）「人类数学家已被永远取代」** / **Ken Ono（去 Axiom Math 创业）「学生的职业可能不复存在」** / **Daniel Litt（多伦多）「必须找到新平衡，50 年后可能没数学」** / **Pavel Etingof（MIT）「AI 凿矿 + 数学家阐释」** / **Tasmin Chu（Caltech）「它打破了我们的制度」**。**4 个生态被冲击**：arXiv...'
 author: 'Sam Xu'
 featured: false
 draft: false
