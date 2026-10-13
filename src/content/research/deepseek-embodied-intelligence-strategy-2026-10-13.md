@@ -159,6 +159,13 @@ source_url: 'https://c.m.163.com/news/a/L93U0U3O0511CPVM.html'
 
 ---
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-embodied-intelligence-strategy-2026-10-13/image-01.png" alt="DeepSeek 入局具身智能：中心 DeepSeek/梁文锋 hub 4 个分支路径：自建团队(???)/投资切入(更可能) / 宇树(已 1.41 亿)/Winverse AI(4 亿$)" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：DeepSeek 入局具身智能 — 中心 DeepSeek/梁文锋 hub（蓝色光晕），4 个分支路径：上方 2 条「未来 2 种入局方式」（路径 1 自建团队？ vs 路径 2 投资切入 = 更可能），下方 2 条「已动作」（宇树 1.41 亿 8 月已投 + Winverse AI 4 亿$ infra 模型加速）。配色用深邃蓝灰 + DeepSeek 蓝 + 绿色「更可能」标记 + 警示色（自建团队 ???）—— 强调 DeepSeek 大概率走「投资 + 模型」而不是「自建本体」路径。</p>
+</div>
+
 ## 来源
 
 - [163 转载快科技：梁文锋被曝密集接触具身智能创业者 DeepSeek 拟入局具身智能](https://c.m.163.com/news/a/L93U0U3O0511CPVM.html)
