@@ -173,6 +173,13 @@ source_url: 'https://github.com/spacedriveapp/spacedrive'
 
 ---
 
+## 配图
+
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/spacedrive-2-beta-rust-virtual-distributed-filesystem-2026-10-13/image-01.png" alt="Spacedrive 2.0 Beta 统一虚拟数据平面：4 个存储源（本地硬盘 / 网盘 / 远程 / 移动盘）→ 中心 Spacedrive hub → Rust+TS 整合" style="max-width: 100%; border-radius: 8px;" />
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：Spacedrive 2.0 Beta 统一虚拟数据平面 — 4 角 4 个存储源（Local 本地硬盘 / Cloud 网盘 / Server 远程 / Mobile 移动盘）→ 中心 Spacedrive hub（11-1 / Rust+TS）→ 统一平面。背景散落 BLAKE3 hash 字符（极淡 30 alpha）— 暗示「内容寻址」。配色用冷 teal + cyan 高光 — 呼应 Rust + BLAKE3 工程师风，**不模仿任何消费网盘蓝白绿**。</p>
+</div>
+
 ## 来源
 
 - [GitHub: spacedriveapp/spacedrive](https://github.com/spacedriveapp/spacedrive)（**一手** — 39,155 stars / 1,358 forks / Apache-2.0 / 最近 push 今天）
