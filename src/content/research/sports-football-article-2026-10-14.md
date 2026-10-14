@@ -4,7 +4,7 @@ slug: 'sports-football-article-2026-10-14'
 date: '2026-10-14'
 category: 'sports'
 tags: ["体育", "足球", "football"]
-summary: '以下是发布会的第一部分'
+summary: '今日体育 - 孔帕尼：我们不配赢球；对手踢得很强硬，甚至游走在犯规边缘|足球|红牌|职业生涯|文森特·孔帕尼_网易订阅 - 含发布 + 数据 + 媒体观点汇总'
 author: 'Sam Xu'
 featured: false
 draft: false
