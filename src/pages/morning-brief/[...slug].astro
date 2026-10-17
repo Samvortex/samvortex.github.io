@@ -21,7 +21,7 @@ const lead = data.lead;
 const slugsWithImage = new Set<string>(data.available_images || []);
 ---
 <DefaultLayout
-  title={`新闻 / News ${data.date}`}
+  title={`新闻 ${data.date}`}
   description={lead.headline}
 >
   <!-- Compact masthead -->
@@ -29,7 +29,7 @@ const slugsWithImage = new Set<string>(data.available_images || []);
     <div class="max-w-5xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between">
       <div class="font-semibold tracking-tight">
         MORNING BRIEF
-        <span class="text-brand-400 italic font-normal text-sm ml-2">Sam's 新闻 / News · 全球 10 大领域</span>
+        <span class="text-brand-400 italic font-normal text-sm ml-2">Sam's 新闻 · 全球 10 大领域</span>
       </div>
       <div class="text-xs opacity-70 uppercase tracking-wider">
         {data.date} · 上海
@@ -165,7 +165,7 @@ const slugsWithImage = new Set<string>(data.available_images || []);
     <!-- Footer / back link -->
     <div class="text-center text-sm text-neutral-500 pt-8">
       <a href="/research/morning-brief/" class="text-brand-600 dark:text-brand-500 hover:underline">
-        ← 返回新闻 / News 归档
+        ← 返回新闻 归档
       </a>
     </div>
   </article>
