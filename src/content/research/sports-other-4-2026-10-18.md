@@ -4,7 +4,7 @@ slug: 'sports-other-4-2026-10-18'
 date: '2026-10-18'
 category: 'sports'
 tags: ["体育", "综合"]
-summary: '杨瀚森今年季前赛整体表现回顾'
+summary: '杨瀚森今年 NBA 季前赛 4 场比赛整体表现回顾，场均 7.3 分 4.8 篮板 2.8 助攻，揭示第三中锋位置的机遇与挑战'
 author: 'Sam Xu'
 featured: false
 draft: false
