@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-label="复平面 zero-free region 示意图">
+  <title>复平面 zero-free region 示意图（ζ_K(s) 零点分布）</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-label  { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-eq     { font: italic 500 14px "Latin Modern Math", "STIX Two Math", "Cambria Math", serif; fill: #172033; }
+      .t-anno   { font: 400 11px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+    </style>
+    <pattern id="dangerStripe" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#fee2e2" />
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#fecaca" stroke-width="3" />
+    </pattern>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">复平面 zero-free region 示意图</text>
+  <text x="40" y="54" class="t-detail">ζ_K(s) 在 σ = Re(s) > 31/32 内无零点（除 trivial zeros 在 σ &lt; 0）</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="440" x2="880" y2="440" stroke="#64748b" stroke-width="1.5" />
+  <polygon points="880,440 870,436 870,444" fill="#64748b" />
+  <text x="888" y="444" class="t-axis">σ = Re(s)</text>
+
+  <line x1="160" y1="480" x2="160" y2="80" stroke="#64748b" stroke-width="1.5" />
+  <polygon points="160,80 156,90 164,90" fill="#64748b" />
+  <text x="145" y="76" class="t-axis">it = Im(s)</text>
+  <text x="120" y="92" class="t-axis">↑</text>
+
+  <!-- Origin -->
+  <circle cx="160" cy="440" r="3" fill="#172033" />
+  <text x="148" y="460" class="t-axis">0</text>
+
+  <!-- Trivial zeros region (left of 0) -->
+  <rect x="80" y="100" width="80" height="320" fill="url(#dangerStripe)" opacity="0.6" />
+  <text x="100" y="120" class="t-anno">trivial zeros</text>
+  <text x="100" y="138" class="t-anno">σ &lt; 0</text>
+
+  <!-- Critical strip 0 < σ < 1 -->
+  <rect x="160" y="100" width="640" height="320" fill="#fef3c7" opacity="0.35" />
+  <text x="180" y="120" class="t-anno">critical strip</text>
+  <text x="180" y="138" class="t-anno">0 &lt; σ &lt; 1</text>
+
+  <!-- New zero-free region σ > 31/32 -->
+  <rect x="784" y="100" width="16" height="320" fill="#6BCB77" opacity="0.5" />
+  <rect x="800" y="100" width="60" height="320" fill="#bbf7d0" opacity="0.5" />
+  <text x="780" y="120" class="t-anno" text-anchor="end" style="text-anchor: end;">σ = 31/32</text>
+  <text x="864" y="120" class="t-anno">σ &gt; 1</text>
+  <text x="864" y="138" class="t-anno">绝对收敛</text>
+
+  <!-- Critical line σ = 1/2 -->
+  <line x1="440" y1="100" x2="440" y2="420" stroke="#FF8AAB" stroke-width="1.5" stroke-dasharray="6 3" />
+  <text x="446" y="112" class="t-label" fill="#FF8AAB">σ = 1/2 (critical line)</text>
+  <text x="446" y="130" class="t-detail">RH 假设所有非平凡零点在此</text>
+
+  <!-- σ = 1 -->
+  <line x1="800" y1="100" x2="800" y2="420" stroke="#5EB1FF" stroke-width="1" stroke-dasharray="2 4" />
+
+  <!-- σ = 31/32 line (highlight) -->
+  <line x1="784" y1="100" x2="784" y2="420" stroke="#6BCB77" stroke-width="2.5" />
+
+  <!-- Bottom legend -->
+  <g transform="translate(40, 490)">
+    <rect x="0" y="-10" width="14" height="14" fill="#bbf7d0" stroke="#6BCB77" />
+    <text x="20" y="2" class="t-detail">新 zero-free region (σ &gt; 31/32)</text>
+
+    <rect x="240" y="-10" width="14" height="14" fill="#fef3c7" stroke="#fbbf24" />
+    <text x="260" y="2" class="t-detail">critical strip 0 &lt; σ &lt; 1</text>
+
+    <line x1="430" y1="-3" x2="444" y2="-3" stroke="#FF8AAB" stroke-width="1.5" stroke-dasharray="6 3" />
+    <text x="450" y="2" class="t-detail">critical line (RH 目标)</text>
+
+    <rect x="610" y="-10" width="14" height="14" fill="url(#dangerStripe)" />
+    <text x="630" y="2" class="t-detail">trivial zeros</text>
+  </g>
+</svg>
