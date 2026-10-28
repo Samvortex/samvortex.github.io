@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>AI「克隆」的 Adobe 全家桶一夜爆火：UI 可速成，工程深度不可 — 给创意工具市场的启示 · Samvortex Hub</title><meta name="description" content="Brandon Thomas 用 Claude Opus 5.5 + Rust 写出 7 款 Adobe 克隆（PhotoCraft / FilmCraft 等），GitHub 开源、本地运行、免费。**PhotoCraft 智能滤镜 30 测试案例仅 5 个匹配 Photoshop**——这是核心证据：UI 可速成，工程深度不可。同代生态：Photon Studio / Concat / GenOffice。给 Sam 启示：学校 IT 别被首屏 demo 迷惑，看长期可维护性。"><link rel="canonical" href="https://samvortex.com/notes/ai-clone-adobe-suite-2026-10-11/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="AI「克隆」的 Adobe 全家桶一夜爆火：UI 可速成，工程深度不可 — 给创意工具市场的启示 · Samvortex Hub"><meta property="og:description" content="Brandon Thomas 用 Claude Opus 5.5 + Rust 写出 7 款 Adobe 克隆（PhotoCraft / FilmCraft 等），GitHub 开源、本地运行、免费。**PhotoCraft 智能滤镜 30 测试案例仅 5 个匹配 Photoshop**——这是核心证据：UI 可速成，工程深度不可。同代生态：Photon Studio / Concat / GenOffice。给 Sam 启示：学校 IT 别被首屏 demo 迷惑，看长期可维护性。"><meta property="og:url" content="https://samvortex.com/notes/ai-clone-adobe-suite-2026-10-11/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AI「克隆」的 Adobe 全家桶一夜爆火：UI 可速成，工程深度不可 — 给创意工具市场的启示 · Samvortex Hub"><meta name="twitter:description" content="Brandon Thomas 用 Claude Opus 5.5 + Rust 写出 7 款 Adobe 克隆（PhotoCraft / FilmCraft 等），GitHub 开源、本地运行、免费。**PhotoCraft 智能滤镜 30 测试案例仅 5 个匹配 Photoshop**——这是核心证据：UI 可速成，工程深度不可。同代生态：Photon Studio / Concat / GenOffice。给 Sam 启示：学校 IT 别被首屏 demo 迷惑，看长期可维护性。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-11T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-11T00:00:00.000Z">2026年10月11日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">AI「克隆」的 Adobe 全家桶一夜爆火：UI 可速成，工程深度不可 — 给创意工具市场的启示</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">Brandon Thomas 用 Claude Opus 5.5 + Rust 写出 7 款 Adobe 克隆（PhotoCraft / FilmCraft 等），GitHub 开源、本地运行、免费。**PhotoCraft 智能滤镜 30 测试案例仅 5 个匹配 Photoshop**——这是核心证据：UI 可速成，工程深度不可。同代生态：Photon Studio / Concat / GenOffice。给 Sam 启示：学校 IT 别被首屏 demo 迷惑，看长期可维护性。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Adobe/" class="tag">#Adobe</a><a href="/tags/PhotoCraft/" class="tag">#PhotoCraft</a><a href="/tags/FilmCraft/" class="tag">#FilmCraft</a><a href="/tags/ArtCraft/" class="tag">#ArtCraft</a><a href="/tags/Photoshop/" class="tag">#Photoshop</a><a href="/tags/AI 克隆/" class="tag">#AI 克隆</a><a href="/tags/AI coding/" class="tag">#AI coding</a><a href="/tags/Claude Opus 5.5/" class="tag">#Claude Opus 5.5</a><a href="/tags/Rust/" class="tag">#Rust</a><a href="/tags/开源/" class="tag">#开源</a><a href="/tags/创意工具/" class="tag">#创意工具</a><a href="/tags/GenOffice/" class="tag">#GenOffice</a><a href="/tags/Concat/" class="tag">#Concat</a><a href="/tags/Photon Studio/" class="tag">#Photon Studio</a><a href="/tags/评论/" class="tag">#评论</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>AI coding 让一个人 几天做出 7 款「能跑、像 Adobe」的平替——<strong>但 30 个 Photoshop 智能滤镜测试案例只有 5 个匹配</strong>。<strong>AI 改变了「感知完成度」不等于「真完成度」——UI 可速成，工程深度（智能滤镜 / GPU 引擎 / 第三方插件生态 / 十年 corner case）不可</strong>。Adobe Creative Cloud 贵是事实，「免费平替」≠「真替代」。</p>
+</blockquote>
+<h2 id="一事件--背景">一、事件 / 背景</h2>
+<p>爱范儿（ifanr.com）10-11 报道：</p>
+<ul>
+<li><strong>开发者</strong>：Brandon Thomas（自称 15 年开发经验，最早在 Square 做支付软件）</li>
+<li><strong>栈</strong>：Rust + Claude Opus 5.5</li>
+<li><strong>产出</strong>：<strong>7 款 Adobe 克隆</strong>，GitHub 全开源，本地运行，<strong>完全免费</strong></li>
+<li><strong>总入口</strong>：<a href="https://getartcraft.com/">getartcraft.com</a></li>
+</ul>
+<p>7 款映射（<strong>一眼能认</strong>）</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>平替名</th><th>对应 Adobe 产品</th><th>状态</th></tr></thead><tbody><tr><td><strong>PhotoCraft</strong></td><td>Photoshop</td><td>早期 Alpha</td></tr><tr><td><strong>FilmCraft</strong></td><td>Premiere Pro</td><td>开发中</td></tr><tr><td>VideoCraft / SoundCraft / 等</td><td>After Effects / Audition</td><td>开发中</td></tr><tr><td>PDF 工具</td><td>Acrobat</td><td>早期 Alpha</td></tr><tr><td>Design 工具</td><td>Illustrator / InDesign / Lightroom</td><td>开发中</td></tr></tbody></table>
+<p><strong>Thomas 的承诺</strong>：「<strong>一个月内达到完整功能对等</strong>」——<strong>截至 10-11 已经跳票多次</strong>。</p>
+<hr>
+<h2 id="二photocraft唯一能用的克隆但深度差太多">二、PhotoCraft：唯一能用的克隆，但深度差太多</h2>
+<h3 id="已能做的事">已能做的事</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>功能</th><th>状态</th></tr></thead><tbody><tr><td>图层 / 蒙版 / 画笔 / 曲线 / 文字工具</td><td>✅ 基本完整</td></tr><tr><td>PSD 文件打开 + 保存</td><td>✅ 可用</td></tr><tr><td>启动速度</td><td>✅ 启动快</td></tr><tr><td>基础图像操作</td><td>✅ 有模有样</td></tr></tbody></table>
+<h3 id="还做不到的事">还做不到的事</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>问题</th><th>详情</th></tr></thead><tbody><tr><td><strong>智能对象</strong></td><td>带智能对象的 PSD 打开后<strong>出问题</strong></td></tr><tr><td><strong>复杂文件操作慢</strong></td><td>不复杂的专业文件<strong>操作起来很慢</strong>，细小但频繁的错误</td></tr><tr><td><strong>智能滤镜 30-5 测试</strong></td><td><strong>30 个测试案例只有 5 个匹配 Photoshop</strong></td></tr><tr><td><strong>滤镜工作流</strong></td><td>用户调参数 / 顺序 / 混合方式 / 蒙版时，Photoshop 会<strong>重新计算画面</strong>；PhotoCraft 只能「保存并读回操作记录」，<strong>算不出相同结果</strong></td></tr></tbody></table>
+<h3 id="智能滤镜的关键技术点这才是-adobe-的护城河">智能滤镜的关键技术点（这才是 Adobe 的护城河）</h3>
+<blockquote>
+<p>Photoshop 的智能滤镜需要先把图层转成「<strong>智能对象</strong>」，再把模糊、锐化等效果挂在它下面，而<strong>不直接改写原始像素</strong>。用户调整参数或滤镜顺序时，Photoshop 会<strong>重新计算画面</strong>。</p>
+</blockquote>
+<p><strong>PhotoCraft 能保存并读回这些操作记录，不等于它能算出相同的结果。</strong>——这是「<strong>保存数据</strong>」与「<strong>计算正确结果</strong>」的本质区别。</p>
+<hr>
+<h2 id="三filmcraft视频剪辑平替的硬骨头">三、FilmCraft：视频剪辑平替的硬骨头</h2>
+<h3 id="已能做的事-1">已能做的事</h3>
+<ul>
+<li>多轨剪辑</li>
+<li>调色（基础）</li>
+<li>视频导出</li>
+<li>视频编解码 / 时间线编辑 / 渲染 / GPU 模块（底层）</li>
+<li>界面 + AI 调用命令接口</li>
+</ul>
+<h3 id="还做不到的事-1">还做不到的事</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>缺口</th><th>实际影响</th></tr></thead><tbody><tr><td><strong>部分常用特效缺失</strong></td><td>视频编辑师的核心工具缺失</td></tr><tr><td><strong>Lumetri 调色仍需 CPU</strong></td><td><strong>处理速度会很痛</strong></td></tr><tr><td><strong>不能加载 VST3 / Audio Units 第三方插件</strong></td><td><strong>后期团队协作痛点无法解决</strong></td></tr></tbody></table>
+<h3 id="关键判断">关键判断</h3>
+<blockquote>
+<p><strong>对剪辑师而言，这些插件对于套上效果、处理长素材、在后期团队间互传有明显提升效率的作用。</strong></p>
+</blockquote>
+<p>Adobe 的护城河不是「能剪辑」——是「<strong>插件生态 + 硬件加速 + 团队协作链路</strong>」。</p>
+<hr>
+<h2 id="四同代生态不是-artcraft-一家在做">四、同代生态：不是 ArtCraft 一家在做</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项目</th><th>对位</th><th>资金 / 模型</th><th>现状</th></tr></thead><tbody><tr><td><strong>ArtCraft</strong>（Brandon Thomas）</td><td>Adobe 全家桶 7 款</td><td>个人开发者 + Claude Opus 5.5</td><td>7 款里 5 款开发中，2 款早期 Alpha</td></tr><tr><td><strong>Photon Studio</strong></td><td>Photoshop</td><td><strong>~$2000 模型调用费</strong> + GPT-6 Astra 等</td><td>首日 <strong>170 名活跃用户</strong>；初版错误 + 不稳定，靠用户反馈迭代</td></tr><tr><td><strong>Concat</strong></td><td>剪映 / CapCut</td><td>Claude Code 写</td><td>开源，主打<strong>本地自动字幕 + TTS</strong>——没必要为导出视频持续付订阅费</td></tr><tr><td><strong>GenOffice</strong></td><td>Microsoft Office 全家</td><td>未知</td><td><strong>直接号称自己是 Word/Excel/PPT/PDF 的开源替代 + AI Agent 接入编辑</strong></td></tr></tbody></table>
+<p><strong>观察</strong></p>
+<ol>
+<li><strong>不是一个项目在做——是 4-5 个项目同代冒头</strong></li>
+<li><strong>资源消耗差异巨大</strong>：ArtCraft 是个人 / 1 个模型；Photon Studio 单项目花 $2000；GenOffice 团队规模未知</li>
+<li><strong>真正威胁 Adobe / Microsoft 的不是「免费」——是「<strong>插件生态 + 团队协作 + 长期可维护</strong>」这三点是否真能搭起来</strong></li>
+</ol>
+<hr>
+<h2 id="五核心论点ai-改变了感知完成度">五、核心论点：AI 改变了「感知完成度」</h2>
+<blockquote>
+<p><strong>AI coding 可以很快写出图层面板、滤镜菜单和文件解析程序，但菜单里有「智能滤镜」，和一份十年前的复杂 PSD 打开后仍然显示正确、保存后还能在 Photoshop 里打开继续改，是两种完成度。</strong></p>
+</blockquote>
+<h3 id="51-旧时代-vs-ai-时代的完成度感知">5.1 旧时代 vs AI 时代的「完成度」感知</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>旧时代</th><th>AI 时代</th></tr></thead><tbody><tr><td><strong>第一次「看起来像成品」的时间</strong></td><td>几个月</td><td>几天</td></tr><tr><td><strong>遇到 bug 修复</strong></td><td>几天 / 几周</td><td>几分钟（Agent 修 + 测试）</td></tr><tr><td><strong>推算</strong></td><td>「<strong>剩下也是几十轮 + 烧 token</strong>」</td><td>但<strong>成熟软件最难的部分不在可见 UI</strong></td></tr></tbody></table>
+<h3 id="52-成熟软件最难的部分">5.2 成熟软件最难的部分</h3>
+<blockquote>
+<p><strong>成熟软件最难的部分，常常正是清单上没有写、仓库里没有列举的例外。这些例外来自过去的使用反馈，甚至可能来自未来，需要洞察来发现和解决，而不是更多的 token。</strong></p>
+</blockquote>
+<p><strong>具体例子</strong>（PhotoCraft 暴露的）</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>例外类型</th><th>例子</th><th>AI 克隆能否复现</th></tr></thead><tbody><tr><td>十年 corner case</td><td>十年前复杂 PSD 文件还要正确显示 + 保存</td><td>❌ 难——需要历史数据</td></tr><tr><td>跨平台一致</td><td>macOS / Windows / Linux + 多显示器 DPI</td><td>❌ 难——需要广泛测试</td></tr><tr><td>硬件加速</td><td>Adobe 用 GPU 引擎（计划下一代「<strong>文档编译 GPU 程序</strong>」）</td><td>❌ 难——需要工程师团队</td></tr><tr><td>第三方生态</td><td>VST3 / Audio Units / 各种插件</td><td>❌ 难——需要 API + 商业关系</td></tr></tbody></table>
+<h3 id="53-一代人有一代人的屠龙梦想">5.3 一代人有一代人的「屠龙梦想」</h3>
+<blockquote>
+<p>ArtCraft 之前，就有人在问「为什么还没有人用 AI 写出一个 Photoshop？」后来出现的几个项目，几乎是<strong>轮流拿成熟软件当靶子</strong>。</p>
+</blockquote>
+<p><strong>置信度：高</strong>——这个论点<strong>逻辑自洽 + 有具体数据支撑</strong>。</p>
+<hr>
+<h2 id="六可信度红旗">六、可信度红旗</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>红旗</th><th>详情</th><th>判断</th></tr></thead><tbody><tr><td><strong>来源是爱范儿（ifanr.com）</strong></td><td>国内硬核科技媒体，<strong>比 163 网易号自媒体高一个档</strong>——实名媒体，附招聘模块</td><td><strong>可信度：中-高</strong></td></tr><tr><td><strong>ArtCraft 7 款产品都存在 GitHub 仓库</strong></td><td>getartcraft.com 是入口；GitHub 仓库具体 repo URL 未给</td><td><strong>置信度：中</strong>——可核但需自查</td></tr><tr><td><strong>「30 个测试案例只有 5 个匹配」</strong></td><td>这是爱范儿引述 Reddit / 用户反馈——单源</td><td><strong>置信度：中</strong></td></tr><tr><td><strong>「$2000 模型调用费」for Photon Studio</strong></td><td>引述开发者自报</td><td><strong>置信度：中-低</strong></td></tr><tr><td><strong>Thomas 「15 年开发经验 + Square 工作经历」</strong></td><td>个人自述，无第三方核</td><td><strong>置信度：中</strong></td></tr><tr><td><strong>「Adobe 工程师总监博文」</strong></td><td>文章说「<strong>两个月前</strong>」讲 Photoshop 架构——具体人物 + URL 未给</td><td><strong>置信度：中-低</strong></td></tr></tbody></table>
+<hr>
+<h2 id="七对-sam-的-3-点启示">七、对 Sam 的 3 点启示</h2>
+<h3 id="71-免费平替真替代你-wcec-it-决策框架">7.1 「免费平替」≠「真替代」——你 WCEC IT 决策框架</h3>
+<p>你 7 校集团级 IT 部署 Adobe Creative Cloud 的成本是<strong>真实痛点</strong>。但 AI 克隆潮给了一个<strong>反直觉的结论</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>短期（1 年）</th><th>长期（3 年）</th></tr></thead><tbody><tr><td><strong>首屏 demo 速度</strong></td><td>ArtCraft 赢</td><td>ArtCraft 赢</td></tr><tr><td><strong>真实生产力</strong></td><td>Adobe 赢（智能滤镜 / GPU / 插件）</td><td>Adobe 仍赢（如果 ArtCraft 没补上工程深度）</td></tr><tr><td><strong>可维护性</strong></td><td>取决于社区是否接盘</td><td>同上</td></tr><tr><td><strong>数据迁移成本</strong></td><td>0（免费切换）</td><td>但 PSD 互操作现在 PhotoCraft 已经出问题</td></tr></tbody></table>
+<p><strong>对你</strong>：</p>
+<ul>
+<li><strong>教学场景</strong>（学生做练习作业）→ ArtCraft / Concat <strong>够用</strong></li>
+<li><strong>教师作品 / 学校宣传物料</strong> → <strong>别省这点 Adobe 订阅费</strong>——风险太高</li>
+<li><strong>关键交付</strong>（招生材料 / 校庆视频）→ Adobe 全套</li>
+</ul>
+<h3 id="72-ai-感知完成度对-hermes-agent--the-hive-的启示">7.2 「AI 感知完成度」对 Hermes Agent / The Hive 的启示</h3>
+<p>你昨天刚跑通的 <a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管</a>——<strong>AI coding 让 1 个开发者 + Claude Opus 5.5 就能做出看起来像样的「几千技能智能体平台</strong>」。</p>
+<p>但<strong>真正的智能体平台</strong>难点不在「<strong>列表里几千个 skill 名称</strong>」——在：</p>
+<ul>
+<li>每个 skill 的 <strong>corner case 处理</strong>（用户反例数据）</li>
+<li><strong>多 skill 协同的异常路径</strong>（A 失败 → B 兜底）</li>
+<li><strong>状态机里的隐藏 bug</strong>（Hermes 三级恢复路径自动沉淀，但 corner case 数据哪来）</li>
+</ul>
+<p><strong>给你的启示</strong>：</p>
+<ul>
+<li><strong>The Hive 别被「Hermes 跑通 demo」迷惑</strong>——真实可维护需要 corner case 数据沉淀</li>
+<li><strong>WCEC IT 别被「AI 一键生成 APP」迷惑</strong>——首屏 demo 跟生产稳定性差 10× token 量</li>
+</ul>
+<h3 id="73-关注-photocraft-的智能滤镜进展这是真正的胜负手">7.3 关注 PhotoCraft 的智能滤镜进展——这是真正的胜负手</h3>
+<p>Adobe 的核心护城河<strong>不是 UI、不是启动速度、不是价格</strong>——是 <strong>智能滤镜重新计算的正确性</strong>。</p>
+<p><strong>PhotoCraft 30-5 测试那个数据点</strong>——<strong>这是可观测、可量化、可追踪的指标</strong>。</p>
+<p><strong>建议</strong>：每月跟踪一次 PhotoCraft 在智能滤镜、跨平台一致性、第三方插件支持三个维度的进展——<strong>这三个突破就是 Adobe 真被冲击的信号</strong>。在那之前，<strong>别给学校 IT 推「Adobe 平替」</strong>。</p>
+<hr>
+<h2 id="八未验证部分--待核清单">八、未验证部分 + 待核清单</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>待核项</th><th>建议核验源</th><th>判断</th></tr></thead><tbody><tr><td>ArtCraft 7 款产品的具体 GitHub repo</td><td>getartcraft.com 或直接搜 GitHub</td><td><strong>可核</strong>——没给具体 URL</td></tr><tr><td>「30 个测试案例只有 5 个匹配」</td><td>直接跑 PhotoCraft 自测</td><td><strong>可核</strong>——具体数据</td></tr><tr><td>Photon Studio 首日 170 用户</td><td>项目方自报</td><td><strong>不可直接核</strong></td></tr><tr><td>GenOffice 的真实代码</td><td>GitHub</td><td><strong>可核</strong></td></tr><tr><td>Adobe 工程师总监博文（Photoshop 架构）</td><td>Adobe 官方 blog</td><td><strong>可核</strong></td></tr><tr><td>「一个月达 100% 功能对等」后续进度</td><td>HackerNews 原帖 + Brandon Thomas 更新</td><td><strong>可追踪</strong>——下次月度更新</td></tr></tbody></table>
+<hr>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/ai-clone-adobe-suite-2026-10-11/image-01.png" alt="Adobe 完整生态 vs AI 克隆矩阵对比示意图" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：左 = Adobe 全家桶（7 款产品完整矩阵，密集连接）；右 = AI 克隆层（ArtCraft + 同代生态，7 个节点但部分仅虚线 / dashed outline 表示仍在 alpha / 开发中）</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L8UVJFSR0511CSAO.html">163 网易号（爱范儿 ifanr.com 原创）：AI「克隆」的 Adobe 全家桶一夜爆火</a></li>
+<li>ArtCraft 官网：<a href="https://getartcraft.com/">getartcraft.com</a></li>
+<li>早前相关：<a href="/research/nano-banana-21-professional-design/">Nano Banana 2.1 杀向专业设计师</a>（10-08）</li>
+<li>早前相关：<a href="/research/tencent-workbuddy-ai-era-office-file-browser/">腾讯 WorkBuddy 想做 AI 时代的 Office</a>（10-08）</li>
+<li>早前相关：<a href="/research/chatgpt-space-pages-slides-launch/">ChatGPT 文档 / PPT 进 Office 腹地</a>（10-01）</li>
+<li>早前相关：<a href="/research/gamma-5-personal-style-ppt/">Gamma 5 解决 AI PPT 个人风格问题</a>（10-06）</li>
+<li>早前相关：<a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管 Ubuntu 云服务器</a>（10-03）</li>
+<li>待核：各 GitHub repo 的 commit 历史 + release 节奏</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

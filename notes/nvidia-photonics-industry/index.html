@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>英伟达开始&quot;抢光&quot;，光电融合产业链要变天了 · Samvortex Hub</title><meta name="description" content="AI 算力竞赛演变为互连架构效率之争。光学经历三阶段跃迁（机架间 → 板卡级 → CPO），引发系统、晶圆代工、光源、器件材料四重产业链重构。NVIDIA 投资 Lumentum + Coherent 各 20 亿美元抢占激光器产能，EDA 工具面临端到端 EOE 仿真革命。"><link rel="canonical" href="https://samvortex.com/notes/nvidia-photonics-industry/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="英伟达开始&#34;抢光&#34;，光电融合产业链要变天了 · Samvortex Hub"><meta property="og:description" content="AI 算力竞赛演变为互连架构效率之争。光学经历三阶段跃迁（机架间 → 板卡级 → CPO），引发系统、晶圆代工、光源、器件材料四重产业链重构。NVIDIA 投资 Lumentum + Coherent 各 20 亿美元抢占激光器产能，EDA 工具面临端到端 EOE 仿真革命。"><meta property="og:url" content="https://samvortex.com/notes/nvidia-photonics-industry/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="英伟达开始&#34;抢光&#34;，光电融合产业链要变天了 · Samvortex Hub"><meta name="twitter:description" content="AI 算力竞赛演变为互连架构效率之争。光学经历三阶段跃迁（机架间 → 板卡级 → CPO），引发系统、晶圆代工、光源、器件材料四重产业链重构。NVIDIA 投资 Lumentum + Coherent 各 20 亿美元抢占激光器产能，EDA 工具面临端到端 EOE 仿真革命。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-08-10T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-08-10T00:00:00.000Z">2026年8月10日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">英伟达开始&quot;抢光&quot;，光电融合产业链要变天了</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">AI 算力竞赛演变为互连架构效率之争。光学经历三阶段跃迁（机架间 → 板卡级 → CPO），引发系统、晶圆代工、光源、器件材料四重产业链重构。NVIDIA 投资 Lumentum + Coherent 各 20 亿美元抢占激光器产能，EDA 工具面临端到端 EOE 仿真革命。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/NVIDIA/" class="tag">#NVIDIA</a><a href="/tags/光互连/" class="tag">#光互连</a><a href="/tags/光电融合/" class="tag">#光电融合</a><a href="/tags/CPO/" class="tag">#CPO</a><a href="/tags/硅光/" class="tag">#硅光</a><a href="/tags/Lumentum/" class="tag">#Lumentum</a><a href="/tags/Coherent/" class="tag">#Coherent</a><a href="/tags/Marvell/" class="tag">#Marvell</a><a href="/tags/台积电/" class="tag">#台积电</a><a href="/tags/Keysight/" class="tag">#Keysight</a><a href="/tags/EDA/" class="tag">#EDA</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>AI 算力竞赛演变为<strong>互连架构效率之争</strong>。光学经历<strong>三阶段跃迁</strong>（机架间 → 板卡级 → <strong>CPO</strong>），引发<strong>四重产业链重构</strong>（系统厂商 / 晶圆代工 / 上游激光器 / 器件材料）。<strong>NVIDIA 各投 20 亿美元锁定 Lumentum + Coherent 激光器产能</strong>。EDA 工具必须从单器件仿真走向<strong>端到端 EOE 仿真</strong>。</p>
+</blockquote>
+<h2 id="光学的三阶段跃迁">光学的三阶段跃迁</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>位置</th><th>形态</th></tr></thead><tbody><tr><td><strong>第一阶段</strong></td><td>数据中心<strong>机架间</strong>最外层网络</td><td>传统可插拔光模块</td></tr><tr><td><strong>第二阶段</strong></td><td><strong>机架内部 + 板卡级</strong></td><td>芯片间互连</td></tr><tr><td><strong>第三阶段</strong></td><td><strong>CPO（光电共封）</strong></td><td>光引擎 + 交换 ASIC + 技术片先进封装紧密结合</td></tr></tbody></table>
+<blockquote>
+<p>“<strong>光正式深入到计算系统内部的核心 I/O。</strong>”</p>
+</blockquote>
+<h2 id="速率演进麦肯锡预测">速率演进（麦肯锡预测）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时点</th><th>速率</th></tr></thead><tbody><tr><td>2029</td><td><strong>87% 超大规模数据中心</strong>光收发器 <strong>800 Gb/s 或更高速率</strong></td></tr><tr><td>进行中</td><td>1.6 Tb/s 和 3.2 Tb/s 加速到来</td></tr></tbody></table>
+<blockquote>
+<p>“光离计算核心越近，电信号在 PCB 板上的衰减风险越低，但电子域与光学域的边界<strong>日趋模糊</strong>，两者交织，使<strong>系统协同设计复杂度呈指数级上升</strong>。”</p>
+</blockquote>
+<h2 id="四重产业链重构">四重产业链重构</h2>
+<h3 id="重构一系统厂商开始直接定义光互连">重构一：系统厂商开始直接定义光互连</h3>
+<p><strong>过去</strong>：交换芯片厂商供 SerDes + 光模块厂商做电光转换（<strong>接力式</strong>）</p>
+<p><strong>现在</strong>（CPO 时代）：</p>
+<ul>
+<li>光引擎 ↔ 交换 ASIC 共同定义</li>
+<li>调制器 + 探测器 ↔ SerDes 适配</li>
+<li>激光器功率 ↔ 完整链路预算匹配</li>
+<li>封装 ↔ 同时管电信号 + 光纤连接 + 热管理</li>
+</ul>
+<blockquote>
+<p><strong>NVIDIA</strong>：将 <strong>Spectrum-X Ethernet Photonics</strong> 作为 <strong>Vera Rubin</strong> 平台互连体系核心组成
+<strong>Broadcom</strong>：<strong>Tomahawk 6 Davisson</strong> —— 102.4 Tb/s 交换 + <strong>第三代 CPO</strong></p>
+</blockquote>
+<h3 id="重构二晶圆代工与先进封装成核心参与者">重构二：晶圆代工与先进封装成核心参与者</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>代工厂</th><th>平台 / 进展</th></tr></thead><tbody><tr><td><strong>台积电</strong></td><td><strong>COUPE 光子引擎</strong>，计划 2026 开始生产 —— 将 COUPE 集成于封装基板的 CPO 方案</td></tr><tr><td><strong>格芯 (GlobalFoundries)</strong></td><td><strong>2026 推出 SCALE CPO</strong> —— 硅光器件 + CWDM/DWDM + TSV + 2.5D/3D 集成</td></tr><tr><td><strong>Tower Semiconductor</strong></td><td>与 <strong>Coherent</strong> 演示 400 Gb/s 单通道硅调制器（量产级硅光工艺）</td></tr></tbody></table>
+<blockquote>
+<p>硅光正从<strong>器件技术</strong>演变为<strong>与先进封装 + HPC 芯片深度结合的平台能力</strong>。</p>
+</blockquote>
+<h3 id="重构三上游光源--光学产能成战略资源">重构三：上游光源 / 光学产能成战略资源 ⭐</h3>
+<blockquote>
+<p>“作为光互连的’<strong>心脏</strong>’，高性能激光器与光源器件<strong>开始成为需要提前锁定的关键资源</strong>。”</p>
+</blockquote>
+<h4 id="nvidia-的抢光动作20263">NVIDIA 的”抢光”动作（2026.3）</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>公司</th><th>投资额</th><th>内容</th></tr></thead><tbody><tr><td><strong>Lumentum</strong></td><td><strong>20 亿美元</strong></td><td>多年期战略 + 采购协议</td></tr><tr><td><strong>Coherent</strong></td><td><strong>20 亿美元</strong></td><td>多年期战略 + 采购协议</td></tr></tbody></table>
+<p><strong>包括</strong>：技术研发 + 激光器 / 光学网络产品<strong>未来产能</strong> + <strong>供应保障</strong> + <strong>美国制造能力扩张</strong>。</p>
+<blockquote>
+<p>AI 基础设施厂商争夺的不只是 GPU + HBM 产能，<strong>也开始向激光器 / 光学器件 / 光纤连接 / 封装能力延伸</strong>。</p>
+</blockquote>
+<h3 id="重构四光子器件--材料路线尚未收敛">重构四：光子器件 + 材料路线尚未收敛</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>路线</th><th>优势</th><th>短板</th></tr></thead><tbody><tr><td><strong>硅光微环调制器</strong></td><td>面积小、密度高，适合 WDM</td><td>对温度和制造偏差敏感</td></tr><tr><td><strong>硅基马赫-曾德尔调制器</strong></td><td>成熟、带宽较宽</td><td>需平衡面积 / 损耗 / 驱动功耗</td></tr><tr><td><strong>薄膜铌酸锂</strong></td><td>下一代候选</td><td>—</td></tr><tr><td><strong>硅有机混合</strong></td><td>下一代候选</td><td>—</td></tr><tr><td><strong>等离激元（Plasmonic）</strong></td><td>提升器件密度 / 调制速度 / 每比特能效</td><td>新兴</td></tr></tbody></table>
+<p><strong>Marvell</strong> 于 <strong>2026.4 收购 Polariton Technologies</strong>，将 Plasmonic 高速低功耗调制技术纳入硅光 + 光 DSP 技术组合，<strong>面向 3.2T 及更高速率</strong>。</p>
+<hr>
+<h2 id="系统级竞赛--eda-与仿真工具革命">系统级竞赛 → EDA 与仿真工具革命</h2>
+<blockquote>
+<p>“工程师如何在制造实物之前，更准确地预测复杂系统的运行表现？”</p>
+</blockquote>
+<h3 id="过去的分工电子--光子--封装--系统各干各的">过去的分工（电子 / 光子 / 封装 / 系统各干各的）</h3>
+<ul>
+<li>高速电路团队：SerDes / 驱动器 / 接收电路</li>
+<li>光子团队：波导 / 调制器 / 耦合器 / PIC</li>
+<li>封装团队：互连与散热</li>
+<li>系统团队：链路预算 + 误码率</li>
+</ul>
+<h3 id="现在--端到端-eoe-仿真需求">现在 → 端到端 EOE 仿真需求</h3>
+<p>光电融合下一代设计工具的竞争点：</p>
+<ol>
+<li>✅ 能否在同一工作流中<strong>连接电 + 光 + 数字算法</strong></li>
+<li>✅ 能否覆盖<strong>器件 / 电路 / 封装 / 完整链路</strong></li>
+<li>✅ 仿真模型能否与<strong>晶圆厂 PDK + 真实测量</strong>一致</li>
+<li>✅ <strong>AI 自动建模 / 参数搜索 / 设计优化</strong></li>
+</ol>
+<hr>
+<h2 id="解决方案商keysight是德科技">解决方案商：Keysight（是德科技）</h2>
+<h3 id="软件布局通过并购整合光领域">软件布局（通过并购整合光领域）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>收购</th><th>能力</th></tr></thead><tbody><tr><td><strong>2025.10</strong></td><td><strong>Synopsys Optical Solutions Group</strong>（含 <strong>RSoft</strong>）</td><td>行业标杆级光子 / 光学设计工具（波导 / 光栅 / 调制器 / 激光器）</td></tr><tr><td><strong>2026.6</strong></td><td><strong>VPIphotonics</strong></td><td>光传输系统 + 网络仿真能力</td></tr></tbody></table>
+<h3 id="旗舰产品">旗舰产品</h3>
+<ul>
+<li><strong>ADS 2026</strong>：突破性端到端 **“电-光-电（EOE）“**仿真解决方案（结合 Keysight Photonic Designer + 高速数字工作流）</li>
+<li><strong>ADS 2027</strong>（新发布）：
+<ul>
+<li>新增 <strong>VCSEL / APD / 激光器模型</strong></li>
+<li>增强光学探测能力 / 仿真稳健性 / Foundry 流程支持</li>
+<li>面向 <strong>PIC / CPO / 高速光通信系统</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="硬件布局">硬件布局</h3>
+<p><strong>N4378A 光波元件分析仪</strong>（2026.3）：</p>
+<ul>
+<li>波长 <strong>1310 nm + 1550 nm</strong></li>
+<li>电-光 + 光-电器件<strong>最高 220 GHz</strong> 全校准 S 参数测量</li>
+<li>目标应用：<strong>1.6T + 3.2T 光收发器件</strong></li>
+</ul>
+<h3 id="keysight-闭环链路">Keysight 闭环链路</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>RSoft 器件级物理仿真</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>Photonic Designer（PIC 电路 + 版图）</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>VPIphotonics 完整系统链路分析</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>N4378A 光波元件分析仪 + 示波器 + 误码仪 + 网络仿真平台</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>真实验证 → 模型回校准 → 再设计</span></span></code></pre>
+<h3 id="三项差异化能力">三项差异化能力</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>能力</th><th>描述</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>解决复杂系统性问题</strong></td><td>ADS 2027 的 EOE 能力 = 高速 SerDes 数字通道 + PIC 行为<strong>同一仿真流程</strong></td></tr><tr><td><strong>2</strong></td><td><strong>更精准预测</strong></td><td>把电噪声 / 光噪声 / 调制器偏置变化 / 非线性 / 多波长干扰 / 制造偏差<strong>放到相同运行条件</strong></td></tr><tr><td><strong>3</strong></td><td><strong>仿真 ↔ 硬件测量闭环</strong></td><td>VPI Optical Link + Keysight 高速数字工具 / 测试仪器，<strong>仿真结果可与台架测量对应</strong></td></tr></tbody></table>
+<hr>
+<h2 id="大会预告">大会预告</h2>
+<blockquote>
+<p><strong>Keysight Design Engineering Summit 2026（KDES 2026 全球首站）</strong>
+📅 <strong>8 月 18 日</strong> 📍 <strong>上海</strong></p>
+<ul>
+<li>4 大分会场 + 30+ 技术演讲 + 20+ 技术展台</li>
+<li>三大路径：<strong>EDA 与 AI 融合</strong> / <strong>电子与光子协同设计</strong> / <strong>工程与多物理场仿真</strong></li>
+</ul>
+</blockquote>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L3VVSV2P0511CPMT.html">网易新闻（半导体行业观察）· 原文</a></li>
+<li>麦肯锡 2029 数据中心光收发器预测</li>
+<li>NVIDIA 官方公告（Lumentum / Coherent 投资）</li>
+<li>Marvell 官方公告（Polariton Technologies 收购）</li>
+<li>台积电 / 格芯 / Tower Semi 官方公告</li>
+<li>Keysight 是德科技</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>华为 GTS 让 Agent 学会&quot;看着网络排障&quot;：双防火墙难题几乎全拿下 · Samvortex Hub</title><meta name="description" content="华为 GTS AI 算法团队提出 NetCanvas：用&#34;可交互视觉拓扑&#34;破解 Agent 的&#34;拓扑失忆&#34;。让 Agent 拥有&#34;边查边长&#34;的活地图 + 按需取景 + 推理交互 + 人类认知对齐画图。CTBench 基准：综合通过率 30.3% → 54.5%（带物理先验 63.6%）；双防火墙 / ECMP 等空间敏感任务 ~10% → ~90%；步数 159 → 113（试错成本 ↓26-45%）；16 胜 0 负 50 平（无一题退化）。"><link rel="canonical" href="https://samvortex.com/notes/huawei-gts-netcanvas-agent/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="华为 GTS 让 Agent 学会&#34;看着网络排障&#34;：双防火墙难题几乎全拿下 · Samvortex Hub"><meta property="og:description" content="华为 GTS AI 算法团队提出 NetCanvas：用&#34;可交互视觉拓扑&#34;破解 Agent 的&#34;拓扑失忆&#34;。让 Agent 拥有&#34;边查边长&#34;的活地图 + 按需取景 + 推理交互 + 人类认知对齐画图。CTBench 基准：综合通过率 30.3% → 54.5%（带物理先验 63.6%）；双防火墙 / ECMP 等空间敏感任务 ~10% → ~90%；步数 159 → 113（试错成本 ↓26-45%）；16 胜 0 负 50 平（无一题退化）。"><meta property="og:url" content="https://samvortex.com/notes/huawei-gts-netcanvas-agent/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="华为 GTS 让 Agent 学会&#34;看着网络排障&#34;：双防火墙难题几乎全拿下 · Samvortex Hub"><meta name="twitter:description" content="华为 GTS AI 算法团队提出 NetCanvas：用&#34;可交互视觉拓扑&#34;破解 Agent 的&#34;拓扑失忆&#34;。让 Agent 拥有&#34;边查边长&#34;的活地图 + 按需取景 + 推理交互 + 人类认知对齐画图。CTBench 基准：综合通过率 30.3% → 54.5%（带物理先验 63.6%）；双防火墙 / ECMP 等空间敏感任务 ~10% → ~90%；步数 159 → 113（试错成本 ↓26-45%）；16 胜 0 负 50 平（无一题退化）。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-09-16T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-09-16T00:00:00.000Z">2026年9月16日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">华为 GTS 让 Agent 学会&quot;看着网络排障&quot;：双防火墙难题几乎全拿下</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">华为 GTS AI 算法团队提出 NetCanvas：用&quot;可交互视觉拓扑&quot;破解 Agent 的&quot;拓扑失忆&quot;。让 Agent 拥有&quot;边查边长&quot;的活地图 + 按需取景 + 推理交互 + 人类认知对齐画图。CTBench 基准：综合通过率 30.3% → 54.5%（带物理先验 63.6%）；双防火墙 / ECMP 等空间敏感任务 ~10% → ~90%；步数 159 → 113（试错成本 ↓26-45%）；16 胜 0 负 50 平（无一题退化）。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/华为/" class="tag">#华为</a><a href="/tags/GTS/" class="tag">#GTS</a><a href="/tags/NetCanvas/" class="tag">#NetCanvas</a><a href="/tags/Agent/" class="tag">#Agent</a><a href="/tags/IP 承载网/" class="tag">#IP 承载网</a><a href="/tags/认知卸载/" class="tag">#认知卸载</a><a href="/tags/Cognitive Offloading/" class="tag">#Cognitive Offloading</a><a href="/tags/CTBench/" class="tag">#CTBench</a><a href="/tags/防火墙/" class="tag">#防火墙</a><a href="/tags/ECMP/" class="tag">#ECMP</a><a href="/tags/网络排障/" class="tag">#网络排障</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>华为 <strong>GTS</strong> AI 算法团队提出 <strong>NetCanvas</strong>：用 <strong>“可交互视觉拓扑”</strong> 破解 Agent 的 ⭐ <strong>“拓扑失忆”</strong>。<strong>三大招</strong>：<strong>边查边长</strong>的活地图 + <strong>按需取景与推理交互</strong> + <strong>人类认知对齐画图</strong>。<strong>CTBench 基准</strong>：⭐ 综合通过率 <strong>30.3% → 54.5%</strong>（带物理先验 <strong>63.6%</strong>）；⭐ 双防火墙 / ECMP 等空间敏感任务 <strong>~10% → ~90%</strong>；<strong>步数 159 → 113</strong>（试错成本 <strong>↓26-45%</strong>）；<strong>16 胜 0 负 50 平</strong>（无一题退化）。</p>
+</blockquote>
+<h2 id="痛点ai-读得懂日志却修不好网">痛点：AI 读得懂日志却修不好网？</h2>
+<h3 id="核心反直觉发现">核心反直觉发现</h3>
+<blockquote>
+<p>“<strong>模型明明能解析单条命令、单段回显</strong>，一旦进入<strong>多设备 / 多路径 / 带防火墙与 ECMP</strong>的真实复杂拓扑，就<strong>开始绕弯、重复探查，甚至在同一节点打转</strong>。”</p>
+</blockquote>
+<h3 id="典型惨案">典型惨案</h3>
+<blockquote>
+<p>“在一次真实的排障测试中，<strong>Agent 已经锁定了出问题的防火墙</strong>，却在这台设备上<strong>换了 70 种查法，原地打转了 300 多步</strong>，仍没找到根因。它<strong>知道该查防火墙，却不知道这台防火墙卡在整个图里面的哪个路径的第几跳</strong>。”</p>
+</blockquote>
+<h2 id="拓扑失忆topology-amnesia">「拓扑失忆」（Topology Amnesia）</h2>
+<h3 id="命名">命名</h3>
+<blockquote>
+<p>“华为 GTS AI 算法团队将其命名为 <strong>‘拓扑失忆’（Topology Amnesia）</strong>：<strong>排障越深入，局部观测可能越来越多，整体的空间关系却在逐渐丢失</strong>。”</p>
+</blockquote>
+<h3 id="资深网工-vs-纯文本-agent">资深网工 vs 纯文本 Agent</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>角色</th><th>“活图”</th></tr></thead><tbody><tr><td><strong>资深网工</strong></td><td>脑子里<strong>始终悬着一张「活图」</strong> —— 流量从哪进、在哪分流、防火墙卡在第几跳</td></tr><tr><td><strong>纯文本 Agent</strong></td><td>面对<strong>一维滚动的 CLI</strong> —— 每推进一步都要从碎片日志重新脑补网络长什么样</td></tr><tr><td><strong>后果</strong></td><td>上下文越长 → <strong>空间关系在长文本里「坍塌」</strong></td></tr></tbody></table>
+<h2 id="解局思路可交互视觉拓扑">解局思路：可交互视觉拓扑 ⭐</h2>
+<blockquote>
+<p>“<strong>不是把专家经验硬写进 Prompt，而是把专家的工作方式写进 Agent 系统。让模型负责思考决策，让 NetCanvas 负责记路与画图</strong>。”</p>
+</blockquote>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>(a) 人类工程师脑中的空间记忆</span></span>
+<span class="line"><span>(b) 纯文本 Agent 陷入拓扑坍塌</span></span>
+<span class="line"><span>(c) NetCanvas 为 Agent 配备可交互的"活地图"</span></span></code></pre>
+<h2 id="三大招">三大招 ⭐</h2>
+<h3 id="招-1边查边长动态生长">招 1：边查边长（动态生长）</h3>
+<ul>
+<li>❌ <strong>摒弃”开局给全景”的僵化思路</strong>（真实排障现场<strong>没有人能在第一时间拿到完美的全局拓扑</strong>）</li>
+<li>✅ Agent 每完成一次 CLI 探查 → 新发现的设备 / 链路 / 路径证据 → <strong>实时合并到当前图状态</strong></li>
+<li>✅ 拓扑图<strong>跟着排障进度一起”动态生长”</strong>（如战争迷雾被逐步驱散）</li>
+</ul>
+<h3 id="招-2按需取景与推理交互核心动作">招 2：按需取景与推理交互（核心动作）</h3>
+<ul>
+<li>✅ Agent 随时切换<strong>全局与局部视图</strong></li>
+<li>✅ Agent 可<strong>高亮当前的焦点节点</strong></li>
+<li>✅ 更绝：通过<strong>主动改变连线颜色</strong>（如用<strong>绿/红虚线标记通断</strong>）→ <strong>在图上直接记录自己的推理假设</strong></li>
+<li>✅ 模型<strong>无需再在脑子里死记硬背</strong> → 真正实现了 ⭐ <strong>“边看、边标、边排查”</strong></li>
+</ul>
+<h3 id="招-3按网工习惯画图认知对齐">招 3：按网工习惯画图（认知对齐）⭐</h3>
+<blockquote>
+<p>“只要把机器生成的拓扑，<strong>换成符合人类网络工程师认知习惯的’领域布局’</strong>，<strong>Agent 的排障成功率就能实现碾压式的跃升</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>画对了图，AI 才能走对路</strong>。”</p>
+</blockquote>
+<h2 id="ctbench-数据验证">CTBench 数据验证 ⭐</h2>
+<h3 id="测试设置">测试设置</h3>
+<ul>
+<li><strong>公开通信运维基准 CTBench</strong></li>
+<li>任务<strong>全部来自真实运维案例</strong></li>
+<li>Agent 进入未知网络 + 动态执行命令 + 从不完整证据中逐步定位故障</li>
+</ul>
+<h3 id="三个核心业务价值">三个核心业务价值</h3>
+<p><strong>1️⃣ 排障更准：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>指标</th><th>数据</th></tr></thead><tbody><tr><td><strong>综合通过率</strong></td><td><strong>30.3% → 54.5%</strong></td></tr><tr><td><strong>带物理连线先验</strong></td><td>可达 <strong>63.6%</strong></td></tr><tr><td><strong>双防火墙 / ECMP 等空间敏感任务</strong></td><td>⭐ <strong>~10% → ~90%</strong></td></tr></tbody></table>
+<blockquote>
+<p>“当隐含在长日志中的空间关系变成’<strong>看得见</strong>’的结构，Agent 沿着多路径顺藤摸瓜终于有了清晰的抓手。”</p>
+</blockquote>
+<p><strong>2️⃣ 表现更稳：16 胜 0 负 50 平</strong></p>
+<blockquote>
+<p>“<strong>逐题比对纯文本方案，NetCanvas 没有在任何一道题上出现能力退化</strong>。多出来的 16 道是<strong>净增</strong>，没有拿别的题来换。”</p>
+</blockquote>
+<p><strong>3️⃣ 步数更少：综合试错成本最高下降 45%</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>指标</th><th>数据</th></tr></thead><tbody><tr><td><strong>平均探查步数</strong></td><td><strong>159 → 113</strong></td></tr><tr><td><strong>Token 试错成本</strong></td><td>⭐ <strong>↓26% – 45%</strong></td></tr></tbody></table>
+<blockquote>
+<p>“<strong>画图不是增加大模型的负担，而是实实在在地省下了试错成本。</strong>”</p>
+</blockquote>
+<h2 id="终极启示认知卸载">终极启示：认知卸载 ⭐</h2>
+<blockquote>
+<p>“<strong>NetCanvas 的实践，揭示了专业 Agent 走向现网落地的核心命题</strong>：<strong>模型本身的理解能力固然重要</strong>，但<strong>外围系统（Harness）如何为它呈现这个真实世界，才真正决定了它最终的战斗力</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“对于 IP 网络这种由拓扑 / 路径 / 协议动态交织的真实复杂系统，<strong>把海量日志生硬地压进大模型的 Token 里，注定会导致认知超载</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>真正的专业能力，不仅仅依赖于模型内部庞大的’知识储备’与强大的’推理决策’，更在于懂得借助外围系统来进行’认知卸载’，建立起真正的网络空间全局观</strong>。”</p>
+</blockquote>
+<h2 id="安迪克拉克andy-clark哲学">安迪·克拉克（Andy Clark）哲学</h2>
+<blockquote>
+<p>“<strong>真正的智能，懂得使用外部图纸进行’认知卸载’（Cognitive Offloading）</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>外围系统，就是 Agent 延展的心智</strong>。”</p>
+</blockquote>
+<h2 id="项目地址">项目地址</h2>
+<ul>
+<li><strong>NetCanvas</strong>：<a href="https://github.com/caimanjing/netcanvas">https://github.com/caimanjing/netcanvas</a></li>
+<li><strong>CTBench</strong>：<a href="https://huggingface.co/datasets/netop/CTBench">https://huggingface.co/datasets/netop/CTBench</a></li>
+</ul>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/huawei-gts-netcanvas-agent/image-01.jpg" alt="华为 GTS NetCanvas 可交互视觉拓扑" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：华为 GTS NetCanvas —— Agent 看着网络排障（量子位 · 2026-09-16）</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L6UL2U1B0511DSSR.html">网易新闻（量子位）· 原文</a></li>
+<li>NetCanvas GitHub：<a href="https://github.com/caimanjing/netcanvas">caimanjing/netcanvas</a></li>
+<li>CTBench：<a href="https://huggingface.co/datasets/netop/CTBench">huggingface.co/datasets/netop/CTBench</a></li>
+<li>认知哲学家 Andy Clark 的认知卸载理论</li>
+<li>华为 GTS AI 算法团队</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

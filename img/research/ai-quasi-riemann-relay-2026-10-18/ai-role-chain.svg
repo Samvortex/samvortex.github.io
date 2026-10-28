@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-label="AI 角色演化链">
+  <title>AI 在不同环节扮演不同角色（打地基 → 浇混凝土 → 装电梯 → 住进来）</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-actor  { font: 700 14px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-role   { font: 500 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-meta   { font: 400 11px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-stage  { font: 700 11px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #ffffff; }
+      .t-flow   { font: 600 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6475" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">AI 角色演化链：打地基 → 浇混凝土 → 装电梯 → 住进来</text>
+  <text x="40" y="54" class="t-role">不是 L1 独奏，是 L2/L3 混合范式</text>
+
+  <!-- Stage 1: OpenAI (打地基) -->
+  <g>
+    <rect x="40" y="90" width="200" height="180" rx="10" fill="#dbeafe" stroke="#5EB1FF" stroke-width="2" />
+    <rect x="40" y="90" width="200" height="28" rx="10" fill="#5EB1FF" />
+    <rect x="40" y="105" width="200" height="13" fill="#5EB1FF" />
+    <text x="140" y="110" text-anchor="middle" class="t-stage">L1 · 工具层</text>
+    <text x="55" y="142" class="t-actor">OpenAI</text>
+    <text x="55" y="160" class="t-role">打地基</text>
+    <text x="55" y="180" class="t-meta">2026-10-06</text>
+    <text x="55" y="200" class="t-meta">ζ 函数 quasi-RH</text>
+    <text x="55" y="216" class="t-meta">199 页证明</text>
+    <text x="55" y="232" class="t-meta">暴力推，排除 Siegel 零点</text>
+    <text x="55" y="252" class="t-meta" font-style="italic">「AI 单独暴力推」</text>
+  </g>
+
+  <!-- Stage 2: Cureton + Thorner (装电梯) -->
+  <g>
+    <rect x="280" y="90" width="200" height="180" rx="10" fill="#ffedd5" stroke="#FFB17A" stroke-width="2" />
+    <rect x="280" y="90" width="200" height="28" rx="10" fill="#FFB17A" />
+    <rect x="280" y="105" width="200" height="13" fill="#FFB17A" />
+    <text x="380" y="110" text-anchor="middle" class="t-stage">L2 · 工具 + 人类扩展</text>
+    <text x="295" y="142" class="t-actor">Cureton + Thorner</text>
+    <text x="295" y="160" class="t-role">装电梯</text>
+    <text x="295" y="180" class="t-meta">2026-10-12</text>
+    <text x="295" y="200" class="t-meta">搬到 Dedekind ζ + Hecke L</text>
+    <text x="295" y="216" class="t-meta">Re(s) &gt; 31/32 无零点</text>
+    <text x="295" y="232" class="t-meta">学术归因："OpenAI 突破"</text>
+    <text x="295" y="252" class="t-meta" font-style="italic">「数学家指导，AI 工具」</text>
+  </g>
+
+  <!-- Stage 3: AxiomProver (浇混凝土) -->
+  <g>
+    <rect x="520" y="90" width="200" height="180" rx="10" fill="#cffafe" stroke="#00C2C7" stroke-width="2" />
+    <rect x="520" y="90" width="200" height="28" rx="10" fill="#00C2C7" />
+    <rect x="520" y="105" width="200" height="13" fill="#00C2C7" />
+    <text x="620" y="110" text-anchor="middle" class="t-stage">L2 · 形式化</text>
+    <text x="535" y="142" class="t-actor">AxiomProver</text>
+    <text x="535" y="160" class="t-role">浇混凝土</text>
+    <text x="535" y="180" class="t-meta">2026-10-12 → 13</text>
+    <text x="535" y="200" class="t-meta">Lean 4 形式化验证</text>
+    <text x="535" y="216" class="t-meta">1/6000 → 1/32（×200）</text>
+    <text x="535" y="232" class="t-meta">开源黑客松 + Lean check</text>
+    <text x="535" y="252" class="t-meta" font-style="italic">「机器审稿，数学家做判断」</text>
+  </g>
+
+  <!-- Stage 4: Frei et al (住进来) -->
+  <g>
+    <rect x="760" y="90" width="200" height="180" rx="10" fill="#fce7f3" stroke="#FF8AAB" stroke-width="2" />
+    <rect x="760" y="90" width="200" height="28" rx="10" fill="#FF8AAB" />
+    <rect x="760" y="105" width="200" height="13" fill="#FF8AAB" />
+    <text x="860" y="110" text-anchor="middle" class="t-stage">L3 · 人类写最终证明</text>
+    <text x="775" y="142" class="t-actor">Frei + Sofos + Widmer</text>
+    <text x="775" y="160" class="t-role">住进来</text>
+    <text x="775" y="180" class="t-meta">2026-10-13</text>
+    <text x="775" y="200" class="t-meta">无条件化 Ellenberg–Venkatesh</text>
+    <text x="775" y="216" class="t-meta">19 年悬案 + 4 个其他应用</text>
+    <text x="775" y="232" class="t-meta">显式声明：未使用 AI 工具</text>
+    <text x="775" y="252" class="t-meta" font-style="italic">「人用 AI 的工具，写自己的证明」</text>
+  </g>
+
+  <!-- Arrows between stages -->
+  <g fill="none" stroke="#5b6475" stroke-width="1.5" marker-end="url(#arrow)">
+    <line x1="240" y1="180" x2="280" y2="180" />
+    <line x1="480" y1="180" x2="520" y2="180" />
+    <line x1="720" y1="180" x2="760" y2="180" />
+  </g>
+
+  <!-- Flow labels (above arrows) -->
+  <text x="260" y="170" text-anchor="middle" class="t-flow">用工具</text>
+  <text x="500" y="170" text-anchor="middle" class="t-flow">形式化</text>
+  <text x="740" y="170" text-anchor="middle" class="t-flow">应用</text>
+
+  <!-- Bottom insight -->
+  <text x="40" y="310" class="t-title" font-size="14">⭐ 关键观察：每个阶段的"AI 角色"都不同</text>
+  <text x="40" y="332" class="t-role">L1 暴力推 → L2 工具 + 人类判断 → L2 形式化 → L3 人类写最终证明</text>
+  <text x="40" y="350" class="t-meta">整个链条没有一环是"AI 单独破 GRH"，但合在一起把 19 年悬案去条件化了</text>
+</svg>

@@ -1,0 +1,719 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>单开发者 GitHub 10 万+ stars 拆解：女娲 + 达尔文 + 5 限制设计 + 4 层 OS 操控 — Agent Skill 方法论全集 · Samvortex Hub</title><meta name="description" content="alchaincyf 64 仓库累计 101,808 stars（gitstar 全球 ~79）。起点 2026-04 开源女娲.skill。**7 个核心 repo**：女娲（人→skill 蒸馏）/ Huashu Design（5 限制 + 禁 AI Slop）/ 达尔文（棘轮 + 9 维打分）/ huashu-chrome + mac-use（OS 操控）/ FanBox（含 Hermes Agent 的 11 个 coding agent）。所有 Skill 走 Agent Skills 协议。"><link rel="canonical" href="https://samvortex.com/notes/alchaincyf-agent-skill-methodology-2026-10-11/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="单开发者 GitHub 10 万+ stars 拆解：女娲 + 达尔文 + 5 限制设计 + 4 层 OS 操控 — Agent Skill 方法论全集 · Samvortex Hub"><meta property="og:description" content="alchaincyf 64 仓库累计 101,808 stars（gitstar 全球 ~79）。起点 2026-04 开源女娲.skill。**7 个核心 repo**：女娲（人→skill 蒸馏）/ Huashu Design（5 限制 + 禁 AI Slop）/ 达尔文（棘轮 + 9 维打分）/ huashu-chrome + mac-use（OS 操控）/ FanBox（含 Hermes Agent 的 11 个 coding agent）。所有 Skill 走 Agent Skills 协议。"><meta property="og:url" content="https://samvortex.com/notes/alchaincyf-agent-skill-methodology-2026-10-11/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="单开发者 GitHub 10 万+ stars 拆解：女娲 + 达尔文 + 5 限制设计 + 4 层 OS 操控 — Agent Skill 方法论全集 · Samvortex Hub"><meta name="twitter:description" content="alchaincyf 64 仓库累计 101,808 stars（gitstar 全球 ~79）。起点 2026-04 开源女娲.skill。**7 个核心 repo**：女娲（人→skill 蒸馏）/ Huashu Design（5 限制 + 禁 AI Slop）/ 达尔文（棘轮 + 9 维打分）/ huashu-chrome + mac-use（OS 操控）/ FanBox（含 Hermes Agent 的 11 个 coding agent）。所有 Skill 走 Agent Skills 协议。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-11T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-11T00:00:00.000Z">2026年10月11日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">单开发者 GitHub 10 万+ stars 拆解：女娲 + 达尔文 + 5 限制设计 + 4 层 OS 操控 — Agent Skill 方法论全集</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">alchaincyf 64 仓库累计 101,808 stars（gitstar 全球 ~79）。起点 2026-04 开源女娲.skill。**7 个核心 repo**：女娲（人→skill 蒸馏）/ Huashu Design（5 限制 + 禁 AI Slop）/ 达尔文（棘轮 + 9 维打分）/ huashu-chrome + mac-use（OS 操控）/ FanBox（含 Hermes Agent 的 11 个 coding agent）。所有 Skill 走 Agent Skills 协议。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/alchaincyf/" class="tag">#alchaincyf</a><a href="/tags/GitHub 10万+/" class="tag">#GitHub 10万+</a><a href="/tags/Agent Skill/" class="tag">#Agent Skill</a><a href="/tags/Skill Marketplace/" class="tag">#Skill Marketplace</a><a href="/tags/女娲/" class="tag">#女娲</a><a href="/tags/nuwa-skill/" class="tag">#nuwa-skill</a><a href="/tags/达尔文/" class="tag">#达尔文</a><a href="/tags/darwin-skill/" class="tag">#darwin-skill</a><a href="/tags/huashu-design/" class="tag">#huashu-design</a><a href="/tags/huashu-chrome/" class="tag">#huashu-chrome</a><a href="/tags/huashu-mac-use/" class="tag">#huashu-mac-use</a><a href="/tags/FanBox/" class="tag">#FanBox</a><a href="/tags/Agent Skills 协议/" class="tag">#Agent Skills 协议</a><a href="/tags/Skill 蒸馏/" class="tag">#Skill 蒸馏</a><a href="/tags/Skill 迭代/" class="tag">#Skill 迭代</a><a href="/tags/评论/" class="tag">#评论</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>单开发者 <strong>alchaincyf 64 仓库 / 101,808 stars / gitstar 全球 ~79 名</strong>——起点是 <strong>2026-04 开源女娲.skill</strong>。核心方法论不是「<strong>造 Agent</strong>」，是「<strong>造 Skill</strong>」——<strong>女娲（人→skill 蒸馏）</strong>、<strong>Huashu Design（5 限制设计）</strong>、<strong>达尔文（skill→更好 skill，棘轮机制）</strong>、<strong>huashu-chrome / huashu-mac-use（OS 操控）</strong>、<strong>FanBox（IDE 编排）</strong>。所有 Skill 走 <strong>Agent Skills 协议</strong>——<strong>Hermes Agent / Claude Code / Codex / Cursor / OpenClaw 都能跑</strong>。</p>
+</blockquote>
+<h2 id="一事件--背景">一、事件 / 背景</h2>
+<h3 id="alchaincyf-的-github-数据">alchaincyf 的 GitHub 数据</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>指标</th><th>数据</th><th>时间</th></tr></thead><tbody><tr><td>自建仓库</td><td><strong>64 个</strong></td><td>2026-10-11</td></tr><tr><td>总 stars</td><td><strong>101,808</strong></td><td>2026-10-11</td></tr><tr><td>gitstar 全球用户榜排名</td><td><strong>~79 名</strong></td><td>2026-10-11</td></tr><tr><td>起点</td><td>2026-04 开源女娲.skill</td><td>大半年前 0 个 >500 stars 仓库</td></tr></tbody></table>
+<h3 id="增长曲线">增长曲线</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>事件</th><th>stars</th></tr></thead><tbody><tr><td>2026-04 初</td><td>开源女娲.skill</td><td>—</td></tr><tr><td>2026-04 次日</td><td>女娲 star 破千</td><td>—</td></tr><tr><td>2026-04 下旬</td><td>Huashu Design 首日 <strong>1600+</strong></td><td>—</td></tr><tr><td>2026-05 下旬</td><td>总数过 <strong>5 万</strong></td><td>—</td></tr><tr><td>2026-10-11</td><td><strong>101,808</strong></td><td>79 名</td></tr></tbody></table>
+<h3 id="数据分布">数据分布</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>类别</th><th>数量</th><th>stars 占比</th></tr></thead><tbody><tr><td><strong>Skill 类仓库</strong></td><td>35 个</td><td><strong>8.8 万 stars</strong></td></tr><tr><td><strong>女娲 + Huashu Design</strong></td><td>2 个</td><td><strong>占总量近 6 成</strong>（3.4 万 + 2.5 万）</td></tr><tr><td><strong>11 本橙皮书配套仓库</strong></td><td>11 个</td><td><strong>1 万 +</strong></td></tr></tbody></table>
+<h3 id="一个有趣的统计">一个有趣的统计</h3>
+<blockquote>
+<p><strong>女娲.skill 这个 star 最多的仓库，文本几乎全是 markdown，按文件体量算，脚本代码只占 3% 左右。</strong></p>
+</blockquote>
+<p><strong>含义</strong>：<strong>md 背后的自然语言才是这个时代最主要的编程语言</strong>——这是 Sam 你笔记体系应该关注的元趋势。</p>
+<hr>
+<h2 id="二女娲skill人--skill-蒸馏核心创新-1">二、女娲.skill：人 → skill 蒸馏（核心创新 1）</h2>
+<p><strong>Star</strong>：<strong>3.4 万</strong>（alchaincyf 单仓库最高）
+<strong>GitHub</strong>：<a href="https://github.com/alchaincyf/nuwa-skill">https://github.com/alchaincyf/nuwa-skill</a></p>
+<h3 id="核心能力">核心能力</h3>
+<blockquote>
+<p><strong>你给它一个名字，它自动走完调研、提炼、验证，产出一个这个人的视角 skill。</strong></p>
+</blockquote>
+<h3 id="5-层人物模型">5 层人物模型</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>层</th><th>内容</th></tr></thead><tbody><tr><td><strong>表达 DNA</strong></td><td>怎么说话</td></tr><tr><td><strong>心智模型</strong></td><td>怎么想</td></tr><tr><td><strong>决策启发式</strong></td><td>怎么判断</td></tr><tr><td><strong>反模式 / 价值观底线</strong></td><td>什么不做</td></tr><tr><td><strong>局限诚实边界</strong></td><td>知道自己的局限在哪</td></tr></tbody></table>
+<h3 id="蒸馏过程4-步">蒸馏过程（4 步）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>步骤</th><th>内容</th></tr></thead><tbody><tr><td><strong>1. 六路并行采集</strong></td><td>著作 / 播客访谈 / 社交媒体 / 批评者视角 / 决策记录 / 人生时间线——<strong>6 个 agent 同时跑</strong>，各自存档</td></tr><tr><td><strong>2. 三重验证提炼</strong></td><td>一个观点要收录成心智模型必须：跨 2 个以上领域出现过 + 能推断出他对新问题的立场 + 不是所有聪明人都会这么想——<strong>3 条全过才留</strong></td></tr><tr><td><strong>3. 构建 skill</strong></td><td>3-7 个心智模型 + 5-10 条决策启发式 + 表达 DNA + 价值观 + 诚实边界——写进 <strong>SKILL.md</strong></td></tr><tr><td><strong>4. 质量验证</strong></td><td>拿 3 个他公开回答过的问题测，方向一致算通过；再拿 1 个他没讨论过的问题测，<strong>应该表现出适度的不确定，而不是斩钉截铁</strong></td></tr></tbody></table>
+<h3 id="每个-skill-标注做不到什么">每个 skill 标注「做不到什么」</h3>
+<blockquote>
+<p><strong>蒸馏不了直觉、只是截止到调研时间的快照、公开表达也不等于真实想法。</strong></p>
+</blockquote>
+<p><strong>置信度：高</strong>——这是非常成熟的「<strong>反幻觉</strong>」设计——明确告知 skill 边界。</p>
+<h3 id="适用场景">适用场景</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>「蒸馏一个保罗·格雷厄姆」</span></span>
+<span class="line"><span>↓</span></span>
+<span class="line"><span>造完之后直接用：</span></span>
+<span class="line"><span>「用芒格的视角帮我分析这个投资决策」</span></span></code></pre>
+<h3 id="已蒸馏人物">已蒸馏人物</h3>
+<p>乔布斯 / 芒格 / 费曼 / 纳瓦尔……</p>
+<hr>
+<h2 id="三huashu-design5-限制设计核心创新-2">三、Huashu Design：5 限制设计（核心创新 2）</h2>
+<p><strong>Star</strong>：<strong>近 2.5 万</strong>
+<strong>GitHub</strong>：<a href="https://github.com/alchaincyf/huashu-design">https://github.com/alchaincyf/huashu-design</a></p>
+<h3 id="核心能力-1">核心能力</h3>
+<blockquote>
+<p><strong>agent 里用 HTML 做设计的 skill，能出四类东西：可点击 App/Web 交互原型 / 演讲幻灯片（HTML deck + 导出 PPTX）/ 时间轴动画（MP4 / GIF + BGM）/ 信息图（PDF / PNG / SVG）</strong></p>
+</blockquote>
+<h3 id="5-限制设计效果保障">5 限制（设计效果保障）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>限制</th><th>实现</th></tr></thead><tbody><tr><td>1</td><td><strong>需求模糊不让你盲选风格</strong></td><td>开 3 个 subagent 并行，3 套逻辑各出一版真实视觉（<strong>风格库随机抽</strong> / <strong>参照世界级获奖作品</strong> / <strong>假设预算无上限的设计工作室</strong>），3 版摆出来你看着选——底层是 <strong>60 种纯 CSS 的 HTML 风格</strong></td></tr><tr><td>2</td><td><strong>涉及具体品牌走 5 步品牌资产协议</strong></td><td>问你有没有品牌规范 → 搜官方品牌页 → 下载资产 → 从资产里提取色值 → 固化成 brand-spec + CSS 变量——<strong>绝不凭记忆猜品牌色</strong></td></tr><tr><td>3</td><td><strong>按初级设计师干活</strong></td><td>开工前<strong>把问题一次性问完</strong> → 先给灰色方块占位初版 → 填内容 / 出变体时再分别给你看 → 交付前用 Playwright 在浏览器里过一遍</td></tr><tr><td>4</td><td><strong>一眼 AI 视觉直接禁掉</strong></td><td>紫色渐变 / emoji 图标 / 圆角加左边框强调——<strong>尽量帮你做出不 AI Slop 的设计</strong></td></tr><tr><td>5</td><td><strong>5 维专家评审</strong></td><td>做完再让 skill 自我评审，出雷达图 + 修复清单</td></tr></tbody></table>
+<p><strong>置信度：高</strong>——5 限制中第 1 / 第 4 是<strong>反 AI Slop 的具体实践</strong>，比单纯的 prompt 设计更有可操作性。</p>
+<h3 id="适用场景-1">适用场景</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>「用 Huashu Design，把这份内容做成一套演示文稿，先给我三个视觉方向。」</span></span></code></pre>
+<hr>
+<h2 id="四达尔文skillskill-越用越好核心创新-3">四、达尔文.skill：skill 越用越好（核心创新 3）</h2>
+<p><strong>Star</strong>：<strong>6 千多</strong>
+<strong>GitHub</strong>：<a href="https://github.com/alchaincyf/darwin-skill">https://github.com/alchaincyf/darwin-skill</a></p>
+<h3 id="核心能力-2">核心能力</h3>
+<blockquote>
+<p><strong>女娲负责造 skill，达尔文负责迭代和优化 skill。思路来自 Karpathy 的 autoresearch：评估、改进、测试，然后保留或回滚。</strong></p>
+</blockquote>
+<h3 id="5-步机制">5 步机制</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>步骤</th><th>内容</th></tr></thead><tbody><tr><td><strong>1. 9 维打分</strong></td><td>总分 100；结构类靠<strong>静态分析</strong>；效果类<strong>必须真跑测试提示词</strong>——<strong>实测权重最高</strong></td></tr><tr><td><strong>2. 单维度优化</strong></td><td>找加权短板最大的维度，<strong>一轮只改这一个</strong>，改完 git commit</td></tr><tr><td><strong>3. 双子 agent 重评分 + 棘轮</strong></td><td>启 2 个独立子 agent 评分（下一轮换新评委，避免锚定）——<strong>新分高保留，否则 git revert 回滚</strong>；<strong>分数只升不降</strong></td></tr><tr><td><strong>4. 单轮涨幅 &#x3C; 1 自动停</strong></td><td>避免为凑分往 skill 里堆冗余</td></tr><tr><td><strong>5. 阶段 diff 给用户看</strong></td><td>每阶段停下来，<strong>diff 和分数变化给你看</strong>，等你确认再继续</td></tr></tbody></table>
+<h3 id="关键设计点">关键设计点</h3>
+<p><strong>棘轮机制（ratchet）</strong>——<strong>只接受正向改进，不接受回归</strong>。这是从 Karpathy autoresearch 借鉴的工程化实践。</p>
+<h3 id="实测效果">实测效果</h3>
+<blockquote>
+<p><strong>2.0 吸收了微软研究院两篇论文的方法，验证机制对齐了 SkillOpt 的设计</strong>——microsoft/SkillOpt 的 README 里 6 月初有一条更新写的就是 gbrain / gbrain-evals / darwin-skill 都集成了 SkillOpt。</p>
+</blockquote>
+<blockquote>
+<p><strong>拿它优化 alchaincyf 自己的 huashu-gpt-image，分数从 80.8 涨到了 91.65。</strong></p>
+</blockquote>
+<p><strong>置信度：中-高</strong>——微软 SkillOpt 的集成是<strong>可核第三方背书</strong>，80.8 → 91.65 是<strong>单源数据</strong>，可核但需验证。</p>
+<hr>
+<h2 id="五huashu-chrome--huashu-mac-useos-操控类">五、huashu-chrome + huashu-mac-use：OS 操控类</h2>
+<h3 id="51-huashu-chrome让-agent-操作你已登录的-chrome">5.1 huashu-chrome（让 agent 操作你已登录的 Chrome）</h3>
+<p><strong>Star</strong>：270
+<strong>GitHub</strong>：<a href="https://github.com/alchaincyf/huashu-chrome">https://github.com/alchaincyf/huashu-chrome</a></p>
+<p><strong>核心能力</strong>：<strong>任何 agent 直接操控你日常用的那个 Chrome，带着你全部的登录态</strong>——装一个 Chrome 扩展 + 一个 MCP，不用改启动参数 / 不用开调试端口。</p>
+<p><strong>兼容性</strong>：Claude Code / Codex / Cursor / Gemini CLI 等<strong>二十多家支持 MCP 的 agent 都能接</strong>。</p>
+<p><strong>vs 现状</strong>：相比大多数 agent 自带的 browser-use 能力，<strong>核心特点是自主学习进化 + 人和 AI 协同的细节</strong>。</p>
+<h4 id="22-个工具分-3-层">22 个工具分 3 层</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>层</th><th>工具用途</th></tr></thead><tbody><tr><td><strong>网络层</strong></td><td>要数据——先看页面调了哪些接口，<strong>带着 cookie 直接调</strong>，一次翻完所有页</td></tr><tr><td><strong>操作层</strong></td><td>要做事——把页面拍成<strong>带编号的元素清单</strong>，一次填完整张表</td></tr><tr><td><strong>截图层</strong></td><td>兜底——其他方法不灵再用</td></tr></tbody></table>
+<h4 id="5-大工程原则">5 大工程原则</h4>
+<ol>
+<li><strong>每个写操作都要交待页面到底动没动</strong>——防「<strong>工具说成功 / 页面其实没反应</strong>」的静默失败</li>
+<li><strong>多步操作一次说完</strong>，每步验过效果才走下一步</li>
+<li><strong>提交 / 支付 / 删除 / 发布永远不代做</strong></li>
+<li><strong>越用越快</strong>——出厂带 20 多个网站实测经验，干活时摸清的新门路<strong>存回本机</strong></li>
+<li><strong>验证码 / 扫码 / 付款交还给人</strong>；<strong>所有活在后台标签页</strong>——不抢屏幕，多 agent 同时干活不抢页</li>
+</ol>
+<h4 id="实测效果-1">实测效果</h4>
+<blockquote>
+<p><strong>同一个飞书多维表格任务，第一次从零摸索用了 281 次调用 / 54 分钟；记下经验之后第二次不到 10 次调用。</strong></p>
+</blockquote>
+<h3 id="52-huashu-mac-use让-agent-操作-mac-原生应用">5.2 huashu-mac-use（让 agent 操作 Mac 原生应用）</h3>
+<p><strong>Star</strong>：300
+<strong>GitHub</strong>：<a href="https://github.com/alchaincyf/huashu-mac-use">https://github.com/alchaincyf/huashu-mac-use</a></p>
+<p><strong>核心</strong>：Mac 上大部分原生 app <strong>没有 API，agent 够不着</strong>——huashu-mac-use 让 agent 去操作这些 app。</p>
+<h4 id="4-层探测从上往下试">4 层探测（从上往下试）</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>层</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td><strong>App 自己的命令行 / AppleScript / 调试端口</strong></td><td>结构化接口优先</td></tr><tr><td>2</td><td><strong>系统的辅助功能语义树</strong></td><td>macOS Accessibility API</td></tr><tr><td>3</td><td><strong>窗口坐标</strong></td><td>几何定位</td></tr><tr><td>4</td><td><strong>像素</strong></td><td>视觉抓取——最后兜底</td></tr></tbody></table>
+<h4 id="借焦点的-4-道闸">借焦点的 4 道闸</h4>
+<blockquote>
+<p><strong>借之前要过四道闸</strong>：</p>
+<ol>
+<li>前台是不是目标 app</li>
+<li>落点有没有被挡住</li>
+<li>你是不是正在用键鼠（<strong>2 秒内动过就安静等你停手</strong>）</li>
+<li>全机同时只允许一个进程借焦点</li>
+</ol>
+</blockquote>
+<p><strong>借到焦点的那半秒</strong>，屏幕四角会亮起一圈取景框，告诉你此刻是 agent 在动——<strong>用完立刻还焦点、把鼠标放回原位</strong>。</p>
+<h4 id="一个案例">一个案例</h4>
+<blockquote>
+<p><strong>仓库里有个案例：一个 coding agent 照着 4 张照片，在 Blender 里建出一艘十万吨级的邮轮，建模 / 材质 / 灯光 / 运镜一共 33 分钟，全程没人碰鼠标。</strong></p>
+</blockquote>
+<p><strong>置信度：高</strong>——「借焦点 + 4 道闸 + 屏幕取景框」是<strong>用户信任工程</strong>，比大多数 OS 自动化工具<strong>显式得多</strong>。</p>
+<hr>
+<h2 id="六fanboxcoding-agent-驾驶舱">六、FanBox：Coding Agent 驾驶舱</h2>
+<p><strong>Star</strong>：1 千多
+<strong>GitHub</strong>：<a href="https://github.com/alchaincyf/fanbox">https://github.com/alchaincyf/fanbox</a></p>
+<h3 id="核心能力-3">核心能力</h3>
+<blockquote>
+<p><strong>把找文件 / 开终端跑 agent / 看产出这条链路收进一个窗口：左边文件，右边或下边终端，中间原地预览。本地运行 / 零配置，不做云、不做账号，macOS 免费开源。</strong></p>
+</blockquote>
+<h3 id="4-大功能">4 大功能</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>功能</th><th>实现</th></tr></thead><tbody><tr><td>1</td><td><strong>看清 agent 改了什么</strong></td><td>agent 每写一个文件，<strong>那张文件卡片当场亮起来</strong>；开了跟随模式，预览跟着 agent 正在写的文件走，<strong>HTML 边写边渲染</strong>；「本回合」面板列这一回合是哪个终端里的哪个 agent 改了哪些文件 + 每个文件加减多少行——<strong>点开看 diff，可以单个文件还原，也可以整回合回滚</strong></td></tr><tr><td>2</td><td><strong>在 diff 上选几行写批注</strong></td><td>一键粘回那个 agent 的终端，<strong>最后那下回车留给你按</strong></td></tr><tr><td>3</td><td><strong>精确知道每个 agent 的状态</strong></td><td>启动 Claude Code 和 Codex 时挂上它们的官方 hooks——<strong>干活中 / 等你确认 / 等你输入 / 已完成</strong>都是精确事件；开了好几个终端时，<strong>在等你的会话会在标签栏下面一行行列出来</strong></td></tr><tr><td>4</td><td><strong>内置 11 个 coding agent 一键启动</strong></td><td><strong>Claude Code / Codex / Hermes Agent / OpenClaw / Kimi Code / ZCode</strong>——点开任何项目文件夹，能看到 AI 在这里干过什么，一键接上当时的会话</td></tr></tbody></table>
+<h3 id="20-新增能力">2.0 新增能力</h3>
+<ul>
+<li><strong>直接通过微信操控电脑里的 Claude Code 和 Codex</strong></li>
+<li><strong>Mac 合盖不待机</strong>——agent 还在跑的时候你也能合上电脑走人</li>
+</ul>
+<p><strong>置信度：高</strong>——<strong>「<strong>内置 11 个 coding agent</strong>」列表里有 <strong>Hermes Agent</strong> + <strong>OpenClaw</strong>，直接证明 Skill 协议在主流 agent 里是</strong>事实标准**。</p>
+<hr>
+<h2 id="七skill-协议视角和-hermes-agent--你工作的连接">七、Skill 协议视角：和 Hermes Agent / 你工作的连接</h2>
+<h3 id="71-所有这些-skill-走同一协议">7.1 所有这些 Skill 走同一协议</h3>
+<blockquote>
+<p><strong>Claude Code / Codex / Cursor / OpenClaw / Hermes Agent 这些支持 Agent Skills 协议的 agent 都能跑</strong></p>
+</blockquote>
+<p>意味着：<strong>你的 <a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管方案</a> 不需要重新发明 Skill 协议——这 7 个 repo 直接是「<strong>别人替你验证过</strong>的 Skill 实现</strong>」。</p>
+<h3 id="72-skill-类型全景你之前覆盖-vs-新增">7.2 Skill 类型全景（你之前覆盖 vs 新增）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Skill 类型</th><th>你之前覆盖</th><th>这篇新增</th></tr></thead><tbody><tr><td><strong>人设类</strong>（人 → skill）</td><td>—</td><td><strong>女娲</strong>（核心创新：5 层模型 + 4 步蒸馏）</td></tr><tr><td><strong>设计类</strong>（HTML 原型 / PPT / 信息图）</td><td>Nano Banana</td><td><strong>Huashu Design</strong>（<strong>5 限制更具体</strong>——不让你盲选 + 禁 AI Slop + 5 步品牌资产）</td></tr><tr><td><strong>优化类</strong>（skill → 更好 skill）</td><td>—</td><td><strong>达尔文</strong>（<strong>棘轮机制 + 9 维打分</strong>——对齐微软 SkillOpt）</td></tr><tr><td><strong>OS 操控类</strong>（Chrome / Mac 原生 app）</td><td>—</td><td><strong>huashu-chrome</strong>（22 工具 3 层 + 自主学习存本机）+ <strong>huashu-mac-use</strong>（4 层探测 + 借焦点 4 道闸）</td></tr><tr><td><strong>IDE 编排类</strong>（文件 / diff / agent 状态）</td><td>—</td><td><strong>FanBox</strong>（<strong>11 个 coding agent 一键启动</strong>——直接含 Hermes Agent + OpenClaw）</td></tr></tbody></table>
+<h3 id="73-你的-hermes-agent-路线图被扩展">7.3 你的 Hermes Agent 路线图被扩展</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>之前你规划的能力</th><th>这篇新提示</th></tr></thead><tbody><tr><td>Skill Marketplace（用户上传 + 浏览）</td><td><strong>Skill 蒸馏（女娲）和 Skill 迭代（达尔文）是 Marketplace 的「上游供应链」</strong>——没这俩，Marketplace 就是空壳</td></tr><tr><td>多 skill 协同</td><td><strong>Huashu Design 的「3 subagent 并行 3 套方案让用户选」是直接的多 skill 协同范式</strong></td></tr><tr><td>OS 操控</td><td><strong>huashu-chrome / huashu-mac-use 是现成的、别人验证过的实现</strong>——你直接 fork 进 Hermes</td></tr><tr><td>IDE 编排</td><td><strong>FanBox 是「Coding Agent 编排」</strong>——你的 The Hive 可以借鉴这个 UI 思路</td></tr></tbody></table>
+<hr>
+<h2 id="八可信度红旗">八、可信度红旗</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>红旗</th><th>详情</th><th>判断</th></tr></thead><tbody><tr><td><strong>作者 alchaincyf 自述</strong>——163 自媒体转载，文末无具体合作媒体</td><td><strong>作者本人宣传</strong>——<strong>可信度：中-低</strong>，但<strong>可上 gitstar.com 直接核</strong></td><td><strong>可核</strong></td></tr><tr><td><strong>101,808 stars / gitstar 全球 79 名</strong></td><td>单一自述——需第三方核</td><td><strong>可核</strong></td></tr><tr><td><strong>女娲.skill 的「六路并行 + 三重验证」</strong></td><td>听上去工程化——<strong>但具体 prompt 和过滤规则开源可查</strong></td><td><strong>可核</strong></td></tr><tr><td><strong>达尔文「80.8 → 91.65」</strong></td><td>单源数据</td><td><strong>可核</strong>——但需自测</td></tr><tr><td><strong>「huashu-chrome 飞书任务 281 → 10 次」</strong></td><td>具体数字——<strong>可自测复现</strong></td><td><strong>可核</strong></td></tr><tr><td><strong>FanBox 内置 11 个 coding agent</strong></td><td>列表可核</td><td><strong>可信度高</strong></td></tr><tr><td><strong>SkillOpt README 6 月初提到 gbrain / darwin-skill 集成</strong></td><td>第三方背书</td><td><strong>可核</strong></td></tr></tbody></table>
+<hr>
+<h2 id="九对-sam-的-3-点启示">九、对 Sam 的 3 点启示</h2>
+<h3 id="91-hermes-agent-的-skill-协议层不需要自造直接-fork">9.1 Hermes Agent 的 Skill 协议层不需要「自造」——直接 fork</h3>
+<p><strong>你的 <a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管方案</a> 已覆盖架构 / Marketplace / 沙箱 / 部署</strong>。<strong>但 Skill 协议实现层</strong>可以<strong>直接参考这 7 个 repo</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>你的 Hermes Agent 层</th><th>对位 alchaincyf repo</th><th>直接借鉴</th></tr></thead><tbody><tr><td><strong>Skill Marketplace</strong>（用户上传）</td><td><strong>女娲.skill</strong>（人 → skill 自动生成）</td><td>把女娲接进 Hermes，<strong>Marketplace 的「创作者侧」就有了</strong></td></tr><tr><td><strong>Skill 质量保证</strong></td><td><strong>达尔文.skill</strong>（棘轮 + 9 维打分）</td><td>用达尔文<strong>自动 QA</strong> Marketplace 上每个新 skill</td></tr><tr><td><strong>Skill 调用入口</strong>（Claude Code / Codex / OpenClaw 互通）</td><td>已是事实标准</td><td><strong>不用你重写</strong>——直接支持 Agent Skills 协议</td></tr><tr><td><strong>OS 操控类 skill</strong></td><td>huashu-chrome / huashu-mac-use</td><td><strong>fork 进去就是 Hermes 的 browser_use + mac_use</strong></td></tr></tbody></table>
+<h3 id="92-你的-the-hive-可以参考-fanbox-的-ui-思路">9.2 你的 The Hive 可以参考 FanBox 的 UI 思路</h3>
+<p>FanBox 的 UI 设计——<strong>左边文件卡片 / 右边终端 / 中间预览 / 跟随模式 / 本回合 diff / 多 agent 标签栏 / 借焦点提示</strong>——<strong>是「Coding Agent 编排」的成熟 UI 范式</strong>。</p>
+<p><a href="https://web.samvortex.com/hive">The Hive</a> 是你做的 agent 讨论论坛——<strong>未来 agent 协同执行时</strong>，UI 应该借鉴：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>FanBox 元素</th><th>The Hive 类比</th></tr></thead><tbody><tr><td>文件卡片亮起</td><td>agent 改讨论状态 / 投票 / 立场时卡片亮起</td></tr><tr><td>本回合 diff</td><td>每个 agent 一轮的「立场变化」diff</td></tr><tr><td>11 个 agent 一键启动</td><td>一键拉多 agent 进同一讨论</td></tr><tr><td>「<strong>最后那下回车留给你按</strong>」</td><td>关键决策点永远留给人——<strong>这是 AI 协作工具的核心 UX 原则</strong></td></tr></tbody></table>
+<p><strong>置信度：中-高</strong>——「<strong>最后那下回车留给你按</strong>」是<strong>AI 协作工具的核心 UX 原则</strong>——<strong>信任工程的具体实践</strong>。</p>
+<h3 id="93-alchaincyf-的方法论对你单点突破-vs-全栈布局的启示">9.3 alchaincyf 的方法论对你「<strong>单点突破 vs 全栈布局</strong>」的启示</h3>
+<p>alchaincyf 的成长路径很清晰：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>动作</th><th>star</th></tr></thead><tbody><tr><td>2026-04</td><td><strong>单点突破</strong>（女娲.skill）</td><td>3.4 万</td></tr><tr><td>2026-04 下旬</td><td><strong>第二单点</strong>（Huashu Design）</td><td>2.5 万</td></tr><tr><td>2026-05 +</td><td><strong>横向扩展</strong>（达尔文 / chrome / mac-use / FanBox）</td><td>各几千到 1 千</td></tr></tbody></table>
+<p><strong>启示</strong>：<strong>先做出一个 10x star 的单点 skill，再用 star 红利拉横向</strong>——<strong>不是同时铺 5 个 0-star skill</strong>。</p>
+<p><strong>对你</strong>：</p>
+<ul>
+<li>Hermes Agent：**先把 Skill 协议层做到「<strong>和 alchaincyf 的 7 个 repo 等量级质量</strong>」——<strong>单点突破</strong></li>
+<li>The Hive：**先做「<strong>多 agent 立场 diff</strong>」<strong>这一个差异点</strong>——<strong>而不是同时铺 5 个 0 用户功能</strong></li>
+</ul>
+<hr>
+<h2 id="十未验证部分--待核清单">十、未验证部分 + 待核清单</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>待核项</th><th>建议核验源</th><th>判断</th></tr></thead><tbody><tr><td>alchaincyf 总 stars（101,808）+ gitstar 全球 79 名</td><td><a href="https://gitstar.com">https://gitstar.com</a> 或 GitHub API 直查</td><td><strong>可核</strong></td></tr><tr><td>女娲.skill 真实 stars（声称 3.4 万）</td><td><a href="https://github.com/alchaincyf/nuwa-skill">https://github.com/alchaincyf/nuwa-skill</a></td><td><strong>可核</strong></td></tr><tr><td>Huashu Design 真实 stars</td><td><a href="https://github.com/alchaincyf/huashu-design">https://github.com/alchaincyf/huashu-design</a></td><td><strong>可核</strong></td></tr><tr><td>SkillOpt README 是否真提到 gbrain / darwin-skill</td><td><a href="https://github.com/microsoft/SkillOpt">https://github.com/microsoft/SkillOpt</a></td><td><strong>可核</strong></td></tr><tr><td>达尔文 80.8 → 91.65 实测数据</td><td>自己跑 huashu-gpt-image + darwin-skill 验证</td><td><strong>可核</strong></td></tr><tr><td>huashu-chrome 281 → 10 次调用</td><td>自己装扩展跑同一飞书多维表格任务</td><td><strong>可核</strong></td></tr><tr><td>FanBox 内置 11 个 coding agent 列表</td><td>看 FanBox README</td><td><strong>可核</strong></td></tr></tbody></table>
+<hr>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/alchaincyf-agent-skill-methodology-2026-10-11/image-01.png" alt="alchaincyf 7 个 repo 围绕 SKILL.md 中心枢纽的 Skill 方法论生态图" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：alchaincyf 的 7 个核心 repo 围绕 SKILL.md 中心枢纽——女娲 (N, 3.4 万星) 与 Huashu Design (HD, 2.5 万星) 是两个核心节点（更大 + 辉光），达尔文 / Chrome / Mac / FanBox / Art 是横向扩展节点。所有 repo 通过 Agent Skills 协议互通</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L8V9M1HP0556BKW5.html">163 自媒体转载：GitHub 星标破 10 万+，凭什么？（alchaincyf 自述）</a></li>
+<li>早前相关：<a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管 Ubuntu 云服务器</a>（10-03）</li>
+<li>早前相关：<a href="/research/nano-banana-21-professional-design/">Nano Banana 2.1 杀向专业设计师</a>（10-08）</li>
+<li>早前相关：<a href="/research/tibo-new-ai-era-three-trends/">Tibo「重置之神」三大趋势</a>（10-05）</li>
+<li>早前相关：<a href="/research/openai-dots-vs-muse/">OpenAI 推出 Dots，正面对标 Meta Muse</a>（09-30）</li>
+<li>待核：7 个 repo 的真实 stars + SkillOpt 集成情况</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

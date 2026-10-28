@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" role="img" aria-label="Anthropic public benefit architecture: ~20% of shares to public good">
+  <title>Anthropic 公共利益分配架构：~20% 股份已锁定</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-row    { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-stat   { font: 600 14px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #ffffff; }
+      .t-pct    { font: 700 22px ui-sans-serif, system-ui, sans-serif; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">Anthropic 公共利益分配架构</text>
+  <text x="40" y="54" class="t-detail">~20% 股份已"留给公共利益" + 估值每涨 50% 再加 2%（董事会酌情）</text>
+
+  <!-- 5 blocks side by side -->
+  <g transform="translate(40, 90)">
+    <!-- Block 1: Public Benefit Fund (5%) -->
+    <g>
+      <rect x="0" y="0" width="170" height="220" rx="10" fill="#5EB1FF" />
+      <text x="85" y="30" text-anchor="middle" class="t-pct">5%</text>
+      <text x="85" y="58" text-anchor="middle" class="t-stat">Public Benefit Fund</text>
+      <text x="85" y="80" text-anchor="middle" class="t-detail" fill="#dbeafe">★ 本次公告</text>
+
+      <text x="12" y="120" class="t-detail" fill="#ffffff">• wholly-owned LLC</text>
+      <text x="12" y="142" class="t-detail" fill="#ffffff">• 灵活 (非 501(c)3)</text>
+      <text x="12" y="164" class="t-detail" fill="#ffffff">• 禁游说 / 政治捐款</text>
+      <text x="12" y="186" class="t-detail" fill="#ffffff">• +2%/涨 50% 触发</text>
+      <text x="12" y="208" class="t-detail" fill="#ffffff">• 董事会酌情</text>
+    </g>
+
+    <!-- Block 2: Co-founders' 80% pledge (~5%) -->
+    <g transform="translate(186, 0)">
+      <rect x="0" y="0" width="170" height="220" rx="10" fill="#FFB17A" />
+      <text x="85" y="30" text-anchor="middle" class="t-pct">~5%</text>
+      <text x="85" y="58" text-anchor="middle" class="t-stat">联合创始人 80%</text>
+      <text x="85" y="80" text-anchor="middle" class="t-detail" fill="#ffedd5">"创业时承诺"</text>
+
+      <text x="12" y="120" class="t-detail" fill="#ffffff">• 7 位创始人</text>
+      <text x="12" y="142" class="t-detail" fill="#ffffff">• 捐 80% 个人股权</text>
+      <text x="12" y="164" class="t-detail" fill="#ffffff">• 5 月那轮人均 $80B</text>
+      <text x="12" y="186" class="t-detail" fill="#ffffff">• 按承诺每人捐 $60+ 亿</text>
+      <text x="12" y="208" class="t-detail" fill="#ffffff">• 早期被市场低估</text>
+    </g>
+
+    <!-- Block 3: Employee equity match (~10%) -->
+    <g transform="translate(372, 0)">
+      <rect x="0" y="0" width="170" height="220" rx="10" fill="#00C2C7" />
+      <text x="85" y="30" text-anchor="middle" class="t-pct">~10%</text>
+      <text x="85" y="58" text-anchor="middle" class="t-stat">员工股权配捐</text>
+      <text x="85" y="80" text-anchor="middle" class="t-detail" fill="#cffafe">"match program"</text>
+
+      <text x="12" y="120" class="t-detail" fill="#ffffff">• 员工捐 · Anthropic match</text>
+      <text x="12" y="142" class="t-detail" fill="#ffffff">• ~50% 员工参与</text>
+      <text x="12" y="164" class="t-detail" fill="#ffffff">• "自成立起就运营"</text>
+      <text x="12" y="186" class="t-detail" fill="#ffffff">• 是 PBC 文化的体现</text>
+      <text x="12" y="208" class="t-detail" fill="#ffffff">• 公开数据相对少</text>
+    </g>
+
+    <!-- Block 4: PBC internal mission work -->
+    <g transform="translate(558, 0)">
+      <rect x="0" y="0" width="170" height="220" rx="10" fill="#FF8AAB" />
+      <text x="85" y="30" text-anchor="middle" class="t-pct" font-size="18">"Inside"</text>
+      <text x="85" y="58" text-anchor="middle" class="t-stat">PBC 公司内</text>
+      <text x="85" y="80" text-anchor="middle" class="t-detail" fill="#fce7f3">"most of our work"</text>
+
+      <text x="12" y="120" class="t-detail" fill="#ffffff">• AI 安全 / 可解释性</text>
+      <text x="12" y="142" class="t-detail" fill="#ffffff">• 应用生物医学</text>
+      <text x="12" y="164" class="t-detail" fill="#ffffff">• Claude 给非营利折扣</text>
+      <text x="12" y="186" class="t-detail" fill="#ffffff">• 科研机构优惠</text>
+      <text x="12" y="208" class="t-detail" fill="#ffffff">• 不在 5% 基金里</text>
+    </g>
+
+    <!-- Block 5: Trigger growth (potential) -->
+    <g transform="translate(744, 0)">
+      <rect x="0" y="0" width="170" height="220" rx="10" fill="#6BCB77" stroke-dasharray="6 3" stroke="#6BCB77" />
+      <text x="85" y="30" text-anchor="middle" class="t-pct" font-size="18">+N×2%</text>
+      <text x="85" y="58" text-anchor="middle" class="t-stat">触发增量</text>
+      <text x="85" y="80" text-anchor="middle" class="t-detail" fill="#bbf7d0">"discretionary"</text>
+
+      <text x="12" y="120" class="t-detail" fill="#ffffff">• 估值每涨 50% → +2%</text>
+      <text x="12" y="142" class="t-detail" fill="#ffffff">• 董事会酌情</text>
+      <text x="12" y="164" class="t-detail" fill="#ffffff">• 上限未明确</text>
+      <text x="12" y="186" class="t-detail" fill="#ffffff">• 几个月内公布</text>
+      <text x="12" y="208" class="t-detail" fill="#ffffff">• 是"开放式承诺"</text>
+    </g>
+  </g>
+
+  <!-- Bottom: total + contrast -->
+  <g transform="translate(40, 340)">
+    <text x="0" y="0" class="t-title" font-size="14">⭐ 当前已经"留给了公共利益"的股份 ≈ 20%</text>
+    <text x="0" y="22" class="t-detail">5%（基金）+ 5%（创始人）+ 10%（员工）= **~20% 股份** 已经跟公司商业价值脱钩，永久锁定给公共用途</text>
+    <text x="0" y="44" class="t-detail">+ 估值每涨 50% 再加 2%（董事会酌情）—— 理论极限是整家公司归公共</text>
+  </g>
+
+  <g transform="translate(40, 410)">
+    <text x="0" y="0" class="t-title" font-size="14" fill="#dc2626">⚠️ 关键对比：硅谷惯例 vs Anthropic</text>
+    <text x="0" y="22" class="t-detail">硅谷惯例："市值每涨一档，CEO 拿一批股票"（如 Musk Tesla 1T 方案）</text>
+    <text x="0" y="44" class="t-detail" font-weight="600" fill="#172033">Anthropic 改写："同一套解锁规则，**收股票的人从 CEO 换成整个社会**"</text>
+  </g>
+</svg>

@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Agent 进入企业核心业务，模型之外还有多少难题 · Samvortex Hub</title><meta name="description" content="从 2026 阿里云栖大会企业级 Agent 实践峰会看：Agent 进入核心业务流程后，企业面临理解需求、Harness 工程、数据治理、权限控制、规模化扩量、ROI 计算、数字员工管理、AI 投入沉淀等 8 大难题。"><link rel="canonical" href="https://samvortex.com/notes/agent-enterprise-challenges/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Agent 进入企业核心业务，模型之外还有多少难题 · Samvortex Hub"><meta property="og:description" content="从 2026 阿里云栖大会企业级 Agent 实践峰会看：Agent 进入核心业务流程后，企业面临理解需求、Harness 工程、数据治理、权限控制、规模化扩量、ROI 计算、数字员工管理、AI 投入沉淀等 8 大难题。"><meta property="og:url" content="https://samvortex.com/notes/agent-enterprise-challenges/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Agent 进入企业核心业务，模型之外还有多少难题 · Samvortex Hub"><meta name="twitter:description" content="从 2026 阿里云栖大会企业级 Agent 实践峰会看：Agent 进入核心业务流程后，企业面临理解需求、Harness 工程、数据治理、权限控制、规模化扩量、ROI 计算、数字员工管理、AI 投入沉淀等 8 大难题。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-09-29T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-09-29T00:00:00.000Z">2026年9月29日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Agent 进入企业核心业务，模型之外还有多少难题</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">从 2026 阿里云栖大会企业级 Agent 实践峰会看：Agent 进入核心业务流程后，企业面临理解需求、Harness 工程、数据治理、权限控制、规模化扩量、ROI 计算、数字员工管理、AI 投入沉淀等 8 大难题。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Agent/" class="tag">#Agent</a><a href="/tags/企业落地/" class="tag">#企业落地</a><a href="/tags/阿里云/" class="tag">#阿里云</a><a href="/tags/AI Agent/" class="tag">#AI Agent</a><a href="/tags/满帮/" class="tag">#满帮</a><a href="/tags/贝壳/" class="tag">#贝壳</a><a href="/tags/易方达/" class="tag">#易方达</a><a href="/tags/众阳健康/" class="tag">#众阳健康</a><a href="/tags/小红书/" class="tag">#小红书</a><a href="/tags/阿里云栖大会/" class="tag">#阿里云栖大会</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>阿里云栖大会 2026 给出明确判断 —— <strong>Agent 自主性反而提高了对基础设施和治理的要求</strong>。从需求理解 / Harness 工程 / 数据治理 / 权限 / 扩量 / ROI / 数字员工管理 / 投入沉淀 8 个维度，企业进入 Agent 时代仍有许多”模型之外的难题”。</p>
+</blockquote>
+<h2 id="吴泳铭阿里集团-ceo核心判断">吴泳铭（阿里集团 CEO）核心判断</h2>
+<blockquote>
+<p>“<strong>机器正在成为思考的主力，智能正在成为一种规模化的商品</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“未来机器思考的总量将是人类的 <strong>1000 倍</strong>，但<strong>真正定义时代的 AI 产品，至今还没有出现</strong>。”</p>
+</blockquote>
+<h2 id="刘伟光阿里云智能集团资深副总裁标尺">刘伟光（阿里云智能集团资深副总裁）标尺</h2>
+<blockquote>
+<p>“如果把一个 Agent 停掉，企业会有危险”——<strong>这才是 Agent 价值的真正标尺</strong>。</p>
+</blockquote>
+<blockquote>
+<p>“AI 从一个补充型的业务增效工具，变成了深入到千行百业核心业务流程的力量。”</p>
+</blockquote>
+<hr>
+<h2 id="8-大企业级难题">8 大企业级难题</h2>
+<h3 id="1-理解需求之后还有一条执行链路">1. 理解需求之后，还有一条执行链路</h3>
+<p><strong>满帮（AI 算法总监 高艺铭）</strong>：</p>
+<ul>
+<li>司机先提”回南京”，看到货源后再加价格要求 → <strong>信息随时进来</strong></li>
+<li>传统意图识别<strong>丢失问答 / 执行 / 议价关系</strong></li>
+<li>接口错误码（如 “219”）Agent 难以判断 → <strong>反馈必须告知缺少什么 + 参数建议</strong></li>
+<li>上线后每天收到<strong>大量失败案例</strong>，逐个修补产生<strong>系统债</strong></li>
+<li>→ 保留<strong>自研归因系统 Vertex</strong> + 用云 AgentLoop 承接通用观测</li>
+</ul>
+<p><strong>关键</strong>：归因要分清是模型没懂任务、参数传错、还是业务规则缺失。</p>
+<h3 id="2-数据很多agent-未必懂业务">2. 数据很多，Agent 未必懂业务</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>公司</th><th>行业知识难题</th></tr></thead><tbody><tr><td><strong>满帮</strong></td><td>“标箱”= 标准集装箱平板车；通用模型理解为厢式货车</td></tr><tr><td><strong>贝壳</strong>（首席算法科学家 尹俊希）</td><td>房产咨询涉及预算 / 通勤 / 家庭结构 / 居住偏好；<strong>用户难以一次说完</strong>，<strong>条件之间存在冲突</strong></td></tr><tr><td><strong>易方达基金</strong>（CIO 刘硕凌博士）</td><td>数据能找到 ≠ 数据能用：<strong>指标口径、来源、权限、质量治理</strong></td></tr></tbody></table>
+<p><strong>核心</strong>：业务专家需要判断知识是否准确，使用者反馈有效性。</p>
+<h3 id="3-能够执行不等于拥有权限">3. 能够执行，不等于拥有权限</h3>
+<p><strong>易方达</strong>：</p>
+<ul>
+<li>统一入口负责<strong>设备认证 + 代理访问 + Token + 审计日志</strong></li>
+<li>业务系统保留自身权限控制</li>
+<li><strong>高风险操作必须人工复核</strong></li>
+</ul>
+<p><strong>众阳健康</strong>（产品研发中心总经理 郭龙领）：</p>
+<ul>
+<li>医疗 Agent <strong>可解释 + 可管控 + 具备人工接管能力</strong></li>
+<li>跨医院部署需要解决<strong>医生授权 + 患者信息安全</strong></li>
+</ul>
+<p><strong>阿里云 Patrick 管理者分身</strong>（为刘伟光构建）：</p>
+<ul>
+<li>AI 数字员工有<strong>独立工号 + 钉钉账号</strong></li>
+<li><strong>不能使用本人账号</strong>（否则员工会间接触达无权信息）</li>
+<li>→ 独立身份 + 调用时<strong>核验对话者身份 + 沿用权限</strong></li>
+</ul>
+<p><strong>安全设计原则</strong>：身份 → 沙箱 → 审计 → 人工复核 → 可中断 → 责任环节可追溯</p>
+<h3 id="4-agent-规模化量变到质变">4. Agent 规模化，量变到质变</h3>
+<p><strong>满帮</strong>：第一次扩量到 <strong>2000 个 Agent</strong> 时，<strong>线上生产系统受到冲击</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>原因</th><th>说明</th></tr></thead><tbody><tr><td><strong>调用频率差异</strong></td><td>Agent 连续调用 vs 人操作间隔</td></tr><tr><td><strong>持续运行</strong></td><td>用户离线后 Agent 仍执行</td></tr><tr><td><strong>任务级负载</strong></td><td>单任务多次工具调用 + 失败重试</td></tr><tr><td><strong>异常循环</strong></td><td>重复调用放大压力</td></tr></tbody></table>
+<p><strong>解法</strong>：</p>
+<ul>
+<li><strong>两套生产系统</strong>（传统 + Agent）+ 桥接层</li>
+<li><strong>状态持久化</strong>（任务可暂停恢复）</li>
+<li><strong>事件触发</strong>（按需唤醒）</li>
+<li><strong>限流 + 超时控制</strong></li>
+</ul>
+<h3 id="5-忙了很多如何计算-roi">5. 忙了很多，如何计算 ROI</h3>
+<p><strong>小红书</strong>（质效 &#x26; AI 应用总架构师 飞鸿）：</p>
+<ul>
+<li>把 AI 成本<strong>归属到具体经营单元</strong></li>
+<li><strong>模型路由</strong> + 上下文管理 → <strong>成本下降约 69%</strong></li>
+</ul>
+<p><strong>满帮</strong>：</p>
+<ul>
+<li>部分 Agent 成本降至 1/4；另一些<strong>没降本，准确率反降</strong></li>
+<li>→ <strong>模型变强后，原有补丁是否合适需重新验证</strong></li>
+</ul>
+<p><strong>众阳健康</strong>：</p>
+<ul>
+<li><strong>固定规则</strong>交工具</li>
+<li><strong>通用知识</strong>做摘要与缓存</li>
+<li><strong>按任务复杂度分级调度模型</strong></li>
+<li>⚠️ <strong>不可为降 Token 牺牲诊疗指标</strong></li>
+</ul>
+<h3 id="6-数字员工多了谁来管理">6. 数字员工多了，谁来管理</h3>
+<p><strong>施磊</strong>（阿里云公共云事业部 AIX 技术负责人）：</p>
+<ul>
+<li><strong>2-3 个月内已有 60+ Agent</strong> 有独立工号</li>
+</ul>
+<p><strong>管理问题</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>问题</th><th>解法</th></tr></thead><tbody><tr><td>不同团队建相似能力 → 重复建设</td><td>引入<strong>上岗审批</strong>（业务负责人 + HR）</td></tr><tr><td>数字员工不断增加技能 → 职责过宽</td><td><strong>岗位说明</strong>明确职责边界</td></tr><tr><td>数字员工之间<strong>很少交流</strong></td><td>协作设施（按职责找协作者）</td></tr></tbody></table>
+<blockquote>
+<p>“数字员工需要完整的管理安排 —— <strong>独立身份 / 岗位说明 / 审批控制 / 运行记录</strong>”</p>
+</blockquote>
+<h3 id="7-执行轨迹与训练数据">7. 执行轨迹与训练数据</h3>
+<p><strong>韩凯</strong>（基元律动联合创始人兼 CTO）：</p>
+<ul>
+<li>通过<strong>隔离环境生成任务轨迹</strong></li>
+<li><strong>结构 + 语义评估筛选</strong></li>
+<li>训练 → 进 Harness 验证 → <strong>下一轮改进数据</strong></li>
+</ul>
+<h3 id="8-给-ai-花的钱企业能沉淀什么">8. 给 AI 花的钱，企业能沉淀什么</h3>
+<blockquote>
+<p>“一片<strong>混乱的欣欣向荣</strong>”——企业 AI 现状</p>
+</blockquote>
+<p><strong>沉淀物（可跨迭代复用）</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>✅ <strong>业务规则与技能</strong></td><td>经过验证</td></tr><tr><td>✅ <strong>评测样本</strong></td><td>真实任务覆盖</td></tr><tr><td>❌ 模型本身</td><td>会更新、可替换</td></tr><tr><td>❌ 框架</td><td>可能替换</td></tr></tbody></table>
+<blockquote>
+<p>“<strong>CTO/CIO 需要掌握的，是企业自身不能外包出去的认知</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="阿里云应对agentic-cloud">阿里云应对：Agentic Cloud</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>能力</th><th>内容</th></tr></thead><tbody><tr><td><strong>模型</strong></td><td>运行时 + 升级</td></tr><tr><td><strong>任务</strong></td><td>编排</td></tr><tr><td><strong>数据</strong></td><td>组织 + 治理</td></tr><tr><td><strong>访问</strong></td><td>网关 + 沙箱</td></tr><tr><td><strong>效果</strong></td><td>持续检查</td></tr></tbody></table>
+<blockquote>
+<p>平台接入 ≠ 业务成熟 —— <strong>企业需要持续打磨专业能力</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="吴泳铭结语">吴泳铭（结语）</h2>
+<blockquote>
+<p>“把繁重的任务留给<strong>机器</strong>，把<strong>时间、创造力以及对美好事物的感受</strong>留给<strong>人类</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“这一切，才刚刚开始。”</p>
+</blockquote>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/agent-enterprise-challenges/image-01.jpg" alt="Agent 进入企业核心业务" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：2026 阿里云栖大会企业级 Agent 实践峰会</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L80UPNBR05118O92.html">网易新闻（钛媒体）· 原文</a></li>
+<li>2026 阿里云栖大会 · 企业级 Agent 实践峰会</li>
+<li>案例企业：满帮 / 贝壳 / 易方达基金 / 众阳健康 / 小红书 / 基元律动</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

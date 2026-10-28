@@ -1,0 +1,264 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>OpenAI 一夜甩出 722 篇数学论文：黎曼、霍奇、BSD 全上阵，数学家：读不过来 · Samvortex Hub</title><meta name="description" content="OpenAI 一夜公开 722 篇数学手稿，全出自一个未发布的内部模型，归成 372 组结果，对应约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+ 源码 + 部分 Lean 证明 + 10 份推理摘要全部上 GitHub。三道千禧难题被同时下手：H003 准黎曼猜想（声称 ζ 函数与所有 Dirichlet L 函数在实部大于 7/8 区域无零点，把无区突破度推进一截；另一版给出实部大于 11/12 + 一致排除 Siegel 零点）
+"><link rel="canonical" href="https://samvortex.com/notes/openai-722-math-manuscripts-overnight/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="OpenAI 一夜甩出 722 篇数学论文：黎曼、霍奇、BSD 全上阵，数学家：读不过来 · Samvortex Hub"><meta property="og:description" content="OpenAI 一夜公开 722 篇数学手稿，全出自一个未发布的内部模型，归成 372 组结果，对应约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+ 源码 + 部分 Lean 证明 + 10 份推理摘要全部上 GitHub。三道千禧难题被同时下手：H003 准黎曼猜想（声称 ζ 函数与所有 Dirichlet L 函数在实部大于 7/8 区域无零点，把无区突破度推进一截；另一版给出实部大于 11/12 + 一致排除 Siegel 零点）
+"><meta property="og:url" content="https://samvortex.com/notes/openai-722-math-manuscripts-overnight/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="OpenAI 一夜甩出 722 篇数学论文：黎曼、霍奇、BSD 全上阵，数学家：读不过来 · Samvortex Hub"><meta name="twitter:description" content="OpenAI 一夜公开 722 篇数学手稿，全出自一个未发布的内部模型，归成 372 组结果，对应约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+ 源码 + 部分 Lean 证明 + 10 份推理摘要全部上 GitHub。三道千禧难题被同时下手：H003 准黎曼猜想（声称 ζ 函数与所有 Dirichlet L 函数在实部大于 7/8 区域无零点，把无区突破度推进一截；另一版给出实部大于 11/12 + 一致排除 Siegel 零点）
+"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-07T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-07T00:00:00.000Z">2026年10月7日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">OpenAI 一夜甩出 722 篇数学论文：黎曼、霍奇、BSD 全上阵，数学家：读不过来</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">OpenAI 一夜公开 722 篇数学手稿，全出自一个未发布的内部模型，归成 372 组结果，对应约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+ 源码 + 部分 Lean 证明 + 10 份推理摘要全部上 GitHub。三道千禧难题被同时下手：H003 准黎曼猜想（声称 ζ 函数与所有 Dirichlet L 函数在实部大于 7/8 区域无零点，把无区突破度推进一截；另一版给出实部大于 11/12 + 一致排除 Siegel 零点）
+</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/OpenAI/" class="tag">#OpenAI</a><a href="/tags/数学论文/" class="tag">#数学论文</a><a href="/tags/722 篇/" class="tag">#722 篇</a><a href="/tags/未发布内部模型/" class="tag">#未发布内部模型</a><a href="/tags/GitHub/" class="tag">#GitHub</a><a href="/tags/准黎曼猜想/" class="tag">#准黎曼猜想</a><a href="/tags/霍奇猜想/" class="tag">#霍奇猜想</a><a href="/tags/BSD 猜想/" class="tag">#BSD 猜想</a><a href="/tags/千禧难题/" class="tag">#千禧难题</a><a href="/tags/希尔伯特第十问题/" class="tag">#希尔伯特第十问题</a><a href="/tags/π 的无理性指数/" class="tag">#π 的无理性指数</a><a href="/tags/卡塔兰常数/" class="tag">#卡塔兰常数</a><a href="/tags/唯一游戏猜想/" class="tag">#唯一游戏猜想</a><a href="/tags/稀疏自旋玻璃/" class="tag">#稀疏自旋玻璃</a><a href="/tags/量子磁性/" class="tag">#量子磁性</a><a href="/tags/弗拉索夫—麦克斯韦方程/" class="tag">#弗拉索夫—麦克斯韦方程</a><a href="/tags/Fields 奖/" class="tag">#Fields 奖</a><a href="/tags/Edward Witten/" class="tag">#Edward Witten</a><a href="/tags/Gowers/" class="tag">#Gowers</a><a href="/tags/Hairer/" class="tag">#Hairer</a><a href="/tags/陶哲轩/" class="tag">#陶哲轩</a><a href="/tags/Cedric Villani/" class="tag">#Cedric Villani</a><a href="/tags/Bryant/" class="tag">#Bryant</a><a href="/tags/OpenAI 28 天/" class="tag">#OpenAI 28 天</a><a href="/tags/Tibo/" class="tag">#Tibo</a><a href="/tags/Decisions API/" class="tag">#Decisions API</a><a href="/tags/Auto-review/" class="tag">#Auto-review</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<p>OpenAI 一夜公开 722 篇数学手稿，全部出自一个未发布的内部模型，归成 372 组结果、覆盖约 4000 个研究问题，平均每项算力约等于 ChatGPT Pro 思考 3 小时，论文+源码+部分 Lean 证明+10 份推理摘要全部上 GitHub。三道千禧难题被同时下手（准黎曼猜想、有理数域 Hilbert 第十、BSD 猜想），外加 Hodge 猜想部分覆盖；π 无理性指数从 7.1 直接压到理论最优值 2；Catalan 常数无理数获证明；唯一游戏猜想拿到完整版。数学界反应：3 位菲尔兹得主（T. Gowers、Martin Hairer、Edward Witten）领衔的 9 人独立顾问组声明承认意义但未认可结果；陶哲轩、Cedric Villani 等数学家表达忧虑，AI 速度已超出人类可读速率。同期 Codex 28 天挑战 Day 2 发布 Auto-review / API 三档简化 / Meetings 插件 / Decisions API。</p>
+<hr>
+<h2 id="一722-篇手稿概览">一、722 篇手稿概览</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>数据</th></tr></thead><tbody><tr><td>手稿总数</td><td>722 篇</td></tr><tr><td>结果分组</td><td>372 组</td></tr><tr><td>覆盖研究问题</td><td>约 4000 个</td></tr><tr><td>单项算力</td><td>约 ChatGPT Pro 思考 3 小时</td></tr><tr><td>数学方向</td><td>17 个（数论/代数几何/理论计算机/统计力学等）</td></tr><tr><td>模型</td><td>同一未发布的内部模型，固定流程</td></tr><tr><td>例外</td><td>黎曼 ζ 无零点区域、复乘 Marvel 簇 Hodge 猜想（人工编辑）</td></tr><tr><td>形式化</td><td>部分有 Lean 形式化证明（核验进度不一）</td></tr></tbody></table>
+<hr>
+<h2 id="二三道千禧难题">二、三道千禧难题</h2>
+<h3 id="002-准黎曼猜想最亮眼">002 准黎曼猜想（最亮眼）</h3>
+<p>黎曼猜想要证明：ζ 函数的非平凡零点全在实部=1/2 直线上。</p>
+<p>OpenAI 结论：ζ 函数和所有 Dirichlet L 函数，在实部大于 7/8 区域都没有零点。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>此前最好</th><th>OpenAI 给</th></tr></thead><tbody><tr><td>实部大于 0.99 整条竖带无零点——做不到</td><td>实部大于 7/8 无零点</td></tr><tr><td>已知无零区域贴着实部=1 的边缘</td><td>把范围向中间推一截</td></tr></tbody></table>
+<p>距离黎曼猜想要求的 1/2 直线还有距离。</p>
+<p>另一份独立证明：实部大于 11/12（范围略窄），多 + 一致排除 Siegel 零点。</p>
+<p><strong>Siegel 零点</strong>：某些 L 函数可能藏在实数 1 附近的”捣乱零点”，是否存在困扰数论学界近百年，许多素数分布结果需绕开。</p>
+<h3 id="004-有理数域上的-hilbert-第十问题">004 有理数域上的 Hilbert 第十问题</h3>
+<p>拿到一个整数系数的多项式，能否写一套通用算法，判断它有没有有理数解？</p>
+<p>OpenAI 结论：这样的算法不存在。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>版本</th><th>状态</th></tr></thead><tbody><tr><td>整数版本</td><td>1970 年由苏联数学家 Matiyasevich 解决</td></tr><tr><td>有理数版本</td><td>悬了半个世纪，OpenAI 声称无算法</td></tr></tbody></table>
+<h3 id="009-bsd-猜想birch--swinnerton-dyer">009 BSD 猜想（Birch &#x26; Swinnerton-Dyer）</h3>
+<p>椭圆曲线有理点情况，关联一个相关函数在特定位置的表现。</p>
+<p>OpenAI：针对满足 Selmer 余秩为 0 或 1 的椭圆曲线，得到完整公式。结合仓库另一组结果按密度统计，可覆盖每条有理数域上椭圆曲线的绝大多数二次扭曲。</p>
+<h3 id="011-hodge-猜想部分覆盖">011 Hodge 猜想（部分覆盖）</h3>
+<p>复杂几何空间里看得见的”形状信息”，能否由代数方程定义的几何对象解释。</p>
+<p>OpenAI 处理的范围：CM Marvel 簇 + K3 曲面乘积。CM 论文声称覆盖该类对象所有维度和余维。Hodge 范围比这广得多——这批论文目前只覆盖上述范围。</p>
+<hr>
+<h2 id="三常数与理论计算机难题">三、常数与理论计算机难题</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>题目</th><th>此前</th><th>OpenAI 结论</th></tr></thead><tbody><tr><td>π 的无理性指数</td><td>7.1（最佳）</td><td><strong>恰好 2</strong>（理论最优）</td></tr><tr><td>Catalan 常数</td><td>是否有理——未公开证明</td><td>证明为无理数</td></tr><tr><td>唯一游戏猜想（2002 Khot）</td><td>2018 弱化版证明</td><td><strong>完整版</strong> + 最大割/顶点覆盖近似难度结论</td></tr></tbody></table>
+<hr>
+<h2 id="四其他-17-个方向">四、其他 17 个方向</h2>
+<ul>
+<li>稀疏自旋玻璃的 Mezard-Parisi 公式</li>
+<li>量子 Heisenberg 铁磁体自发磁化</li>
+<li>自由群因子同构</li>
+<li>三维单种粒子相对论性 Vlasov-Maxwell 整体光滑解</li>
+</ul>
+<hr>
+<h2 id="五数学界反应高速读不过">五、数学界反应：高速读不过</h2>
+<p>3 位菲尔兹得主领衔的 9 人独立数学与 AI 顾问组：</p>
+<ul>
+<li><strong>Timothy Gowers</strong></li>
+<li><strong>Martin Hairer</strong></li>
+<li><strong>Edward Witten</strong>（理论物理学家）</li>
+</ul>
+<p><strong>顾问组声明</strong>：</p>
+<blockquote>
+<p>“承认这是数学界的一件大事。但同时表示——顾问组此前给 OpenAI 提过建议，不代表他们已经认可这些结果，也不代表他们认可 OpenAI 产出成果的过程。”</p>
+</blockquote>
+<blockquote>
+<p>“证明是否成立、对后续研究有多大用处，要交给各领域的数学家慢慢消化。”</p>
+</blockquote>
+<h3 id="顶级数学家声音">顶级数学家声音</h3>
+<p><strong>Francesco Maggi（UT Austin）</strong>：</p>
+<blockquote>
+<p>“9 月那篇流体力学证明，专家们至今还在研究它究竟怎么起作用。一下再来数百篇，谁有精力读？读完以后，又能从中发现什么新方法、新问题？”</p>
+</blockquote>
+<blockquote>
+<p>“结果产出速度确实远远超过了人类能理解的速度，数学家只能在后面追着 AI 跑。”</p>
+</blockquote>
+<p><strong>陶哲轩</strong>（9 月加州理工）：</p>
+<blockquote>
+<p>“AI 发展的速度『太疯狂了』，没有理由这么快。AI 公司简直就跟疯了一样。”</p>
+</blockquote>
+<p><strong>Cedric Villani（菲尔兹得主）</strong>：</p>
+<blockquote>
+<p>“我大受震撼……简直跟世界末日一样。这是数学界有史以来从未见过的浩劫。”</p>
+</blockquote>
+<h3 id="发布前的提前对接">发布前的提前对接</h3>
+<ul>
+<li>8 月：OpenAI 召集约 40 名数学家讨论成果如何发布</li>
+<li>西北大学 Bryna Kra 等人希望看到写得清楚、能让同行阅读和引用的论文</li>
+<li>部分与会者以为 OpenAI 不会一次放出所有成果——OpenAI 发言人表示不清楚有过这样的承诺</li>
+<li>9 月的流体力学争议（Anthropic 与 OpenAI Navier-Stokes 同时发布）让气氛更紧张</li>
+<li>Tristan Buckmaster（NYU）与 Levent Alpkoge（Anthropic 研究员）公开三篇流体方程爆破证明（带 Lean），与 OpenAI 发布同时</li>
+<li>Buckmaster 起初想再花时间把证明写得好读，因外部压力提前发布</li>
+<li>双方围绕研究进度和成果归属起争执——OpenAI 否认 Buckmaster 使用 Codex 时的提示词影响自家模型</li>
+</ul>
+<hr>
+<h2 id="六ai-编程能力边界">六、AI 编程能力边界</h2>
+<blockquote>
+<p>“OpenAI 已经交卷了，但数学界的阅卷才刚开始。”</p>
+</blockquote>
+<p>OpenAI 承诺<strong>出资办研讨会</strong>帮助数学界研究这些成果。顾问组回应：材料公开了，接下来该由数学家检查、讲解，再决定哪些结果真正能进入数学研究。</p>
+<hr>
+<h2 id="七one-more-thing28-天挑战-day-2">七、One More Thing：28 天挑战 Day 2</h2>
+<p>Tibo 赛博义父 28 天承诺 Day 2 共发布 4 项更新：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>名称</th><th>详情</th></tr></thead><tbody><tr><td>1</td><td><strong>Auto-review</strong></td><td>长任务时另一 AI 代理检查操作、拦截高风险动作；ChatGPT 账号用户免费</td></tr><tr><td>2</td><td><strong>API 档位简化</strong></td><td>五档 → 三档</td></tr><tr><td>3</td><td><strong>Meetings 插件</strong></td><td>会议整理为纪要和待办</td></tr><tr><td>4</td><td><strong>Decisions API</strong></td><td>开发者调用，开放公测</td></tr></tbody></table>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://openai.com/index/sharing-ai-progress-in-mathematics/">https://openai.com/index/sharing-ai-progress-in-mathematics/</a></li>
+<li><a href="https://github.com/openai/math">https://github.com/openai/math</a></li>
+<li><a href="https://agmai.org/">https://agmai.org/</a></li>
+<li><a href="https://x.com/thsottiaux/status/2107575657014468879">https://x.com/thsottiaux/status/2107575657014468879</a></li>
+</ul>
+<hr>
+<h2 id="八对-sam-的-3-点启示">八、对 Sam 的 3 点启示</h2>
+<ol>
+<li><strong>AI 出活速度 > 人类理解速度</strong> —— Sam 的 Hermes Agent 内部 skill 输出也要考虑”机器输出 vs 人类审阅”的速率差。加 ratelimit + 人工 checkpoint 比代码审查更关键</li>
+<li><strong>顾问组 vs 实际背书</strong> —— OpenAI 的 9 人顾问组给的不是学术背书，是程序建议。Sam 引入专家时也该明示：他们提的是<strong>专业建议</strong>不是<strong>质量认证</strong></li>
+<li><strong>Co-publish vs Race-publish</strong> —— 9 月 Anthropic 与 OpenAI 同时发流体力学证明造成归属争议。Sam 协调类似事件时，主动排他期 + 同步声明可能更稳</li>
+</ol>
+<hr>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://www.163.com/dy/article/L8KI53AQ0511DSSR.html">量子位 QbitAI 原文</a></li>
+<li><a href="https://openai.com/index/sharing-ai-progress-in-mathematics/">OpenAI 官方分享页</a></li>
+<li><a href="https://github.com/openai/math">GitHub 仓库</a></li>
+<li><a href="https://agmai.org/">AGMai 顾问组声明</a></li>
+<li><a href="https://x.com/thsottiaux/status/2107575657014468879">Tibo X 帖</a></li>
+</ul>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/openai-722-math-manuscripts-overnight/image-01.jpg" alt="OpenAI 722 数学手稿一夜公开" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：OpenAI 一夜公开 722 篇数学手稿 —— 准黎曼、霍奇、BSD 千禧难题同时下手（量子位 · 2026-10-07）</p>
+</div> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

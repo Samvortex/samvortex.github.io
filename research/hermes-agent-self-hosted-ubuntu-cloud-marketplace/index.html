@@ -1,0 +1,764 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Hermes Agent 自托管方案：在 Ubuntu 云服务器上跑一个&quot;几千技能&quot;的智能体平台 · Samvortex Hub</title><meta name="description" content="对标 Meta Muse / Groq Bot / ChatGPT Dots 三类 &#34;云端内置几千技能&#34; 的产品模型 —— 在自托管 Ubuntu 云服务器上复刻一整套 **Agent + Cloud Skill Marketplace + 模型无关适配** 的自托管平台。覆盖架构 / 部署 / 安全 / 运维 / 阶段路线 + 完整 Mermaid 流程图。"><link rel="canonical" href="https://samvortex.com/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Hermes Agent 自托管方案：在 Ubuntu 云服务器上跑一个&#34;几千技能&#34;的智能体平台 · Samvortex Hub"><meta property="og:description" content="对标 Meta Muse / Groq Bot / ChatGPT Dots 三类 &#34;云端内置几千技能&#34; 的产品模型 —— 在自托管 Ubuntu 云服务器上复刻一整套 **Agent + Cloud Skill Marketplace + 模型无关适配** 的自托管平台。覆盖架构 / 部署 / 安全 / 运维 / 阶段路线 + 完整 Mermaid 流程图。"><meta property="og:url" content="https://samvortex.com/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Hermes Agent 自托管方案：在 Ubuntu 云服务器上跑一个&#34;几千技能&#34;的智能体平台 · Samvortex Hub"><meta name="twitter:description" content="对标 Meta Muse / Groq Bot / ChatGPT Dots 三类 &#34;云端内置几千技能&#34; 的产品模型 —— 在自托管 Ubuntu 云服务器上复刻一整套 **Agent + Cloud Skill Marketplace + 模型无关适配** 的自托管平台。覆盖架构 / 部署 / 安全 / 运维 / 阶段路线 + 完整 Mermaid 流程图。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-03T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 "> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/research/" class="hover:text-brand-600">研究</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">研究</span> <time datetime="2026-10-03T00:00:00.000Z">2026年10月3日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Hermes Agent 自托管方案：在 Ubuntu 云服务器上跑一个&quot;几千技能&quot;的智能体平台</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">对标 Meta Muse / Groq Bot / ChatGPT Dots 三类 &quot;云端内置几千技能&quot; 的产品模型 —— 在自托管 Ubuntu 云服务器上复刻一整套 **Agent + Cloud Skill Marketplace + 模型无关适配** 的自托管平台。覆盖架构 / 部署 / 安全 / 运维 / 阶段路线 + 完整 Mermaid 流程图。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Hermes Agent/" class="tag">#Hermes Agent</a><a href="/tags/自托管/" class="tag">#自托管</a><a href="/tags/Ubuntu/" class="tag">#Ubuntu</a><a href="/tags/IDC/" class="tag">#IDC</a><a href="/tags/云服务器/" class="tag">#云服务器</a><a href="/tags/Agent Marketplace/" class="tag">#Agent Marketplace</a><a href="/tags/Skill Marketplace/" class="tag">#Skill Marketplace</a><a href="/tags/MCP/" class="tag">#MCP</a><a href="/tags/Agent Skills/" class="tag">#Agent Skills</a><a href="/tags/GPT Store/" class="tag">#GPT Store</a><a href="/tags/插件系统/" class="tag">#插件系统</a><a href="/tags/开源 Agent/" class="tag">#开源 Agent</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一研究结论与不确定性-️">一、研究结论与不确定性 ⚠️</h2>
+<p>我先在 163 / DuckDuckGo / 维基百科搜了一圈，<strong>Meta Muse / Groq Bot / ChatGPT Dots</strong> 这 3 个具体产品名<strong>没有公开的官方页面能完全核实</strong>（Groq 是真实存在的 LPU 公司 + GroqCloud，但具体”Groq Bot”产品没有公开资料）。</p>
+<p>所以这份方案是按你的提示**—— “云端内置几千种技能和能力”—— 这一共性反推的普适模型**，对应业界公开可考的参考：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>你说的</th><th>公开可考的对应产品 / 模式</th></tr></thead><tbody><tr><td><strong>Meta Muse</strong></td><td>⭐ <strong>Meta AI + Llama Stack</strong>（开放生态）</td></tr><tr><td><strong>Groq Bot</strong></td><td>⭐ <strong>GroqCloud API</strong>（极速推理 + 函数调用）</td></tr><tr><td><strong>ChatGPT Dots</strong></td><td>⭐ <strong>ChatGPT GPT Store</strong>（自定义 GPT + Actions 生态）</td></tr></tbody></table>
+<p><strong>这三个的共性</strong>：</p>
+<ol>
+<li><strong>云端托管</strong> —— 厂商承担基础设施，用户即开即用</li>
+<li><strong>几千个 Skill / Plugin / Action</strong> —— Marketplace 化</li>
+<li><strong>模型无关或可选</strong> —— 不锁死单家厂商</li>
+<li><strong>Web + Desktop + CLI 多端接入</strong></li>
+<li><strong>沙箱 + 权限分层</strong> —— 安全的”能干活的智能体”</li>
+</ol>
+<blockquote>
+<p>⭐ <strong>自托管目标</strong>：把这套”云端 + Marketplace + 模型无关 + 多端”的智能体平台搬到<strong>一台 Ubuntu 云服务器 / IDC 物理机</strong>上，自己掌握数据 / 自主扩展技能。</p>
+</blockquote>
+<hr>
+<h2 id="二整体架构">二、整体架构 ⭐</h2>
+<h3 id="架构图自托管层--云托管层">架构图（自托管层 + 云托管层）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌───────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│  ⭐ Skill Marketplace（几千 Skill · Plugin · Agent Template）  │</span></span>
+<span class="line"><span>│       浏览 · 评分 · 版本 · 权限 · 安装计数                    │</span></span>
+<span class="line"><span>└──────────────────┬────────────────────────────────────────────┘</span></span>
+<span class="line"><span>                   ↓ 插件调用 / 工具路由</span></span>
+<span class="line"><span>┌───────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│  ⭐ Agent Orchestrator（模型路由 · 上下文 · 记忆）              │</span></span>
+<span class="line"><span>│       LangGraph / AutoGen · 调度 · 长期记忆                   │</span></span>
+<span class="line"><span>└──────────────────┬────────────────────────────────────────────┘</span></span>
+<span class="line"><span>                   ↓ 调用</span></span>
+<span class="line"><span>┌───────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│  ⭐ Tool Runtime（隔离沙箱）                                   │</span></span>
+<span class="line"><span>│       文件 IO · Shell Exec · Code Sandbox · Web Fetch · Browser│</span></span>
+<span class="line"><span>└──────────────────┬────────────────────────────────────────────┘</span></span>
+<span class="line"><span>                   ↓ 统一接口</span></span>
+<span class="line"><span>┌───────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│  ⭐ Model Adapters（LiteLLM 统一协议）                         │</span></span>
+<span class="line"><span>│       OpenAI · Anthropic · DeepSeek · Groq · Mistral · 本地    │</span></span>
+<span class="line"><span>└──────────────────┬────────────────────────────────────────────┘</span></span>
+<span class="line"><span>                   ↓</span></span>
+<span class="line"><span>┌───────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│  ⭐ Ubuntu 22.04 LTS Base（Docker · NVIDIA 驱动）              │</span></span>
+<span class="line"><span>└───────────────────────────────────────────────────────────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>   ⭐ 多端接入：Web UI · Desktop App · CLI · OpenAI 兼容 API</span></span></code></pre>
+<h3 id="五层拆分">五层拆分</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>层</th><th>职责</th><th>对应业界方案</th></tr></thead><tbody><tr><td>⭐ <strong>1. Skill Marketplace</strong></td><td>几千个 Skill / Plugin / Agent Template 的发现 / 安装 / 版本管理</td><td>ChatGPT GPT Store / Coze Dots / Anthropic MCP Marketplace</td></tr><tr><td>⭐ <strong>2. Agent Orchestrator</strong></td><td>模型选择 / 任务路由 / 上下文管理 / 长期记忆</td><td>LangGraph / AutoGen / CrewAI</td></tr><tr><td>⭐ <strong>3. Tool Runtime</strong></td><td>文件 IO / Shell Exec / Code Exec / Web Fetch / Browser</td><td>Docker Sandbox / E2B / Modal</td></tr><tr><td>⭐ <strong>4. Model Adapters</strong></td><td>OpenAI / Anthropic / DeepSeek / Groq / Mistral 适配</td><td>LiteLLM / One API</td></tr><tr><td><strong>5. Ubuntu Base</strong></td><td>操作系统 + Docker + GPU 驱动 + 网络</td><td>22.04 LTS + NVIDIA Driver + Docker</td></tr></tbody></table>
+<h3 id="接入端">接入端</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>端</th><th>用途</th></tr></thead><tbody><tr><td><strong>Web UI</strong></td><td>类 ChatGPT 风格聊天界面</td></tr><tr><td><strong>Desktop App</strong></td><td>双击即用，本地文件操作</td></tr><tr><td><strong>CLI</strong></td><td><code>hermes "把当前目录的 PDF 全部转成 Markdown"</code></td></tr><tr><td><strong>API</strong></td><td>暴露 OpenAI 兼容协议 → 其他应用直接接入</td></tr></tbody></table>
+<hr>
+<h2 id="三skill-marketplace-数据流">三、Skill Marketplace 数据流 ⭐</h2>
+<h3 id="流程图">流程图</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>   开发者                 Marketplace                用户</span></span>
+<span class="line"><span>   ─────                  ──────────                ────</span></span>
+<span class="line"><span>       │                      │                     │</span></span>
+<span class="line"><span>       ▼                      │                     │</span></span>
+<span class="line"><span>   [1. Skill Upload]          │                     │</span></span>
+<span class="line"><span>       │   GitHub / Gitea      │                     │</span></span>
+<span class="line"><span>       ▼                      │                     │</span></span>
+<span class="line"><span>   [2. Sandbox Test]  ── Docker 隔离                 │</span></span>
+<span class="line"><span>       │   安全 + 依赖 + 行为                      │</span></span>
+<span class="line"><span>       ▼                      │                     │</span></span>
+<span class="line"><span>   [3. Version Tag]  ── semver + changelog           │</span></span>
+<span class="line"><span>       │                      │                     │</span></span>
+<span class="line"><span>       │  ── 发布 ── ──►  [4. Browse]               │</span></span>
+<span class="line"><span>       │                              │             │</span></span>
+<span class="line"><span>       │                              ▼             │</span></span>
+<span class="line"><span>       │                       评分 · 评论          │</span></span>
+<span class="line"><span>       │                              │             │</span></span>
+<span class="line"><span>       │                              ▼             │</span></span>
+<span class="line"><span>       │              [5. Install + Execute] ◄────┤</span></span>
+<span class="line"><span>       │                              │             │</span></span>
+<span class="line"><span>       │                              ▼             │</span></span>
+<span class="line"><span>       │                          立即可用 ──────►  📱 桌面</span></span></code></pre>
+<h3 id="五阶段流水线">五阶段流水线</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>1. Skill Upload       开发者推送 skill 包（GitHub / Gitea / npm）</span></span>
+<span class="line"><span>         ↓</span></span>
+<span class="line"><span>2. Sandbox Test       隔离沙箱跑安全 + 行为 + 依赖审计</span></span>
+<span class="line"><span>         ↓</span></span>
+<span class="line"><span>3. Version Tag        semver 化 + changelog + 兼容性矩阵</span></span>
+<span class="line"><span>         ↓</span></span>
+<span class="line"><span>4. Marketplace Browse 用户搜索 / 浏览 / 评分 / 评论</span></span>
+<span class="line"><span>         ↓</span></span>
+<span class="line"><span>5. Install + Execute  用户一键安装 → 自动加载 → 立即可用</span></span></code></pre>
+<h3 id="skill-增长曲线行业经验">Skill 增长曲线（行业经验）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时点</th><th>预估 Skill 数</th><th>类比</th></tr></thead><tbody><tr><td><strong>Day 0</strong></td><td>0</td><td>启动</td></tr><tr><td><strong>Day 1</strong></td><td>100</td><td>内部团队 bootstrap</td></tr><tr><td><strong>Day 7</strong></td><td>1,000</td><td>公开接受外部贡献</td></tr><tr><td><strong>Day 30</strong></td><td><strong>5,000</strong></td><td>⭐ 进入你的”几千技能”目标</td></tr></tbody></table>
+<hr>
+<h2 id="四server-runtime-流程">四、Server Runtime 流程 ⭐</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>                ┌───────────────┐</span></span>
+<span class="line"><span>                │   ⭐ 用户请求   │</span></span>
+<span class="line"><span>                └───────┬───────┘</span></span>
+<span class="line"><span>                        ▼</span></span>
+<span class="line"><span>               ┌────────────────┐</span></span>
+<span class="line"><span>               │ ⭐ 接入端选择   │</span></span>
+<span class="line"><span>               ├─────┬─────┬────┤</span></span>
+<span class="line"><span>               │Web  │Desktop│CLI│ API│</span></span>
+<span class="line"><span>               └──┬──┴──┬──┴──┬─┘</span></span>
+<span class="line"><span>                  └────┴────┴─────┐</span></span>
+<span class="line"><span>                       ▼</span></span>
+<span class="line"><span>              ┌──────────────────┐</span></span>
+<span class="line"><span>              │ ⭐ Orchestrator  │</span></span>
+<span class="line"><span>              └──────────┬───────┘</span></span>
+<span class="line"><span>                         ▼</span></span>
+<span class="line"><span>            ┌────────────────────┐</span></span>
+<span class="line"><span>            │ ⭐ 任务分类        │</span></span>
+<span class="line"><span>            └────┬───┬───┬───┬─┘</span></span>
+<span class="line"><span>        ┌───────┘   │   │   └───────┐</span></span>
+<span class="line"><span>        ▼           ▼   ▼           ▼</span></span>
+<span class="line"><span>  ┌─────────┐ ┌────────┐ ┌────────────┐ ┌──────────┐</span></span>
+<span class="line"><span>  │⭐ Skill │ │⭐ Code │ │⭐ Web Fetch│ │⭐ Memory │</span></span>
+<span class="line"><span>  │Marketplace│ │ Sandbox│ │  /Browser  │ │  Store   │</span></span>
+<span class="line"><span>  └────┬────┘ └───┬────┘ └─────┬──────┘ └─────┬────┘</span></span>
+<span class="line"><span>       └──────────┴────────────┴─────────────┘</span></span>
+<span class="line"><span>                              ▼</span></span>
+<span class="line"><span>                   ┌────────────────────┐</span></span>
+<span class="line"><span>                   │ ⭐ Model Adapter   │</span></span>
+<span class="line"><span>                   └─────────┬──────────┘</span></span>
+<span class="line"><span>                             ▼</span></span>
+<span class="line"><span>                    ┌─────────────────┐</span></span>
+<span class="line"><span>                    │ ⭐ 模型选择       │</span></span>
+<span class="line"><span>                    ├──────┬──────────┤</span></span>
+<span class="line"><span>                    │默认   │高级任务   │</span></span>
+<span class="line"><span>                    ▼       ▼          ▼</span></span>
+<span class="line"><span>            ┌──────────┐ ┌──────────────┐</span></span>
+<span class="line"><span>            │⭐ 本地模型 │ │⭐ 云端 API    │</span></span>
+<span class="line"><span>            │Qwen/DeepSeek│ │GPT-6/Claude  │</span></span>
+<span class="line"><span>            └──────┬───┘ └──────┬───────┘</span></span>
+<span class="line"><span>                   └──────┬────┘</span></span>
+<span class="line"><span>                          ▼</span></span>
+<span class="line"><span>                   ┌──────────────┐</span></span>
+<span class="line"><span>                   │ ⭐ 结果聚合   │</span></span>
+<span class="line"><span>                   └──────────────┘</span></span>
+<span class="line"><span>                          ▼</span></span>
+<span class="line"><span>                   [ 用户接收 ]</span></span></code></pre>
+<hr>
+<h2 id="五部署清单">五、部署清单 ⭐</h2>
+<h3 id="硬件需求自托管-ubuntu">硬件需求（自托管 Ubuntu）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>单机起步</th><th>中等规模</th><th>大规模</th></tr></thead><tbody><tr><td><strong>CPU</strong></td><td>8 核 x86_64</td><td>16 核</td><td>32+ 核</td></tr><tr><td><strong>RAM</strong></td><td>32 GB</td><td>64 GB</td><td>128+ GB</td></tr><tr><td><strong>GPU</strong></td><td>RTX 4090 (24GB) / RTX 5090 (32GB)</td><td>A6000 (48GB)</td><td>4×H100 (80GB)</td></tr><tr><td><strong>存储</strong></td><td>1 TB NVMe</td><td>2 TB NVMe</td><td>10 TB NVMe + 备份</td></tr><tr><td><strong>网络</strong></td><td>100 Mbps</td><td>1 GB（云 IDC）</td><td>10 GB + CDN</td></tr></tbody></table>
+<h3 id="软件栈">软件栈</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>组件</th><th>选择</th><th>理由</th></tr></thead><tbody><tr><td>⭐ <strong>OS</strong></td><td><strong>Ubuntu 22.04 LTS</strong></td><td>长期支持 + NVIDIA 驱动齐全</td></tr><tr><td><strong>Container</strong></td><td>Docker 24+ + docker-compose</td><td>标准运维</td></tr><tr><td><strong>反代</strong></td><td>Caddy / Nginx</td><td>自动 HTTPS</td></tr><tr><td><strong>数据库</strong></td><td>PostgreSQL 15</td><td>Skill / 用户 / 任务元数据</td></tr><tr><td><strong>向量库</strong></td><td>pgvector / Qdrant</td><td>长期记忆 / Skill 检索</td></tr><tr><td><strong>消息队列</strong></td><td>Redis</td><td>异步任务 / 限流</td></tr><tr><td><strong>监控</strong></td><td>Prometheus + Grafana</td><td>资源 / 延迟 / 错误率</td></tr><tr><td><strong>日志</strong></td><td>Loki + Promtail</td><td>聚合 + 检索</td></tr></tbody></table>
+<h3 id="模型适配器">模型适配器 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>模型</th><th>提供方</th><th>用法</th></tr></thead><tbody><tr><td><strong>本地默认</strong></td><td>Qwen3 / DeepSeek / GLM-4</td><td>日常 80% 任务（隐私 + 成本）</td></tr><tr><td><strong>复杂推理</strong></td><td>GPT-6 / Claude Opus 5</td><td>长推理 / 复杂代码</td></tr><tr><td><strong>快速推理</strong></td><td>Groq LPU</td><td>低延迟 chat</td></tr><tr><td><strong>代码专用</strong></td><td>Qwen3-Coder / DeepSeek-Coder</td><td>代码生成</td></tr></tbody></table>
+<hr>
+<h2 id="六阶段路线">六、阶段路线 ⭐</h2>
+<h3 id="phase-1--mvp-启动week-1">Phase 1 — <strong>MVP 启动</strong>（Week 1）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>任务</th><th>产出</th></tr></thead><tbody><tr><td>1</td><td>Ubuntu 22.04 LTS + NVIDIA 驱动 + Docker</td><td>基础环境</td></tr><tr><td>2</td><td>部署 LiteLLM + 接入 3 个模型（OpenAI + Anthropic + 本地）</td><td>模型层就绪</td></tr><tr><td>3</td><td>部署 Agent Orchestrator（自托管）</td><td>基础智能体跑通</td></tr><tr><td>4</td><td>跑通 5 个内部 Skill（文件操作 + Shell + 计算 + 搜索 + 邮件）</td><td>验证可用</td></tr><tr><td>5</td><td>Web UI（类 ChatGPT 风格）</td><td>第一个能用的产品</td></tr></tbody></table>
+<h3 id="phase-2--marketplace-接入week-2-3">Phase 2 — <strong>Marketplace 接入</strong>（Week 2-3）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>任务</th><th>产出</th></tr></thead><tbody><tr><td>1</td><td>Skill 打包格式定义（YAML + manifest）</td><td>标准化</td></tr><tr><td>2</td><td>沙箱执行（Docker 隔离 + 资源限制）</td><td>安全基线</td></tr><tr><td>3</td><td>Marketplace 浏览 / 安装 / 评分</td><td>用户生态起步</td></tr><tr><td>4</td><td>接 50 个内部 Skill</td><td>内部团队用</td></tr><tr><td>5</td><td>文档 + SDK（Python + JS）</td><td>第三方能写</td></tr></tbody></table>
+<h3 id="phase-3--多端扩展week-4-5">Phase 3 — <strong>多端扩展</strong>（Week 4-5）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>任务</th><th>产出</th></tr></thead><tbody><tr><td>1</td><td>Desktop App（Tauri / Electron）</td><td>双击即用</td></tr><tr><td>2</td><td>CLI（Rust / Go）</td><td>程序员友好</td></tr><tr><td>3</td><td>OpenAI 兼容 API</td><td>其他应用接入</td></tr><tr><td>4</td><td>接 500 个 Skill</td><td>跨多团队</td></tr><tr><td>5</td><td>计费 + 多租户（如果对外）</td><td>商业模式</td></tr></tbody></table>
+<h3 id="phase-4--生态开放week-6">Phase 4 — <strong>生态开放</strong>（Week 6+）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>任务</th><th>产出</th></tr></thead><tbody><tr><td>1</td><td>公开 Marketplace</td><td>外部开发者贡献</td></tr><tr><td>2</td><td>Skill 审核 + 信誉体系</td><td>质量保证</td></tr><tr><td>3</td><td>接 5,000+ Skill</td><td>⭐ <strong>达到”几千技能”目标</strong></td></tr><tr><td>4</td><td>性能优化 + 沙箱增强</td><td>稳定性</td></tr><tr><td>5</td><td>商业模式（订阅 / 企业版）</td><td>商业化</td></tr></tbody></table>
+<hr>
+<h2 id="七与对标产品的能力矩阵">七、与对标产品的能力矩阵</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>能力</th><th>ChatGPT GPTs</th><th>Anthropic MCP</th><th>Coze</th><th><strong>Hermes 自托管</strong></th></tr></thead><tbody><tr><td><strong>模型切换</strong></td><td>仅 OpenAI</td><td>多模型</td><td>多</td><td><strong>✅</strong> 完全自由</td></tr><tr><td><strong>数据本地化</strong></td><td>❌ 云端</td><td>❌ 云端</td><td>❌ 云端</td><td>⭐ <strong>✅ 100% 本地</strong></td></tr><tr><td><strong>Skill Marketplace</strong></td><td>✅</td><td>✅（MCP）</td><td>✅</td><td>⭐ <strong>✅ 自托管版</strong></td></tr><tr><td><strong>几千 Skill</strong></td><td>✅</td><td>✅</td><td>✅</td><td>⭐ <strong>可达</strong></td></tr><tr><td><strong>多端接入</strong></td><td>Web/App/Desktop</td><td>Web/API</td><td>Web</td><td>⭐ <strong>Web + Desktop + CLI + API</strong></td></tr><tr><td><strong>沙箱隔离</strong></td><td>服务端</td><td>服务端</td><td>服务端</td><td>⭐ <strong>Docker 隔离</strong></td></tr><tr><td><strong>合规审计</strong></td><td>服务端</td><td>服务端</td><td>服务端</td><td>⭐ <strong>自有可控</strong></td></tr><tr><td><strong>成本</strong></td><td>订阅</td><td>订阅 + API</td><td>订阅</td><td>⭐ <strong>本地 + API 混合，最优</strong></td></tr></tbody></table>
+<hr>
+<h2 id="八风险与自托管-️">八、风险与自托管 ⚠️</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>风险</th><th>自托管缓解</th></tr></thead><tbody><tr><td><strong>Skill 执行权限过大</strong></td><td>⭐ Docker 隔离 + 资源限制 + 审计日志</td></tr><tr><td><strong>Skill 来源不可信</strong></td><td>沙箱跑 + 行为白名单 + 信誉评分</td></tr><tr><td><strong>GPU 成本</strong></td><td>⭐ 大部分任务用本地小模型（80%）+ 仅复杂任务用云 API</td></tr><tr><td><strong>运维复杂</strong></td><td>K8s + Prometheus + 自动扩缩</td></tr><tr><td><strong>Skill 市场冷启动</strong></td><td>内部团队 + 跨团队 + 公开三阶段</td></tr><tr><td><strong>数据合规</strong></td><td>自托管 = 完全合规</td></tr><tr><td><strong>模型更新跟不上</strong></td><td>Adapter 模式 + 一键切模型</td></tr></tbody></table>
+<hr>
+<h2 id="九成本估算">九、成本估算</h2>
+<h3 id="单机起步ubuntu--rtx-4090">单机起步（Ubuntu + RTX 4090）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项</th><th>月成本</th></tr></thead><tbody><tr><td><strong>GPU 云（北京 / 上海）</strong></td><td>¥2,500（按 RTX 4090 月租）</td></tr><tr><td><strong>公网带宽 + IP</strong></td><td>¥100</td></tr><tr><td><strong>存储 + 备份</strong></td><td>¥200</td></tr><tr><td><strong>云 API 调用（少量）</strong></td><td>¥300</td></tr><tr><td><strong>合计</strong></td><td>⭐ <strong>~¥3,100 / 月</strong></td></tr></tbody></table>
+<h3 id="vs-云端订阅">vs 云端订阅</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>产品</th><th>月成本</th></tr></thead><tbody><tr><td>ChatGPT Team</td><td>$25 / 用户 × N</td></tr><tr><td>Claude Max</td><td>$100 / 用户</td></tr><tr><td><strong>Hermes 自托管（10 用户）</strong></td><td>⭐ <strong>$430 / 10 人 = $43 / 人</strong></td></tr></tbody></table>
+<p><strong>长期 ROI</strong>：自托管 6-12 个月回本。</p>
+<hr>
+<h2 id="十关键设计决策">十、关键设计决策 ⭐</h2>
+<h3 id="1-模型适配器优先">1. 模型适配器优先</h3>
+<blockquote>
+<p><strong>不要锁死单一模型</strong> —— 所有模型走统一接口（OpenAI 协议），切换无感</p>
+</blockquote>
+<h3 id="2-skill-沙箱是核心">2. Skill 沙箱是核心</h3>
+<blockquote>
+<p><strong>沙箱不能事后补</strong> —— Phase 2 第一天就要落地（Docker + 资源限制 + 行为审计）</p>
+</blockquote>
+<h3 id="3-数据流向决定成本">3. 数据流向决定成本</h3>
+<blockquote>
+<p><strong>80% 任务本地小模型 + 20% 复杂任务云 API</strong> —— 而不是反过来</p>
+</blockquote>
+<h3 id="4-web-ui-是入口">4. Web UI 是入口</h3>
+<blockquote>
+<p><strong>Desktop / CLI 是补充</strong> —— Web 门槛最低、调试最易</p>
+</blockquote>
+<h3 id="5-长期记忆是差异化">5. 长期记忆是差异化</h3>
+<blockquote>
+<p><strong>pgvector / Qdrant</strong> 是必备 —— 否则每个 session 重新白板</p>
+</blockquote>
+<h3 id="6-marketplace-冷启动靠自己">6. Marketplace 冷启动靠自己</h3>
+<blockquote>
+<p><strong>不要等生态</strong> —— 内部团队 + 跨部门 100 个就能用</p>
+</blockquote>
+<hr>
+<h2 id="十一总结">十一、总结 ⭐</h2>
+<blockquote>
+<p><strong>“云端 + Marketplace + 模型无关 + 多端”</strong> —— 这套”几千技能”的产品模型<strong>完全可以在自托管 Ubuntu 上跑通</strong>。</p>
+</blockquote>
+<blockquote>
+<p><strong>关键路径</strong>：</p>
+<ol>
+<li><strong>Week 1</strong> MVP（5 个内部 Skill）</li>
+<li><strong>Week 2-3</strong> Marketplace 接入（50 个 Skill）</li>
+<li><strong>Week 4-5</strong> 多端 + API（500 个 Skill）</li>
+<li><strong>Week 6+</strong> 公开生态（<strong>5,000+ Skill</strong>）</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>最终收益</strong>：<strong>数据本地化 / 成本节省 60-80% / 完全合规 / 模型自由切换</strong>。</p>
+</blockquote>
+<blockquote>
+<p><strong>核心风险</strong>：<strong>沙箱安全</strong>（Phase 2 第一天必须落地）+ <strong>冷启动</strong>（自己先做 100 个 Skill）。</p>
+</blockquote>
+<hr>
+<h2 id="配图">配图</h2>
+<ul>
+<li>图 1：自托管 Hermes Agent 五层架构（基础设施图，AI 渲染）<strong>⏳ 待补</strong></li>
+<li>图 2：Skill Marketplace 五阶段流水线（数据流图，AI 渲染）<strong>⏳ 待补</strong></li>
+</ul>
+<h2 id="来源">来源</h2>
+<ul>
+<li>自托管实践参考：DeepSeek Harness（GitHub：deepseek-ai/deepseek-harness）</li>
+<li>业界对应：ChatGPT GPTs（openai.com）/ Anthropic MCP（anthropic.com）/ Coze（coze.com）/ LiteLLM（github.com/BerriAI/litellm）</li>
+<li>部署栈参考：Docker / Caddy / PostgreSQL / pgvector / Prometheus</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

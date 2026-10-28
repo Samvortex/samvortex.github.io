@@ -1,0 +1,423 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>千亿模型消费级部署成真：Strata 三级调度让 RTX 5070 跑 125B Qwen3.8-Flash-Next · Samvortex Hub</title><meta name="description" content="Qwen3.8-Flash-Next（125B MoE）+ Strata 推理引擎，组合后让消费级 RTX 5070 (12GB) 跑千亿模型——94 tok/s，1.6-1.8x 投机解码加速，OpenAI API 兼容可直接接 Cursor / Claude Code。Strata 核心是 GPU 显存 / 系统内存 / 高速 SSD 三级分层调度 + MTP 投机解码。RTX 5090 实测 140-158 tok/s，A100 80GB 跑 Unsloth UD-IQ4_XS 4-bit 混合量化版本，2x TITAN RTX 实测 262K 极限上下文。"><link rel="canonical" href="https://samvortex.com/notes/strata-qwen3-8-flash-next-consumer-gpu-2026-10-10/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="千亿模型消费级部署成真：Strata 三级调度让 RTX 5070 跑 125B Qwen3.8-Flash-Next · Samvortex Hub"><meta property="og:description" content="Qwen3.8-Flash-Next（125B MoE）+ Strata 推理引擎，组合后让消费级 RTX 5070 (12GB) 跑千亿模型——94 tok/s，1.6-1.8x 投机解码加速，OpenAI API 兼容可直接接 Cursor / Claude Code。Strata 核心是 GPU 显存 / 系统内存 / 高速 SSD 三级分层调度 + MTP 投机解码。RTX 5090 实测 140-158 tok/s，A100 80GB 跑 Unsloth UD-IQ4_XS 4-bit 混合量化版本，2x TITAN RTX 实测 262K 极限上下文。"><meta property="og:url" content="https://samvortex.com/notes/strata-qwen3-8-flash-next-consumer-gpu-2026-10-10/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="千亿模型消费级部署成真：Strata 三级调度让 RTX 5070 跑 125B Qwen3.8-Flash-Next · Samvortex Hub"><meta name="twitter:description" content="Qwen3.8-Flash-Next（125B MoE）+ Strata 推理引擎，组合后让消费级 RTX 5070 (12GB) 跑千亿模型——94 tok/s，1.6-1.8x 投机解码加速，OpenAI API 兼容可直接接 Cursor / Claude Code。Strata 核心是 GPU 显存 / 系统内存 / 高速 SSD 三级分层调度 + MTP 投机解码。RTX 5090 实测 140-158 tok/s，A100 80GB 跑 Unsloth UD-IQ4_XS 4-bit 混合量化版本，2x TITAN RTX 实测 262K 极限上下文。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-10T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-10T00:00:00.000Z">2026年10月10日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">千亿模型消费级部署成真：Strata 三级调度让 RTX 5070 跑 125B Qwen3.8-Flash-Next</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">Qwen3.8-Flash-Next（125B MoE）+ Strata 推理引擎，组合后让消费级 RTX 5070 (12GB) 跑千亿模型——94 tok/s，1.6-1.8x 投机解码加速，OpenAI API 兼容可直接接 Cursor / Claude Code。Strata 核心是 GPU 显存 / 系统内存 / 高速 SSD 三级分层调度 + MTP 投机解码。RTX 5090 实测 140-158 tok/s，A100 80GB 跑 Unsloth UD-IQ4_XS 4-bit 混合量化版本，2x TITAN RTX 实测 262K 极限上下文。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Qwen3.8/" class="tag">#Qwen3.8</a><a href="/tags/Flash-Next/" class="tag">#Flash-Next</a><a href="/tags/Strata/" class="tag">#Strata</a><a href="/tags/推理引擎/" class="tag">#推理引擎</a><a href="/tags/消费级显卡/" class="tag">#消费级显卡</a><a href="/tags/本地部署/" class="tag">#本地部署</a><a href="/tags/千亿模型/" class="tag">#千亿模型</a><a href="/tags/MoE/" class="tag">#MoE</a><a href="/tags/投机解码/" class="tag">#投机解码</a><a href="/tags/MTP/" class="tag">#MTP</a><a href="/tags/Unsloth/" class="tag">#Unsloth</a><a href="/tags/UD-IQ4_XS/" class="tag">#UD-IQ4_XS</a><a href="/tags/A100/" class="tag">#A100</a><a href="/tags/RTX 5070/" class="tag">#RTX 5070</a><a href="/tags/RTX 5090/" class="tag">#RTX 5090</a><a href="/tags/评论/" class="tag">#评论</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>Strata 推理引擎 + Qwen3.8-Flash-Next（125B MoE）让<strong>消费级显卡跑千亿模型</strong>这件事从 PPT 走到实测——<strong>12GB 显存的 RTX 5070 跑出 94 tok/s</strong>，架构关键是三级分层调度（GPU 显存 / 系统内存 / SSD）+ MTP 投机解码；<strong>但要把 A100 跑得好的成绩单算「消费级」有点偷换概念</strong>（作者用的是 Colab Pro 拉的 80GB 临时实例）。</p>
+</blockquote>
+<h2 id="一事件strata-推理引擎--qwen38-flash-next">一、事件：Strata 推理引擎 + Qwen3.8-Flash-Next</h2>
+<p>163 网易号作者「Ai 学习的老章」10-10 发了同主题实测——核心是<strong>两个新东西</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项</th><th>详情</th></tr></thead><tbody><tr><td><strong>Qwen3.8-Flash-Next</strong></td><td>125B 参数 <strong>MoE 模型</strong>，24,576 个细粒度专家，每 token 仅激活 <strong>10 个</strong></td></tr><tr><td><strong>Strata</strong></td><td>开源推理引擎，主打「让 125B 跑在普通家用游戏电脑」</td></tr><tr><td><strong>组合实测</strong></td><td>RTX 5070 (12GB) 跑出 94 tok/s，RTX 5090 (32GB) 跑出 140-158 tok/s</td></tr></tbody></table>
+<p><strong>和我之前几篇 Qwen3.8 文章的关系</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>文章</th><th>路径</th></tr></thead><tbody><tr><td><a href="/research/mac-studio-m5-ultra-qwen3-8-27b-token-throughput-2026/">Mac Studio M5 Ultra × Qwen3.8 27B</a></td><td>Apple Silicon + 27B 路径</td></tr><tr><td><a href="/research/macmini-m5pro-qwen38-h3-verified-report/">Mac mini M5 Pro × Qwen3.8 × MiniMax H3</a></td><td>Apple Silicon + 27B 路径</td></tr><tr><td><a href="/research/vllm-omni-minimax-h3-fasth3/">vLLM-Omni × MiniMax H3</a></td><td>vLLM 推理引擎 + 视频场景</td></tr><tr><td><a href="/research/nvidia-dgx-spark-64gb/">NVIDIA DGX Spark 64GB</a></td><td>桌面级 AI 超算</td></tr><tr><td><strong>本文 Strata + Flash-Next 125B</strong></td><td><strong>新：消费级显卡 + 千亿 MoE + 三级调度</strong></td></tr></tbody></table>
+<h2 id="二qwen38-flash-nextmoe-才是消费级可行的关键">二、Qwen3.8-Flash-Next：MoE 才是消费级可行的关键</h2>
+<h3 id="模型规格">模型规格</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td>总参数</td><td>125B</td></tr><tr><td>架构</td><td>MoE（Mixture of Experts）</td></tr><tr><td>专家数</td><td><strong>24,576 个细粒度专家</strong></td></tr><tr><td>每 token 激活</td><td><strong>仅 10 个</strong></td></tr><tr><td>激活率</td><td>~0.04%</td></tr><tr><td>上下文</td><td>128K 原生，部分硬件支持 262K</td></tr></tbody></table>
+<h3 id="为什么这模型能跑在消费级硬件">为什么这模型能跑在消费级硬件</h3>
+<p>传统 dense 模型：125B 参数全部要装进显存 → <strong>250 GB+ 显存</strong>才装得下。</p>
+<p>Flash-Next MoE 125B：每 token 实际只激活 10 个专家 → <strong>只需要把这 10 个专家的权重 + 路由网络放进 GPU 显存</strong>，其他 24,566 个专家留在系统内存甚至 SSD。</p>
+<blockquote>
+<p><strong>MoE 是「消费级跑千亿」的工程前提</strong>——没有 MoE，125B 在 12GB 显卡上根本不可能。</p>
+</blockquote>
+<h2 id="三strata-的核心创新三级分层调度核心架构">三、Strata 的核心创新：三级分层调度（核心架构）</h2>
+<p>厨房料理台的比喻：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>层级</th><th>类比</th><th>存储内容</th><th>速度</th></tr></thead><tbody><tr><td><strong>GPU 显存</strong></td><td>料理台</td><td>注意力层 + 基础权重 + MTP 投机头 + 数千高频专家</td><td>纳秒级</td></tr><tr><td><strong>系统内存</strong></td><td>大冰箱</td><td>全量 24,576 专家；用 AVX-512/AVX2 指令集就地计算</td><td>微秒级</td></tr><tr><td><strong>高速 SSD</strong></td><td>远端储藏室</td><td>28.8 GB n-gram 查找表，词级检索</td><td>毫秒级</td></tr></tbody></table>
+<h3 id="三个核心工程决策">三个核心工程决策</h3>
+<ol>
+<li><strong>专家动态加载</strong>：每次生成 token 时，Strata 看路由决定要哪些专家——<strong>已驻显存</strong>直接用；<strong>没驻显存</strong>的，系统内存 CPU 并行就地计算（与 GPU 并行推进）；<strong>冷门专家</strong>走 SSD 检索</li>
+<li><strong>显存预算硬约束</strong>：家用 64GB 内存机器保留「内存 - 24GB」专家驻内存；<strong>只有 80GB+ 内存才能全量常驻</strong>（这是 A100 跑得好的关键）</li>
+<li><strong>n-gram 预查表</strong>：28.8 GB SSD 上的查找表，每生成一个词只需检索极小片段</li>
+</ol>
+<h2 id="四投机解码mtp16-18x-加速">四、投机解码（MTP）——1.6-1.8x 加速</h2>
+<h3 id="机制">机制</h3>
+<ul>
+<li>内置轻量 <strong>MTP（Multi-Token Prediction）模块</strong>先行预测数个候选 token</li>
+<li>大模型主干<strong>一次前向批量核验</strong>这批候选</li>
+<li>命中率高 → 一次走多个 token；命中率低 → 退化为单 token 模式</li>
+</ul>
+<h3 id="收益">收益</h3>
+<ul>
+<li><strong>端到端吞吐 1.6-1.8 倍提升</strong></li>
+<li>不需要训练额外 draft model（MTP 是模型自带的）</li>
+<li>兼容性高，对所有主流 GPU 都生效</li>
+</ul>
+<h2 id="五硬件实测数据全盘点">五、硬件实测数据全盘点</h2>
+<h3 id="消费级单卡最值得关注">消费级单卡（最值得关注）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>硬件</th><th>量化</th><th>Decode (tok/s)</th><th>Prefill (tok/s)</th></tr></thead><tbody><tr><td><strong>RTX 5070 (12GB)</strong> + Ryzen 5 7600 + 64GB RAM</td><td>Q2_0</td><td><strong>94</strong></td><td>2,650</td></tr><tr><td>RTX 5070 (12GB)</td><td>IQ2_XS</td><td>79</td><td>2,090</td></tr><tr><td>RTX 5070 (12GB)</td><td>IQ3_XXS</td><td>62</td><td>1,750</td></tr><tr><td>RTX 5070 (12GB)</td><td>IQ3_S</td><td>53</td><td>1,620</td></tr><tr><td>RTX 5070 (12GB)</td><td>Coder</td><td>55</td><td>2,180</td></tr><tr><td>AMD RX 9070 XT (16GB) + Ryzen 9 3900X + 47GB RAM</td><td>Q2_0</td><td>60</td><td>1,160</td></tr></tbody></table>
+<blockquote>
+<p><strong>关键观察</strong>：12GB 显存的显卡在 32K 提示词下<strong>预填充超过 2,000 tok/s，生成直奔 90 tok/s</strong>——已经超过人类阅读速度。</p>
+</blockquote>
+<h3 id="高阶单卡与旗舰">高阶单卡与旗舰</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>硬件</th><th>量化</th><th>Decode (tok/s)</th></tr></thead><tbody><tr><td><strong>RTX 5090 (32GB)</strong> + Core Ultra 9 285K</td><td>IQ2_XS / IQ3_S</td><td><strong>140-158</strong></td></tr><tr><td>AMD RX 7900 XTX (24GB) + ROCm</td><td>IQ3_S (128K ctx)</td><td>59.2-65.1</td></tr></tbody></table>
+<h3 id="多卡方案">多卡方案</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>Decode (tok/s)</th><th>备注</th></tr></thead><tbody><tr><td><strong>2x TITAN RTX (48GB 总)</strong></td><td>70.9-77.3</td><td><strong>262K 极限上下文</strong>实测，Needle 6/6 全过</td></tr><tr><td>RTX 5080 (16GB) + RTX 3090 (24GB)</td><td>84-110</td><td>Coder 混合切分，Prefill 2,039-2,357</td></tr><tr><td>2x Quadro RTX 4000 (16GB 总)</td><td>18-23</td><td>131K 上下文，能跑</td></tr><tr><td>2x Intel Arc Pro B60</td><td>(社区适配)</td><td>多卡异构</td></tr></tbody></table>
+<h3 id="a100-80gb--unsloth-ud-iq4_xs">A100 80GB + Unsloth UD-IQ4_XS</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>配置</th></tr></thead><tbody><tr><td>GPU</td><td>NVIDIA A100-SXM4-80GB（CUDA 13.0，sm_80）</td></tr><tr><td>内存</td><td>167 GB RAM，分配 55 GiB 专供专家层</td></tr><tr><td>量化</td><td><strong>Unsloth UD-IQ4_XS</strong>（~4-bit 混合：IQ3_S + IQ4_NL）</td></tr><tr><td>下载体积</td><td><strong>93.7 GB</strong>（59.5 GB 高品质专家库 + 34.2 GB 基础权重）</td></tr><tr><td>优势</td><td>80GB 显存 + 55GB 内存预算 → 24,576 专家<strong>全量常驻</strong>，不依赖 SSD 实时换页</td></tr></tbody></table>
+<h2 id="六可信度红旗必看">六、可信度红旗（必看）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>红旗</th><th>详情</th><th>判断</th></tr></thead><tbody><tr><td><strong>「A100 也能跑」是偷换概念</strong></td><td>作者上一篇文章写自己<strong>花了 199 块买 Gemini Pro 套餐获赠 Colab Pro 权益</strong>，<strong>这台 A100 是 Google 临时分配的 80GB 显存实例</strong>，不是自己买的</td><td>把 A100 的成绩单算「A100 也能用 Strata」<strong>没毛病，但暗示「千亿模型消费级可行」时把 A100 列进来是混淆视听</strong>——80GB HBM2e 是企业级特性，<strong>消费级硬件根本不可比</strong></td></tr><tr><td><strong>官方未明确 A100 适配</strong></td><td>Strata README 重点宣传 RTX 20/30/40/50 消费级</td><td>sm_80 架构原生支持，所以 A100 跑得通——但<strong>这不算 A100 的优势，是企业卡的天然属性</strong></td></tr><tr><td><strong>Q2_0 94 tok/s 的解读</strong></td><td>这是 2-bit 极低精度版本</td><td><strong>智商掉档明显</strong>——长文本 / 复杂推理会很惨，<strong>别拿 Q2_0 当日常用</strong></td></tr><tr><td><strong>4-bit 智商差距</strong></td><td>Unsloth UD-IQ4_XS 介于 IQ3_S 和 UD-Q4_K_XL 之间</td><td><strong>4-bit 已经能逼近满血</strong>——这才是真实可用的精度档</td></tr><tr><td><strong>作者立场</strong></td><td>实测博主，写过 Gemini Pro 薅羊毛、Colab 拉 A100 等</td><td><strong>不是 OpenAI / Qwen / Strata 利益相关方</strong>，可参考但不背书</td></tr></tbody></table>
+<h2 id="七对-sam-的-3-点启示">七、对 Sam 的 3 点启示</h2>
+<h3 id="71-wcec-校园-it-的本地-ai-推理选型要更新了">7.1 WCEC 校园 IT 的「本地 AI 推理」选型要更新了</h3>
+<ul>
+<li>你的 <a href="/research/nvidia-dgx-spark-64gb/">DGX Spark 64GB 文章</a> 写过桌面级 AI 超算</li>
+<li>这次 Strata + RTX 5070 的组合让<strong>普通台式工作站也能跑千亿</strong>——对惠灵顿学校的 IT 选型有直接意义</li>
+<li><strong>建议</strong>：下次给学校选 AI 推理硬件时，<strong>别再默认 DGX Spark / H100 路线</strong>——一台 RTX 5090 工作站 + Strata 部署 = <strong>¥3-4 万搞定千亿推理</strong></li>
+<li><strong>架构选型</strong>：单卡（RTX 5090）跑 Flash-Next 125B IQ3_S = <strong>足够 1 个学校用</strong>；多卡（2x TITAN RTX 48GB）= <strong>7 校集团级</strong></li>
+</ul>
+<h3 id="72-mac-studio--mac-mini-的-qwen38-27b-路线要重新评估">7.2 Mac Studio / Mac mini 的 Qwen3.8 27B 路线要重新评估</h3>
+<ul>
+<li>你的 <a href="/research/mac-studio-m5-ultra-qwen3-8-27b-token-throughput-2026/">Mac Studio M5 Ultra × Qwen3.8 27B</a> 路径是 Apple Silicon + 中等模型</li>
+<li>Strata + Flash-Next 125B 在 <strong>RTX 5090 (32GB) 跑出 140-158 tok/s</strong>——比 Mac Studio 27B 还快</li>
+<li><strong>结论</strong>：<strong>Apple Silicon 不再是「本地 LLM 推理」的最优解</strong>——x86 + NVIDIA + Strata 在千亿规模有显著优势</li>
+<li><strong>但</strong>：27B 及以下，<strong>Mac mini / Mac Studio 仍然有能效比 + 静音优势</strong>——按场景分层</li>
+</ul>
+<h3 id="73-openai-api-兼容--编程生态直接打通">7.3 OpenAI API 兼容 = 编程生态直接打通</h3>
+<ul>
+<li>Strata <strong>完全兼容 OpenAI API</strong>——Cursor / Claude Code / Cline / Continue 等编程 agent <strong>零改造直接接</strong></li>
+<li><strong>对你的启示</strong>：<strong>Hermes Agent / The Hive</strong> 的模型 provider 层<strong>应该考虑加 Strata 后端</strong></li>
+<li>一个 RTX 5090 工作站 + Strata + 本地 125B = <strong>完全本地化的编程 agent</strong>，<strong>企业级数据不出门</strong></li>
+<li><strong>建议</strong>：把 Strata 加入你的 <a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管</a> 备选清单</li>
+</ul>
+<h2 id="八未验证部分--待核清单">八、未验证部分 + 待核清单</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>待核项</th><th>建议核验源</th><th>判断</th></tr></thead><tbody><tr><td>Strata 项目 GitHub</td><td>GitHub 仓库 README</td><td><strong>可信</strong>——可一手核</td></tr><tr><td>Qwen3.8-Flash-Next 模型卡</td><td>Hugging Face / Qwen 官方</td><td><strong>可信</strong>——125B MoE 是公开规格</td></tr><tr><td>24,576 专家 / 激活 10</td><td>模型 config.json</td><td>可核</td></tr><tr><td>各显卡实测数据</td><td>Strata 官方 benchmark 文档</td><td><strong>部分可信</strong>——数字漂亮，但要分清<strong>官方 vs 社区</strong></td></tr><tr><td>A100 + Unsloth UD-IQ4_XS 实测</td><td>老章自己 Colab Pro 跑</td><td><strong>可信</strong>——是他自己跑出来的</td></tr><tr><td>RTX 5070 (12GB) 94 tok/s</td><td>同样来自官方/社区</td><td><strong>可信但要打折</strong>——Q2_0 极低精度智商掉档</td></tr><tr><td>「消费级可行」论断</td><td>工程实测</td><td><strong>部分可信</strong>——可行但要分精度档 + 场景</td></tr></tbody></table>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L8R29CPH0519EA27.html">163 网易号（Ai 学习的老章）：千亿大模型消费级显卡实测</a></li>
+<li>早前相关：<a href="/research/mac-studio-m5-ultra-qwen3-8-27b-token-throughput-2026/">Mac Studio M5 Ultra × Qwen3.8 27B</a></li>
+<li>早前相关：<a href="/research/macmini-m5pro-qwen38-h3-verified-report/">Mac mini M5 Pro × Qwen3.8 × MiniMax H3</a></li>
+<li>早前相关：<a href="/research/vllm-omni-minimax-h3-fasth3/">vLLM-Omni × MiniMax H3</a></li>
+<li>早前相关：<a href="/research/nvidia-dgx-spark-64gb/">NVIDIA DGX Spark 64GB</a></li>
+<li>早前相关：<a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管 Ubuntu 云服务器</a></li>
+<li>待核：Strata GitHub 仓库（curl 受限，待浏览器手核）</li>
+<li>待核：Qwen3.8-Flash-Next Hugging Face 模型卡</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

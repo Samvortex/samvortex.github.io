@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Meta 开源 Muse Gadgets：让全球开发者自己「造 AI 外设」 · Samvortex Hub</title><meta name="description" content="⭐ **Meta 推出 Muse Gadgets 开源项目** —— 让全球开发者用 ⭐ **ESP32** 或 ⭐ **Raspberry Pi 5** 等为 Muse 打造专属&#34;AI 外设&#34;。同时发布 ⭐ **Muse Home Link** 官方设备（USB-C 供电，连接家庭网络 + 智能家居，**首批 5000 台免费**）。DIY 案例：Xteink 墨水阅读器改装 + SenseCAP Watcher 酒窖识别。**&#34;Agent 时代：先做强大模型，再让开发者造各种载体&#34;**。"><link rel="canonical" href="https://samvortex.com/notes/meta-muse-gadgets-open-source/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Meta 开源 Muse Gadgets：让全球开发者自己「造 AI 外设」 · Samvortex Hub"><meta property="og:description" content="⭐ **Meta 推出 Muse Gadgets 开源项目** —— 让全球开发者用 ⭐ **ESP32** 或 ⭐ **Raspberry Pi 5** 等为 Muse 打造专属&#34;AI 外设&#34;。同时发布 ⭐ **Muse Home Link** 官方设备（USB-C 供电，连接家庭网络 + 智能家居，**首批 5000 台免费**）。DIY 案例：Xteink 墨水阅读器改装 + SenseCAP Watcher 酒窖识别。**&#34;Agent 时代：先做强大模型，再让开发者造各种载体&#34;**。"><meta property="og:url" content="https://samvortex.com/notes/meta-muse-gadgets-open-source/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Meta 开源 Muse Gadgets：让全球开发者自己「造 AI 外设」 · Samvortex Hub"><meta name="twitter:description" content="⭐ **Meta 推出 Muse Gadgets 开源项目** —— 让全球开发者用 ⭐ **ESP32** 或 ⭐ **Raspberry Pi 5** 等为 Muse 打造专属&#34;AI 外设&#34;。同时发布 ⭐ **Muse Home Link** 官方设备（USB-C 供电，连接家庭网络 + 智能家居，**首批 5000 台免费**）。DIY 案例：Xteink 墨水阅读器改装 + SenseCAP Watcher 酒窖识别。**&#34;Agent 时代：先做强大模型，再让开发者造各种载体&#34;**。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-03T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-03T00:00:00.000Z">2026年10月3日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Meta 开源 Muse Gadgets：让全球开发者自己「造 AI 外设」</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ **Meta 推出 Muse Gadgets 开源项目** —— 让全球开发者用 ⭐ **ESP32** 或 ⭐ **Raspberry Pi 5** 等为 Muse 打造专属&quot;AI 外设&quot;。同时发布 ⭐ **Muse Home Link** 官方设备（USB-C 供电，连接家庭网络 + 智能家居，**首批 5000 台免费**）。DIY 案例：Xteink 墨水阅读器改装 + SenseCAP Watcher 酒窖识别。**&quot;Agent 时代：先做强大模型，再让开发者造各种载体&quot;**。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Meta/" class="tag">#Meta</a><a href="/tags/Muse/" class="tag">#Muse</a><a href="/tags/Muse Gadgets/" class="tag">#Muse Gadgets</a><a href="/tags/ESP32/" class="tag">#ESP32</a><a href="/tags/Raspberry Pi 5/" class="tag">#Raspberry Pi 5</a><a href="/tags/开源/" class="tag">#开源</a><a href="/tags/AI 外设/" class="tag">#AI 外设</a><a href="/tags/AI 硬件/" class="tag">#AI 硬件</a><a href="/tags/Alexandr Wang/" class="tag">#Alexandr Wang</a><a href="/tags/Muse Home Link/" class="tag">#Muse Home Link</a><a href="/tags/智能家居/" class="tag">#智能家居</a><a href="/tags/DIY/" class="tag">#DIY</a><a href="/tags/Agent/" class="tag">#Agent</a><a href="/tags/墨水屏/" class="tag">#墨水屏</a><a href="/tags/Xteink/" class="tag">#Xteink</a><a href="/tags/SenseCAP Watcher/" class="tag">#SenseCAP Watcher</a><a href="/tags/MagSafe/" class="tag">#MagSafe</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ <strong>Meta 推出 Muse Gadgets 开源项目</strong> —— 让全球开发者用 ⭐ <strong>ESP32</strong> 或 ⭐ <strong>Raspberry Pi 5</strong> 等为 Muse 打造专属”<strong>AI 外设</strong>”。同时发布 ⭐ <strong>Muse Home Link</strong> 官方设备（USB-C 供电，连接家庭网络 + 智能家居，<strong>首批 5000 台免费</strong>）。DIY 案例：Xteink 墨水阅读器改装 + SenseCAP Watcher 酒窖识别。<strong>“Agent 时代：先做强大模型，再让开发者造各种载体”</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="一muse-gadgets-开源项目">一、Muse Gadgets 开源项目 ⭐</h2>
+<h3 id="核心">核心 ⭐</h3>
+<blockquote>
+<p>”⭐ <strong>Meta 公布了一项新的动作：正式推出 Muse Gadgets 开源项目，全面下放硬件能力</strong>，⭐ <strong>让全球创客与开发者能够为 Muse 打造专属的外围硬件设备</strong>。”</p>
+</blockquote>
+<h3 id="支持平台">支持平台 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>平台</th><th>用法</th></tr></thead><tbody><tr><td>⭐ <strong>ESP32 开发板</strong></td><td><strong>运行 Muse 固件</strong>（低成本微控制器）</td></tr><tr><td>⭐ <strong>Raspberry Pi 5</strong></td><td><strong>Linux SDK 连接更复杂设备</strong>（边缘计算）</td></tr></tbody></table>
+<h3 id="官方-diy-形态参考">官方 DIY 形态参考 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>形态</th><th>用途</th></tr></thead><tbody><tr><td>⭐ <strong>彩色墨水屏（E Ink）</strong></td><td>桌面低功耗提醒器 / 智能看板 —— 实时展示 Muse 同步的 ⭐ <strong>日程 + 待办</strong></td></tr><tr><td>⭐ <strong>HDMI 显示棒 / 大屏扩展</strong></td><td>将 Muse Agent 界面或互动 ⭐ <strong>投射至电视 / 外部监视器</strong></td></tr><tr><td>⭐ <strong>触控掌上挂件</strong></td><td>类似于 Muse Charm 的 ⭐ <strong>随身交互终端</strong> —— 无需佩戴智能眼镜即可随时与 Agent 对话</td></tr></tbody></table>
+<hr>
+<h2 id="二开发流程">二、开发流程 ⭐</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>步骤</th><th>详情</th></tr></thead><tbody><tr><td>⭐ <strong>1. 获取凭证</strong></td><td>访问 ⭐ <strong>gadgets.muse.ai</strong> 注册并领取个人的 ⭐ <strong>API Token</strong></td></tr><tr><td><strong>2. 连接开发工具</strong></td><td>将 GitHub 官方代码库导入 ⭐ <strong>Claude Code / Cursor / GitHub Copilot CLI</strong> 等 AI 编程代理，借助 ⭐ <strong>Agentic Coding</strong> 快速理解协议 + 生成外设驱动代码</td></tr><tr><td><strong>3. 固件刷写与调试</strong></td><td>刷入 ⭐ <strong>ESP32 开发板</strong> 或 ⭐ <strong>Linux / 树莓派</strong>运行 SDK 客户端 → 完成硬件终端与 Muse 的 ⭐ <strong>实时双向连接</strong></td></tr></tbody></table>
+<hr>
+<h2 id="三muse-home-link-官方设备">三、Muse Home Link 官方设备 ⭐</h2>
+<h3 id="设备">设备 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>名称</strong></td><td>⭐ <strong>Muse Home Link</strong></td></tr><tr><td><strong>供电</strong></td><td>⭐ <strong>USB-C</strong></td></tr><tr><td><strong>连接</strong></td><td>让 Muse 连接到 ⭐ <strong>家庭网络</strong></td></tr><tr><td><strong>能力</strong></td><td>与 ⭐ <strong>智能家居设备</strong>通信（电视 / 音响 + 任何 ⭐ <strong>支持 HTTPS 接口的设备</strong>）</td></tr></tbody></table>
+<h3 id="商业">商业 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td>⭐ <strong>首批试产</strong></td><td><strong>5000 台</strong></td></tr><tr><td><strong>发货</strong></td><td>⭐ <strong>预计几周内开始</strong></td></tr><tr><td>⭐ <strong>价格</strong></td><td>⭐ <strong>免费发给符合条件的 Muse 订阅用户</strong>（库存充足期间）</td></tr></tbody></table>
+<hr>
+<h2 id="四alexandr-wang-的开源原因">四、Alexandr Wang 的开源原因 ⭐</h2>
+<blockquote>
+<p>“<strong>打造各种小工具本身就是一件很有趣的事情</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>其次，我们希望释放开发者的创造力，让大家探索各种全新的、甚至疯狂的想法</strong>。我们相信，Muse 正处在一个特殊的时刻，⭐ <strong>它为人们创造新型硬件设备提供了无限可能</strong>，也非常期待看到大家最终会打造出什么样的作品！”</p>
+</blockquote>
+<blockquote>
+<p>“从这一点来看，Meta 似乎希望 ⭐ <strong>Muse 不只是一个官方产品，而成为一个可以被扩展的平台</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="五网友-diy-案例">五、网友 DIY 案例 ⭐</h2>
+<h3 id="1️⃣-xteink-墨水阅读器改造">1️⃣ Xteink 墨水阅读器改造 ⭐</h3>
+<blockquote>
+<p>“网友 ⭐ <strong>Federico Viticci</strong> (@viticci) 尝试把自己的 ⭐ <strong>Xteink 电子墨水阅读器</strong>改造成了一个 ⭐ <strong>常亮的 Muse 随身显示屏</strong>。Muse（Calliope）可以在上面显示自己的形象，并展示状态更新。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>设备</strong></td><td>⭐ <strong>Xteink 电子墨水阅读器</strong></td></tr><tr><td><strong>角色</strong></td><td>Muse 随身显示屏</td></tr><tr><td><strong>物理</strong></td><td>⭐ <strong>通过 MagSafe 磁吸连接到手机背面</strong> —— 把手机翻过来即可随时查看 Muse 推送</td></tr><tr><td><strong>用户反馈</strong></td><td>⭐ <strong>“Muse App 的设置流程非常顺畅</strong>，可以直接让 Muse 加载内容，或自动化控制显示屏信息。我真的很 ⭐ <strong>喜欢这种对黑客和开发者友好的设计理念</strong>。”</td></tr></tbody></table>
+<h3 id="2️⃣-sensecap-watcher-酒窖识别">2️⃣ SenseCAP Watcher 酒窖识别 ⭐</h3>
+<blockquote>
+<p>“另一位开发者则利用 ⭐ <strong>约 $50 的 SenseCAP Watcher 设备</strong>，打造了一个连接 ⭐ <strong>个人酒窖</strong>的智能硬件。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>硬件成本</strong></td><td>⭐ <strong>约 $50</strong></td></tr><tr><td><strong>功能</strong></td><td>拍摄酒瓶标签 → Muse ⭐ <strong>识别酒庄和年份</strong> → 通过 ⭐ <strong>Tailscale 连接器</strong>同步到个人酒窖系统</td></tr><tr><td><strong>搭建时间</strong></td><td>⭐ <strong>不到 1 小时</strong></td></tr></tbody></table>
+<hr>
+<h2 id="六agent-时代的新模式">六、Agent 时代的新模式 ⭐</h2>
+<h3 id="范式转移">范式转移 ⭐</h3>
+<blockquote>
+<p>”⭐ <strong>过去</strong>：<strong>智能硬件的发展路径通常是</strong> —— <strong>公司设计硬件 → 用户购买设备 → 开发应用</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>AI Agent 可能走向另一种模式</strong> —— ⭐ <strong>公司提供模型和 Agent 能力 → 开发者创造各种形态的设备</strong>。”</p>
+</blockquote>
+<h3 id="行业反思">行业反思 ⭐</h3>
+<blockquote>
+<p>“其实从 ⭐ <strong>AI Pin</strong> 等，⭐ <strong>行业对 AI 硬件的探索有很多</strong>，曾尝试通过独立设备替代手机入口，但 ⭐ <strong>不少产品受到功能限制、交互体验等问题影响</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>如今，厂商似乎开始换一种思路</strong>：⭐ <strong>直接先打造强大的 AI Agent，再让它进入不同硬件</strong>。”</p>
+</blockquote>
+<h3 id="meta-路线">Meta 路线 ⭐</h3>
+<blockquote>
+<p>”⭐ <strong>Muse 负责智能能力、开发者负责创造各种载体</strong>。未来，Muse 可能存在于 ⭐ <strong>智能手机 / 智能眼镜 / 各种家庭设备</strong>，⭐ <strong>甚至是开发者创造的新硬件里</strong>……”</p>
+</blockquote>
+<hr>
+<h2 id="七与之前-muse-文章的关系">七、与之前 Muse 文章的关系</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>文章</th><th>角度</th></tr></thead><tbody><tr><td><code>iphone-18-pro-max-att-outage-muse-fda.md</code>（早）</td><td>Muse ⭐ <strong>争议</strong>：主动推送专栏选题（用户认为越权）</td></tr><tr><td><code>mac-full-disk-access-agent-trust.md</code>（更晚）</td><td>Muse ⭐ <strong>安全架构</strong>：隔离环境 + Sentinel 系统 + 按次授权</td></tr><tr><td><strong>本篇</strong></td><td>Muse ⭐ <strong>硬件生态</strong>：Gadgets 开源 + 开发者造各种”AI 外设”</td></tr></tbody></table>
+<p>三篇一起勾勒出 Muse 的 ⭐ <strong>软件能力 + 安全设计 + 硬件生态</strong> 全貌。</p>
+<hr>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/meta-muse-gadgets-open-source/image-01.jpg" alt="Meta Muse Gadgets 开源" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：Meta Muse Gadgets 开源 —— ESP32 + Raspberry Pi 5 + 墨水屏 / HDMI / 触控挂件（机器之心 · 2026-10-03）</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L8BJFFIQ0511AQHO.html">网易新闻（机器之心）· 原文</a></li>
+<li><a href="https://x.com/alexandr_wang/status/2106113742266089526">Alexandr Wang X 帖</a></li>
+<li><a href="https://www.theverge.com/tech/1004330/meta-muse-ai-gadgets-home-link">The Verge 报道</a></li>
+<li><a href="https://gadgets.muse.ai/">gadgets.muse.ai 官方页</a></li>
+<li><a href="https://x.com/viticci/status/2106139174604816765">Federico Viticci X 帖</a></li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

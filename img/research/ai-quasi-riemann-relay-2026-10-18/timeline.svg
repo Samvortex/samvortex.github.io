@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 320" role="img" aria-label="12 天数学接力时间线">
+  <title>12 天数学接力时间线（10-06 → 10-13）</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-event  { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-date   { font: 600 12px ui-sans-serif, system-ui, sans-serif; fill: #172033; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">12 天数学接力时间线（2026-10-06 → 10-13）</text>
+
+  <!-- Horizontal axis line -->
+  <line x1="80" y1="200" x2="880" y2="200" stroke="#64748b" stroke-width="1.5" />
+
+  <!-- Tick marks + dates -->
+  <g>
+    <line x1="160" y1="195" x2="160" y2="205" stroke="#64748b" stroke-width="1.5" />
+    <text x="160" y="230" text-anchor="middle" class="t-date">10-06</text>
+    <text x="160" y="248" text-anchor="middle" class="t-axis">7 天</text>
+
+    <line x1="500" y1="195" x2="500" y2="205" stroke="#64748b" stroke-width="1.5" />
+    <text x="500" y="230" text-anchor="middle" class="t-date">10-12</text>
+    <text x="500" y="248" text-anchor="middle" class="t-axis">6 天后</text>
+
+    <line x1="780" y1="195" x2="780" y2="205" stroke="#64748b" stroke-width="1.5" />
+    <text x="780" y="230" text-anchor="middle" class="t-date">10-13</text>
+    <text x="780" y="248" text-anchor="middle" class="t-axis">+1 天</text>
+  </g>
+
+  <!-- Event 1: OpenAI 10-06 (above) -->
+  <g>
+    <line x1="160" y1="195" x2="160" y2="135" stroke="#5EB1FF" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="60" y="60" width="200" height="70" rx="6" fill="#dbeafe" stroke="#5EB1FF" stroke-width="1.5" />
+    <text x="70" y="82" class="t-event">① OpenAI 准 RH</text>
+    <text x="70" y="102" class="t-detail">ζ 函数 quasi-RH</text>
+    <text x="70" y="120" class="t-detail">199 页证明（工具层）</text>
+  </g>
+
+  <!-- Event 2: Cureton-Thorner 10-12 (above) -->
+  <g>
+    <line x1="500" y1="195" x2="500" y2="135" stroke="#FFB17A" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="380" y="60" width="240" height="70" rx="6" fill="#ffedd5" stroke="#FFB17A" stroke-width="1.5" />
+    <text x="390" y="82" class="t-event">② Cureton + Thorner</text>
+    <text x="390" y="102" class="t-detail">搬到 Dedekind ζ + Hecke L</text>
+    <text x="390" y="120" class="t-detail">Theorem 1.1: Re(s) > 31/32</text>
+  </g>
+
+  <!-- Event 3: Open source 10-12→13 (below) -->
+  <g>
+    <line x1="620" y1="205" x2="620" y2="265" stroke="#00C2C7" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="500" y="270" width="240" height="40" rx="6" fill="#cffafe" stroke="#00C2C7" stroke-width="1.5" />
+    <text x="510" y="290" class="t-event">③ 开源黑客松（10-12 → 13）</text>
+    <text x="510" y="304" class="t-detail">1/6000 → 1/32（Lean 验证）</text>
+  </g>
+
+  <!-- Event 4: Frei et al 10-13 (above, right) -->
+  <g>
+    <line x1="780" y1="195" x2="780" y2="135" stroke="#FF8AAB" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="700" y="60" width="220" height="70" rx="6" fill="#fce7f3" stroke="#FF8AAB" stroke-width="1.5" />
+    <text x="710" y="82" class="t-event">④ Frei + Sofos + Widmer</text>
+    <text x="710" y="102" class="t-detail">无条件化 19 年悬案</text>
+    <text x="710" y="120" class="t-detail">+ 4 个其他应用</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40, 290)">
+    <rect x="0" y="-10" width="14" height="14" fill="#dbeafe" stroke="#5EB1FF" />
+    <text x="20" y="2" class="t-detail">OpenAI</text>
+    <rect x="90" y="-10" width="14" height="14" fill="#ffedd5" stroke="#FFB17A" />
+    <text x="110" y="2" class="t-detail">数学家</text>
+    <rect x="180" y="-10" width="14" height="14" fill="#cffafe" stroke="#00C2C7" />
+    <text x="200" y="2" class="t-detail">开源社区</text>
+    <rect x="285" y="-10" width="14" height="14" fill="#fce7f3" stroke="#FF8AAB" />
+    <text x="305" y="2" class="t-detail">人类数学家</text>
+  </g>
+</svg>

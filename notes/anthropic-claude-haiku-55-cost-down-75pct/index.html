@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Anthropic 发布 Claude Haiku 5.5：平均运行成本较 4.5 版本低约 75% · Samvortex Hub</title><meta name="description" content="2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。
+"><link rel="canonical" href="https://samvortex.com/notes/anthropic-claude-haiku-55-cost-down-75pct/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Anthropic 发布 Claude Haiku 5.5：平均运行成本较 4.5 版本低约 75% · Samvortex Hub"><meta property="og:description" content="2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。
+"><meta property="og:url" content="https://samvortex.com/notes/anthropic-claude-haiku-55-cost-down-75pct/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Anthropic 发布 Claude Haiku 5.5：平均运行成本较 4.5 版本低约 75% · Samvortex Hub"><meta name="twitter:description" content="2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。
+"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-08T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-08T00:00:00.000Z">2026年10月8日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Anthropic 发布 Claude Haiku 5.5：平均运行成本较 4.5 版本低约 75%</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。
+</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Anthropic/" class="tag">#Anthropic</a><a href="/tags/Claude Haiku 5.5/" class="tag">#Claude Haiku 5.5</a><a href="/tags/Haiku 4.5/" class="tag">#Haiku 4.5</a><a href="/tags/Claude Sonnet 5.5/" class="tag">#Claude Sonnet 5.5</a><a href="/tags/小模型/" class="tag">#小模型</a><a href="/tags/成本/" class="tag">#成本</a><a href="/tags/运行成本/" class="tag">#运行成本</a><a href="/tags/API 价格/" class="tag">#API 价格</a><a href="/tags/Token 价格/" class="tag">#Token 价格</a><a href="/tags/缓存读取/" class="tag">#缓存读取</a><a href="/tags/可调节推理强度/" class="tag">#可调节推理强度</a><a href="/tags/智能体/" class="tag">#智能体</a><a href="/tags/摘要/" class="tag">#摘要</a><a href="/tags/分类/" class="tag">#分类</a><a href="/tags/数据库查询/" class="tag">#数据库查询</a><a href="/tags/客服/" class="tag">#客服</a><a href="/tags/浏览器操作/" class="tag">#浏览器操作</a><a href="/tags/AI 智能体子任务/" class="tag">#AI 智能体子任务</a><a href="/tags/AWS/" class="tag">#AWS</a><a href="/tags/Google Cloud/" class="tag">#Google Cloud</a><a href="/tags/Azure/" class="tag">#Azure</a><a href="/tags/Claude Platform/" class="tag">#Claude Platform</a><a href="/tags/Max 用户/" class="tag">#Max 用户</a><a href="/tags/Team 用户/" class="tag">#Team 用户</a><a href="/tags/小额 API 额度/" class="tag">#小额 API 额度</a><a href="/tags/Microsoft/" class="tag">#Microsoft</a><a href="/tags/Meta/" class="tag">#Meta</a><a href="/tags/算账期/" class="tag">#算账期</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<p>2026-10-08 Anthropic 发布 Claude Haiku 5.5，专为成本敏感型任务——摘要、分类、数据库查询、客服、浏览器操作、AI 智能体子任务。价格（≤10 万 tokens）：输入 $0.1/百万 tokens、输出 $0.5/百万 tokens，较 Haiku 4.5 低 90%；超过 10 万 tokens：输入 $0.5、输出 $2.5/百万 tokens，较上代低 50%。综合实际 token 使用量，平均运行成本较 Haiku 4.5 降低约 75%。首次在 Haiku 系列引入可调节推理强度。同期 Claude Sonnet 5.5 缓存读取价格下调 50%（$0.20 → $0.10/百万 tokens），多数智能体任务成本降低约 20%。Haiku 5.5 已在 Claude Platform / AWS / Google Cloud / Azure 上线；Anthropic 还面向所有 Max 与 Team 用户推出新的每月 API 额度。呼应此前微软 Meta 大幅削减 Claude 预算的”算账期”——Anthropic 正以成本回应市场：想留住中小负载的”长尾客户”。</p>
+<hr>
+<h2 id="一模型定位">一、模型定位</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>数据</th></tr></thead><tbody><tr><td>发布日期</td><td>2026-10-08</td></tr><tr><td>类型</td><td>小模型（成本敏感型任务）</td></tr><tr><td>适用场景</td><td>摘要 / 分类 / 数据库查询 / 客服 / 浏览器操作 / AI 智能体子任务</td></tr><tr><td>跨平台</td><td>Claude Platform / AWS / Google Cloud / Azure</td></tr><tr><td>创新点</td><td><strong>首次在 Haiku 系列引入可调节推理强度</strong></td></tr><tr><td>同期动作</td><td>Claude Sonnet 5.5 缓存读取价格下调 50%</td></tr></tbody></table>
+<hr>
+<h2 id="二价格">二、价格</h2>
+<h3 id="claude-haiku-55">Claude Haiku 5.5</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>长度档</th><th>输入（每百万 tokens）</th><th>输出（每百万 tokens）</th><th>较 Haiku 4.5</th></tr></thead><tbody><tr><td>≤ 10 万 tokens</td><td>$0.1</td><td>$0.5</td><td>低 90%</td></tr><tr><td>> 10 万 tokens</td><td>$0.5</td><td>$2.5</td><td>低 50%</td></tr></tbody></table>
+<h3 id="综合平均">综合平均</h3>
+<p>综合实际 token 使用量计算，<strong>Haiku 5.5 平均运行成本较 Haiku 4.5 降低约 75%</strong>。</p>
+<h3 id="claude-sonnet-55同期">Claude Sonnet 5.5（同期）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项目</th><th>旧价</th><th>新价</th><th>变化</th></tr></thead><tbody><tr><td>缓存读取</td><td>$0.20/百万 tokens</td><td>$0.10/百万 tokens</td><td>下调 50%</td></tr></tbody></table>
+<p>多数智能体任务成本降低约 20%。</p>
+<hr>
+<h2 id="三配套动作">三、配套动作</h2>
+<ul>
+<li>Haiku 5.5 已在 Claude Platform / AWS / Google Cloud / Azure 上线</li>
+<li>Anthropic 面向所有 Max 与 Team 用户推出新的每月 API 额度</li>
+</ul>
+<hr>
+<h2 id="四与早前报道的呼应">四、与早前报道的呼应</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>事件</th></tr></thead><tbody><tr><td>早些时候</td><td>微软 / Meta 大幅削减 Claude 预算（Microsoft $10+ 亿内部 Claude 预算砍 1/3，Meta 用户从 6 万腰斩到 3 万）</td></tr><tr><td>同期</td><td>AI 编程进入”算账期”——巨头开始压 Claude 转向自研（Muse Spark / MetaCode / Copilot / Qoder）</td></tr><tr><td>2026-10-08</td><td><strong>Anthropic 反击</strong>：Haiku 5.5 成本降 75% + Sonnet 5.5 缓存降 50%</td></tr></tbody></table>
+<p>Anthropic 的策略很清楚——把”小负载 + 长尾客户”留在这里。Haiku 系列本来就是面向”单任务、低延迟、不需要旗舰智能”的工作负载。降 75% 之后，性价比对中小负载 + agent 子任务极具吸引力。</p>
+<hr>
+<h2 id="五对-sam-的-3-点启示">五、对 Sam 的 3 点启示</h2>
+<ol>
+<li><strong>价格战从旗舰级下沉到小模型</strong>：OpenAI GPT-6 系列主打前沿 / 智能；Anthropic Haiku 5.5 路线”成本 → 长尾”。Hermes Agent 设计时也该分两层——重智能走 GPT-6 / Claude Opus 5 路线；轻任务（路由 / 分类 / 子任务）走 Claude Haiku 5.5 路线，每条调用降本可达 75%</li>
+<li><strong>可调节推理强度是新卖点</strong>：Haiku 5.5 首次引入可调节推理强度——意味着同一模型可按任务难度动态分配算力。Hermes Agent 在设计 skill 时可以让每个 skill 声明”推理强度”（low/medium/high），不同任务用不同强度，单次调用成本可压缩 30-60%</li>
+<li><strong>同期调 Sonnet 5.5 缓存价格</strong>：Anthropic 知道中小客户常用 Sonnet 做主力模型——缓存读取下调 50% 才是真正”日均成本下降”的核心。Hermes Agent 应该统计”实际 prompt 中缓存命中比例”——缓存命中每提升 10%，等效成本下降约 5%</li>
+</ol>
+<hr>
+<h2 id="来源">来源</h2>
+<ul>
+<li>观点网（金融界网站官方账号 / 优质财经领域创作者）原文</li>
+<li>Anthropic 官方公告</li>
+<li>Claude Platform / AWS / Google Cloud / Azure 上线通知</li>
+<li>早前相关：<a href="https://www.samvortex.com/research/claude-too-expensive-microsoft-meta/">微软 Meta 砍 Claude 预算 / AI 编程进入算账期</a></li>
+<li>早前相关：<a href="https://www.samvortex.com/research/openai-codex-28-day-deadline-reset/">Tibo 新 AI 时代三大趋势 / Codex 28 天挑战</a></li>
+<li>免责声明：本文内容与数据由观点根据公开信息整理，不构成投资建议</li>
+</ul>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/anthropic-claude-haiku-55-cost-down-75pct/image-01.png" alt="Claude Haiku 5.5 成本降 75%" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：Anthropic Claude Haiku 5.5——平均运行成本较 4.5 版本降低约 75%（观点网 · 2026-10-08）</p>
+</div> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

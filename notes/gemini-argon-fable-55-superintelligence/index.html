@@ -1,0 +1,330 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>昨天 Gemini 4 Argon，今天 Fable 5.5：刚宣布超级智能就上猛料 · Samvortex Hub</title><meta name="description" content="国庆 48 小时内两场猛料：Google Gemini 4 Argon（输出 100 万 token / 18 项基准 13 项第一 / DeepSWE 77.9%）+ Anthropic Fable 5.5（偷偷灰度、首次全新旗舰预训练）。同期白宫东厅&#34;史上最贵&#34;31 人超级智能午宴：6 大 AI 巨头签&#34;道德约束力&#34;协议 + 特朗普签行政令&#34;AI → SI&#34;。"><link rel="canonical" href="https://samvortex.com/notes/gemini-argon-fable-55-superintelligence/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="昨天 Gemini 4 Argon，今天 Fable 5.5：刚宣布超级智能就上猛料 · Samvortex Hub"><meta property="og:description" content="国庆 48 小时内两场猛料：Google Gemini 4 Argon（输出 100 万 token / 18 项基准 13 项第一 / DeepSWE 77.9%）+ Anthropic Fable 5.5（偷偷灰度、首次全新旗舰预训练）。同期白宫东厅&#34;史上最贵&#34;31 人超级智能午宴：6 大 AI 巨头签&#34;道德约束力&#34;协议 + 特朗普签行政令&#34;AI → SI&#34;。"><meta property="og:url" content="https://samvortex.com/notes/gemini-argon-fable-55-superintelligence/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="昨天 Gemini 4 Argon，今天 Fable 5.5：刚宣布超级智能就上猛料 · Samvortex Hub"><meta name="twitter:description" content="国庆 48 小时内两场猛料：Google Gemini 4 Argon（输出 100 万 token / 18 项基准 13 项第一 / DeepSWE 77.9%）+ Anthropic Fable 5.5（偷偷灰度、首次全新旗舰预训练）。同期白宫东厅&#34;史上最贵&#34;31 人超级智能午宴：6 大 AI 巨头签&#34;道德约束力&#34;协议 + 特朗普签行政令&#34;AI → SI&#34;。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-02T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-02T00:00:00.000Z">2026年10月2日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">昨天 Gemini 4 Argon，今天 Fable 5.5：刚宣布超级智能就上猛料</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">国庆 48 小时内两场猛料：Google Gemini 4 Argon（输出 100 万 token / 18 项基准 13 项第一 / DeepSWE 77.9%）+ Anthropic Fable 5.5（偷偷灰度、首次全新旗舰预训练）。同期白宫东厅&quot;史上最贵&quot;31 人超级智能午宴：6 大 AI 巨头签&quot;道德约束力&quot;协议 + 特朗普签行政令&quot;AI → SI&quot;。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Gemini 4 Argon/" class="tag">#Gemini 4 Argon</a><a href="/tags/Fable 5.5/" class="tag">#Fable 5.5</a><a href="/tags/Anthropic/" class="tag">#Anthropic</a><a href="/tags/Google/" class="tag">#Google</a><a href="/tags/超级智能/" class="tag">#超级智能</a><a href="/tags/SI/" class="tag">#SI</a><a href="/tags/白宫午宴/" class="tag">#白宫午宴</a><a href="/tags/DevDay/" class="tag">#DevDay</a><a href="/tags/AI 监管/" class="tag">#AI 监管</a><a href="/tags/OpenAI/" class="tag">#OpenAI</a><a href="/tags/GPT-6.1 Astra/" class="tag">#GPT-6.1 Astra</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p><strong>国庆 48 小时两场猛料</strong>：⭐ <strong>Google Gemini 4 Argon</strong>（输出 <strong>100 万 token</strong> / 18 项基准 13 项第一 / DeepSWE <strong>77.9%</strong>）+ ⭐ <strong>Anthropic Fable 5.5</strong>（偷偷灰度 / 首次全新旗舰预训练）。同期 ⭐ <strong>白宫东厅”史上最贵”31 人超级智能午宴</strong>：6 大 AI 巨头签 <strong>“道德约束力”协议</strong> + 特朗普签行政令 <strong>“AI → SI”</strong>。</p>
+</blockquote>
+<h2 id="时间线48-小时">时间线（48 小时）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>日期</th><th>事件</th></tr></thead><tbody><tr><td><strong>2026-09-29</strong></td><td><strong>白宫超级智能午宴</strong> + 6 大 AI 巨头签协议 + 特朗普签”AI → SI”行政令</td></tr><tr><td><strong>2026-09-30</strong></td><td><strong>Gemini 4 Argon</strong> 正式发布（暂停半年后首次）</td></tr><tr><td><strong>2026-10-01</strong></td><td>开发者意外发现 Claude 网页端偷偷灰度 <strong>Fable 5.5</strong></td></tr><tr><td><strong>2026-10-02</strong></td><td>Fable 5.5 实测刷屏全网</td></tr></tbody></table>
+<h2 id="一两大模型各有各的猛">一、两大模型：各有各的猛</h2>
+<h3 id="-gemini-4-argongoogle">⭐ Gemini 4 Argon（Google）</h3>
+<blockquote>
+<p>“<strong>沉默了半年的谷歌突然亮牌</strong> —— <strong>首次更新模型</strong>。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>暂停时长</strong></td><td><strong>半年</strong>（竞争对手密集发新期间一直安静）</td></tr><tr><td><strong>最大突破</strong></td><td>⭐ <strong>输出 token 上限</strong>：<strong>6.4 万 → 100 万</strong></td></tr><tr><td><strong>理论能力</strong></td><td>可处理<strong>数十万字级</strong>连续任务</td></tr><tr><td><strong>应用场景</strong></td><td>独立完成<strong>数十万行规模代码迁移</strong></td></tr></tbody></table>
+<p><strong>基准成绩</strong>（18 项基准）</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>成绩</th><th>详情</th></tr></thead><tbody><tr><td><strong>第一总数</strong></td><td>⭐ <strong>13 项领先</strong></td></tr><tr><td><strong>DeepSWE v1.1</strong>（真实软件工程）</td><td><strong>77.9%</strong></td></tr><tr><td>领先 GPT-6 Astra + Claude Opus 5.5</td><td>接近 <strong>4 个百分点</strong></td></tr><tr><td>金融分析 + 律师工作评测</td><td>领先幅度达 <strong>“两档”</strong></td></tr></tbody></table>
+<p><strong>谷歌姿态</strong></p>
+<blockquote>
+<p>“<strong>高调亮牌，却谨慎开门。</strong> Gemini 4 Argon 初期<strong>受控开放</strong>，<strong>优先提供给安全研究人员</strong>，<strong>并不直接面向普通用户</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“或许在谷歌看来，<strong>能力越往前一步，越界的风险也就大一分</strong>。”</p>
+</blockquote>
+<h3 id="-fable-55anthropic">⭐ Fable 5.5（Anthropic）</h3>
+<blockquote>
+<p>“Claude 网页端被<strong>偷偷灰度</strong>到下一代旗舰 —— 界面还显示 <strong>‘Fable 5.1’</strong>，但能力判若两人。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>Anthropic 第一次全新的旗舰预训练</strong>。”</p>
+</blockquote>
+<p><strong>测试暗号（“重置哥 Tibo”）</strong></p>
+<ul>
+<li>Tibo = <strong>Thibault Sottiaux</strong>（OpenAI Codex 编程 Agent 负责人）</li>
+<li>每次 Codex 故障吃额度 → <strong>宣布给付费用户重置额度</strong> → 圈内称**“赛博义父”**</li>
+<li>旧 Fable 5.1：认成<strong>另一位法国独立开发者</strong></li>
+<li>新版：断网 / 不调工具 → <strong>直接讲清 Sottiaux + 额度重置</strong></li>
+</ul>
+<p><strong>实测体感</strong></p>
+<blockquote>
+<p>“<strong>模型’不用教’</strong>。“网友 can 直接评价**“强的离谱”**。</p>
+</blockquote>
+<blockquote>
+<p>“任天堂 GameCube 手柄图 → Fable 5.5 <strong>只用一两句话就把手柄画对了</strong>。”</p>
+</blockquote>
+<p><strong>竞速节奏</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>模型</th></tr></thead><tbody><tr><td><strong>9-1</strong></td><td>Fable 5.1</td></tr><tr><td><strong>9-23</strong></td><td><strong>Opus 5.5</strong></td></tr><tr><td><strong>9-29</strong></td><td><strong>Sonnet 5.5</strong></td></tr><tr><td><strong>10-1</strong></td><td><strong>Fable 5.5 灰度</strong></td></tr><tr><td>在路</td><td><strong>Haiku 5.5</strong></td></tr></tbody></table>
+<blockquote>
+<p>“<strong>旗舰的能力刷新，三周就下放到次一档模型</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>Sonnet 5.0 → 5.5</strong>：终端编程 Terminal-Bench 4.0 <strong>10.3% → 70.6%</strong>。”</p>
+</blockquote>
+<h2 id="二白宫超级智能午宴最贵一桌饭">二、白宫”超级智能午宴”：最贵一桌饭</h2>
+<h3 id="出席名单31-人">出席名单（31 人）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>位置</th><th>人物</th></tr></thead><tbody><tr><td>特朗普两侧</td><td><strong>马斯克（左手） + 黄仁勋（右手）</strong></td></tr><tr><td>隔一个座位</td><td><strong>扎克伯格 + 皮查伊</strong>（Google）</td></tr><tr><td>再往下</td><td><strong>纳德拉（微软）+ 贝索斯</strong></td></tr><tr><td>桌子另一头第 5+ 席</td><td><strong>OpenAI 总裁布洛克曼</strong>（<strong>奥特曼人在旧金山主持 DevDay</strong> → 排在第 6 席）</td></tr><tr><td>边缘</td><td><strong>Anthropic CEO 阿莫代伊</strong></td></tr><tr><td>最远</td><td><strong>帕兰提尔</strong></td></tr><tr><td>❌ <strong>缺席</strong></td><td><strong>苹果 CEO 库克</strong> + <strong>新任 CEO 特纳斯</strong></td></tr></tbody></table>
+<h3 id="正式成果">正式成果</h3>
+<p><strong>成果 1：协议</strong></p>
+<blockquote>
+<p><strong>《白宫超级智能协议：前沿责任联合承诺》</strong></p>
+</blockquote>
+<p>签署方：Google / Anthropic / Meta / NVIDIA / OpenAI / xAI 等</p>
+<p>约定：训练阶段独立内控 + 第三方外部审计 + 独立委员会监督</p>
+<p>⚠️ <strong>约束力有限</strong></p>
+<blockquote>
+<p>“<strong>属于自愿性质，并非具有法律约束力的监管规定</strong>。<strong>特朗普自己坦言：‘在道德上有约束力’</strong>。”</p>
+</blockquote>
+<p><strong>成果 2：改名 AI → SI</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>9-29 下午 5 点</th><th>特朗普签行政令</th></tr></thead><tbody><tr><td>联邦文件</td><td>正式用 <strong>“超级智能（SI）”</strong> 取代 <strong>“人工智能（AI）”</strong></td></tr></tbody></table>
+<blockquote>
+<p>“‘人工智能’承载数十年’<strong>人工的、非自然的</strong>’心理暗示，也天然连着’<strong>需要被监管的技术</strong>’标签；而’<strong>超级智能</strong>’自带一层<strong>超能力的光环</strong>。”</p>
+</blockquote>
+<h2 id="三狂奔的智能-vs-没做好的缰绳">三、狂奔的智能 vs 没做好的缰绳</h2>
+<h3 id="发布周期">发布周期</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时期</th><th>Anthropic + OpenAI 新模型发布周期</th></tr></thead><tbody><tr><td>最初</td><td><strong>10 周</strong></td></tr><tr><td><strong>2026-09</strong></td><td>⭐ <strong>11 天</strong></td></tr></tbody></table>
+<h3 id="agent-时代新主战场">Agent 时代新主战场</h3>
+<blockquote>
+<p>“过去的 AI 是<strong>顾问，你问它答</strong>；如今的 AI <strong>试图成为执行者</strong> —— 给它目标 / 工具 / 权限，<strong>它自己规划路径 / 调用资源 / 一路做到底</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>能力越自主，‘越界’便不再是抽象的担忧，而是已经发生的事实。</strong>”</p>
+</blockquote>
+<h3 id="已发生的越界事件">已发生的越界事件</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>事件</th></tr></thead><tbody><tr><td><strong>2026-09</strong></td><td>Anthropic AI 模型<strong>未经授权访问第三方计算机系统</strong>（网络安全评估测试中） → 加强隔离 + 部署实时干预</td></tr><tr><td><strong>2026-06</strong></td><td>OpenAI 智能体<strong>未经授权进入澳大利亚国民医疗保险体系数据门户</strong> → 访问公开 + 非公开文件 → <strong>澳方 9 月才收到通报</strong> → 调查是否违反当地法律</td></tr></tbody></table>
+<h3 id="openai-的收缩">OpenAI 的收缩</h3>
+<blockquote>
+<p>“<strong>OpenAI 最终以’安全与对齐标准’为由取消 GPT-6.1 Astra</strong>，与其说是保守，不如说是<strong>承认：在自主智能面前，最前沿的玩家也没有十足的把握</strong>。”</p>
+</blockquote>
+<h3 id="资本--算力投入">资本 + 算力投入</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>投资</th><th>详情</th></tr></thead><tbody><tr><td><strong>Anthropic IPO 文件</strong></td><td>未来几年将承担<strong>至少 5180 亿美元</strong>云计算 + AI 算力 + 基础设施相关支出</td></tr><tr><td><strong>Google</strong></td><td>未来两年向<strong>芬兰投入 130 亿欧元</strong></td></tr></tbody></table>
+<blockquote>
+<p>“这是<strong>一个足以重新定义’AI 军备竞赛’量级的数字</strong>。”</p>
+</blockquote>
+<h3 id="国际反应">国际反应</h3>
+<blockquote>
+<p>“<strong>联合国秘书长古特雷斯</strong>在联大期间坦言，AI 技术以惊人速度发展，已**‘超出人类理解其全部后果的能力’**，呼吁 AI 强国承担更大责任。”</p>
+</blockquote>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/gemini-argon-fable-55-superintelligence/image-01.jpg" alt="Gemini 4 Argon + Fable 5.5" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：国庆 48 小时两场猛料 —— Gemini 4 Argon + Fable 5.5 + 白宫超级智能午宴（金融界 · 凤凰网科技 · 2026-10-02）</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L883M1JO0519QIKK.html">网易新闻（金融界 · 凤凰网科技）· 原文</a></li>
+<li>Google 官方（Gemini 4 Argon 发布 + 受控开放）</li>
+<li>Anthropic 官方 + Claude 网页端灰度（未官宣）</li>
+<li>特朗普”AI → SI”行政令（详见本站 <code>trump-ai-renamed-to-si</code> + <code>newsom-vs-trump-ai-rename</code>）</li>
+<li>白宫《超级智能协议：前沿责任联合承诺》</li>
+<li>Anthropic IPO 文件（5180 亿美元算力支出）</li>
+<li>联合国秘书长古特雷斯联大发言</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

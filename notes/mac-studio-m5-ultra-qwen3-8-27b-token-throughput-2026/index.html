@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Mac Studio M5 Ultra 实测：Qwen3.8 27B 单流 token 速度可达 100+ tok/s — 我之前把内存带宽算错了 · Samvortex Hub</title><meta name="description" content="Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，
+"><link rel="canonical" href="https://samvortex.com/notes/mac-studio-m5-ultra-qwen3-8-27b-token-throughput-2026/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Mac Studio M5 Ultra 实测：Qwen3.8 27B 单流 token 速度可达 100+ tok/s — 我之前把内存带宽算错了 · Samvortex Hub"><meta property="og:description" content="Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，
+"><meta property="og:url" content="https://samvortex.com/notes/mac-studio-m5-ultra-qwen3-8-27b-token-throughput-2026/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Mac Studio M5 Ultra 实测：Qwen3.8 27B 单流 token 速度可达 100+ tok/s — 我之前把内存带宽算错了 · Samvortex Hub"><meta name="twitter:description" content="Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，
+"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-09T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-09T00:00:00.000Z">2026年10月9日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Mac Studio M5 Ultra 实测：Qwen3.8 27B 单流 token 速度可达 100+ tok/s — 我之前把内存带宽算错了</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，
+</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Mac Studio/" class="tag">#Mac Studio</a><a href="/tags/M5 Ultra/" class="tag">#M5 Ultra</a><a href="/tags/M5 Max/" class="tag">#M5 Max</a><a href="/tags/M5 Pro/" class="tag">#M5 Pro</a><a href="/tags/Apple Silicon/" class="tag">#Apple Silicon</a><a href="/tags/Qwen3-8-27B/" class="tag">#Qwen3-8-27B</a><a href="/tags/MLX/" class="tag">#MLX</a><a href="/tags/oMLX/" class="tag">#oMLX</a><a href="/tags/Lightning MTP/" class="tag">#Lightning MTP</a><a href="/tags/Weschera/" class="tag">#Weschera</a><a href="/tags/Weschera-M4-Max/" class="tag">#Weschera-M4-Max</a><a href="/tags/内存带宽/" class="tag">#内存带宽</a><a href="/tags/bandwidth-1.2-TB-s/" class="tag">#bandwidth-1.2-TB-s</a><a href="/tags/4-bit/" class="tag">#4-bit</a><a href="/tags/oQ4e/" class="tag">#oQ4e</a><a href="/tags/Q4e/" class="tag">#Q4e</a><a href="/tags/Q8e/" class="tag">#Q8e</a><a href="/tags/bf16/" class="tag">#bf16</a><a href="/tags/6-bit/" class="tag">#6-bit</a><a href="/tags/Apple specs/" class="tag">#Apple specs</a><a href="/tags/apple.com.cn/" class="tag">#apple.com.cn</a><a href="/tags/omlx.ai/" class="tag">#omlx.ai</a><a href="/tags/benchmarks/" class="tag">#benchmarks</a><a href="/tags/performance/" class="tag">#performance</a><a href="/tags/Native MTP/" class="tag">#Native MTP</a><a href="/tags/ANE prefill/" class="tag">#ANE prefill</a><a href="/tags/Decode speed/" class="tag">#Decode speed</a><a href="/tags/Caveats/" class="tag">#Caveats</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<p>Mac Studio M5 Max / M5 Ultra 全部 Apple 官方内存带宽已确认：M5 Max 460 GB/s（标准）/ 614 GB/s（高配），M5 Ultra 两档都是 1.2 TB/s（标准 + 高配带宽一样，只是 CPU/GPU 核心数不同）。之前传 1 TB/s / 2 TB/s 是错的。oMLX 官方 benchmark 实测 Qwen3.8-27B 4-bit + Lightning MTP k=3：M5 Ultra 80c 高配 256 GB 在 16k context 单流 105.7 tok/s，M5 Ultra 64c 标准 100.8 tok/s（1k）/ 77.5 tok/s（4k），M5 Max 40c 128 GB 95-96 tok/s。M5 Pro 不在 Mac Studio 产品线。6-bit 没有官方实测。</p>
+<hr>
+<h2 id="一我之前算错了">一、我之前算错了</h2>
+<p>今天下午我在几篇文章里写”M5 Ultra 标准 1 TB/s / 高配 2 TB/s”。<strong>这个数是错的。</strong></p>
+<p>我直接 curl Apple 中国官方 spec 页（apple.com.cn/mac-studio/specs/）重新核了一遍。两个 SKU 内存带宽<strong>都是 1.2 TB/s</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>字段</th><th>Apple 官方</th><th>我之前写的</th></tr></thead><tbody><tr><td>M5 Max 标准</td><td>460 GB/s</td><td>410（推测，没核）</td></tr><tr><td>M5 Max 高配</td><td>614 GB/s</td><td>540（推测，没核）</td></tr><tr><td>M5 Ultra 标准</td><td><strong>1.2 TB/s</strong> = 1229 GB/s</td><td>1 TB/s（错）</td></tr><tr><td>M5 Ultra 高配</td><td><strong>1.2 TB/s</strong> = 1229 GB/s</td><td>2 TB/s（错）</td></tr></tbody></table>
+<p>M5 Ultra 高配 vs 标准的差别在 CPU（30→36 核）+ GPU（64→80 核）+ 内存选项，<strong>带宽没变</strong>。这跟 M1/M2/M3/M4 Ultra（高配 2x 带宽）不同 —— Apple 在 M5 这代对 Ultra 带宽做了取舍。</p>
+<h2 id="二m5-pro-不在-mac-studio-产品线">二、M5 Pro 不在 Mac Studio 产品线</h2>
+<p>Apple spec 页”芯片”section 与”按单配置”section 都只列 M5 Max 和 M5 Ultra。M5 Pro 是 MacBook Pro / iPad Pro 用的 SoC，<strong>Mac Studio 起步是 M5 Max</strong>。</p>
+<h2 id="三qwen38-27b-在-mac-studio-的单流-toks-实测">三、Qwen3.8-27B 在 Mac Studio 的单流 tok/s 实测</h2>
+<p>数据全部来自 omlx.ai/benchmarks/performance（oMLX 官方 benchmark dashboard，2026-09-23 至 2026-09-26 跑的数据）。</p>
+<h3 id="主结果4-bit-oq4e--lightning-mtp-k3">主结果（4-bit oQ4e + Lightning MTP k=3）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>内存</th><th>context</th><th><strong>TG tok/s（单流）</strong></th></tr></thead><tbody><tr><td><strong>M5 Ultra 80c 高配</strong></td><td>256 GB</td><td>16k</td><td><strong>105.7</strong> ⭐</td></tr><tr><td>M5 Ultra 80c 高配</td><td>256 GB</td><td>4k</td><td>97.5 - 99.2</td></tr><tr><td>M5 Ultra 80c 高配</td><td>256 GB</td><td>1k</td><td>87.2 - 97.2</td></tr><tr><td>M5 Ultra 64c 标准</td><td>256 GB</td><td>1k</td><td>100.8 - 92.3</td></tr><tr><td>M5 Ultra 64c 标准</td><td>256 GB</td><td>4k</td><td>77.5 - 92</td></tr><tr><td>M5 Max 40c</td><td>48 GB</td><td>1k</td><td>127.2</td></tr><tr><td>M5 Max 40c</td><td>128 GB</td><td>4k</td><td>95.5 - 96.4</td></tr></tbody></table>
+<h3 id="关掉-mtp纯-gpu-解码基线">关掉 MTP（纯 GPU 解码基线）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>内存</th><th>context</th><th>TG tok/s</th></tr></thead><tbody><tr><td>M5 Ultra 64c 标准</td><td>256 GB</td><td>4k</td><td>53.7</td></tr></tbody></table>
+<p>MTP k=3 相对”无 MTP”基线（53.7 → 92 在 4k context）<strong>约 +71%</strong>。MTP 接受率是关键 —— Weschera 实测 code 99.6%、prose 75-80%。</p>
+<h3 id="动效单流-toks-对照m5-ultra-各-sku">动效：单流 tok/s 对照（M5 Ultra 各 SKU）</h3>
+<div style="background: #f7f7f9; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; font-family: ui-monospace, SFMono-Regular, monospace;">
+<div style="font-size: 0.875rem; color: #6b6b76; margin-bottom: 0.75rem;">Qwen3.8-27B-oQ4e-mtp · 4-bit · Lightning MTP k=3 · 单流 4k context · 256 GB</div>
+<div style="margin-bottom: 0.875rem;">
+  <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.25rem;">
+    <span>M5 Ultra 80c 高配</span>
+    <span><strong style="color: #c2410c;">99.2 tok/s</strong></span>
+  </div>
+  <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+    <div style="background: linear-gradient(90deg, #c2410c, #f59e0b); height: 100%; width: 0%; animation: fill 1.2s ease-out forwards; --target: 100%;"></div>
+  </div>
+</div>
+<div style="margin-bottom: 0.875rem;">
+  <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.25rem;">
+    <span>M5 Ultra 64c 标准</span>
+    <span><strong style="color: #c2410c;">92.0 tok/s</strong></span>
+  </div>
+  <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+    <div style="background: linear-gradient(90deg, #ea580c, #fb923c); height: 100%; width: 0%; animation: fill 1.2s ease-out 0.15s forwards; --target: 93%;"></div>
+  </div>
+</div>
+<div style="margin-bottom: 0.875rem;">
+  <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.25rem;">
+    <span>M5 Max 40c 128 GB</span>
+    <span><strong style="color: #1d4ed8;">96.4 tok/s</strong></span>
+  </div>
+  <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+    <div style="background: linear-gradient(90deg, #1d4ed8, #3b82f6); height: 100%; width: 0%; animation: fill 1.2s ease-out 0.3s forwards; --target: 97%;"></div>
+  </div>
+</div>
+<div style="margin-bottom: 0.875rem;">
+  <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.25rem;">
+    <span>M5 Max 40c 48 GB</span>
+    <span><strong style="color: #1d4ed8;">127.2 tok/s</strong></span>
+  </div>
+  <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+    <div style="background: linear-gradient(90deg, #15803d, #22c55e); height: 100%; width: 0%; animation: fill 1.2s ease-out 0.45s forwards; --target: 100%;"></div>
+  </div>
+</div>
+<style>
+@keyframes fill { to { width: var(--target, 100%); } }
+@media (prefers-reduced-motion: reduce) {
+  [style*="animation"] { animation: none !important; width: var(--target, 100%) !important; }
+}
+</style>
+<div style="font-size: 0.75rem; color: #6b6b76; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e5e7eb;">
+来源：omlx.ai/benchmarks/performance · 2026-09-23 / 09-25 · oMLX v0.7.0.dev4 / v0.7.0rc1 · Python code · temperature 0 · thinking off
+</div>
+</div>
+<p>注意：M5 Max 48 GB 单流跑得比 M5 Max 128 GB 还快（127 vs 96）—— 因为两个 benchmark 用的不是同一个 quant 变体，不能直接比。这里”越低配置越快”是 quant 差异造成的，不是硬件差异。</p>
+<h2 id="四为什么-m5-ultra-两档带宽相同">四、为什么 M5 Ultra 两档带宽相同</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>SKU</th><th>CPU</th><th>GPU</th><th>内存带宽</th></tr></thead><tbody><tr><td>M5 Max 标准</td><td>18 核（6 超 + 12 性能）</td><td>32 核</td><td><strong>460 GB/s</strong></td></tr><tr><td>M5 Max 高配</td><td>18 核</td><td>40 核</td><td><strong>614 GB/s</strong></td></tr><tr><td>M5 Ultra 标准</td><td>30 核（10 超 + 20 性能）</td><td>64 核</td><td><strong>1.2 TB/s</strong></td></tr><tr><td>M5 Ultra 高配</td><td>36 核</td><td>80 核</td><td><strong>1.2 TB/s</strong> ← 与标准相同</td></tr></tbody></table>
+<p>M5 Ultra 高配比标准<strong>多一倍 GPU 核心（64→80）+ 多 6 核 CPU（30→36）</strong>，但带宽不变。Apple 这次的取舍可能是：单 die 2 TB/s 需要更宽内存控制器/封装，对良率有挑战，先把 1.2 TB/s 起步做到稳，再加 GPU 核心。</p>
+<h2 id="五6-bit-量化数据缺失">五、6-bit 量化数据缺失</h2>
+<p><strong>omlx.ai/benchmarks 没有 6-bit Qwen3.8-27B 的 M5 Ultra 实测</strong>。官方数据点都是 4-bit (oQ4e)、8-bit (oQ8e)、bf16 stock。</p>
+<p>6-bit 速度推算（按 4-bit 实测外推）：</p>
+<ul>
+<li>权重 6/4 = 1.5x = 20.25 GB（vs 4-bit 13.5 GB）</li>
+<li>解码速率通常在 4-bit 基础上下降 5-15%（解压缩开销 + KV cache 写放大）</li>
+<li><strong>M5 Ultra 6-bit 估算：85-100 tok/s</strong>（4-bit 数据 95% 附近）</li>
+</ul>
+<p>但这是估算不是实测。要精确数字需要自己跑 benchmark。</p>
+<h2 id="六实际部署选型">六、实际部署选型</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>需求</th><th>选什么</th><th>4-bit 实测速率</th></tr></thead><tbody><tr><td>≥30 tok/s（轻度实时感）</td><td><strong>M5 Max 起步 36 GB</strong></td><td>95-127 tok/s</td></tr><tr><td>≥50 tok/s</td><td><strong>M5 Max 起步 36 GB</strong></td><td>95-127 tok/s</td></tr><tr><td>≥100 tok/s</td><td><strong>M5 Ultra 64c 起步 96 GB</strong></td><td>100-105 tok/s</td></tr><tr><td>≥150 tok/s</td><td><strong>单流达不到</strong>（M5 Ultra 上限 ~106 tok/s）</td><td>—</td></tr></tbody></table>
+<p><strong>M5 Pro 不在 Mac Studio 产品线</strong>。要买 Pro 只能选 MacBook Pro / iPad Pro。</p>
+<h2 id="七omlx-支持范围per-weschera--omlx-readme">七、oMLX 支持范围（per Weschera + oMLX README）</h2>
+<p>Weschera recipe（github.com/Weschera/Qwen3.8-27B-oMLX-MTP-Mac）已在 M4 Max 上验证：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Config: oMLX 0.6.3rc2 + ANE prefill + Lightning MTP k=3</span></span>
+<span class="line"><span>Prose tok/s: 53.3</span></span>
+<span class="line"><span>Code tok/s: 72.1</span></span>
+<span class="line"><span>Prefill 4K tok/s: 273.7</span></span></code></pre>
+<p>oMLX README 主表只明写 “Qwen3.5 Series”（在 VLM 行）；Qwen3.6 和 3.8 通过 release notes 加进：</p>
+<ul>
+<li>v0.5.2：「custom Metal kernels for GLM-5.2, MiniMax M3, DeepSeek V4, and Qwen3.5/3.6」</li>
+<li>v0.6.0：「Expanded Qwen3.8 support. oMLX now loads blockwise FP8, embedded MTP, and the mixed ModelOpt NVFP4 unsloth/Qwen3.8-27B-NVFP4 checkpoint directly」</li>
+</ul>
+<h2 id="八关键-caveat">八、关键 caveat</h2>
+<ol>
+<li><strong>Weschera recipe 用 ANE prefill</strong>，omlx.ai 官方 MTP-on 条目里 ANE prefill 是 false。Weschera 的 72 tok/s code 与 oMLX 官方 78-105 tok/s 不是同口径</li>
+<li><strong>TG tok/s 在不同 context 下不是单调</strong>（4k 反而比 1k 慢 5-15%）</li>
+<li><strong>没有 6-bit 实测数据</strong>，推算仅作参考</li>
+<li><strong>M5 Max 48 GB vs 128 GB 数字不能直接比</strong>（不同 quant 变体）</li>
+<li><strong>MTPLX 自己的对比页有 M5 Max 63 tok/s 数据点</strong>（不同 quant + sampling），与 oMLX 官方 95-96 差很大；按官方数据看齐</li>
+<li><strong>6-bit Qwen3.8-27B 在 M5 Ultra 没有官方实测</strong>——只看 4-bit/8-bit/bf16 数字</li>
+</ol>
+<h2 id="九对-sam-的-3-点启示">九、对 Sam 的 3 点启示</h2>
+<ol>
+<li><strong>Apple Mac Studio M5 这代</strong>对 Ultra SKU 的带宽做了”两个都 1.2 TB/s”取舍，不是 2x 升级。买 M5 Ultra 高的朋友花的钱主要买了 CPU/GPU 核心数 + 内存选项（96/256/512 GB），不是带宽</li>
+<li><strong>oMLX 实测速率已经超出”理论上限”</strong> —— 1.2 TB/s 带宽按公式 tok/s = BW / (model_size × 2) 算 M5 Ultra 4-bit 27B 上限约 100 tok/s（1.2 TB / 13.5 GB / 2），但 oMLX 在 4k context 上跑出 105.7 tok/s——说明 oMLX 的 cache 命中率 + 量化 kernel 已经接近 100% 带宽效率</li>
+<li><strong>6-bit 量化在 oMLX 官方 benchmark 里被有意忽略</strong>——可能因为 6-bit 在 Apple Silicon 上没有专用 kernel，速率比 4-bit 还低。<strong>生产环境想稳定</strong>就用 4-bit（oQ4e / NVFP4），6-bit 留作实验</li>
+</ol>
+<h2 id="来源">来源</h2>
+<ul>
+<li>Apple 中国官方 spec 页：<a href="https://www.apple.com.cn/mac-studio/specs/">https://www.apple.com.cn/mac-studio/specs/</a></li>
+<li>Apple US support：<a href="https://support.apple.com/en-us/128107">https://support.apple.com/en-us/128107</a></li>
+<li>oMLX 官方 benchmark dashboard：<a href="https://omlx.ai/benchmarks/performance">https://omlx.ai/benchmarks/performance</a></li>
+<li>Weschera recipe 与 raw JSON：<a href="https://github.com/Weschera/Qwen3.8-27B-oMLX-MTP-Mac">https://github.com/Weschera/Qwen3.8-27B-oMLX-MTP-Mac</a></li>
+<li>oMLX README：<a href="https://github.com/jundot/omlx/blob/main/README.md">https://github.com/jundot/omlx/blob/main/README.md</a></li>
+<li>oMLX v0.5.2 release notes：<a href="https://github.com/jundot/omlx/releases/tag/v0.5.2">https://github.com/jundot/omlx/releases/tag/v0.5.2</a></li>
+<li>oMLX v0.6.0 release notes：<a href="https://github.com/jundot/omlx/releases/tag/v0.6.0">https://github.com/jundot/omlx/releases/tag/v0.6.0</a></li>
+<li>早前相关：<a href="https://www.samvortex.com/research/tencent-marvis-ai-steward-nas/">Tencent Marvis AI 管家 + NAS</a></li>
+<li>早前相关：<a href="https://www.samvortex.com/research/google-embedding-gemma-2-740m/">Google EmbeddingGemma 2 0.5GB 内存跑多模态</a></li>
+</ul>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/mac-studio-m5-ultra-qwen3-8-27b-throughput/m5-ultra-chip.jpg" alt="Apple M5 Ultra chip" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">Apple M5 Ultra 芯片 · 单 die · 30/36 核 CPU + 64/80 核 GPU + 32 核 NPU + 1.2 TB/s 统一内存带宽</p>
+</div> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>
