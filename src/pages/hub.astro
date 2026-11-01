@@ -116,6 +116,21 @@ import Base from '../layouts/Base.astro';
 <script define:vars={{ supabaseUrl: 'https://babkatqycaigexyjnlqv.supabase.co', supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhYmthdHF5Y2FpZ2V4eWpubHF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMzg4NjksImV4cCI6MjA4ODcxNDg2OX0.xnz8BHhA8dThSpwOBoeubNCIfUXLmEuknf3S0niuwCk' }}>
   const API_URL = supabaseUrl;
   const API_KEY = supabaseKey;
+
+  // 2026-11-01: 后端不可达时原生 fetch 会无限期挂起 → 页面永远停在 "Loading..."。
+  // 统一加超时；超时按失败返回，让既有的 !res.ok 分支正常显示错误而不是空转。
+  const API_TIMEOUT_MS = 15000;
+  async function apiFetch(url, opts = {}) {
+    try {
+      return await fetch(url, { ...opts, signal: AbortSignal.timeout(API_TIMEOUT_MS) });
+    } catch (err) {
+      const msg = (err && err.name === 'TimeoutError')
+        ? `timeout after ${API_TIMEOUT_MS}ms`
+        : ((err && err.message) || 'network error');
+      console.error('[Hub] request failed:', msg, url);
+      return { ok: false, status: 0, statusText: msg, json: async () => [], text: async () => msg };
+    }
+  }
   let currentTopicId = null;
   let pollInterval = null;
 
@@ -196,7 +211,7 @@ import Base from '../layouts/Base.astro';
   // ─── Topics ─────────────────────────────────────────────────────────
   async function loadTopics() {
     console.log('[Hub] Loading topics...');
-    const res = await fetch(API_URL + '/rest/v1/topics?status=eq.active&order=created_at.desc', {
+    const res = await apiFetch(API_URL + '/rest/v1/topics?status=eq.active&order=created_at.desc', {
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
 
@@ -229,7 +244,7 @@ import Base from '../layouts/Base.astro';
     if (!title) return;
 
     console.log('[Hub] Creating topic:', title);
-    const res = await fetch(API_URL + '/rest/v1/topics', {
+    const res = await apiFetch(API_URL + '/rest/v1/topics', {
       method: 'POST',
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
       body: JSON.stringify({ title, status: 'active', created_by: 'Sam' })
@@ -262,7 +277,7 @@ import Base from '../layouts/Base.astro';
   }
 
   async function loadMessages(topicId, isSilent = false) {
-    const res = await fetch(API_URL + '/rest/v1/messages?topic_id=eq.' + topicId + '&order=created_at.asc', {
+    const res = await apiFetch(API_URL + '/rest/v1/messages?topic_id=eq.' + topicId + '&order=created_at.asc', {
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
 
@@ -302,7 +317,7 @@ import Base from '../layouts/Base.astro';
     input.value = '';
 
     console.log('[Hub] Sending message to topic:', currentTopicId);
-    const res = await fetch(API_URL + '/rest/v1/messages', {
+    const res = await apiFetch(API_URL + '/rest/v1/messages', {
       method: 'POST',
       headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
       body: JSON.stringify({ topic_id: currentTopicId, author: 'Sam', author_type: 'human', content })
@@ -320,10 +335,10 @@ import Base from '../layouts/Base.astro';
     if (!confirm('Delete this topic and all its messages?')) return;
 
     console.log('[Hub] Deleting topic:', id);
-    await fetch(API_URL + '/rest/v1/messages?topic_id=eq.' + id, {
+    await apiFetch(API_URL + '/rest/v1/messages?topic_id=eq.' + id, {
       method: 'DELETE', headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
-    const delRes = await fetch(API_URL + '/rest/v1/topics?id=eq.' + id, {
+    const delRes = await apiFetch(API_URL + '/rest/v1/topics?id=eq.' + id, {
       method: 'DELETE', headers: { 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY }
     });
 
