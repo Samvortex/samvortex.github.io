@@ -4,7 +4,7 @@ slug: 'sports-basketball-nba-2026-11-03'
 date: '2026-11-03'
 category: 'sports'
 tags: ["体育", "篮球", "basketball"]
-summary: '西部周最佳：文班亚马（马刺）'
+summary: '文班亚马上周率领马刺打出3胜0负的战绩，场均贡献36.0分10.3篮板4.3盖帽。对国王一战，文班贡献29分10篮板2助攻2抢断5盖帽。'
 author: 'Sam Xu'
 featured: false
 draft: false
