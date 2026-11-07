@@ -1,0 +1,556 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>vLLM-Omni 上的 MiniMax H3：从系统级优化到基于 FastVideo FastH3 的实时服务 · Samvortex Hub</title><meta name="description" content="vLLM-Omni 部署 MiniMax H3 实时服务：① 系统级优化（注意力 + 融合 DiT + 并行 VAE + 紧凑输出 + 并行 MP4）相对 Diffusers 时延 ↓30.8%（1.445×）；② FastVideo FastH3（DMD2 蒸馏四步学生模型）将 49 次 DiT 前向 → 4 次。在 8× B300 上 10.125 秒完整 MP4 用时 8.678-8.710 秒 —— **完整响应快于播放**（RTF_client ≤ 1.0）。"><link rel="canonical" href="https://samvortex.com/notes/vllm-omni-minimax-h3-fasth3/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="vLLM-Omni 上的 MiniMax H3：从系统级优化到基于 FastVideo FastH3 的实时服务 · Samvortex Hub"><meta property="og:description" content="vLLM-Omni 部署 MiniMax H3 实时服务：① 系统级优化（注意力 + 融合 DiT + 并行 VAE + 紧凑输出 + 并行 MP4）相对 Diffusers 时延 ↓30.8%（1.445×）；② FastVideo FastH3（DMD2 蒸馏四步学生模型）将 49 次 DiT 前向 → 4 次。在 8× B300 上 10.125 秒完整 MP4 用时 8.678-8.710 秒 —— **完整响应快于播放**（RTF_client ≤ 1.0）。"><meta property="og:url" content="https://samvortex.com/notes/vllm-omni-minimax-h3-fasth3/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="vLLM-Omni 上的 MiniMax H3：从系统级优化到基于 FastVideo FastH3 的实时服务 · Samvortex Hub"><meta name="twitter:description" content="vLLM-Omni 部署 MiniMax H3 实时服务：① 系统级优化（注意力 + 融合 DiT + 并行 VAE + 紧凑输出 + 并行 MP4）相对 Diffusers 时延 ↓30.8%（1.445×）；② FastVideo FastH3（DMD2 蒸馏四步学生模型）将 49 次 DiT 前向 → 4 次。在 8× B300 上 10.125 秒完整 MP4 用时 8.678-8.710 秒 —— **完整响应快于播放**（RTF_client ≤ 1.0）。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-09-13T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-09-13T00:00:00.000Z">2026年9月13日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">vLLM-Omni 上的 MiniMax H3：从系统级优化到基于 FastVideo FastH3 的实时服务</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">vLLM-Omni 部署 MiniMax H3 实时服务：① 系统级优化（注意力 + 融合 DiT + 并行 VAE + 紧凑输出 + 并行 MP4）相对 Diffusers 时延 ↓30.8%（1.445×）；② FastVideo FastH3（DMD2 蒸馏四步学生模型）将 49 次 DiT 前向 → 4 次。在 8× B300 上 10.125 秒完整 MP4 用时 8.678-8.710 秒 —— **完整响应快于播放**（RTF_client ≤ 1.0）。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/vLLM-Omni/" class="tag">#vLLM-Omni</a><a href="/tags/MiniMax H3/" class="tag">#MiniMax H3</a><a href="/tags/FastVideo/" class="tag">#FastVideo</a><a href="/tags/FastH3/" class="tag">#FastH3</a><a href="/tags/DMD2/" class="tag">#DMD2</a><a href="/tags/Hermes Agent/" class="tag">#Hermes Agent</a><a href="/tags/实时服务/" class="tag">#实时服务</a><a href="/tags/音视频 DiT/" class="tag">#音视频 DiT</a><a href="/tags/B300/" class="tag">#B300</a><a href="/tags/vLLM/" class="tag">#vLLM</a><a href="/tags/VeRL-Omni/" class="tag">#VeRL-Omni</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>vLLM-Omni 部署 <strong>MiniMax H3</strong> 实时服务：⭐ <strong>① 系统级优化</strong>（注意力 + 融合 DiT + 并行 VAE + 紧凑输出 + 并行 MP4）相对 Diffusers 时延 ↓<strong>30.8%</strong>（<strong>1.445×</strong>）；⭐ <strong>② FastVideo FastH3</strong>（DMD2 蒸馏<strong>四步</strong>学生模型）将 <strong>49 次 DiT 前向 → 4 次</strong>。在 <strong>8× B300</strong> 上 <strong>10.125 秒完整 MP4 用时 8.678-8.710 秒</strong> —— ⭐ <strong>完整响应快于播放</strong>（RTF_client ≤ 1.0）。</p>
+</blockquote>
+<h2 id="问题h3-服务是系统级问题">问题：H3 服务是系统级问题</h2>
+<blockquote>
+<p>“<strong>MiniMax H3 的服务是一个系统问题</strong>。一个请求要经过：⭐ <strong>庞大的 Qwen3-VL 编码器 + 长序列的音视频 DiT + 独立的视频与音频 VAE + 设备与进程边界 + 最后 H.264/AAC 封装</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>只优化 DiT，其余环节的时延依然留在那里</strong>。”</p>
+</blockquote>
+<h3 id="已发布的-3-种服务任务">已发布的 3 种服务任务</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>任务类型</th><th>详情</th></tr></thead><tbody><tr><td>⭐ <strong>T2VA</strong></td><td>文本 → 视频 + 音频</td></tr><tr><td><strong>I2VA</strong></td><td>图像 → 视频 + 音频</td></tr><tr><td><strong>V2VA</strong></td><td>视频 → 视频 + 音频</td></tr></tbody></table>
+<blockquote>
+<p>“<strong>DiT 主导基础调度，但不是唯一瓶颈</strong>。编码器的常驻影响容量；去噪被缩短后 VAE 解码显现；原始帧仍必须跨越进程边界并封装成 MP4。”</p>
+</blockquote>
+<h2 id="解决方案两层">解决方案：两层 ⭐</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>第一层：vLLM-Omni 系统级优化（处理周围开销）</span></span>
+<span class="line"><span>第二层：FastVideo FastH3（处理去噪主导项）</span></span></code></pre>
+<h3 id="两条证据线严格分开-️">两条证据线严格分开 ⚠️</h3>
+<blockquote>
+<p>“<strong>两条线各自都是有效且已冻结的实验，但它们并不共用同一个源码 SHA、prompt、seed 与产物</strong>。因此我们<strong>不推导从基础版到 FastH3 的加速比</strong>。本文只报告 FastH3 的绝对时延，直到有一组严格对齐的 A/B 实验为止。”</p>
+</blockquote>
+<h2 id="第一层vllm-omni-系统级优化">第一层：vLLM-Omni 系统级优化 ⭐</h2>
+<h3 id="1️⃣-长序列注意力与通信">1️⃣ 长序列注意力与通信</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td>负载</td><td><strong>58,758 个有效 token</strong> 占据 58,816 token 对齐缓冲区</td></tr><tr><td><strong>TRTLLM_ATTN</strong></td><td>接收有效序列长度 → 打包序列去掉<strong>结构性尾部 padding</strong></td></tr><tr><td><strong>rank 本地边界</strong></td><td>只构建本地 embedding / RoPE 行，gather <strong>128 通道投影</strong>（不是 5,376 通道隐藏状态）</td></tr><tr><td><strong>Fast Ulysses</strong></td><td>NCCL SymmetricMemory → <strong>直接以注意力所需布局交换分片</strong>，省去 all-to-all 前后一次单独重排</td></tr></tbody></table>
+<h3 id="2️⃣-融合的-dit-算子">2️⃣ 融合的 DiT 算子</h3>
+<ul>
+<li><strong>49 次前向循环</strong>反复施加矩阵乘法周围的小算子</li>
+<li><strong>PR #5990</strong>：Q/K RMSNorm 与 RoPE 融合</li>
+<li><strong>PR #6281、#6878</strong>：合并 FP32 调制 / 归一化 / 残差计算</li>
+<li><strong>PR #6283</strong>：融合 SwiGLU 取代分开的 SiLU + 乘法两次 launch</li>
+</ul>
+<h3 id="3️⃣-并行且融合的-vae-解码">3️⃣ 并行且融合的 VAE 解码</h3>
+<ul>
+<li>⭐ <strong>VAE patch 并行</strong>：<strong>tile 化的视频解码器分布到 8 张 GPU</strong></li>
+<li>加速 VAE 算子路径：物化解码块 + 融合 Q/K 归一化 + RoPE + SwiGLU + 带缩放残差更新</li>
+<li>不受支持布局保留 <strong>eager 回退</strong></li>
+</ul>
+<h3 id="4️⃣-gpu-输出准备传输与-mp4">4️⃣ GPU 输出准备、传输与 MP4 ⭐</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>FP32 BCTHW</span></span>
+<span class="line"><span>  → uint8 BTHWC（传输前负载 ↓75%）</span></span>
+<span class="line"><span>  → pinned D2H + IPC 传输</span></span>
+<span class="line"><span>  → planar frames</span></span>
+<span class="line"><span>  → H.264 / AAC MP4</span></span></code></pre>
+<p>每步只做一次：直接 planar 编码 + 常驻并行转换器 + 传输后 strided RGB 平面 → H.264 直接取用，<strong>无需构建完整交错 RGB 缓冲区</strong>。</p>
+<h3 id="实测结果">实测结果 ⚡</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>数据</th></tr></thead><tbody><tr><td><strong>硬件</strong></td><td>8× B300</td></tr><tr><td><strong>Diffusers</strong></td><td>原生上下文并行 + 复制权重</td></tr><tr><td><strong>vLLM-Omni</strong></td><td>编码器 TP8 + DiT USP8/Ring1（Fast Ulysses）+ VAE PP8 tile + TRTLLM_ATTN</td></tr><tr><td>⭐ <strong>无损加速比</strong></td><td><strong>30.8%（1.445×）</strong></td></tr><tr><td><strong>“无损”含义</strong></td><td>加速不依赖量化 / 稀疏注意力 / 缓存复用 / 减少去噪步数</td></tr><tr><td>⚠️ <strong>注意</strong></td><td>并不意味着输出<strong>逐位一致</strong>（不同 kernel 实现与浮点归约顺序仍可能扰动扩散轨迹）</td></tr></tbody></table>
+<h2 id="第二层fastvideo-fasth3">第二层：FastVideo FastH3 ⭐</h2>
+<blockquote>
+<p>“FastH3 是 <strong>FastVideo 基于 MiniMax H3 蒸馏出的四步 DMD2 学生模型</strong>。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>基础模型</strong></td><td>MiniMax H3</td></tr><tr><td><strong>蒸馏方式</strong></td><td>DMD2</td></tr><tr><td><strong>去噪步数</strong></td><td>⭐ <strong>49 → 4 次 transformer 前向</strong>（5 个 sigma 位置）</td></tr><tr><td><strong>复用</strong></td><td>编码器 / 视频 VAE / 音频 VAE / tokenizer / 调度器</td></tr><tr><td><strong>vLLM-Omni 支持</strong></td><td>Dense/Data-Free + 推荐 VSA/Data-Free</td></tr></tbody></table>
+<h3 id="集成方式两层协作">集成方式（两层协作）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>层</th><th>责任</th></tr></thead><tbody><tr><td><strong>FastVideo</strong></td><td>开发并发布<strong>蒸馏出的学生模型 + 适配器产物</strong></td></tr><tr><td><strong>vLLM-Omni</strong></td><td>验证产物 → <strong>checkpoint 流式载入同时完成融合</strong> → 对融合权重分片 → 通过已优化的注意力 / VAE / 传输 / MP4 路径服务</td></tr></tbody></table>
+<h3 id="fasth3--普通-lora-️">FastH3 ≠ 普通 LoRA ⚠️</h3>
+<blockquote>
+<p>“FastH3 <strong>不是一个可按请求切换的普通 LoRA</strong>。除低秩因子外，其产物还携带<strong>满秩 delta + 替换权重</strong>——这是普通 LoRA 层无法表达的。<strong>因此 vLLM-Omni 选择在分片之前先融合这份产物</strong>，而不是按请求激活它。”</p>
+</blockquote>
+<h3 id="fasth3-v1-服务契约-️">FastH3 v1 服务契约 ⚠️</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>约束</th><th>详情</th></tr></thead><tbody><tr><td><strong>任务</strong></td><td>⭐ <strong>只接受 T2VA</strong></td></tr><tr><td><strong>调度</strong></td><td>必须用它自己的<strong>四步调度 + checkpoint 的 flow shift</strong></td></tr><tr><td><strong>资源</strong></td><td>⭐ <strong>拒绝 offload</strong></td></tr><tr><td><strong>并发</strong></td><td>不能在接纳另一个请求时再接受 LoRA</td></tr><tr><td><strong>VSA 变体</strong></td><td>额外要求 <strong>CUDA + 外部 FastVideo kernel 包 + 本地或纯 Ulysses 序列并行</strong></td></tr></tbody></table>
+<h2 id="实测8-b300-上的-fasth3">实测：8× B300 上的 FastH3 ⭐</h2>
+<h3 id="部署配置">部署配置</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>组件</th><th>配置</th></tr></thead><tbody><tr><td><strong>FastH3 副本数</strong></td><td>1</td></tr><tr><td><strong>编码器</strong></td><td>TP8</td></tr><tr><td><strong>DiT</strong></td><td>DP1 × TP1 × USP8（带 Ring1 + Fast Ulysses）</td></tr><tr><td><strong>VAE</strong></td><td>PP8 tile 解码</td></tr><tr><td><strong>注意力</strong></td><td>TRTLLM_ATTN</td></tr><tr><td><strong>输出</strong></td><td>标准紧凑输出 + MP4 路径</td></tr></tbody></table>
+<h3 id="核心数据">核心数据 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>测试时长（帧）</th><th>测试时长（秒）</th><th>完整 MP4 用时</th></tr></thead><tbody><tr><td>5 秒（124 帧）</td><td>5.175</td><td>⭐ <strong>快于播放</strong></td></tr><tr><td>⭐ <strong>10 秒（243 帧）</strong></td><td><strong>10.125</strong></td><td>⭐ <strong>8.678-8.710 秒</strong></td></tr><tr><td>15 秒（362 帧）</td><td>15.0</td><td>快于播放</td></tr></tbody></table>
+<p><strong>判定标准</strong>：⭐ <strong>RTF_client = T_client / T_media ≤ 1.0</strong>（完整响应的实时判据）</p>
+<blockquote>
+<p>“<strong>全部六次计入的请求都满足 RTF_client ≤ 1.0</strong> —— 在测试过的每一个时长上，<strong>完整 MP4 的生成都快于播放</strong>。”</p>
+</blockquote>
+<h3 id="dense-vs-vsa-对比">Dense vs VSA 对比</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>注意力</th><th>结果</th></tr></thead><tbody><tr><td><strong>Dense</strong></td><td>TRTLLM_ATTN</td><td>标准对照</td></tr><tr><td><strong>⭐ VSA</strong></td><td>FASTVIDEO_VSA + top-k 64 + Triton kernel</td><td>⭐ <strong>更优加速比</strong></td></tr></tbody></table>
+<p>VSA 额外要求：<strong>CUDA + 外部 FastVideo kernel 包 + 本地或纯 Ulysses 序列并行</strong>。</p>
+<h2 id="通用-h3-服务架构">通用 H3 服务架构 ⭐</h2>
+<h3 id="41-分布式逐层卸载dlo">4.1 分布式逐层卸载（DLO）</h3>
+<blockquote>
+<p>“<strong>DLO（Distributed Layerwise Offload）在 HBM 中保留一个有界的 DiT 层窗口，其余部分从主机内存流式取用</strong>。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>模式</th><th>机制</th></tr></thead><tbody><tr><td><strong>AllGather 模式</strong></td><td>从主机侧分片<strong>集体重建活跃层</strong></td></tr><tr><td><strong>rank 本地模式</strong></td><td>流式取用各 rank 常规 loader 产生的张量</td></tr></tbody></table>
+<p><strong>8× B300 BF16 DLO 帕累托前沿</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>配置</th><th>时延代价</th><th>HBM 降低</th></tr></thead><tbody><tr><td><strong>r = 35</strong>（常驻 35 个 DiT block）</td><td>+5.1%</td><td>⭐ <strong>↓37.5%</strong></td></tr><tr><td><strong>r = 0</strong></td><td>—</td><td>显存最小端点</td></tr></tbody></table>
+<h3 id="42-编码器分离">4.2 编码器分离 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>编码器显存常驻</strong></td><td>BF16 下 <strong>~51.5 GB Qwen3-VL</strong></td></tr><tr><td><strong>解法</strong></td><td>把编码器<strong>移入独立 vLLM 阶段</strong>（自己的放置 / 张量并行 / 副本 / 队列 / kernel / prefix cache）</td></tr><tr><td><strong>接口</strong></td><td>编排器把<strong>第 50 层隐藏状态 + token 角色标签</strong> + 原始媒体 → 交给 DiT/VAE 阶段</td></tr></tbody></table>
+<h3 id="43-可选量化与注意力加速">4.3 可选量化与注意力加速</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>路径</th><th>类型</th><th>状态</th></tr></thead><tbody><tr><td><strong>在线 FP8</strong></td><td>全局 FP8 路径</td><td>✅ 已合并</td></tr><tr><td><strong>SVDQuant NVFP4 W4A4</strong></td><td>离线 loader + BF16 低秩修正</td><td>✅ checkpoint + 正确性兼容；性能路径待原生融合</td></tr><tr><td><strong>SAGE 量化</strong></td><td>QK + PV 量化到 FP8</td><td>TRTLLM_ATTN 可选</td></tr><tr><td><strong>Skip-Softmax</strong></td><td>动态跳过 Softmax + P×V</td><td>TRTLLM_ATTN 可选</td></tr><tr><td><strong>Cache-DiT</strong></td><td>请求级缓存策略</td><td>quality=high / lossless</td></tr></tbody></table>
+<h2 id="进一步优化空间尾部开销显现">进一步优化空间（尾部开销显现）⭐</h2>
+<blockquote>
+<p>“<strong>去噪被压缩后，新的尾部开销显现出来</strong> —— 在 10 秒档上，插桩路径中合并的 VAE + 推导的传输 + CPU MP4 <strong>合计约占 3 秒</strong>。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>优化项</th><th>节省</th><th>E2E 占比</th></tr></thead><tbody><tr><td><strong>重叠传输 + 编码</strong></td><td>0.87 秒</td><td>10%</td></tr><tr><td><strong>+ 增量式 VAE 解码</strong></td><td>1.75 秒</td><td>20%</td></tr><tr><td><strong>分块 VAE 到传输到 MP4 流水线</strong></td><td>RFC #6872 提议</td><td>go/no-go: 5% / 10% E2E</td></tr><tr><td><strong>草稿 PR #6885</strong></td><td>4 卡 L20X 上 VAE → MP4 减 <strong>0.8847 秒（26.57%）</strong></td><td>—</td></tr></tbody></table>
+<h2 id="限制-️">限制 ⚠️</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>限制</th><th>详情</th></tr></thead><tbody><tr><td><strong>兼容性</strong></td><td>⚠️ <strong>FastH3 VSA 不要</strong>在没有经过新正确性 / 质量 / 显存 / 时延认证的情况下，与 DLO / 量化 / 缓存 / Ring-AllGather 稀疏注意力 / 编码器分离组合使用</td></tr><tr><td><strong>license</strong></td><td>⭐ <strong>MiniMax H3 Community License Agreement</strong> —— 商业 / 托管服务运营方应与法务一起审阅当前地域 / 署名 / 营收 / 可接受使用 / 安全保障要求</td></tr><tr><td><strong>后训练</strong></td><td>vLLM-Omni 也在 VeRL-Omni 中为 H3 提供 rollout 服务 —— 训练属于生态覆盖，不属于本次服务基准测试</td></tr></tbody></table>
+<h2 id="结论">结论</h2>
+<blockquote>
+<p>“<strong>系统级优化让完整的 H3 流水线变得高效</strong>。随后，<strong>FastVideo 的四步前向学生模型把专用的 T2VA 画像推进到了完整响应快于播放的区间</strong>，在实测的 B300 系统上成立。”</p>
+</blockquote>
+<h3 id="聚焦的后续工作">聚焦的后续工作</h3>
+<ol>
+<li><strong>认证原生 FastVideo SM100a VSA kernel</strong>（目标 Blackwell 系统）</li>
+<li><strong>集成原生融合的 NVFP4 kernel</strong></li>
+<li><strong>集成并认证 Sol-Attn</strong> 即时稀疏注意力后端</li>
+<li><strong>完成基础版与 FastH3 对齐的多 seed 质量评估</strong></li>
+<li><strong>实现分块的 VAE 到传输到 MP4 流水线</strong>，认证一个 GPU 编码器</li>
+<li><strong>在 VeRL-Omni / UniRL / RLinf 中增强 H3 的后训练集成</strong></li>
+<li><strong>认证 FastH3 与编码器分离或其他扩展特性的组合</strong></li>
+</ol>
+<h2 id="仓库地址">仓库地址</h2>
+<ul>
+<li><strong>vLLM-Omni</strong>：<a href="https://github.com/vllm-project/vllm-omni">github.com/vllm-project/vllm-omni</a></li>
+<li><strong>FastVideo</strong>：<a href="https://github.com/hao-ai-lab/FastVideo">github.com/hao-ai-lab/FastVideo</a></li>
+<li><strong>vLLM 博客</strong>：<a href="https://vllm.ai/blog/2026-09-01-minimax-h3-production-serving">vllm.ai/blog/2026-09-01-minimax-h3-production-serving</a></li>
+</ul>
+<h2 id="致谢部分">致谢（部分）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>人</th><th>贡献</th></tr></thead><tbody><tr><td>@Isotr0py</td><td>基础 H3 支持</td></tr><tr><td>@lishunyang12、@evanchueng、@Gaohan123、@david6666666</td><td>DLO / 基础集成 / 在线 FP8</td></tr><tr><td>@gcanlin、@yuanwu2017</td><td>编码器分离</td></tr><tr><td>@bobboli、@fan2956、@mo-ke-ke、@mglyn、@MosCloud、@ultism</td><td>注意力 / 融合 kernel / 量化 / VAE / 传输 / 媒体路径</td></tr><tr><td>@princepride</td><td>FastH3 集成 + VSA/Ulysses 支持</td></tr><tr><td>@NancyFyong、@mengchengTang</td><td>VeRL-Omni 集成</td></tr><tr><td>Hongsheng Liu、Roger Wang</td><td>总体支持 + 博客准备</td></tr></tbody></table>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/vllm-omni-minimax-h3-fasth3/image-01.jpg" alt="vLLM-Omni MiniMax H3 FastH3" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：vLLM-Omni + MiniMax H3 实时服务架构（机器之心 · 2026-09-13）</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L6NLA51N0511AQHO.html">网易新闻（机器之心）· 原文</a></li>
+<li>vLLM-Omni 仓库：<a href="https://github.com/vllm-project/vllm-omni">github.com/vllm-project/vllm-omni</a></li>
+<li>FastVideo 仓库：<a href="https://github.com/hao-ai-lab/FastVideo">github.com/hao-ai-lab/FastVideo</a></li>
+<li>vLLM 官方博客：<a href="https://vllm.ai/blog/2026-09-01-minimax-h3-production-serving">vllm.ai/blog/2026-09-01-minimax-h3-production-serving</a></li>
+<li>相关 PR：#5990 / #6281 / #6283 / #6878 / #5810 / #5700 / #6476 / #6550 / #6714 / #6885 / #6909</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

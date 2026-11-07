@@ -1,0 +1,483 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>PhAI Labs RSI-Anything：通过世界模型跨领域递归自我改进 — JEPA-Anything 路线 + 4 个硬数据 + 免疫科学应用 · Samvortex Hub</title><meta name="description" content="PhAI Labs 10-12 发布 **RSI-Anything** 技术报告——**通过世界模型 + Agent + 真实反馈**实现**跨领域递归自我改进**。**延续 JEPA-Anything 路线**（OPF 正交预测分解跨视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气 7 域）。**4 个硬数据**——代码修复 26.3% → 31.2% / GUI Agent (OSWorld) +18.4% / LabHorizon 4B 规划 5 代改进 21.80% → 46.01% / 化学 Suzuki-Miyaura 40 次..."><link rel="canonical" href="https://samvortex.com/notes/phai-labs-rsi-anything-2026-10-12/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="PhAI Labs RSI-Anything：通过世界模型跨领域递归自我改进 — JEPA-Anything 路线 + 4 个硬数据 + 免疫科学应用 · Samvortex Hub"><meta property="og:description" content="PhAI Labs 10-12 发布 **RSI-Anything** 技术报告——**通过世界模型 + Agent + 真实反馈**实现**跨领域递归自我改进**。**延续 JEPA-Anything 路线**（OPF 正交预测分解跨视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气 7 域）。**4 个硬数据**——代码修复 26.3% → 31.2% / GUI Agent (OSWorld) +18.4% / LabHorizon 4B 规划 5 代改进 21.80% → 46.01% / 化学 Suzuki-Miyaura 40 次..."><meta property="og:url" content="https://samvortex.com/notes/phai-labs-rsi-anything-2026-10-12/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="PhAI Labs RSI-Anything：通过世界模型跨领域递归自我改进 — JEPA-Anything 路线 + 4 个硬数据 + 免疫科学应用 · Samvortex Hub"><meta name="twitter:description" content="PhAI Labs 10-12 发布 **RSI-Anything** 技术报告——**通过世界模型 + Agent + 真实反馈**实现**跨领域递归自我改进**。**延续 JEPA-Anything 路线**（OPF 正交预测分解跨视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气 7 域）。**4 个硬数据**——代码修复 26.3% → 31.2% / GUI Agent (OSWorld) +18.4% / LabHorizon 4B 规划 5 代改进 21.80% → 46.01% / 化学 Suzuki-Miyaura 40 次..."><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-12T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-12T00:00:00.000Z">2026年10月12日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">PhAI Labs RSI-Anything：通过世界模型跨领域递归自我改进 — JEPA-Anything 路线 + 4 个硬数据 + 免疫科学应用</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">PhAI Labs 10-12 发布 **RSI-Anything** 技术报告——**通过世界模型 + Agent + 真实反馈**实现**跨领域递归自我改进**。**延续 JEPA-Anything 路线**（OPF 正交预测分解跨视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气 7 域）。**4 个硬数据**——代码修复 26.3% → 31.2% / GUI Agent (OSWorld) +18.4% / LabHorizon 4B 规划 5 代改进 21.80% → 46.01% / 化学 Suzuki-Miyaura 40 次...</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/PhAI Labs/" class="tag">#PhAI Labs</a><a href="/tags/RSI/" class="tag">#RSI</a><a href="/tags/Recursive Self-Improvement/" class="tag">#Recursive Self-Improvement</a><a href="/tags/递归自我改进/" class="tag">#递归自我改进</a><a href="/tags/RSI-Anything/" class="tag">#RSI-Anything</a><a href="/tags/JEPA-Anything/" class="tag">#JEPA-Anything</a><a href="/tags/World Model/" class="tag">#World Model</a><a href="/tags/世界模型/" class="tag">#世界模型</a><a href="/tags/OPF/" class="tag">#OPF</a><a href="/tags/正交预测分解/" class="tag">#正交预测分解</a><a href="/tags/AIBuildAI/" class="tag">#AIBuildAI</a><a href="/tags/OSWorld/" class="tag">#OSWorld</a><a href="/tags/LabHorizon/" class="tag">#LabHorizon</a><a href="/tags/Suzuki-Miyaura/" class="tag">#Suzuki-Miyaura</a><a href="/tags/Agent Genesis/" class="tag">#Agent Genesis</a><a href="/tags/EvoIWM/" class="tag">#EvoIWM</a><a href="/tags/免疫科学/" class="tag">#免疫科学</a><a href="/tags/评论/" class="tag">#评论</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>PhAI Labs 10-12 发 <strong>RSI-Anything</strong>：<strong>世界模型 + Agent + 真实反馈</strong>形成跨领域递归自我改进。<strong>核心创新是「Policy + World Model 异步更新 + 兼容性检查」</strong>——只有通过检验的更新才保留为下一轮起点。<strong>4 个应用 + 硬数据</strong>：代码修复 26.3%→31.2% / GUI Agent +18.4% / LabHorizon 4B 规划 5 代 21.80%→46.01% / 化学 96.15%。<strong>沿 JEPA-Anything 路线</strong>——<strong>Anything 范式从「预测万物」进化到「让万物推动 AI 自我进化」</strong>。</p>
+</blockquote>
+<h2 id="一事件--背景">一、事件 / 背景</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项</th><th>详情</th></tr></thead><tbody><tr><td><strong>发布主体</strong></td><td>PhAI Labs（Gen-Verse 团队）</td></tr><tr><td><strong>发布时间</strong></td><td>2026-10-12</td></tr><tr><td><strong>技术报告</strong></td><td><a href="https://arxiv.org/abs/2610.13912">arxiv.org/abs/2610.13912</a></td></tr><tr><td><strong>项目代码</strong></td><td><a href="https://github.com/Gen-Verse/RSI-Anything">github.com/Gen-Verse/RSI-Anything</a></td></tr><tr><td><strong>延续路线</strong></td><td><a href="https://arxiv.org/abs/2609.20800">JEPA-Anything</a> — **「OPF 正交预测分解」**跨 7 域（视觉 / 生物 / 临床 / 控制 / 分子动力学 / 物理场 / 天气）</td></tr><tr><td><strong>官网</strong></td><td><a href="https://phai-labs.com">phai-labs.com</a></td></tr><tr><td><strong>PhAI Labs 历史脉络</strong></td><td><strong>JEPA-Anything</strong>（统一预测学习）→ <strong>EvoIWM</strong>（演化免疫世界模型）→ <strong>Agent Genesis</strong>（演化科学 Agent 工作流）→ <strong>RSI-Anything</strong>（跨域递归自我改进）</td></tr></tbody></table>
+<hr>
+<h2 id="二核心问题rsi-为什么要anything-化">二、核心问题：RSI 为什么要「Anything 化」？</h2>
+<h3 id="21-传统-rsi-的局限">2.1 传统 RSI 的局限</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>局限</th><th>详情</th></tr></thead><tbody><tr><td><strong>任务域窄</strong></td><td>传统 RSI 主要在<strong>代码 / 数学</strong>——状态 / 行动 / 反馈都是数字化的</td></tr><tr><td><strong>反馈获取难</strong></td><td>化学实验需要真实验；生物系统一次干预可能多尺度变化——<strong>真实反馈昂贵、稀疏、难直接获得</strong></td></tr><tr><td><strong>Agent 不知道选哪个</strong></td><td>就算能预测行动后果——<strong>不必然知道如何选择 / 如何学习</strong>——更不必然能持续改进</td></tr></tbody></table>
+<h3 id="22-anything-化的答案">2.2 Anything 化的答案</h3>
+<p><strong>RSI-Anything 的回答</strong>：</p>
+<blockquote>
+<p><strong>如果 AI 能为不同世界建立预测模型（世界模型），在真正行动前预判后果，再利用真实反馈持续改进自己——RSI 就能跨域复用。</strong></p>
+</blockquote>
+<p><strong>State → Action → Prediction → Feedback → Improvement</strong> — <strong>5 步递归循环</strong>。</p>
+<h3 id="23-关键技术挑战policy-vs-world-model-同步--异步问题">2.3 关键技术挑战：Policy vs World Model 同步 / 异步问题</h3>
+<blockquote>
+<p><strong>当 Agent 的策略更新后，它可能探索过去从未接触过的状态；原来准确的世界模型，未必还能可靠预测新的行动。</strong></p>
+<p><strong>反过来，世界模型更新后，也可能改变 Agent 对候选行动的判断。</strong></p>
+</blockquote>
+<p><strong>答</strong>——<strong>异步更新 + 兼容性检查</strong>——<strong>不是每次更新都被直接接受</strong>——<strong>只有通过相应检验的策略与世界模型组合，才会被保留，成为下一轮改进的起点</strong>。</p>
+<hr>
+<h2 id="三4-个跨领域应用--硬数据">三、4 个跨领域应用 + 硬数据</h2>
+<h3 id="31-code263--312-代码修复成功率">3.1 Code：26.3% → 31.2% 代码修复成功率</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>实验</strong></td><td>CodeContests 代码修复</td></tr><tr><td><strong>固定生成器</strong></td><td>ReasonFlux-Coder-7B（<strong>不升级 coder 本身</strong>）</td></tr><tr><td><strong>流程</strong></td><td>每轮生成 4 个候选 Patch → 世界模型预测 → 选 1 个执行</td></tr><tr><td><strong>结果</strong></td><td>静态 Verifier <strong>26.3%</strong> → 固定世界模型 <strong>29.2%</strong> → <strong>执行反馈适配世界模型 31.2%</strong></td></tr><tr><td><strong>测试预算</strong></td><td>平均每任务 3.7 次在线测试（<strong>没增加</strong>）</td></tr></tbody></table>
+<p><strong>核心洞察</strong>：<strong>提升 Agent 能力不一定要更强的生成模型或更多真实试错——让世界模型更准确地判断「哪些行动值得执行」也能提升表现</strong>。</p>
+<h3 id="32-gui-agentosworld-任务成功率-184">3.2 GUI Agent：OSWorld 任务成功率 +18.4%</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>实验</strong></td><td>OSWorld（GUI 操作基准）</td></tr><tr><td><strong>挑战</strong></td><td>屏幕视觉理解 → 鼠标 / 键盘 → 连续决策 → 状态不断变化</td></tr><tr><td><strong>结果</strong></td><td><strong>任务成功率相对提升约 18.4%</strong></td></tr></tbody></table>
+<p><strong>核心洞察</strong>：<strong>RSI-Anything 不只代码——能拓展到需要持续观察、行动与环境交互的智能体任务</strong>。</p>
+<h3 id="33-labhorizon4b-模型-5-代改进-2180--4601">3.3 LabHorizon：4B 模型 5 代改进 21.80% → 46.01%</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>实验</strong></td><td>LabHorizon 实验室规划任务</td></tr><tr><td><strong>模型</strong></td><td><strong>4B 策略模型</strong>（<strong>比参考的小很多</strong>）</td></tr><tr><td><strong>5 代改进</strong></td><td><strong>21.80% → 38.03% → 41.99% → 44.56% → 46.01%</strong></td></tr><tr><td><strong>vs 参考</strong></td><td><strong>略高于</strong> Actor-Simulator-Selector 参考系统的 <strong>45.32%</strong></td></tr></tbody></table>
+<p><strong>核心洞察</strong>：<strong>4B 模型 5 代改进后超过更大模型组合</strong>——<strong>「递归改进」比「更大模型」更划算</strong>。</p>
+<h3 id="34-chemistrysuzukimiyaura-反应-9615">3.4 Chemistry：Suzuki–Miyaura 反应 96.15%</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>实验</strong></td><td>两组 Suzuki-Miyaura 反应筛选</td></tr><tr><td><strong>方法</strong></td><td>世界模型预测（催化剂 / 配体 / 溶剂组合）→ 真实测量反馈 → 选下一轮</td></tr><tr><td><strong>20 次实验</strong></td><td>最佳观测产率 <strong>93.0%</strong>（vs 贝叶斯优化 <strong>87.5%</strong>）</td></tr><tr><td><strong>40 次实验</strong></td><td>平均最佳观测产率 <strong>96.15%</strong>（vs 贝叶斯优化 <strong>82.16%</strong>）</td></tr></tbody></table>
+<p><strong>核心洞察</strong>：<strong>实验预算有限的科学研究</strong>——<strong>同样实验次数 → 更好探索结果</strong>。</p>
+<h3 id="35-跨域共性">3.5 跨域共性</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>任务</th><th>状态</th><th>行动</th><th>反馈</th></tr></thead><tbody><tr><td>Code</td><td>代码</td><td>Patch</td><td>编译 / 测试</td></tr><tr><td>GUI</td><td>屏幕</td><td>点击 / 输入</td><td>界面变化</td></tr><tr><td>Lab</td><td>实验设计</td><td>协议</td><td>实验结果</td></tr><tr><td>Chemistry</td><td>化合物</td><td>反应条件</td><td>产率</td></tr></tbody></table>
+<p><strong>共同点</strong>——<strong>都能被组织进同一套「预测 + 反馈驱动改进」框架</strong>——<strong>这是「Anything」范式的核心</strong>。</p>
+<hr>
+<h2 id="四免疫科学rsi-遇见-evoiwm">四、免疫科学：RSI 遇见 EvoIWM</h2>
+<p><strong>延伸应用</strong>——<strong>EvoIWM（演化免疫世界模型）+ Agent Genesis</strong>——RSI-Anything 在端到端免疫科学应用：</p>
+<ol>
+<li>演化科学 Agent 工作流构建<strong>免疫世界模型</strong></li>
+<li>模型驱动的<strong>分析、证据检验、自我修正</strong></li>
+<li>筛选潜在<strong>干预方案</strong></li>
+</ol>
+<p><strong>结果</strong>——提出涉及 <strong>SIRPα 抑制 + IL-36γ 轴调节</strong>的<strong>候选联合干预假设</strong>——<strong>仍待后续实验验证</strong>。</p>
+<p><strong>核心洞察</strong>：<strong>世界模型已不只是预测行动结果——它开始成为科学 Agent 分析复杂系统、比较干预方案、修正研究判断的工具</strong>。</p>
+<hr>
+<h2 id="五可信度红旗">五、可信度红旗</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>红旗</th><th>详情</th><th>判断</th></tr></thead><tbody><tr><td><strong>163 自媒体</strong></td><td>文末「<strong>仅代表作者观点</strong>」</td><td><strong>置信度：中-低</strong></td></tr><tr><td><strong>arxiv 论文可核</strong></td><td>arxiv.org/abs/2610.13912 — <strong>一手可查</strong></td><td><strong>置信度：高</strong></td></tr><tr><td><strong>GitHub repo 可核</strong></td><td>github.com/Gen-Verse/RSI-Anything — <strong>一手可看</strong></td><td><strong>置信度：高</strong></td></tr><tr><td><strong>数据合理性</strong></td><td><strong>代码 26.3%→31.2%（+4.9pp）</strong> / <strong>GUI +18.4%</strong> / <strong>Lab 21.80%→46.01%（×2.1）</strong> / <strong>化学 93.0%→96.15%</strong> — <strong>都合理（+5pp ~ ×2.1 区间）</strong></td><td><strong>置信度：中-高</strong></td></tr><tr><td><strong>与 JEPA-Anything 一致性</strong></td><td>PhAI Labs 历史脉络清晰（JEPA → EvoIWM → Agent Genesis → RSI-Anything）— <strong>路演合理</strong></td><td><strong>置信度：高</strong></td></tr><tr><td><strong>「Anything」营销色彩</strong></td><td>标题里的「<strong>Anything</strong>」有 buzzword 风险——<strong>但有 4 个硬数据支撑</strong></td><td><strong>置信度：中</strong></td></tr><tr><td><strong>「4B 超过更大模型组合」</strong></td><td>单一基准（LabHorizon）— <strong>需独立复现</strong></td><td><strong>置信度：中</strong></td></tr><tr><td><strong>免疫科学联合干预</strong></td><td>是「<strong>假设</strong>」非「<strong>结论</strong>」——文章明确说「<strong>仍待后续实验验证</strong>」</td><td><strong>置信度：高</strong>（<strong>作者自己标了</strong>）</td></tr></tbody></table>
+<hr>
+<h2 id="六对-sam-的-3-点启示">六、对 Sam 的 3 点启示</h2>
+<h3 id="61-你的anything-范式文章系列可以加一篇">6.1 你的「<strong>Anything 范式</strong>」文章系列可以加一篇</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>你已有</th><th>这篇新增</th></tr></thead><tbody><tr><td><a href="/research/hinton-20-ai-leaders-rsi-warning/">Hinton 20+ AI 大牛警告</a></td><td><strong>警告侧</strong></td></tr><tr><td><a href="/research/hinton-bengio-22-signatories-intelligence-explosion/">22 巨头联名智能爆炸</a></td><td><strong>警告侧</strong></td></tr><tr><td><a href="/research/ai-masters-oa-rsi-explosion/">AI 宗师 + OA 集体疾呼</a></td><td><strong>警告侧 + 商业应对</strong></td></tr><tr><td><a href="/research/aibuildai-posttrain-agent-self-evolving/">AIBuildAI 递归自进化 PostTrain</a></td><td><strong>自演化技术侧</strong></td></tr><tr><td><a href="/research/physical-ai-agent-active-inference.md">物理 AI 主动推理</a></td><td><strong>相关范式</strong></td></tr><tr><td><strong>本文 RSI-Anything</strong></td><td><strong>跨域递归改进技术侧</strong></td></tr></tbody></table>
+<p><strong>Sam 你的「RSI 全景」现在 6 篇</strong>——<strong>警告 + 技术 + 自演化 + 主动推理 + 跨域</strong>——<strong>完整图景</strong>。</p>
+<h3 id="62-世界模型--agent--反馈对-hermes-agent--the-hive-的实操启示">6.2 「<strong>世界模型 + Agent + 反馈</strong>」对 Hermes Agent / The Hive 的实操启示</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>启发</th></tr></thead><tbody><tr><td><strong>世界模型 = Agent 的「<strong>预演</strong>」</strong></td><td>Hermes Agent 在 <a href="/research/alchaincyf-agent-skill-methodology-2026-10-11/">FanBox 风格 UI</a> 里可以加「<strong>行动预演</strong>」——<strong>让用户看 agent 准备做的事</strong></td></tr><tr><td><strong>4B 超过更大模型组合</strong></td><td><strong>The Hive 不需要堆 70B 模型</strong>——<strong>4B + 强世界模型 + 反馈循环</strong>可能更优</td></tr><tr><td><strong>5 代策略迭代</strong></td><td>The Hive 的 agent 立场可以「<strong>代际更新</strong>」——<strong>v1 → v2 → v3</strong>，每次只改一维度</td></tr><tr><td><strong>政策 / 世界模型兼容性</strong></td><td>The Hive 升级 agent 时<strong>做兼容性测试</strong>——<strong>不盲目 push 新版本</strong></td></tr></tbody></table>
+<h3 id="63-学术派-vs-商业派phai-给的第三种-rsi-路径">6.3 学术派 vs 商业派：PhAI 给的「<strong>第三种 RSI 路径</strong>」</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>流派</th><th>主张</th><th>代表</th></tr></thead><tbody><tr><td><strong>警告派</strong></td><td><strong>「AI 会自我进化 → 危险」</strong></td><td>Hinton / Bengio / 22 巨头 / 财长</td></tr><tr><td><strong>商业派</strong></td><td><strong>「在监管下安全地做 RSI」</strong></td><td>OpenAI / Anthropic</td></tr><tr><td><strong>技术派</strong>（<strong>这才是新路径</strong>）</td><td><strong>「通过世界模型 + 异步兼容性检查，让 RSI 跨域安全可控」</strong></td><td>PhAI Labs（Gen-Verse）</td></tr></tbody></table>
+<p><strong>PhAI 的论文给的是「<strong>工程上可实现的中间路线</strong>」</strong>——<strong>不是哲学辩论</strong>——<strong>是具体方法和 4 个硬数据</strong>。</p>
+<p><strong>对 Sam 你 WCEC IT 工作的实操价值</strong>：</p>
+<ul>
+<li><strong>Hermes Agent / The Hive 的下一版</strong>可以<strong>借鉴「异步 + 兼容性检查」架构</strong>——<strong>agent 升级不停服</strong>——<strong>灰度发布 + 自动回滚</strong></li>
+<li><strong>不需要堆最大模型</strong>——<strong>4B + 强反馈循环</strong>足够</li>
+<li><strong>科研级证据链</strong>——<strong>4 个不同领域的硬数据</strong>——<strong>比「<strong>AI 帮你做</strong>」营销话术强 10 倍</strong></li>
+</ul>
+<hr>
+<h2 id="七未验证部分--待核清单">七、未验证部分 + 待核清单</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>待核项</th><th>建议核验源</th><th>判断</th></tr></thead><tbody><tr><td><strong>arxiv 论文</strong></td><td>arxiv.org/abs/2610.13912</td><td><strong>可核</strong>（<strong>最高优先级</strong>）</td></tr><tr><td><strong>GitHub repo 代码</strong></td><td>github.com/Gen-Verse/RSI-Anything</td><td><strong>可核</strong></td></tr><tr><td><strong>CodeContests 26.3%→31.2%</strong></td><td>论文 §4.1 + GitHub README</td><td><strong>可核</strong></td></tr><tr><td><strong>OSWorld +18.4%</strong></td><td>论文 + OSWorld leaderboard</td><td><strong>可核</strong></td></tr><tr><td><strong>LabHorizon 4B 5 代 21.80→46.01</strong></td><td>论文 + 复现</td><td><strong>可核</strong></td></tr><tr><td><strong>Suzuki-Miyaura 96.15%</strong></td><td>论文附录 + 化学领域复现</td><td><strong>可核</strong></td></tr><tr><td><strong>SIRPα + IL-36γ 联合干预</strong></td><td>论文 + 后续实验</td><td><strong>仍待</strong></td></tr><tr><td><strong>「Anything」是否真有跨域适用</strong></td><td>论文实验设计 + 独立团队复现</td><td><strong>可核</strong>（<strong>这是核心</strong>）</td></tr></tbody></table>
+<hr>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/phai-labs-rsi-anything-2026-10-12/image-01.png" alt="PhAI Labs RSI-Anything 递归改进循环：5 步 State→Action→Prediction→Feedback→Improvement + 4 域数据" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：PhAI Labs RSI-Anything 递归改进框架 — 中心 5 步循环（State → Action → Prediction → Feedback → Improvement）+ 中心「Policy ⇄ World Model」标签（异步更新 + 兼容性检查）+ 外圈 4 个应用域数据（Code 26.3%→31.2% / GUI +18.4% / Lab ×2.1 / Chemistry 96.15%）。配色用科学绿青（呼应 JEPA-Anything 学术风），不模仿任何商业 AI 蓝白。</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L920D8SH0511AQHO.html">163 自媒体转载：PhAI Labs 提出 RSI-Anything</a></li>
+<li><a href="https://arxiv.org/abs/2610.13912">arxiv 论文：RSI-Anything</a></li>
+<li><a href="https://github.com/Gen-Verse/RSI-Anything">GitHub：Gen-Verse/RSI-Anything</a></li>
+<li><a href="https://arxiv.org/abs/2609.20800">arxiv 论文：JEPA-Anything</a></li>
+<li><a href="https://phai-labs.com/">PhAI Labs 官网</a></li>
+<li>早前相关：<a href="/research/hinton-20-ai-leaders-rsi-warning/">Hinton 20+ AI 大牛警告「智能爆炸」</a>（10-03）</li>
+<li>早前相关：<a href="/research/hinton-bengio-22-signatories-intelligence-explosion/">Hinton + Bengio 22 巨头联名</a>（10-03）</li>
+<li>早前相关：<a href="/research/aibuildai-posttrain-agent-self-evolving/">AIBuildAI 递归自进化 PostTrain Agent</a>（10-07）</li>
+<li>早前相关：<a href="/research/alchaincyf-agent-skill-methodology-2026-10-11/">alchaincyf 10万+ stars 拆解 — Agent Skill 方法论全集</a>（10-11）</li>
+<li>早前相关：<a href="/research/physical-ai-agent-active-inference.md">物理 AI 智能体的主动推理</a>（10-02）</li>
+<li>待核：arxiv 论文 / GitHub repo / OSWorld leaderboard</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

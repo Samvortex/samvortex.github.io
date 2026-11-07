@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="640" viewBox="0 0 1100 640" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#374151"/>
+    </linearGradient>
+    <linearGradient id="crash" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c8102e"/>
+      <stop offset="100%" stop-color="#e8544f"/>
+    </linearGradient>
+    <linearGradient id="flat" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6b7280"/>
+      <stop offset="100%" stop-color="#9ca3af"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1100" height="640" fill="#f7f8fa"/>
+  <rect x="0" y="0" width="1100" height="74" fill="url(#hdr)"/>
+  <text x="36" y="34" fill="#ffffff" font-size="21" font-weight="700">初级岗位占比：技术线塌了，其他部门没动</text>
+  <text x="36" y="58" fill="#9ca3af" font-size="13">Anthropic 内部数据 · 2025 年初 → 2026 年中 · Datawhale 转载</text>
+
+  <!-- Tech row -->
+  <text x="40" y="118" fill="#111827" font-size="16" font-weight="700">技术部门</text>
+
+  <rect x="40" y="132" width="900" height="52" rx="8" fill="#e5e7eb"/>
+  <rect x="40" y="132" width="243" height="52" rx="8" fill="url(#crash)"/>
+  <text x="161" y="164" fill="#ffffff" font-size="17" font-weight="700" text-anchor="middle">27%</text>
+  <text x="40" y="205" fill="#6b7280" font-size="12">2025 年初</text>
+
+  <!-- arrow down -->
+  <line x1="490" y1="158" x2="490" y2="158" stroke="#9ca3af"/>
+  <path d="M 300 205 L 300 232" stroke="#c8102e" stroke-width="3"/>
+  <path d="M 292 224 L 300 236 L 308 224" fill="none" stroke="#c8102e" stroke-width="3"/>
+  <text x="318" y="228" fill="#c8102e" font-size="15" font-weight="700">-18 个百分点</text>
+
+  <rect x="40" y="238" width="900" height="52" rx="8" fill="#e5e7eb"/>
+  <rect x="40" y="238" width="81" height="52" rx="8" fill="url(#crash)"/>
+  <text x="80" y="270" fill="#ffffff" font-size="17" font-weight="700" text-anchor="middle">9%</text>
+  <text x="40" y="311" fill="#6b7280" font-size="12">2026 年中</text>
+
+  <text x="700" y="278" fill="#6b7280" font-size="13">同期公司员工总数成倍增长</text>
+  <text x="700" y="298" fill="#6b7280" font-size="13">技术团队实际招入人数在增加</text>
+
+  <!-- divider -->
+  <line x1="40" y1="336" x2="1060" y2="336" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- Non-tech row -->
+  <text x="40" y="372" fill="#111827" font-size="16" font-weight="700">非技术部门（销售 / 财务 / 法务）</text>
+
+  <rect x="40" y="386" width="900" height="52" rx="8" fill="#e5e7eb"/>
+  <rect x="40" y="386" width="225" height="52" rx="8" fill="url(#flat)"/>
+  <text x="152" y="418" fill="#ffffff" font-size="17" font-weight="700" text-anchor="middle">~25%</text>
+  <text x="40" y="459" fill="#6b7280" font-size="12">基本稳定，未受影响</text>
+
+  <text x="700" y="410" fill="#6b7280" font-size="13">对照：只有技术线塌陷</text>
+  <text x="700" y="430" fill="#9ca3af" font-size="12">这排除了"整体不招人"的解释</text>
+
+  <!-- callout -->
+  <rect x="40" y="488" width="1020" height="120" rx="10" fill="#fff" stroke="#e5e7eb"/>
+  <text x="64" y="520" fill="#111827" font-size="15" font-weight="700">为什么？</text>
+  <text x="64" y="548" fill="#4b5563" font-size="13.5">过去新人靠改小需求、修简单问题练手。现在这类"简单明确的基础工作"越来越多交给 AI——</text>
+  <text x="64" y="572" fill="#4b5563" font-size="13.5">基础工作仍需有人完成，只是公司有了招聘新人之外的选择（用 AI 顶替入门练手机会）。</text>
+  <text x="64" y="596" fill="#c8102e" font-size="13.5" font-weight="600">留给人"从头学起"的位置正在消失，而企业同时希望新人已具备独立判断力。</text>
+</svg>

@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>给 AI 装上记忆，它就真的记对了吗？HaluMem 拆解智能体记忆幻觉 · Samvortex Hub</title><meta name="description" content="⭐ **HaluMem** —— ⭐ **首个面向智能体记忆系统的操作级幻觉评测基准**（⭐ **EMNLP 2026 主会接收**）。⭐ **3 阶段拆分**：⭐ **记忆提取 / 记忆更新 / 记忆问答**，⭐ **不是只测最终答案**，⭐ **而是看错误在哪一步产生**。⭐ **6 套记忆系统实测**（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ **所有系统 Q&#38;A 准确率都未达 70%**，⭐ **Mem0 从 Medium 53% 暴跌至 Long 28%**。"><link rel="canonical" href="https://samvortex.com/notes/halumem-memory-hallucination-eval/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="给 AI 装上记忆，它就真的记对了吗？HaluMem 拆解智能体记忆幻觉 · Samvortex Hub"><meta property="og:description" content="⭐ **HaluMem** —— ⭐ **首个面向智能体记忆系统的操作级幻觉评测基准**（⭐ **EMNLP 2026 主会接收**）。⭐ **3 阶段拆分**：⭐ **记忆提取 / 记忆更新 / 记忆问答**，⭐ **不是只测最终答案**，⭐ **而是看错误在哪一步产生**。⭐ **6 套记忆系统实测**（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ **所有系统 Q&#38;A 准确率都未达 70%**，⭐ **Mem0 从 Medium 53% 暴跌至 Long 28%**。"><meta property="og:url" content="https://samvortex.com/notes/halumem-memory-hallucination-eval/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="给 AI 装上记忆，它就真的记对了吗？HaluMem 拆解智能体记忆幻觉 · Samvortex Hub"><meta name="twitter:description" content="⭐ **HaluMem** —— ⭐ **首个面向智能体记忆系统的操作级幻觉评测基准**（⭐ **EMNLP 2026 主会接收**）。⭐ **3 阶段拆分**：⭐ **记忆提取 / 记忆更新 / 记忆问答**，⭐ **不是只测最终答案**，⭐ **而是看错误在哪一步产生**。⭐ **6 套记忆系统实测**（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ **所有系统 Q&#38;A 准确率都未达 70%**，⭐ **Mem0 从 Medium 53% 暴跌至 Long 28%**。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-09-30T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-09-30T00:00:00.000Z">2026年9月30日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">给 AI 装上记忆，它就真的记对了吗？HaluMem 拆解智能体记忆幻觉</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ **HaluMem** —— ⭐ **首个面向智能体记忆系统的操作级幻觉评测基准**（⭐ **EMNLP 2026 主会接收**）。⭐ **3 阶段拆分**：⭐ **记忆提取 / 记忆更新 / 记忆问答**，⭐ **不是只测最终答案**，⭐ **而是看错误在哪一步产生**。⭐ **6 套记忆系统实测**（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ **所有系统 Q&amp;A 准确率都未达 70%**，⭐ **Mem0 从 Medium 53% 暴跌至 Long 28%**。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/HaluMem/" class="tag">#HaluMem</a><a href="/tags/Agent Memory/" class="tag">#Agent Memory</a><a href="/tags/智能体记忆/" class="tag">#智能体记忆</a><a href="/tags/记忆幻觉/" class="tag">#记忆幻觉</a><a href="/tags/EMNLP 2026/" class="tag">#EMNLP 2026</a><a href="/tags/MemTensor/" class="tag">#MemTensor</a><a href="/tags/中国电信研究院/" class="tag">#中国电信研究院</a><a href="/tags/记忆提取/" class="tag">#记忆提取</a><a href="/tags/记忆更新/" class="tag">#记忆更新</a><a href="/tags/记忆问答/" class="tag">#记忆问答</a><a href="/tags/Mem0/" class="tag">#Mem0</a><a href="/tags/MemOS/" class="tag">#MemOS</a><a href="/tags/Supermemory/" class="tag">#Supermemory</a><a href="/tags/Zep/" class="tag">#Zep</a><a href="/tags/记忆评测基准/" class="tag">#记忆评测基准</a><a href="/tags/召回率/" class="tag">#召回率</a><a href="/tags/虚假记忆抵抗 FMR/" class="tag">#虚假记忆抵抗 FMR</a><a href="/tags/更新遗漏率/" class="tag">#更新遗漏率</a><a href="/tags/操作性评测/" class="tag">#操作性评测</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ <strong>HaluMem</strong> —— ⭐ <strong>首个面向智能体记忆系统的操作级幻觉评测基准</strong>（⭐ <strong>EMNLP 2026 主会接收</strong>）。⭐ <strong>3 阶段拆分</strong>：⭐ <strong>记忆提取 / 记忆更新 / 记忆问答</strong>，⭐ <strong>不是只测最终答案</strong>，⭐ <strong>而是看错误在哪一步产生</strong>。⭐ <strong>6 套记忆系统实测</strong>（⭐ Mem0 / Mem0-Graph / Memobase / MemOS / Supermemory / Zep）—— ⭐ <strong>所有系统 Q&#x26;A 准确率都未达 70%</strong>，⭐ <strong>Mem0 从 Medium 53% 暴跌至 Long 28%</strong>。⭐ <strong>三大核心发现</strong>：(1) ⭐ 高召回率 ≠ 可靠（虚假记忆抵抗 FMR 拖累）；(2) ⭐ 更新幻觉率 &#x3C;1.2% 看似漂亮但 ⭐ <strong>更新遗漏率高达 60-98%</strong>；(3) ⭐ 上游记忆问题最终传递到答案。</p>
+</blockquote>
+<blockquote>
+<p><strong>机构</strong>：⭐ <strong>中国电信研究院 + 上海记忆张量（MemTensor）公司</strong></p>
+</blockquote>
+<hr>
+<h2 id="一核心问题">一、核心问题 ⭐</h2>
+<blockquote>
+<p>“<strong>当 AI 助手把你的新职位说错时，我们很容易把它归结为：模型又在「胡说八道」。但错误一定发生在回答的那一刻吗？</strong>”</p>
+</blockquote>
+<p>⭐ <strong>错误可能发生在三处</strong>：</p>
+<ul>
+<li>⭐ <strong>整理对话时记错了</strong>（提取阶段）</li>
+<li>⭐ <strong>保留旧记录没更新</strong>（更新阶段）</li>
+<li>⭐ <strong>拿到了正确记忆却答错</strong>（问答阶段）</li>
+</ul>
+<blockquote>
+<p>“<strong>要判断 AI 的记忆是否可靠，我们需要检查这本「笔记」是怎么写成、怎么修改、又怎么被使用的。</strong>”</p>
+</blockquote>
+<hr>
+<h2 id="二halumem-三大评测维度">二、HaluMem 三大评测维度 ⭐</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>问题</th></tr></thead><tbody><tr><td>⭐ <strong>记忆提取</strong></td><td>该记的信息是否被完整、准确地记录？有没有把虚构细节也写进去？</td></tr><tr><td>⭐ <strong>记忆更新</strong></td><td>新信息出现后，旧记忆是否得到正确修改？有没有漏改 / 改错 / 留下冲突？</td></tr><tr><td>⭐ <strong>记忆问答</strong></td><td>系统最终能否利用记忆给出正确回答？错误回答与因信息缺失而无法回答，各占多少？</td></tr></tbody></table>
+<p>⭐ <strong>关键</strong>：评测按<strong>对话时间顺序展开</strong>，在相关会话处理完成后立即触发 → 不仅看到总分，还看到<strong>不同操作阶段的具体问题</strong>。</p>
+<hr>
+<h2 id="三数据构建">三、数据构建 ⭐</h2>
+<h3 id="-六阶段数据流程">⭐ 六阶段数据流程</h3>
+<p>⭐ <strong>模拟 10-20 年用户经历</strong>：</p>
+<ol>
+<li>用户画像</li>
+<li>人生发展骨架</li>
+<li>事件流</li>
+<li>会话摘要</li>
+<li>记忆点</li>
+<li>多轮对话与评测问题</li>
+</ol>
+<p>⭐ <strong>3 类记忆</strong>：</p>
+<ul>
+<li>画像（职业 / 健康 / 兴趣 / 人际关系）</li>
+<li>事件</li>
+<li>关系</li>
+</ul>
+<h3 id="-两个版本">⭐ 两个版本 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>版本</th><th>用户</th><th>对话轮次</th><th>Token / 用户</th><th>记忆点</th><th>Q&#x26;A</th><th>设计目标</th></tr></thead><tbody><tr><td>⭐ <strong>Medium</strong></td><td>⭐ <strong>20 位</strong></td><td>⭐ <strong>30,073 轮</strong></td><td>⭐ <strong>~16 万</strong></td><td>⭐ <strong>14,948 个</strong></td><td>⭐ <strong>3,467 个</strong></td><td>基础测试</td></tr><tr><td>⭐ <strong>Long</strong></td><td>同上</td><td>⭐ <strong>53,516 轮</strong></td><td>⭐ <strong>100 万+</strong></td><td>同有效记忆</td><td>同上</td><td>⭐ <strong>加干扰与上下文负担</strong>，看长上下文是否仍能保留有效信息</td></tr></tbody></table>
+<h3 id="-6-类题型">⭐ 6 类题型</h3>
+<ol>
+<li>基础事实回忆</li>
+<li>多跳推理</li>
+<li>动态更新</li>
+<li>记忆边界</li>
+<li>泛化与应用</li>
+<li>记忆冲突</li>
+</ol>
+<p>⭐ <strong>人工校验</strong>：Medium 中 <strong>700 段会话人工评估</strong>，覆盖 <strong>>50% 会话</strong>，记忆点与问答<strong>正确率 95.70%</strong>。</p>
+<hr>
+<h2 id="四6-套实测系统">四、6 套实测系统 ⭐</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>类型</th></tr></thead><tbody><tr><td>⭐ <strong>Mem0</strong></td><td>通用型</td></tr><tr><td><strong>Mem0-Graph</strong></td><td>图结构增强</td></tr><tr><td><strong>Memobase</strong></td><td>通用型</td></tr><tr><td>⭐ <strong>MemOS</strong></td><td>⭐ <strong>最佳表现</strong></td></tr><tr><td><strong>Supermemory</strong></td><td>长上下文优</td></tr><tr><td><strong>Zep</strong></td><td>会话级</td></tr></tbody></table>
+<p>⭐ <strong>统一测试条件</strong>：</p>
+<ul>
+<li>更新任务：检索前 10 条相关记忆</li>
+<li>问答任务：检索前 20 条记忆</li>
+<li>答案生成：<strong>GPT-4o</strong></li>
+</ul>
+<hr>
+<h2 id="五三大核心发现">五、三大核心发现 ⭐</h2>
+<h3 id="发现-1-召回率高--记忆可靠">发现 1：⭐ 召回率高 ≠ 记忆可靠</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>Medium 召回率</th><th>Long 召回率</th><th>Long FMR（虚假记忆抵抗）</th></tr></thead><tbody><tr><td>Mem0</td><td>42.91%</td><td>3.23%</td><td>—</td></tr><tr><td>Mem0-Graph</td><td>43.28%</td><td>2.24%</td><td>—</td></tr><tr><td>Memobase</td><td>14.55%</td><td>6.18%</td><td>—</td></tr><tr><td>⭐ <strong>MemOS</strong></td><td>—</td><td>⭐ <strong>81.90%</strong></td><td>⭐ <strong>28.85%</strong></td></tr><tr><td>⭐ <strong>Supermemory</strong></td><td>—</td><td>⭐ <strong>53.02%</strong></td><td>⭐ <strong>36.86%</strong></td></tr></tbody></table>
+<p>⭐ <strong>结论</strong>：⭐ <strong>MemOS / Supermemory 覆盖更多目标记忆，但虚假记忆抵抗低</strong> —— 扩大信息覆盖并没有自动带来更强的真假辨别能力。</p>
+<blockquote>
+<p>“<strong>可靠记忆需要同时做到两件事：该记的不能漏，不该信的不能存。单看召回率或记忆条数，都容易忽略另一侧的代价。</strong>”</p>
+</blockquote>
+<h3 id="发现-2-更新幻觉率-12-看似漂亮实际是悲剧">发现 2：⭐ 更新幻觉率 &#x3C;1.2% 看似漂亮，实际是悲剧</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>更新幻觉率</th><th>Long 遗漏率</th><th>Long 正确更新率</th></tr></thead><tbody><tr><td>⭐ <strong>Mem0</strong></td><td>&#x3C;1.2%</td><td>⭐ <strong>98.51%</strong></td><td>⭐ <strong>1.45%</strong></td></tr><tr><td><strong>Mem0-Graph</strong></td><td>&#x3C;1.2%</td><td>⭐ <strong>98.40%</strong></td><td>⭐ <strong>1.47%</strong></td></tr><tr><td>⭐ <strong>MemOS</strong></td><td>&#x3C;1.2%</td><td>~35%</td><td>⭐ <strong>65.25%</strong> ⭐最佳</td></tr></tbody></table>
+<blockquote>
+<p>“<strong>为什么「很少改错」会和「大量漏改」同时出现？</strong>”</p>
+</blockquote>
+<p>⭐ <strong>因为更新幻觉率衡量的是目标更新中发生错误更新的比例</strong>。当大量更新根本没有完成时，错误更新的比例也可能很低。⭐ <strong>仅凭这一项数值，无法判断系统是否真正掌握了记忆更新</strong>。</p>
+<h3 id="发现-3-上游记忆问题最终传递到答案">发现 3：⭐ 上游记忆问题最终传递到答案</h3>
+<p>⭐ <strong>所有受测系统 Q&#x26;A 正确率均未达 70%</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>Medium Q&#x26;A</th><th>Long Q&#x26;A</th><th>Medium 遗漏率</th><th>Long 遗漏率</th></tr></thead><tbody><tr><td>⭐ <strong>MemOS</strong> ⭐最佳</td><td>⭐ <strong>67.23%</strong></td><td>⭐ <strong>64.44%</strong></td><td>—</td><td>—</td></tr><tr><td>⭐ <strong>Mem0</strong></td><td>53.02%</td><td>⭐ <strong>28.11%</strong></td><td>27.81%</td><td>⭐ <strong>54.60%</strong></td></tr></tbody></table>
+<blockquote>
+<p>“<strong>Mem0 的问答正确率从 53.02% 降至 28.11%，同时问答遗漏率从 27.81% 升至 54.60%</strong>。这一变化与其上游记忆召回率的大幅下降相呼应。”</p>
+</blockquote>
+<p>⭐ <strong>题型能力差异</strong>：多数系统在 ⭐ <strong>识别未知信息 / 错误前提</strong> 时表现相对较好，但面对 ⭐ <strong>多跳推理 / 动态更新 / 泛化应用</strong> 仍存在明显短板。</p>
+<hr>
+<h2 id="六对智能体工程的意义">六、对智能体工程的意义 ⭐</h2>
+<blockquote>
+<p>“<strong>HaluMem 带来的价值，是让记忆系统的改进方向变得更具体</strong>。”</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>问题层</th><th>检查项</th></tr></thead><tbody><tr><td>⭐ <strong>提取层</strong></td><td>同时检查 ⭐ <strong>信息覆盖</strong> + ⭐ <strong>来源可信度</strong></td></tr><tr><td>⭐ <strong>更新层</strong></td><td>检查 ⭐ <strong>新旧记忆关联</strong> + 应做的修改是否<strong>真正完成</strong></td></tr><tr><td>⭐ <strong>问答层</strong></td><td>⭐ <strong>结合上游记录与检索结果</strong>继续分析</td></tr></tbody></table>
+<blockquote>
+<p>“<strong>这也解释了为什么一项漂亮的单独指标还不够</strong>：</p>
+<ul>
+<li>⭐ <strong>高召回可能伴随虚假信息写入</strong></li>
+<li>⭐ <strong>低更新幻觉率可能伴随大量遗漏</strong></li>
+<li>⭐ <strong>最终问答分数可能遮住内部不同环节的失败</strong>”</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="七可复用评测思路">七、可复用评测思路 ⭐</h2>
+<blockquote>
+<p>“<strong>把最终答案背后的记忆操作逐一拿出来核对，让「哪里出了错」成为可以测量的问题</strong>。”</p>
+</blockquote>
+<p>⭐ <strong>未来扩展</strong>：</p>
+<ul>
+<li>当前数据围绕模拟用户的画像 / 事件 / 关系记忆展开</li>
+<li>⭐ <strong>尚未全面覆盖工具 / 技能等其他记忆形态</strong></li>
+<li>不同系统开放的接口会影响内部操作的可观测程度</li>
+</ul>
+<hr>
+<h2 id="八对-openclaw--hermes-agent-的启示">八、对 OpenClaw / Hermes Agent 的启示 ⭐</h2>
+<p>⭐ <strong>3 点直接可借鉴</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>启示</th><th>落地建议</th></tr></thead><tbody><tr><td>⭐ <strong>1</strong></td><td><strong>指标单一不可信</strong></td><td>评测 memory 时<strong>同时看召回 / 遗漏 / FMR</strong> 3 项</td></tr><tr><td>⭐ <strong>2</strong></td><td><strong>下游答案错 ≠ 当前问答错</strong></td><td>加日志：每次输出 trace 回”取的是哪条记忆？”</td></tr><tr><td><strong>3</strong></td><td>⭐ <strong>构造 1M+ token 干扰场景</strong></td><td>Hermes Agent 的 skill marketplace 实战测试应包含<strong>长上下文干扰</strong></td></tr></tbody></table>
+<hr>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L8399NOI0511AQHO.html">网易新闻（机器之心 Pro）· 原文</a></li>
+<li><a href="https://arxiv.org/pdf/2511.03506">HaluMem arXiv 论文</a></li>
+<li><a href="https://github.com/MemTensor/HaluMem">GitHub 开源项目</a></li>
+<li>论文：HaluMem: Evaluating Hallucinations in Memory Systems of Agents（EMNLP 2026 主会）</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

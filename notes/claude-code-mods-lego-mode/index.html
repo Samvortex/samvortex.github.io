@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Claude Code 的「乐高」模式，让程序员彻底玩「上头」了 · Samvortex Hub</title><meta name="description" content="⭐ **Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启** —— ⭐ **TypeScript 插件函数** 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ **像素宠物**：Claude 每调一次工具就吃一口饭 ∘ **打 Doom** ∘ **Storytime（26 万参数小模型 + Claude 工作的实时故事）** ∘ **4-7-8 呼吸引导** ∘ **发射密码**（破坏性命令需输入密码） ∘ **agent-race** ∘ **claudemods.ai** 已分类投票。"><link rel="canonical" href="https://samvortex.com/notes/claude-code-mods-lego-mode/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Claude Code 的「乐高」模式，让程序员彻底玩「上头」了 · Samvortex Hub"><meta property="og:description" content="⭐ **Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启** —— ⭐ **TypeScript 插件函数** 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ **像素宠物**：Claude 每调一次工具就吃一口饭 ∘ **打 Doom** ∘ **Storytime（26 万参数小模型 + Claude 工作的实时故事）** ∘ **4-7-8 呼吸引导** ∘ **发射密码**（破坏性命令需输入密码） ∘ **agent-race** ∘ **claudemods.ai** 已分类投票。"><meta property="og:url" content="https://samvortex.com/notes/claude-code-mods-lego-mode/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Claude Code 的「乐高」模式，让程序员彻底玩「上头」了 · Samvortex Hub"><meta name="twitter:description" content="⭐ **Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启** —— ⭐ **TypeScript 插件函数** 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ **像素宠物**：Claude 每调一次工具就吃一口饭 ∘ **打 Doom** ∘ **Storytime（26 万参数小模型 + Claude 工作的实时故事）** ∘ **4-7-8 呼吸引导** ∘ **发射密码**（破坏性命令需输入密码） ∘ **agent-race** ∘ **claudemods.ai** 已分类投票。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-03T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-03T00:00:00.000Z">2026年10月3日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Claude Code 的「乐高」模式，让程序员彻底玩「上头」了</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ **Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启** —— ⭐ **TypeScript 插件函数** 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ **像素宠物**：Claude 每调一次工具就吃一口饭 ∘ **打 Doom** ∘ **Storytime（26 万参数小模型 + Claude 工作的实时故事）** ∘ **4-7-8 呼吸引导** ∘ **发射密码**（破坏性命令需输入密码） ∘ **agent-race** ∘ **claudemods.ai** 已分类投票。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Claude Code/" class="tag">#Claude Code</a><a href="/tags/Anthropic/" class="tag">#Anthropic</a><a href="/tags/Mods/" class="tag">#Mods</a><a href="/tags/插件/" class="tag">#插件</a><a href="/tags/Boris Cherny/" class="tag">#Boris Cherny</a><a href="/tags/Vibe Coding/" class="tag">#Vibe Coding</a><a href="/tags/Claude Marketplace/" class="tag">#Claude Marketplace</a><a href="/tags/Minecraft/" class="tag">#Minecraft</a><a href="/tags/DeepSeek Harness/" class="tag">#DeepSeek Harness</a><a href="/tags/OpenAI Codex/" class="tag">#OpenAI Codex</a><a href="/tags/pet 宠物/" class="tag">#pet 宠物</a><a href="/tags/Storytime/" class="tag">#Storytime</a><a href="/tags/claudemods.ai/" class="tag">#claudemods.ai</a><a href="/tags/可控开放/" class="tag">#可控开放</a><a href="/tags/CLI 光谱/" class="tag">#CLI 光谱</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ <strong>Claude Code 负责人 Boris Cherny 9 月中旬放出 Mods 机制，10-1 正式默认开启</strong> —— ⭐ <strong>TypeScript 插件函数</strong> 能改造 UI / 拦截命令 / 转给其他模型。开发者玩疯了：∘ <strong>像素宠物</strong>：Claude 每调一次工具就吃一口饭 ∘ <strong>打 Doom</strong> ∘ <strong>Storytime（26 万参数小模型 + Claude 工作的实时故事）</strong> ∘ <strong>4-7-8 呼吸引导</strong> ∘ <strong>发射密码</strong>（破坏性命令需输入密码） ∘ <strong>agent-race</strong> ∘ <strong>claudemods.ai</strong> 已分类投票。⭐ <strong>Claude Marketplace 2000+ 插件 / 商店 / 上架审核 / 开发者后台 — 10 天凑齐应用商店四件套</strong>。对比 Codex（官方做宠物）vs DeepSeek Harness（MIT 一切皆插件）—— Claude Code 卡在 ⭐ <strong>“可控的开放”光谱正中间</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="一mods-机制">一、Mods 机制 ⭐</h2>
+<blockquote>
+<p>”⭐ <strong>这一切的源头，是 Claude Code 负责人 Boris Cherny 9 月中旬在 GitHub 上放出的一套机制，名字就叫 Mods</strong>。当地时间 10 月 1 日，⭐ <strong>它正式写进更新日志，默认开启</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>短短十几天，一个敲命令、改代码的工具，被程序员们搭成了一个可以随便盖房子的「我的世界」</strong>。”</p>
+</blockquote>
+<h3 id="核心定义">核心定义 ⭐</h3>
+<blockquote>
+<p>“Claude Code 里的 mod，⭐ <strong>本质上是几行跑在插件里的 TypeScript 函数</strong>。”</p>
+</blockquote>
+<h3 id="权限">权限 ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>能力</th><th>详情</th></tr></thead><tbody><tr><td>⭐ <strong>开面板</strong></td><td>在对话旁边开面板</td></tr><tr><td>⭐ <strong>画横条</strong></td><td>在输入框上方画横条</td></tr><tr><td>⭐ <strong>改造内置界面</strong></td><td>改 UI</td></tr><tr><td>⭐ <strong>拦截命令</strong></td><td>在 Claude 执行命令之前把它拦下来</td></tr><tr><td>⭐ <strong>转给其他模型</strong></td><td>⭐ <strong>把请求转给另一个模型处理</strong></td></tr><tr><td>⭐ <strong>写 mod</strong></td><td>不会写代码也没关系，<strong>对 Claude 说一句”帮我写个 mod”</strong>，它就能自己给自己装上新功能</td></tr></tbody></table>
+<hr>
+<h2 id="二官方自己也用-mods">二、官方自己也用 Mods ⭐</h2>
+<blockquote>
+<p>“Anthropic 在发布时顺手透露了一个细节。⭐ <strong>Claude Code 自己的 /diff 变更面板，以及对 AGENTS.md 的支持，并不是写死在产品里的功能，而是官方团队用同一套 Mods 机制写出来的</strong>。⭐ <strong>源代码和测试就公开放在仓库里</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>官方团队和外部开发者，用的是同一套改装工具</strong>。Anthropic 不是施舍给用户一点改皮肤的权限，⭐ <strong>而是在用积木搭自己的产品，然后把整个积木盒子倒在桌上，告诉所有人你们也可以这么干</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="三社区玩疯了">三、社区玩疯了 ⭐</h2>
+<h3 id="-像素宠物">⭐ 像素宠物 ⭐</h3>
+<blockquote>
+<p>“有人在输入框上方养了一只像素宠物，⭐ <strong>Claude 每调用一次工具它就吃一口饭，调用失败当场生病，碰上 rm -rf 还会抱头惊慌</strong>。”</p>
+</blockquote>
+<h3 id="chrome-恐龙--doom">Chrome 恐龙 + Doom ⭐</h3>
+<blockquote>
+<p>“有人把 Chrome 断网时的小恐龙搬了进来，<strong>Claude 在后台写业务逻辑，人在前台狂按空格跳仙人掌</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“开发者 ⭐ <strong>jarrodwatts 制作的在 Claude Code 里打 Doom 的 Mod</strong>。”</p>
+</blockquote>
+<h3 id="-storytime最离谱">⭐ Storytime（最离谱）⭐</h3>
+<blockquote>
+<p>“最离谱的一个叫 ⭐ <strong>Storytime</strong>。作者往 Claude Code 里塞了一个 ⭐ <strong>26 万参数的小模型</strong>，⭐ <strong>根据 Claude 正在干的活，实时在屏幕上方写一个小故事</strong>。<strong>一个 AI 编程工具里，又跑着另一个 AI 在讲故事</strong>。”</p>
+</blockquote>
+<h3 id="onewave-ai-一晚上-10-个-mod">OneWave AI 一晚上 10 个 mod ⭐</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Mod</th><th>作用</th></tr></thead><tbody><tr><td><strong>像素宠物</strong></td><td>同上</td></tr><tr><td>⭐ <strong>发射密码</strong></td><td>⭐ <strong>遇到破坏性命令必须先输入密码才放行</strong></td></tr><tr><td>⭐ <strong>内心独白</strong></td><td>开个面板展示 ⭐ <strong>Claude 对你这次会话干巴巴的吐槽</strong></td></tr><tr><td>⭐ <strong>agent-race</strong></td><td>让几个 Claude 会话同时解同一个问题，⭐ <strong>屏幕实时刷计分板</strong></td></tr></tbody></table>
+<h3 id="社区站">社区站 ⭐</h3>
+<blockquote>
+<p>“已经有人搭起了 ⭐ <strong>claudemods.ai</strong>，⭐ <strong>按游戏 / 仪表盘分门别类，还能投票</strong>。⭐ <strong>目前投票最高的，是那只小恐龙</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="四anthropic-10-天凑齐应用商店四件套">四、Anthropic 10 天凑齐应用商店四件套 ⭐</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>日期</th><th>事件</th></tr></thead><tbody><tr><td><strong>9-23</strong></td><td>⭐ <strong>Claude Marketplace 上线</strong> —— ⭐ <strong>2000+ 插件和连接器</strong></td></tr><tr><td><strong>9-25</strong></td><td>⭐ <strong>开放插件提交门户</strong> —— ⭐ <strong>付费开发者提交作品</strong>，⭐ <strong>自动校验 + 安全扫描 + 人工审核一条龙</strong>，上线后可看 ⭐ <strong>安装 / 使用数据</strong></td></tr><tr><td><strong>10-1</strong></td><td>⭐ <strong>Mods 正式上线</strong>（默认开启），⭐ <strong>打包在插件里</strong>，<strong>可提交到目录分享</strong></td></tr></tbody></table>
+<blockquote>
+<p>”⭐ <strong>商店 / 上架审核 / 开发者后台 / 深度改装能力 —— 10 天之内，Anthropic 凑齐了一个应用商店的全部四件套</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>官方还表示，未来几周 Claude 应用和 Claude Code 会统一插件入口</strong>。⭐ <strong>终端里的这些 mod，正在被收进 Anthropic 更大的生态版图</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="五对比codex-vs-harness-vs-claude-code">五、对比：Codex vs Harness vs Claude Code ⭐</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>玩家</th><th>路线</th><th>开放度</th></tr></thead><tbody><tr><td>⭐ <strong>OpenAI Codex</strong></td><td>⭐ <strong>官方做宠物</strong>：<code>/pet</code> 召唤浮窗小伙伴<br>可换皮，<strong>碰不到底层</strong></td><td>⭐ <strong>闭源</strong></td></tr><tr><td>⭐ <strong>DeepSeek Harness</strong></td><td>⭐ <strong>MIT 开源</strong>”<strong>一切皆插件</strong>”<br>⭐ <strong>连 Claude Code / Codex 都能作为子代理</strong><br>Harness <strong>同一天</strong>DeepSeek-V4-Pro 涨价 —— ⭐ <strong>“编排免费，推理收费”</strong></td><td>⭐ <strong>全开源</strong></td></tr><tr><td>⭐ <strong>Anthropic Claude Code</strong></td><td>⭐ <strong>核心思考循环不开放</strong><br><strong>几乎把其他能交的权限都交了出去</strong>（包括转给其他模型）</td><td>⭐ <strong>“可控的开放”光谱正中间</strong></td></tr></tbody></table>
+<blockquote>
+<p>”⭐ <strong>Harness 能托管 Claude，Claude Code 却不能托管 DeepSeek</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“Claude Code 卡在这条光谱的 ⭐ <strong>正中间</strong>，核心的思考循环目前没有开放，但在内核之外，它几乎把能交的权限都交了出去，⭐ <strong>包括把请求转给另一个模型</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>这种’可控的开放’，开放到足以让重度用户把它改成自己的形状，又没有开放到让人可以把 Claude 本身换掉</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="六安全风险">六、安全风险 ⭐</h2>
+<blockquote>
+<p>”⭐ <strong>开放的代价也摆在明面上</strong>。⭐ <strong>官方文档说得很直白，mod 拥有和 Claude Code 本身相同的机器访问权限，⭐ <strong>代码由发布者而不是 Anthropic 写，只装可信来源的</strong>。理论上，一个恶意 mod 能做的事，和一个恶意软件包没有区别</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>”⭐ <strong>文档里专门留了一页给企业管理员，讲如何管控 mod</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="七商业模式">七、商业模式 ⭐</h2>
+<blockquote>
+<p>”⭐ <strong>从公开信息来看，Anthropic 的目录体系里看不到收益分成</strong>，⭐ <strong>一个被成千上万人安装的 mod，开发者能拿到的只有后台的使用数据</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>当第一波整活的新鲜劲过去，⭐ <strong>开发者凭什么长期为一个闭源、没有经济回报的平台添砖加瓦</strong>？</strong>”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>《我的世界》的模组能繁荣十几年，靠的是热爱和社区声望</strong>。<strong>生产力工具的世界不太一样</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="八深层洞察">八、深层洞察 ⭐</h2>
+<blockquote>
+<p>“<strong>Anthropic 已经把乐高积木的盒子倒在了桌上</strong>。⭐ <strong>这个用代码搭起来的「我的世界」能长多大，取决于它最终能为建造者留下什么</strong>。”</p>
+</blockquote>
+<blockquote>
+<p>“<strong>但大家也不要小看，程序员及用户对于和自己打造 / 美化工具之间的羁绊</strong>，⭐ <strong>在模型每周都在更新的当下，一个让自己中意的皮肤或者 Mod，都有可能是留住用户的「软实力」</strong>。”</p>
+</blockquote>
+<hr>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/claude-code-mods-lego-mode/image-01.jpg" alt="Claude Code Mods 乐高模式" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：Claude Code Mods 乐高模式 —— 像素宠物 / Doom / Storytime（极客公园 · 2026-10-03）</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L8AVDUJ205119FMA.html">网易新闻（极客公园）· 原文</a></li>
+<li>Claude Code 负责人 Boris Cherny GitHub 公告（9 月中旬）</li>
+<li>Claude Code 官方更新日志（2026-10-01）</li>
+<li>Claude Marketplace（9-23）/ 插件提交门户（9-25）</li>
+<li>claudemods.ai 社区站</li>
+<li>OpenAI Codex 宠物模式</li>
+<li>DeepSeek Harness 开源项目（MIT）</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

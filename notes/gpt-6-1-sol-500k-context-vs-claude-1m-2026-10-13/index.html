@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>GPT-6.1 Sol 500k 上下文 + 免长上下文费 — 上下文窗口赛道 2026 Q4：OpenAI / Anthropic / Google 三家策略对比 · Samvortex Hub</title><meta name="description" content="GPT-6.1 Sol 默认上下文 272k → 500k（+80%），Tibo 宣布订阅用户免长上下文附加费。对比 2026 Q4 三家策略：OpenAI 500k 保守（避 7 月扣量翻车）vs Anthropic Claude 1M 激进（压缩算法领先）vs Google 待公布。核心信号：窗口竞赛从「比谁大」转向「比谁不压缩」。"><link rel="canonical" href="https://samvortex.com/notes/gpt-6-1-sol-500k-context-vs-claude-1m-2026-10-13/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="GPT-6.1 Sol 500k 上下文 + 免长上下文费 — 上下文窗口赛道 2026 Q4：OpenAI / Anthropic / Google 三家策略对比 · Samvortex Hub"><meta property="og:description" content="GPT-6.1 Sol 默认上下文 272k → 500k（+80%），Tibo 宣布订阅用户免长上下文附加费。对比 2026 Q4 三家策略：OpenAI 500k 保守（避 7 月扣量翻车）vs Anthropic Claude 1M 激进（压缩算法领先）vs Google 待公布。核心信号：窗口竞赛从「比谁大」转向「比谁不压缩」。"><meta property="og:url" content="https://samvortex.com/notes/gpt-6-1-sol-500k-context-vs-claude-1m-2026-10-13/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="GPT-6.1 Sol 500k 上下文 + 免长上下文费 — 上下文窗口赛道 2026 Q4：OpenAI / Anthropic / Google 三家策略对比 · Samvortex Hub"><meta name="twitter:description" content="GPT-6.1 Sol 默认上下文 272k → 500k（+80%），Tibo 宣布订阅用户免长上下文附加费。对比 2026 Q4 三家策略：OpenAI 500k 保守（避 7 月扣量翻车）vs Anthropic Claude 1M 激进（压缩算法领先）vs Google 待公布。核心信号：窗口竞赛从「比谁大」转向「比谁不压缩」。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-13T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-13T00:00:00.000Z">2026年10月13日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">GPT-6.1 Sol 500k 上下文 + 免长上下文费 — 上下文窗口赛道 2026 Q4：OpenAI / Anthropic / Google 三家策略对比</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">GPT-6.1 Sol 默认上下文 272k → 500k（+80%），Tibo 宣布订阅用户免长上下文附加费。对比 2026 Q4 三家策略：OpenAI 500k 保守（避 7 月扣量翻车）vs Anthropic Claude 1M 激进（压缩算法领先）vs Google 待公布。核心信号：窗口竞赛从「比谁大」转向「比谁不压缩」。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/GPT-6.1 Sol/" class="tag">#GPT-6.1 Sol</a><a href="/tags/上下文窗口/" class="tag">#上下文窗口</a><a href="/tags/context window/" class="tag">#context window</a><a href="/tags/500k/" class="tag">#500k</a><a href="/tags/1M/" class="tag">#1M</a><a href="/tags/Tibo/" class="tag">#Tibo</a><a href="/tags/OpenAI/" class="tag">#OpenAI</a><a href="/tags/Anthropic/" class="tag">#Anthropic</a><a href="/tags/Claude Opus 5.5/" class="tag">#Claude Opus 5.5</a><a href="/tags/Claude Sonnet 5.5/" class="tag">#Claude Sonnet 5.5</a><a href="/tags/Google Gemini/" class="tag">#Google Gemini</a><a href="/tags/AI 编程/" class="tag">#AI 编程</a><a href="/tags/Agent 上下文管理/" class="tag">#Agent 上下文管理</a><a href="/tags/评论/" class="tag">#评论</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>GPT-6.1 Sol <strong>默认上下文从 272k 扩到 500k（+80%）</strong> + <strong>订阅用户免长上下文附加费</strong>——<strong>上下文窗口赛道 2026 Q4</strong>：<strong>OpenAI 500k 默认 / 1M 上限</strong> vs <strong>Anthropic Claude 1M 默认</strong> vs <strong>Google 待公布</strong>。<strong>核心信号</strong>——<strong>窗口竞赛已从「比谁大」转向「比谁不压缩」</strong>——<strong>Tibo 7 月踩过「272k→372k 反而扣更多」的坑</strong>。<strong>3 家哲学</strong>：(1) OpenAI 保守 (2) Anthropic 激进默认 1M (3) Google 待定。<strong>对开发者</strong>——<strong>耐心不会跟着窗口扩容</strong>——<strong>正确做法是「压缩 + 缓存 + 子 Agent」</strong>。</p>
+</blockquote>
+<h2 id="一事件--核心数据">一、事件 / 核心数据</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项</th><th>详情</th></tr></thead><tbody><tr><td><strong>时间</strong></td><td>2026-10-12 / 10-13</td></tr><tr><td><strong>更新</strong></td><td>OpenAI Day 7 更新</td></tr><tr><td><strong>模型</strong></td><td><strong>GPT-6.1 Sol</strong></td></tr><tr><td><strong>默认上下文</strong></td><td><strong>272k → 500k</strong>（<strong>+80%</strong>）</td></tr><tr><td><strong>上限</strong></td><td><strong>1M</strong>（用户手动可调）</td></tr><tr><td><strong>订阅价</strong></td><td><strong>免长上下文附加费</strong>（Tibo 公告）</td></tr><tr><td><strong>API 价</strong></td><td>仍按标准 API 价格表计费</td></tr><tr><td><strong>踩过的坑</strong></td><td>今年 7 月 OpenAI 把 272k→372k，<strong>订阅用量扣得比预期多</strong>——<strong>退回 272k</strong>——<strong>这次吸取教训</strong></td></tr><tr><td><strong>来源</strong></td><td><strong>新智元</strong>（Xinzhiyuan，<strong>专业 AI 媒体</strong>——比普通 163 自媒体可信度高）</td></tr></tbody></table>
+<hr>
+<h2 id="二上下文窗口赛道-2026-q4-三家策略对比">二、上下文窗口赛道 2026 Q4 三家策略对比</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>厂商</th><th>默认窗口</th><th>上限</th><th>收费策略</th><th>哲学</th></tr></thead><tbody><tr><td><strong>OpenAI</strong>（GPT-6.1 Sol）</td><td><strong>500k</strong></td><td><strong>1M</strong></td><td><strong>订阅免附加费</strong> / API 标准表</td><td><strong>保守</strong>——避免重蹈 7 月扣量翻车</td></tr><tr><td><strong>Anthropic</strong>（Opus 5.5 / Sonnet 5.5）</td><td><strong>1M</strong></td><td>1M+</td><td><strong>1M 内不涨单价</strong></td><td><strong>激进</strong>——直接默认 1M</td></tr><tr><td><strong>Google</strong>（Gemini）</td><td><strong>未公布</strong></td><td>1M+（推测）</td><td>推测类似 Anthropic</td><td><strong>待公布</strong></td></tr></tbody></table>
+<h3 id="关键差异">关键差异</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>OpenAI</th><th>Anthropic</th></tr></thead><tbody><tr><td><strong>默认窗口</strong></td><td>500k（<strong>+80% 增长</strong>）</td><td>1M（<strong>直接给两倍</strong>）</td></tr><tr><td><strong>用户实际体感</strong></td><td>「窗口变大了，但 Tibo 主动说不收附加费——<strong>这是 win</strong>」</td><td>「直接 1M 开箱即用」</td></tr><tr><td><strong>风险</strong></td><td>7 月踩过 272k→372k→272k 反复——<strong>订阅用量扣得比预期多</strong></td><td>没踩过类似坑</td></tr><tr><td><strong>压缩策略</strong></td><td>Codex 默认 272k 触发压缩（<strong>2 分钟等</strong>）</td><td>Claude 默认 967k 触发自动压缩 + 子 Agent 隔离</td></tr></tbody></table>
+<hr>
+<h2 id="三为什么-openai-这次-500k-不是-1m">三、为什么 OpenAI 这次 500k 不是 1M</h2>
+<h3 id="31-tibo-的理由">3.1 Tibo 的理由</h3>
+<blockquote>
+<p><strong>OpenAI 这次默认给 500k，是因为测试后认为，这个设置更适合多数用户。</strong></p>
+</blockquote>
+<p><strong>含义</strong>：</p>
+<ul>
+<li><strong>1M 是个宣传数字</strong>——<strong>OpenAI 也能给</strong>——<strong>GPT-6.1 Sol 上限确实是 1M</strong></li>
+<li>**但 500k 是「<strong>用得着 + 跑得起</strong>」<strong>的甜蜜点</strong></li>
+<li><strong>用户手动可调到 1M</strong>——<strong>如果他们真的需要</strong></li>
+</ul>
+<h3 id="32-tibo-7-月踩过的坑">3.2 Tibo 7 月踩过的坑</h3>
+<blockquote>
+<p><strong>今年 7 月，OpenAI 把产品里的上下文从 272k 提高到 372k，供 GPT-5.6 Sol 使用。结果订阅用量扣得比预期多，团队又退回 272k。刚加上去的容量，转头就收了回去。</strong></p>
+</blockquote>
+<p><strong>原因</strong>：</p>
+<ul>
+<li><strong>你以为只多了 100k 窗口</strong>——<strong>实际每次读取多扣 token</strong></li>
+<li>「<strong>你只敲了一句「继续」，Agent 要接着改代码，仍得带上前面读过的文件、测试结果和要求</strong>」</li>
+<li><strong>缓存能复用已经处理过的内容，读取成本更低</strong>——<strong>但每次读取仍会计入用量</strong></li>
+<li><strong>读的内容和次数一多</strong>——<strong>消耗就累积起来</strong></li>
+</ul>
+<h3 id="33-这次免费--谨慎的策略">3.3 这次「<strong>免费 + 谨慎</strong>」的策略</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>决策</th><th>详情</th></tr></thead><tbody><tr><td><strong>默认 500k</strong>（不是 1M）</td><td>避开 7 月那种「<strong>默认值太激进 → 订阅扣光</strong>」的坑</td></tr><tr><td><strong>订阅免附加费</strong></td><td>主动承担长期上下文增量的成本——<strong>留住用户</strong></td></tr><tr><td><strong>API 仍按标准表</strong></td><td>开发者主动调 1M 的——<strong>按 token 单价付费</strong>——<strong>OpenAI 不亏</strong></td></tr><tr><td><strong>用户可手动 1M</strong></td><td><strong>上限不卡</strong>——<strong>真需要的人能跑</strong>——但「<strong>默认值保守</strong>」保护 95% 普通用户</td></tr></tbody></table>
+<hr>
+<h2 id="四anthropic-的-1m-默认激进但聪明">四、Anthropic 的 1M 默认：激进但聪明</h2>
+<h3 id="41-claude-code-默认-1m-的工程实现">4.1 Claude Code 默认 1M 的工程实现</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>详情</th></tr></thead><tbody><tr><td><strong>自动压缩点</strong></td><td><strong>约 967k</strong>（接近上限时触发）</td></tr><tr><td><strong>压缩策略 1</strong></td><td>移除较早的<strong>工具输出</strong>（读文件 / 跑命令）</td></tr><tr><td><strong>压缩策略 2</strong></td><td>把对话<strong>整理成摘要</strong>——<strong>保留当前需求 + 关键代码</strong></td></tr><tr><td><strong>压缩策略 3</strong></td><td><strong>子 Agent 隔离</strong>——<strong>查文件这类子任务交给子 Agent</strong>——<strong>自己的上下文</strong>——<strong>查完把结果摘要交回</strong>——<strong>主对话不塞整段查找过程</strong></td></tr></tbody></table>
+<h3 id="42-vs-openai-的差异">4.2 vs OpenAI 的差异</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>OpenAI GPT-6.1 Sol</th><th>Anthropic Claude</th></tr></thead><tbody><tr><td><strong>默认窗口</strong></td><td>500k</td><td>1M</td></tr><tr><td><strong>压缩触发</strong></td><td>272k</td><td>967k</td></tr><tr><td><strong>压缩算法</strong></td><td>「<strong>先把前面的对话和工作进度压缩整理一遍</strong>」</td><td>「<strong>工具输出 + 对话摘要 + 子 Agent 隔离</strong>」——<strong>三层组合</strong></td></tr><tr><td><strong>开发者期望</strong></td><td>500k 够用 95% 用户</td><td>1M 默认——<strong>Claude 赌的是「<strong>用户能负担得起</strong>」</strong></td></tr><tr><td><strong>风险</strong></td><td>7 月踩过</td><td>还没踩过（但如果 1M 用户量足够大——<strong>可能会</strong>）</td></tr></tbody></table>
+<hr>
+<h2 id="五google-gemini--第三个玩家未明牌">五、Google Gemini — 第三个玩家（未明牌）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>推测</th></tr></thead><tbody><tr><td><strong>默认窗口</strong></td><td>未公布——<strong>可能 1M+</strong>（Gemini 1.5 Pro 当年就是 1M 先锋）</td></tr><tr><td><strong>收费</strong></td><td><strong>推测与 Anthropic 类似</strong>——<strong>1M 内不涨单价</strong></td></tr><tr><td><strong>策略</strong></td><td>推测**「<strong>默认 1M + 压缩算法</strong>」**——<strong>不跟 OpenAI 走保守路线</strong></td></tr><tr><td><strong>风险</strong></td><td>看 OpenAI 7 月翻车后——<strong>Google 会更谨慎设计压缩触发点</strong></td></tr></tbody></table>
+<p><strong>没有明确信息</strong>——<strong>等 Google 10-14 / 10-15 Gemini 发布会</strong>（如果有）。</p>
+<hr>
+<h2 id="六核心信号窗口竞赛从比谁大转向比谁不压缩">六、核心信号：窗口竞赛从「<strong>比谁大</strong>」转向「<strong>比谁不压缩</strong>」</h2>
+<h3 id="61-旧时代谁窗口大谁赢">6.1 旧时代——「<strong>谁窗口大谁赢</strong>」</h3>
+<blockquote>
+<p><strong>Claude Code 里的 Opus 5.5 和 Sonnet 5.5，默认上下文已是 1M，相当于 Codex 这次新默认值的两倍。</strong></p>
+</blockquote>
+<p>旧竞赛：<strong>1M vs 500k vs 1M</strong>——<strong>比绝对数字</strong>——<strong>数字大 = 赢</strong>。</p>
+<h3 id="62-新时代比压缩算法">6.2 新时代——「<strong>比压缩算法</strong>」</h3>
+<p><strong>核心问题</strong>不再是「<strong>窗口多大</strong>」——<strong>是「<strong>窗口快满时怎么处理</strong>」</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>处理方式</th><th>谁用</th><th>效果</th></tr></thead><tbody><tr><td><strong>直接压缩对话</strong></td><td>OpenAI（<strong>2 分钟等</strong>）</td><td>用户体感：等待 + 可能丢细节</td></tr><tr><td><strong>分层压缩（工具输出 + 摘要 + 子 Agent）</strong></td><td>Anthropic</td><td>用户体感：透明 + 不丢关键信息</td></tr><tr><td><strong>用户自己切 1M</strong></td><td>少数</td><td>自由度高但<strong>得自己管成本</strong></td></tr></tbody></table>
+<p><strong>Anthropic 赢的不是窗口大小</strong>——<strong>是「<strong>压缩算法让 1M 用起来像 2M</strong>」</strong>。</p>
+<h3 id="63-用户实际工作流">6.3 用户实际工作流</h3>
+<p><strong>Tibo 给的开发者的真话</strong>：</p>
+<blockquote>
+<p><strong>窗口还会变大，但开发者的耐心不能跟着扩容。代码交给 AI 之后，总该少等几次，也少说几遍「这个要求我前面讲过了」。</strong></p>
+</blockquote>
+<p><strong>含义</strong>：</p>
+<ul>
+<li><strong>1M 窗口</strong>≠<strong>1M 体验</strong>——<strong>等压缩 + 听重复 + 看错误 = 用户实际体感</strong></li>
+<li>**真正的「<strong>大上下文</strong>」<strong>是「<strong>少压缩 + 少重复 + 少丢细节</strong>」</strong>——<strong>这些是压缩算法的事</strong></li>
+<li><strong>OpenAI / Anthropic / Google 接下来 6-12 个月的竞赛焦点</strong>——<strong>不是「<strong>给 1M 默认</strong>」</strong>——<strong>是「<strong>给 1M 默认 + 不压缩</strong>」</strong></li>
+</ul>
+<hr>
+<h2 id="七对-sam和开发者的-3-点启示">七、对 Sam（和开发者）的 3 点启示</h2>
+<h3 id="71-别光看窗口大看压缩算法">7.1 别光看「<strong>窗口大</strong>」——看「<strong>压缩算法</strong>」</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Provider</th><th>默认窗口</th><th>压缩策略</th><th>实际体感</th></tr></thead><tbody><tr><td>OpenAI GPT-6.1 Sol</td><td>500k</td><td><strong>2 分钟压缩</strong></td><td>等 + 可能丢</td></tr><tr><td>Anthropic Claude 1M</td><td>1M</td><td><strong>工具输出移除 + 对话摘要 + 子 Agent</strong></td><td>透明</td></tr><tr><td>Google Gemini</td><td>推测 1M+</td><td>推测类似 Anthropic</td><td>待公布</td></tr></tbody></table>
+<p><strong>建议</strong>——<strong>选模型时</strong>：</p>
+<ul>
+<li><strong>短任务（&#x3C; 50k token）</strong>——<strong>OpenAI / Anthropic 都没差</strong>——<strong>选便宜的</strong></li>
+<li><strong>长任务（> 200k token）</strong>——<strong>Anthropic 压缩算法目前领先</strong>——<strong>多花点钱买体验</strong></li>
+<li><strong>超长任务（> 500k）</strong>——<strong>Anthropic 1M + 智能压缩</strong>——<strong>OpenAI 500k 够用但要手动调 1M</strong></li>
+</ul>
+<h3 id="72-hermes-agent--the-hive-的上下文管理架构">7.2 Hermes Agent / The Hive 的「<strong>上下文管理</strong>」架构</h3>
+<p><strong>3 层设计</strong>（学 Anthropic）：</p>
+<ol>
+<li><strong>工具输出隔离</strong>——<strong>读文件 / 跑命令的原始输出不进主 Agent 上下文</strong>——<strong>进子 Agent 摘要</strong></li>
+<li><strong>主 Agent 摘要</strong>——<strong>每 50k token 自动压缩当前任务 + 关键代码</strong></li>
+<li><strong>子 Agent 隔离</strong>——<strong>长任务分解</strong>——<strong>每个子 Agent 自己的上下文</strong>——<strong>完成后只回摘要</strong></li>
+</ol>
+<p><strong>意义</strong>——**Hermes Agent 的「<strong>几千技能</strong>」<strong>架构</strong>——<strong>如果没上下文管理</strong>——<strong>5 个 skill × 每个 100k 输出 = 500k 主 Agent 直接炸</strong>——<strong>必须分层 + 子 Agent</strong>。</p>
+<h3 id="73-wcec-it-视角窗口不是越大越好">7.3 WCEC IT 视角——「<strong>窗口不是越大越好</strong>」</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>场景</th><th>500k 够用</th><th>1M 必要</th></tr></thead><tbody><tr><td><strong>学生用 ChatGPT 问问题</strong></td><td>✅ 500k 远大于学生输入</td><td>❌</td></tr><tr><td><strong>老师用 ChatGPT 备课</strong></td><td>✅ 够</td><td>❌</td></tr><tr><td><strong>学校用 Codex 写代码项目</strong></td><td>✅（如果项目分模块）</td><td>看项目大小</td></tr><tr><td><strong>学校用 Agent 跑数据分析</strong></td><td>看数据量</td><td><strong>如果数据 > 500k 必须 1M</strong></td></tr><tr><td><strong>学校用 Agent 跑多文档 RAG</strong></td><td>多数情况 ✅</td><td>大型文档库（如全校 5 年教案）</td></tr></tbody></table>
+<p><strong>建议</strong>：WCEC 的 AI 部署<strong>默认 500k / 1M 按需</strong>——<strong>不必为 1M 多花钱</strong>——<strong>用 95% 学生 + 老师场景都够</strong>。</p>
+<hr>
+<h2 id="八可信度红旗">八、可信度红旗</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>红旗</th><th>详情</th><th>判断</th></tr></thead><tbody><tr><td><strong>来源新智元</strong></td><td><strong>专业 AI 媒体</strong>——比普通 163 自媒体高</td><td><strong>置信度：中-高</strong></td></tr><tr><td><strong>OpenAI Day 7 具体更新</strong></td><td>没给具体 changelog 链接</td><td><strong>置信度：中</strong>——<strong>可核 platform.openai.com</strong></td></tr><tr><td><strong>Tibo 公告原话</strong></td><td>引用自 X 帖——<strong>有 X 帖链</strong></td><td><strong>置信度：高</strong></td></tr><tr><td><strong>「<strong>7 月踩坑</strong>」</strong></td><td>引用 Tibo 早期 X 帖 + 开发者 Theo 评论</td><td><strong>置信度：中-高</strong></td></tr><tr><td><strong>「<strong>Anthropic Claude 默认 1M</strong>」</strong></td><td>事实陈述</td><td><strong>置信度：高</strong></td></tr><tr><td><strong>「<strong>Google Gemini 未公布</strong>」</strong></td><td>文章自己标</td><td><strong>置信度：高</strong></td></tr><tr><td><strong>压缩时间「<strong>2 分钟</strong>」</strong></td><td>开发者 Lasse 推文</td><td><strong>置信度：中</strong></td></tr></tbody></table>
+<hr>
+<h2 id="九未验证部分--待核清单">九、未验证部分 + 待核清单</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>待核项</th><th>建议核验源</th><th>判断</th></tr></thead><tbody><tr><td><strong>OpenAI Day 7 changelog</strong></td><td>platform.openai.com / OpenAI 官方 blog</td><td><strong>可核</strong></td></tr><tr><td><strong>GPT-6.1 Sol 1M 上限</strong></td><td>OpenAI API 文档</td><td><strong>可核</strong></td></tr><tr><td><strong>Anthropic Claude 自动压缩点 967k</strong></td><td>Claude Code 文档 / 源码</td><td><strong>可核</strong></td></tr><tr><td><strong>Google Gemini 上下文窗口策略</strong></td><td>10-14 / 10-15 发布会（如果有）</td><td><strong>可核</strong>（<strong>最高优先级</strong>）</td></tr><tr><td><strong>「<strong>Tibo 7 月踩坑</strong>」原帖</strong></td><td>X / OpenAI 论坛</td><td><strong>可核</strong></td></tr><tr><td><strong>「<strong>Claude Opus 5.5 / Sonnet 5.5 默认 1M</strong>」</strong></td><td>Anthropic 官方</td><td><strong>可核</strong></td></tr><tr><td><strong>X 帖 thsottiaux 链接</strong></td><td>原文给的 X URL</td><td><strong>可核</strong></td></tr></tbody></table>
+<hr>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/gpt-6-1-sol-500k-context-vs-claude-1m-2026-10-13/image-01.png" alt="上下文窗口赛道 2026 Q4：OpenAI GPT-6.1 Sol 500k 默认 vs Anthropic Claude Opus 5.5/Sonnet 5.5 1M 默认 双面板对比" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：上下文窗口赛道 2026 Q4 双面板对比 — 左侧 OpenAI（绿色，500K 默认，订阅免附加费 + API 按 token + 手动可至 1M，哲学「保守（避 7 月扣量翻车）」），右侧 Anthropic（橙色，1M 默认，1M 内不涨单价 + 工具输出隔离 + 子 Agent 隔离，哲学「激进（压缩算法领先）」）。中央「vs」徽标 + 红色三角警告 + 「窗口竞赛 → 压缩算法竞赛」副标题。底部 3 个 callout：Day 7 OpenAI / +80% 扩容 / 免附加费 Tibo。</p>
+</div>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/L92IVOGR0511ABV6.html">163 转载新智元：GPT-6.1 Sol 一夜扩容 500k！完全免费</a></li>
+<li>早前相关：<a href="/research/openai-gpt-6-1-sol-launch/">OpenAI 发布 GPT-6.1 Sol：性能媲美 Astra，费用仅为 1/5</a>（09-30）</li>
+<li>早前相关：<a href="/research/openai-devday-2026-glm-kimi/">OpenAI DevDay 2026 速递：Codex 接入 GLM/Kimi + GPT-6.1 Sol + 24 小时 Agent Dots 首发</a>（09-30）</li>
+<li>早前相关：<a href="/research/anthropic-sonnet-5-5-launch/">Anthropic Sonnet 5.5 发布：编程能力从 10% 飙到 70%</a>（09-29）</li>
+<li>早前相关：<a href="/research/anthropic-claude-haiku-55-cost-down-75pct/">Anthropic Claude Haiku 5.5：成本较 4.5 低 75%</a>（10-08）</li>
+<li>早前相关：<a href="/research/claude-too-expensive-microsoft-meta-meta/">Claude 太贵了！微软砍掉超三成预算</a>（10-06）</li>
+<li>早前相关：<a href="/research/hermes-agent-self-hosted-ubuntu-cloud-marketplace/">Hermes Agent 自托管 Ubuntu 云服务器</a>（10-03）</li>
+<li>待核：OpenAI changelog / Anthropic 自动压缩点 / Google 10 月发布会</li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

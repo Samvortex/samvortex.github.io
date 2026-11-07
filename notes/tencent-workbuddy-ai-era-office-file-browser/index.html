@@ -1,0 +1,442 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>腾讯再出手，WorkBuddy 想做 AI 时代的 Office — 右键菜单成为新战场，独立文件浏览器 · Samvortex Hub</title><meta name="description" content="腾讯 WorkBuddy 发布第三波&#34;AI 时代 Office&#34;——独立文件浏览器。右键本地文件 → WorkBuddy 打开 → 左侧看文件、右侧叫 AI，改完直接保存回原文件。&#34;办公三件套&#34;入口从对话框走向你电脑里的每个文件。三波进化：7 月底人机双写（AI 进文档跟你一起改）/ 8 月中 HTML 人机双写 / 这次独立文件浏览器（右键入口）。文件支持 Office 三件套 / PDF / Markdown / HTML / TXT / 图片 / 音频 + 腾讯文档在线文档，可设默认双击。
+"><link rel="canonical" href="https://samvortex.com/notes/tencent-workbuddy-ai-era-office-file-browser/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="腾讯再出手，WorkBuddy 想做 AI 时代的 Office — 右键菜单成为新战场，独立文件浏览器 · Samvortex Hub"><meta property="og:description" content="腾讯 WorkBuddy 发布第三波&#34;AI 时代 Office&#34;——独立文件浏览器。右键本地文件 → WorkBuddy 打开 → 左侧看文件、右侧叫 AI，改完直接保存回原文件。&#34;办公三件套&#34;入口从对话框走向你电脑里的每个文件。三波进化：7 月底人机双写（AI 进文档跟你一起改）/ 8 月中 HTML 人机双写 / 这次独立文件浏览器（右键入口）。文件支持 Office 三件套 / PDF / Markdown / HTML / TXT / 图片 / 音频 + 腾讯文档在线文档，可设默认双击。
+"><meta property="og:url" content="https://samvortex.com/notes/tencent-workbuddy-ai-era-office-file-browser/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="腾讯再出手，WorkBuddy 想做 AI 时代的 Office — 右键菜单成为新战场，独立文件浏览器 · Samvortex Hub"><meta name="twitter:description" content="腾讯 WorkBuddy 发布第三波&#34;AI 时代 Office&#34;——独立文件浏览器。右键本地文件 → WorkBuddy 打开 → 左侧看文件、右侧叫 AI，改完直接保存回原文件。&#34;办公三件套&#34;入口从对话框走向你电脑里的每个文件。三波进化：7 月底人机双写（AI 进文档跟你一起改）/ 8 月中 HTML 人机双写 / 这次独立文件浏览器（右键入口）。文件支持 Office 三件套 / PDF / Markdown / HTML / TXT / 图片 / 音频 + 腾讯文档在线文档，可设默认双击。
+"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-08T00:00:00.000Z"><meta property="article:modified_time" content="2026-10-10T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-08T00:00:00.000Z">2026年10月8日</time>  <span>·</span> <span>更新于 2026年10月10日</span>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">腾讯再出手，WorkBuddy 想做 AI 时代的 Office — 右键菜单成为新战场，独立文件浏览器</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">腾讯 WorkBuddy 发布第三波&quot;AI 时代 Office&quot;——独立文件浏览器。右键本地文件 → WorkBuddy 打开 → 左侧看文件、右侧叫 AI，改完直接保存回原文件。&quot;办公三件套&quot;入口从对话框走向你电脑里的每个文件。三波进化：7 月底人机双写（AI 进文档跟你一起改）/ 8 月中 HTML 人机双写 / 这次独立文件浏览器（右键入口）。文件支持 Office 三件套 / PDF / Markdown / HTML / TXT / 图片 / 音频 + 腾讯文档在线文档，可设默认双击。
+</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/腾讯/" class="tag">#腾讯</a><a href="/tags/Tencent/" class="tag">#Tencent</a><a href="/tags/WorkBuddy/" class="tag">#WorkBuddy</a><a href="/tags/AI Office/" class="tag">#AI Office</a><a href="/tags/AI 时代 Office/" class="tag">#AI 时代 Office</a><a href="/tags/独立文件浏览器/" class="tag">#独立文件浏览器</a><a href="/tags/右键菜单/" class="tag">#右键菜单</a><a href="/tags/右键打开/" class="tag">#右键打开</a><a href="/tags/人机双写/" class="tag">#人机双写</a><a href="/tags/Markdown/" class="tag">#Markdown</a><a href="/tags/HTML/" class="tag">#HTML</a><a href="/tags/docx/" class="tag">#docx</a><a href="/tags/Word/" class="tag">#Word</a><a href="/tags/WPS/" class="tag">#WPS</a><a href="/tags/腾讯文档/" class="tag">#腾讯文档</a><a href="/tags/ima/" class="tag">#ima</a><a href="/tags/乐享知识库/" class="tag">#乐享知识库</a><a href="/tags/微信小程序/" class="tag">#微信小程序</a><a href="/tags/微信/" class="tag">#微信</a><a href="/tags/Marvis/" class="tag">#Marvis</a><a href="/tags/桌面办公智能体/" class="tag">#桌面办公智能体</a><a href="/tags/文件上下文/" class="tag">#文件上下文</a><a href="/tags/Agent 入口/" class="tag">#Agent 入口</a><a href="/tags/右键双击/" class="tag">#右键双击</a><a href="/tags/2 个月 25 版/" class="tag">#2 个月 25 版</a><a href="/tags/GitHub/" class="tag">#GitHub</a><a href="/tags/WorkBuddy 蓝皮书/" class="tag">#WorkBuddy 蓝皮书</a><a href="/tags/AI Office 战争/" class="tag">#AI Office 战争</a><a href="/tags/易观/" class="tag">#易观</a><a href="/tags/6000 万月访问/" class="tag">#6000 万月访问</a><a href="/tags/2097 万访问/" class="tag">#2097 万访问</a><a href="/tags/入口之争/" class="tag">#入口之争</a><a href="/tags/Windows File Explorer/" class="tag">#Windows File Explorer</a><a href="/tags/Open with/" class="tag">#Open with</a><a href="/tags/C 盘清理/" class="tag">#C 盘清理</a><a href="/tags/Word/" class="tag">#Word</a><a href="/tags/Excel/" class="tag">#Excel</a><a href="/tags/PPT/" class="tag">#PPT</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<p>腾讯 WorkBuddy 发布第三波”AI 时代 Office”——独立文件浏览器。右键本地文件 → WorkBuddy 打开 → 左侧看文件、右侧叫 AI，改完直接保存回原文件。“办公三件套”入口从对话框走向你电脑里的每个文件。三波进化：7 月底人机双写（AI 进文档跟你一起改）/ 8 月中 HTML 人机双写 / 这次独立文件浏览器（右键入口）。文件支持 Office 三件套 / PDF / Markdown / HTML / TXT / 图片 / 音频 + 腾讯文档在线文档，可设默认双击。设计：AI 面板默认收起 / 每个标签独立对话上下文 / 不扫磁盘只读主动打开的。三大场景：培训方案 docx 五处修改只写回受影响的段落并附修改清单 / AI 吐的 md 与 html 直接渲染可点改保存 / Excel 问卷转 HTML 单页报告可分享链接。保护：Word 占着文件时 WB 只能看不能改 / 文件别处被改保存前提示刷新或另存。移动端微信里甩过来的 md/html 通过小程序”用其他应用打开”——能查看 + 加入对话变附件卡，不能编辑。整套链路：编辑器来自腾讯文档 → 改完传资料库/腾讯文档/ima/乐享 → 微信接住。6 月易观统计 17 款国内桌面端 AI 原生办公智能体月访问量破 6000 万次，其中 WorkBuddy 2097 万次。微软也把 AI 操作加进了 Windows 文件资源管理器右键菜单。“AI 时代 Office”之争 = 双击这一下的归属权。</p>
+<hr>
+<h2 id="一第三波独立文件浏览器">一、第三波：独立文件浏览器</h2>
+<p>WorkBuddy 自 7 月以来的三波进化：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>时间</th><th>波次</th><th>关键能力</th></tr></thead><tbody><tr><td>7 月底</td><td>第一波</td><td>人机双写（AI 进文档跟你一起改）</td></tr><tr><td>8 月中</td><td>第二波</td><td>HTML 人机双写</td></tr><tr><td>10 月初</td><td><strong>第三波</strong></td><td><strong>独立文件浏览器（右键入口）</strong></td></tr></tbody></table>
+<p>入口从对话框走向每个本地文件。</p>
+<hr>
+<h2 id="二独立文件浏览器产品形态">二、独立文件浏览器：产品形态</h2>
+<h3 id="支持文件类型">支持文件类型</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>类别</th><th>类型</th></tr></thead><tbody><tr><td>Office 三件套</td><td>docx / xlsx / pptx</td></tr><tr><td>文本</td><td>PDF / Markdown / HTML / TXT</td></tr><tr><td>多媒体</td><td>图片 / 音频</td></tr><tr><td>在线</td><td>腾讯文档在线文档</td></tr></tbody></table>
+<p>设成默认打开方式后 → 双击文件直接进入。</p>
+<h3 id="三个关键设计选择">三个关键设计选择</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>决策</th><th>详情</th></tr></thead><tbody><tr><td>AI 面板默认收起</td><td>打开文件时右侧对话栏是收着的，先让你安静看文档，要用再点”和 WorkBuddy 对话”</td></tr><tr><td>对话跟着文件走</td><td>一个窗口能开多个标签，切到哪个文件，右边就是哪个文件的对话；也同步到主窗口</td></tr><tr><td>不扫磁盘</td><td>只读取你主动打开的文件，不会遍历扫描整个硬盘</td></tr></tbody></table>
+<hr>
+<h2 id="三三大使用场景">三、三大使用场景</h2>
+<h3 id="场景-1修改-docx只写回受影响段落">场景 1：修改 docx（只写回受影响段落）</h3>
+<p>工作流：</p>
+<ol>
+<li>右键《培训方案-V1.docx》→ WorkBuddy 打开</li>
+<li>选中写死的某行 → 点”AI 编辑” → 改为”待客户确认”</li>
+<li>客户 5 条补充以附件形式发给右侧对话</li>
+<li>prompt：按附件 5 条修改方案，只改受影响的段落，总时长保持 780 分钟，改完列修改清单 + 自查每天时间加总</li>
+<li>Cmd + S 保存 → 仍是同一个文件，只有修改时间变了</li>
+</ol>
+<h3 id="场景-2ai-吐的-md-与-html-直接渲染可改">场景 2：AI 吐的 md 与 html 直接渲染可改</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>文件</th><th>普通打开方式</th><th>WorkBuddy 打开方式</th></tr></thead><tbody><tr><td>.md</td><td>满屏井号星号</td><td>渲染成排版后正文，可点改</td></tr><tr><td>.html</td><td>浏览器只能看不能改</td><td>点”编辑”切换手动 / AI 双写</td></tr></tbody></table>
+<p>测试用例：公众号稿 .md + 排版 Skill 输出 .html + 蓝皮书 28 章全是 .md — 全部点哪改哪。AI prompt：“按右键打开、选中修改、存回原文件的新流程重写这一节，其他内容不动” — 改动只动这一节，git diff 干净。</p>
+<h3 id="场景-3excel-问卷--html-单页报告">场景 3：Excel 问卷 → HTML 单页报告</h3>
+<p>工作流：</p>
+<ol>
+<li>右键 18 人训前问卷汇总表 → WorkBuddy 打开</li>
+<li>prompt：按这份问卷做网页版训前调研报告，给客户 HR 看（各部门 AI 基础、最耗时任务、最该优先讲的 3 个场景 + 依据哪几份问卷）；单页 HTML，手机也能看；数字必须能回到表里</li>
+<li>生成的 HTML 默认放在问卷表同一个文件夹，对话里点一下新标签打开</li>
+<li>HTML 本身支持人机双写：点”编辑”手动改标题 / 选中让 AI 换配色 / 点”退出编辑”自动保存</li>
+<li>两条路径：
+<ul>
+<li>分享：传资料库 → 生成在线链接 → 设”获得链接的人可查看” → 发客户 HR</li>
+<li>上传：选资料库 / 腾讯文档 / ima 知识库 / 乐享 → 团队协作或留作下个项目参考</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="四保护机制">四、保护机制</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>风险</th><th>保护</th></tr></thead><tbody><tr><td>文件正被 Word 占着</td><td>WB 这边只能看不能改</td></tr><tr><td>文件在别处被改过</td><td>保存前提示刷新或另存为，不把同事修改悄悄盖掉</td></tr></tbody></table>
+<p>提醒：保存是直接覆盖原文件。模板 / 合同原件这类，先另存一份再改。</p>
+<hr>
+<h2 id="五移动端微信里用其他应用打开">五、移动端：微信里”用其他应用打开”</h2>
+<p>3 月 WorkBuddy 小程序上线时已与微信生态打通。这次补上 md / html 短板。</p>
+<p>微信本身的痛点：甩进群里的 md / html 文件，点开只有”暂不支持打开此类文件”。</p>
+<p>WorkBuddy 解法：提示语下方加选项”在打开方式列表里选 WorkBuddy 小程序”。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>操作</th><th>详情</th></tr></thead><tbody><tr><td>选”查看”</td><td>md 渲染成排版好的文档 / html 渲染成网页 / svg 也能看</td></tr><tr><td>选”加入对话”</td><td>文件变成附件卡片放进输入框，补一句要求让 AI 干活</td></tr></tbody></table>
+<p>实际效果：作者把 Instinct + Jev 模型调研报告 .md 直接发到群里 → 用小程序”加入对话”打开 → AI 自动问”这个模型和 Jev 的区别是啥”。</p>
+<p>限制：移动端只能看 + 对话，不能编辑。</p>
+<h3 id="pc-vs-移动端入口对比">PC vs 移动端入口对比</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>端</th><th>入口</th></tr></thead><tbody><tr><td>PC</td><td>右键 / 双击</td></tr><tr><td>移动</td><td>微信”用其他应用打开”</td></tr></tbody></table>
+<hr>
+<h2 id="六workbuddy-的产品哲学">六、WorkBuddy 的产品哲学</h2>
+<h3 id="路线分两条">路线分两条</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>路线</th><th>描述</th></tr></thead><tbody><tr><td>对话框在前</td><td>你说一句，AI 在后台把文件处理完</td></tr><tr><td>文件在前</td><td>文件在前面，AI 在旁边，看着它一处处改进原文件</td></tr></tbody></table>
+<p>WorkBuddy 两条都在走。独立文件浏览器是后一条。</p>
+<h3 id="上下文--文件">上下文 = 文件</h3>
+<blockquote>
+<p>“Agent 的能力在文件夹，不在模型。”</p>
+</blockquote>
+<p>文件就是最浓的那份上下文——打开它，背景、格式、改到哪一步，一次交给 AI，不用上传也不用再讲一遍。</p>
+<h3 id="腾讯整套牌">腾讯整套牌</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>层</th><th>来源</th></tr></thead><tbody><tr><td>编辑引擎</td><td>腾讯文档</td></tr><tr><td>存储后端</td><td>资料库 / 腾讯文档 / ima / 乐享</td></tr><tr><td>移动端</td><td>微信小程序</td></tr></tbody></table>
+<p>一个文件从打开 → 修改 → 入库 → 转发，都不出这条链路。</p>
+<hr>
+<h2 id="七行业竞争地图">七、行业竞争地图</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>玩家</th><th>动作</th></tr></thead><tbody><tr><td>腾讯</td><td>WorkBuddy 三波进化 + 独立文件浏览器</td></tr><tr><td>阿里 / 字节</td><td>都在抢桌面办公智能体入口</td></tr><tr><td>微软</td><td>Windows 文件资源管理器右键菜单加 AI 操作</td></tr></tbody></table>
+<h3 id="6-月易观统计">6 月易观统计</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>数据</th><th>数字</th></tr></thead><tbody><tr><td>国内 17 款主流桌面端 AI 原生办公智能体</td><td>月访问量合计 <strong>6000 万次</strong></td></tr><tr><td>WorkBuddy 单独</td><td><strong>2097 万次</strong></td></tr></tbody></table>
+<p>（呼应早些时候 Anthropic / Bessent 那篇报道里的数据）</p>
+<hr>
+<h2 id="八待优化点作者自评">八、待优化点（作者自评）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项</th><th>详情</th></tr></thead><tbody><tr><td>Office 编辑要登录</td><td>没登录只能看（Markdown 例外）</td></tr><tr><td>保存直接覆盖原文件</td><td>好用也危险，重要文件先另存</td></tr><tr><td>微信小程序</td><td>一次只能打开 1 个文件，多个文件得一个个来</td></tr></tbody></table>
+<hr>
+<h2 id="九对-sam-的-3-点启示">九、对 Sam 的 3 点启示</h2>
+<ol>
+<li><strong>入口之争的本质 = 文件上下文所有权</strong>：腾讯 / 阿里 / 字节 / 微软争桌面 AI 入口，核心不是模型能力，而是”你的文件先经过谁”。Sam 部署 Hermes Agent 到校园 IT 时，应考虑”文件 / 邮件 / 课表”先到 Hermes 而非 GitHub Copilot / 腾讯 TIONE 的入口策略——可以通过对接校园 IT 系统（共享盘 / 邮件 / OA）建立”日常文件先到 Hermes”的心智</li>
+<li><strong>“右键菜单 = 桌面 AI 入口” 是新共识</strong>：腾讯 + 微软 + Anthropic + Google 都在走这条路线（WorkBuddy 右键 / Windows 右键 / Claude Desktop / Gemini Flow / Stitch）。Sam 设计 Hermes Agent 时也该考虑”右键集成”——Mac 平台 Finder 右键服务 / Windows 上下文菜单，让”选中文件 → 右键 → Hermes 处理”成为肌肉记忆</li>
+<li><strong>“AI 面板默认收起”是好设计</strong>：WorkBuddy 这个细节值得借鉴——Hermes Agent 不要强行 push 对话框，让用户先安静看文档，需要时主动唤醒。Sam 之前 OpenClaw <code>&#x3C;compact_fallback></code> 设计也是同源哲学：“AI 在旁边，用户随时叫”</li>
+</ol>
+<hr>
+<h2 id="十10-10-补充袋鼠帝实测--新细节">十、10-10 补充：袋鼠帝实测 + 新细节</h2>
+<p>10-10 网易号 163 自媒体作者「袋鼠帝」发了同主题实测文，5 个点值得 update。</p>
+<h3 id="1-微信小程序能编辑和上一节只能看冲突">1. 微信小程序「能编辑」——和上一节「只能看」冲突</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>我 10-08 原文</th><th>袋鼠帝 10-10 实测</th></tr></thead><tbody><tr><td>移动端</td><td>「只能看 + 对话，不能编辑」</td><td>微信聊天 → 文件 → 更多打开方式 → WorkBuddy 小程序 → 选中 → AI 编辑</td></tr></tbody></table>
+<p><strong>判断</strong>：袋鼠帝明确写 Mac 5.7.6 实测能编辑，<strong>很可能是 5.7.6 起的版本更新</strong>。我 10-08 写的时候版本没跟上，<strong>以最新版为准——5.7.6+ 移动端可以编辑</strong>。</p>
+<h3 id="2-新场景合同审查docx-实战">2. 新场景：合同审查（docx 实战）</h3>
+<p>袋鼠帝给的合同审查流程：</p>
+<ol>
+<li>双击脱敏的《合作协议》.docx → WorkBuddy 打开</li>
+<li>右栏 prompt：「帮我把付款节点、交付标准、修改次数、违约责任这几条找出来，看看有没有对乙方不利的地方」</li>
+<li>AI 列出 4 条 + 主动提醒「修改次数未明确约定上限」（区分「未约定」和「允许无限修改」）</li>
+<li>选中那条 → AI 改为「不超过 2 次，超出部分另行计费」→ 写回合同原文</li>
+</ol>
+<p><strong>新增视角</strong>：我原文三大场景是「培训方案 / AI 吐的 md-html / Excel 问卷」，<strong>合同是 docx 的另一重量级用例</strong>——AI 既能做条款定位，又能在原文上原地改。</p>
+<h3 id="3-积分机制">3. 积分机制</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>行为</th><th>是否消耗</th></tr></thead><tbody><tr><td>看文件 / 手动改文件</td><td>❌</td></tr><tr><td>让 AI 干活（编辑 / 摘要 / 翻译）</td><td>✅</td></tr><tr><td>新注册 / 每日签到</td><td>送积分</td></tr><tr><td>成长计划</td><td>领 buddy 猫盲盒</td></tr></tbody></table>
+<p><strong>判断</strong>：「看/改免费、AI 干活才计费」是聪明设计——降低首次使用摩擦，把付费触发点放在「确实在用 AI 能力」那一刻。</p>
+<h3 id="4-版本号">4. 版本号</h3>
+<p>袋鼠帝实测 <strong>5.7.6 (Mac)</strong>。我 10-08 写时没记，下次单独更新时补上。</p>
+<h3 id="5-哲学框架对照">5. 哲学框架对照</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>框架</th><th>出处</th><th>表达</th></tr></thead><tbody><tr><td>「上下文 = 文件」</td><td>我 10-08 原文</td><td>文件是 AI 工作的最佳载体</td></tr><tr><td>「一切皆文件」</td><td>袋鼠帝 10-10</td><td>文件是入口的统一抽象（Unix 哲学）</td></tr></tbody></table>
+<p>两者同源，<strong>可并存引用</strong>。</p>
+<hr>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://www.163.com/news/a/L8O99JCG0556KPC7.html">网易新闻（甲木 / 优质互联网领域创作者）原文</a></li>
+<li><a href="https://github.com/anthropics/workbuddy-bluebook">WorkBuddy GitHub 蓝皮书</a>（28 章 / 3300+ star）</li>
+<li>早前相关：<a href="https://www.samvortex.com/research/tencent-marvis-ai-steward-nas/">腾讯 Marvis AI 管家 + NAS</a></li>
+<li>早前相关：<a href="https://www.samvortex.com/research/claude-too-expensive-microsoft-meta/">微软 Meta 砍 Claude 预算 / 算账期</a></li>
+<li>早前相关：<a href="https://www.samvortex.com/research/anthropic-claude-frontier-academy-10k-fde/">Anthropic 启动 1 万 FDE 培训计划</a></li>
+<li><a href="https://c.m.163.com/news/a/L8O5G2PN0556HRF3.html">袋鼠帝（163 网易号）· 10-10 补充实测</a></li>
+</ul>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/tencent-workbuddy-ai-era-office-file-browser/image-01.jpg" alt="WorkBuddy AI 时代 Office 右键入口" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：WorkBuddy 独立文件浏览器——右键成为 AI 时代 Office 新入口（甲木 · 2026-10-08）</p>
+</div> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

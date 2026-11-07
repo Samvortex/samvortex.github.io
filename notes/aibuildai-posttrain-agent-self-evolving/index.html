@@ -1,0 +1,659 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>让 AI 自己给大模型做后训练 — AIBuildAI 开源递归自进化 PostTrain Agent，登顶 PostTrainBench · Samvortex Hub</title><meta name="description" content="AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。
+"><link rel="canonical" href="https://samvortex.com/notes/aibuildai-posttrain-agent-self-evolving/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="让 AI 自己给大模型做后训练 — AIBuildAI 开源递归自进化 PostTrain Agent，登顶 PostTrainBench · Samvortex Hub"><meta property="og:description" content="AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。
+"><meta property="og:url" content="https://samvortex.com/notes/aibuildai-posttrain-agent-self-evolving/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="让 AI 自己给大模型做后训练 — AIBuildAI 开源递归自进化 PostTrain Agent，登顶 PostTrainBench · Samvortex Hub"><meta name="twitter:description" content="AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。
+"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-10-07T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-10-07T00:00:00.000Z">2026年10月7日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">让 AI 自己给大模型做后训练 — AIBuildAI 开源递归自进化 PostTrain Agent，登顶 PostTrainBench</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。
+</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/AIBuildAI/" class="tag">#AIBuildAI</a><a href="/tags/PostTrain Agent/" class="tag">#PostTrain Agent</a><a href="/tags/RSI/" class="tag">#RSI</a><a href="/tags/递归自我改进/" class="tag">#递归自我改进</a><a href="/tags/PostTrainBench/" class="tag">#PostTrainBench</a><a href="/tags/后训练/" class="tag">#后训练</a><a href="/tags/Agent/" class="tag">#Agent</a><a href="/tags/自我进化/" class="tag">#自我进化</a><a href="/tags/MCP/" class="tag">#MCP</a><a href="/tags/知识系统/" class="tag">#知识系统</a><a href="/tags/元搜索/" class="tag">#元搜索</a><a href="/tags/监督微调/" class="tag">#监督微调</a><a href="/tags/SFT/" class="tag">#SFT</a><a href="/tags/DPO/" class="tag">#DPO</a><a href="/tags/GRPO/" class="tag">#GRPO</a><a href="/tags/强化学习/" class="tag">#强化学习</a><a href="/tags/Qwen3-4B-Base/" class="tag">#Qwen3-4B-Base</a><a href="/tags/Qwen3-1.7B-Base/" class="tag">#Qwen3-1.7B-Base</a><a href="/tags/SmolLM3-3B-Base/" class="tag">#SmolLM3-3B-Base</a><a href="/tags/gemma-3-4b-pt/" class="tag">#gemma-3-4b-pt</a><a href="/tags/Claude Opus 5/" class="tag">#Claude Opus 5</a><a href="/tags/Claude Code/" class="tag">#Claude Code</a><a href="/tags/H100/" class="tag">#H100</a><a href="/tags/ICML 2026/" class="tag">#ICML 2026</a><a href="/tags/零人类介入/" class="tag">#零人类介入</a><a href="/tags/AIME 2025/" class="tag">#AIME 2025</a><a href="/tags/HealthBench/" class="tag">#HealthBench</a><a href="/tags/ArenaHard Writing/" class="tag">#ArenaHard Writing</a><a href="/tags/HumanEval/" class="tag">#HumanEval</a><a href="/tags/BFCL/" class="tag">#BFCL</a><a href="/tags/Fan-in/" class="tag">#Fan-in</a><a href="/tags/元 Agent/" class="tag">#元 Agent</a><a href="/tags/拒绝采样/" class="tag">#拒绝采样</a><a href="/tags/权重平均/" class="tag">#权重平均</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<p>AIBuildAI 发布并开源 PostTrain Agent——给基座模型 + 目标能力 + 算力预算，全程无人介入自主完成后训练（数据收集 / 算法设计 / 训练 / 评估 / 迭代）。PostTrainBench 加权综合分 46.6，排名第一，仅次于人类专家基线 51.1——超过 Locus 45.6、Claude Fable 5 + Claude Code 41.8、GPT-5.6 36.2、Kimi K3 32.0。同一 Claude Opus 5 模型下：AIBuildAI 系统 +11.6 分（vs Claude Code 35.0），七项任务六项领先。BFCL +94.3、ArenaHard Writing +12.1、HumanEval +9.2 三大增益——系统增益超过模型升级一代。BFCL（-95.8）唯一超过人类参考（85.0）的一项任务。核心组件：知识系统（MCP 服务 / 34 工作流 / 111 方法 / 215 数据集 / 108 框架文件 / 每条声明带 URL + 日期 + 评测基准文件剔除）+ 元搜索（元 Agent 调研任务后写出由 Agent / Program / Search 三种单元组成的搜索程序，可链式 / 扇出扇入 / 循环 / 分阶段 / 锦标赛，程序可阶段性地基于实测决定下一步）。两案例：HealthBench × Qwen3-4B-Base（基座 13.4 → 48.6）、ArenaHard Writing × SmolLM3-3B-Base（基座 0.4 → 74.6）。</p>
+<hr>
+<h2 id="一问题后训练能否完全自动化">一、问题：后训练能否完全自动化</h2>
+<p>后训练 = 把基座模型变成能遵循指令、会推理、会用工具、懂某个领域的过程——也是公司把通用模型变成”自己模型”的方式。</p>
+<p>决策耦合：</p>
+<ul>
+<li>数据：用什么 + 怎么配比</li>
+<li>算法：SFT / 偏好优化 / 强化学习</li>
+<li>超参：学习率、训练步数、checkpoint</li>
+</ul>
+<p>每次实验消耗可观算力。AIBuildAI 的研究问题：能否把这事完全交给 AI——输入基座模型 + 目标能力 + 算力预算，Agent 自己完成后训练流程，输出一个训练好的模型。</p>
+<hr>
+<h2 id="二posttrainbench">二、PostTrainBench</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>数据</th></tr></thead><tbody><tr><td>设定</td><td>单张 H100 / 10 小时 / 自主设计并执行后训练</td></tr><tr><td>评分</td><td>基准方持有的、Agent 看不到的评测集</td></tr><tr><td>任务覆盖</td><td>4 个基座模型 × 7 类任务</td></tr><tr><td>基座模型</td><td>Qwen3-4B-Base 等</td></tr><tr><td>任务</td><td>数学推理（AIME 2025、GSM8K）、写作（ArenaHard Writing）、通用问答（GPQA）、健康咨询（HealthBench）、代码（HumanEval）、函数调用（BFCL）</td></tr></tbody></table>
+<p>Agent 自己决定用哪些数据 + 怎么混合 + 选什么算法 + 哪些超参。</p>
+<hr>
+<h2 id="三从基线到-rsi-系统的演进">三、从基线到 RSI 系统的演进</h2>
+<h3 id="线性搜索基线做法">线性搜索（基线做法）</h3>
+<p>把编码 Agent（如 Claude Code）直接指向任务：一个会话、一个 CLI 环境，给基座模型 + 数据 + GPU + 评测器，让它自己规划、写代码、训练、评估。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>局限</th><th>详情</th></tr></thead><tbody><tr><td>每次尝试修改上一次</td><td>方案很早就定下</td></tr><tr><td>几个思路无法并行</td><td>一条走不通的方向耗光预算</td></tr><tr><td>知识仅来自模型参数</td><td>没外部证据</td></tr></tbody></table>
+<h3 id="aibuildai-此前的整实验树搜索">AIBuildAI 此前的整实验树搜索</h3>
+<p>一次运行是一棵实验树。每个节点是一次完整实验，由任务评测程序打分，价值 = 树上的最高分。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>角色</th><th>职责</th></tr></thead><tbody><tr><td>设计员 Agent</td><td>播下若干互异起始方案，每个是一条分支的根</td></tr><tr><td>实验员 Agent</td><td>端到端跑一个实验并提修改建议，成为子实验</td></tr><tr><td>选择器</td><td>按预期收益 + 证据 + 新颖性 + 成本为等待 GPU 的候选排序</td></tr></tbody></table>
+<h3 id="新系统针对后训练的两限制">新系统针对后训练的两限制</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>限制</th><th>详情</th></tr></thead><tbody><tr><td>不懂领域</td><td>实验员靠内部知识，常错选（无库方法、与评测集重叠数据、跨模型规模超参），每错一次消耗整次训练</td></tr><tr><td>拓扑提前定死</td><td>树的每个节点必须是打过分的模型；“生成数据”无分做不了节点；fan-in 也表达不出</td></tr></tbody></table>
+<p>新系统引入两个核心组件：</p>
+<ol>
+<li>知识系统：让 Agent 依据证据而非记忆做决策</li>
+<li>元搜索：搜索的拓扑本身成为 Agent 的输出</li>
+</ol>
+<hr>
+<h2 id="四知识系统">四、知识系统</h2>
+<p>通过 MCP 提供服务的远程检索知识库。四子库：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>子库</th><th>文件数</th><th>内容</th></tr></thead><tbody><tr><td>工作流</td><td>34</td><td>一次后训练运行的 13 个有序步骤、每步落定的判断 + 具体案例 + 适用边界</td></tr><tr><td>方法</td><td>111</td><td>SFT / DPO / GRPO / 蒸馏等的适用条件、目标函数、带数字算例、数据形态、额外模型、库实现</td></tr><tr><td>数据集</td><td>215</td><td>许可证、切分、加载代码、样本行；标出哪些是评测基准，必须隔离</td></tr><tr><td>框架</td><td>108</td><td>何时选它、如何启动、监控、保存一次训练</td></tr></tbody></table>
+<p>每份知识文件从公开来源（论文 / 库代码 / Hub 数据集说明 / 公开训练记录）收集：</p>
+<ul>
+<li>经人工确认范围</li>
+<li>检查许可和切分</li>
+<li>从代码中实测事实</li>
+<li>按统一模板写</li>
+<li>每条声明带 URL + 日期</li>
+<li>任何提到评测基准的文件都会被剔除出语料</li>
+</ul>
+<p>实验员面临设计决策时，把”任务 + 当前方案 + 哪里出了问题”发给知识库 → 拿回匹配的知识文件 → 据此决定下一步。跑完的实验也会把观察写回，知识随之增长。</p>
+<h3 id="工作流第一步示例">工作流第一步示例</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>步骤</th><th>内容</th></tr></thead><tbody><tr><td>选任何数据之前</td><td>读懂”分数到底奖励什么”</td></tr><tr><td>评分维度</td><td>最终答案 / 整段回复 / 格式错误 / 推理过程</td></tr><tr><td>实际操作</td><td>在未训练基座上完整跑一次官方评测器</td></tr><tr><td>产出</td><td>基线数字 + 单次评测耗时（用于后续预算分配）</td></tr></tbody></table>
+<hr>
+<h2 id="五元搜索">五、元搜索</h2>
+<p>不同任务需要不同形状的搜索：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>类型</th><th>适用</th></tr></thead><tbody><tr><td>线性搜索</td><td>方案已定，只需反复打磨同一种流程</td></tr><tr><td>树搜索</td><td>几种可信思路，靠证据取舍</td></tr><tr><td>后训练常见</td><td>两者都表达不了（如”构建外部数据集”无分）</td></tr></tbody></table>
+<h3 id="后训练典型方案">后训练典型方案</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>详情</th></tr></thead><tbody><tr><td>数据</td><td>任务自带训练集 + 公开语料构建的外部数据集</td></tr><tr><td>SFT</td><td>两份数据各做一次</td></tr><tr><td>选择</td><td>用验证集选更好模型作为”当前最优”</td></tr><tr><td>RL</td><td>每一轮从最优出发做 GRPO 训练 → 验证集打分 → 只有提高才替换</td></tr><tr><td>终止</td><td>预算不够再跑一轮</td></tr></tbody></table>
+<p>该方案树搜索放不进去：树的节点必须是训练完打过分的模型，但”构建外部数据集”只产出数据，无模型无分，做不了节点。</p>
+<h3 id="解法元搜索">解法：元搜索</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>动作</th></tr></thead><tbody><tr><td>派出元 Agent</td><td>调研任务 + 阅读 37 种带可运行示例的搜索模式 + 查询知识库</td></tr><tr><td>写出搜索程序</td><td>由 Agent / Program / Search 三种基本单元组合</td></tr><tr><td>单元定义</td><td>Agent = LLM 会话；Program = 确定性计算；Search = 编排嵌套子搜索</td></tr><tr><td>可组合结构</td><td>链式、扇出/扇入、循环、分阶段流程 + 37 种后训练专属策略（checkpoint 锦标赛、SFT 接 GRPO、预算约束多轮训练等）</td></tr><tr><td>阶段性</td><td>元 Agent 只写当前阶段程序 → 执行后读剩余预算 → 下一代元 Agent 根据实测写下一阶段</td></tr></tbody></table>
+<p>上面案例写成程序不过几行：两路 SFT、取优、预算允许时循环 GRPO。</p>
+<h3 id="aime-2025--qwen3-17b-base-案例">AIME 2025 × Qwen3-1.7B-Base 案例</h3>
+<p>元 Agent 调研：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>指标</th><th>数字</th></tr></thead><tbody><tr><td>未经训练基座回复给出要求答案行比例</td><td>20%</td></tr><tr><td>23% 题目一直生成到长度上限</td><td>是瓶颈</td></tr><tr><td>给两个格式示范后答案行比例</td><td>73%</td></tr><tr><td>准确率</td><td>完全没变化</td></tr></tbody></table>
+<p>结论：格式不是瓶颈，真正问题是 1.7B 模型能学多长推理链。</p>
+<h3 id="写出的搜索程序">写出的搜索程序</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>动作</th></tr></thead><tbody><tr><td>1</td><td>CPU 并行构建短/中/长三种思维链长度语料</td></tr><tr><td>2</td><td>GPU 上保存并评测基座模型，确立基线 + 单次评测成本</td></tr><tr><td>3</td><td>每份语料各做一次小预算试训</td></tr><tr><td>4</td><td>策略 Agent 读基线 + 三次试训 + 语料筛查结果 → 决定主训练用哪份语料 / 是否续训 / 要不要二阶段</td></tr><tr><td>5</td><td>主训练</td></tr><tr><td>6</td><td>可选二阶段：续训 / 长度退火 / 拒绝采样微调 / DPO 四选一</td></tr></tbody></table>
+<p>程序规格：471 行 Python / 8 个文件 / 1 搜索编排器 + 5 Agent 角色 + 2 确定性程序 / 全部由元 Agent 在任何训练开始之前的一次会话中生成。</p>
+<hr>
+<h2 id="六posttrainbench-成绩">六、PostTrainBench 成绩</h2>
+<p>加权综合分（7 任务加权平均：AIME 22.7% + GPQA 22.5% + HealthBench 18.4% + HumanEval 10.6% + GSM8K 9.4% + ArenaHard Writing 9.0% + BFCL 7.5%）。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>模型</th><th>综合分</th></tr></thead><tbody><tr><td><strong>人类专家参考</strong>（不限 10 小时）</td><td>官方指令微调版</td><td>51.1</td></tr><tr><td><strong>AIBuildAI</strong></td><td>Claude Opus 5</td><td><strong>46.6</strong></td></tr><tr><td>Locus</td><td>-</td><td>45.6</td></tr><tr><td>Claude Code</td><td>Claude Fable 5</td><td>41.8</td></tr><tr><td>GPT-5.6</td><td>-</td><td>36.2</td></tr><tr><td>Claude Opus 5（直接用）</td><td>-</td><td>35.0</td></tr><tr><td>Claude Opus 4.8</td><td>-</td><td>33.8</td></tr><tr><td>Kimi K3</td><td>-</td><td>32.0</td></tr><tr><td>GLM-5.2</td><td>-</td><td>31.7</td></tr><tr><td>Gemini 3.1 Pro</td><td>-</td><td>22.0</td></tr><tr><td>未训练基座</td><td>-</td><td>7.5（平均）</td></tr></tbody></table>
+<p>AIBuildAI 10 小时把综合分提高约 39 分。</p>
+<hr>
+<h2 id="七同一底层模型116-分来自系统">七、同一底层模型：+11.6 分来自系统</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>模型</th><th>综合分</th></tr></thead><tbody><tr><td>AIBuildAI</td><td>Claude Opus 5</td><td>46.6</td></tr><tr><td>Claude Code</td><td>Claude Opus 5</td><td>35.0</td></tr><tr><td>差</td><td></td><td>+11.6</td></tr></tbody></table>
+<p>七项任务中 AIBuildAI 六项领先、GPQA 持平。提升最大：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>任务</th><th>增量</th></tr></thead><tbody><tr><td>BFCL</td><td>+94.3</td></tr><tr><td>ArenaHard Writing</td><td>+12.1</td></tr><tr><td>HumanEval</td><td>+9.2</td></tr></tbody></table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>系统</th><th>模型</th><th>综合分</th></tr></thead><tbody><tr><td>AIBuildAI</td><td>Claude Opus 5</td><td>46.6</td></tr><tr><td>Claude Code</td><td>Claude Fable 5</td><td>41.8</td></tr></tbody></table>
+<blockquote>
+<p>知识系统与元搜索带来的增益，超过把底层模型升级一代所带来的增益。</p>
+</blockquote>
+<hr>
+<h2 id="八分任务分析">八、分任务分析</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>任务</th><th>AIBuildAI 表现</th><th>备注</th></tr></thead><tbody><tr><td><strong>AIME 2025</strong></td><td><strong>15.8 最高</strong>（其后 Fable 5 13.3 / Locus 9.4）</td><td>“采样—验证—重训”循环，元搜索用武之地；最难 gemma-3-4b-pt AIBuildAI 3.3 vs 其他 Agent ≤1.1</td></tr><tr><td><strong>BFCL</strong></td><td><strong>95.8 最高</strong>（后 Locus 66.6）</td><td>**唯一超过人类参考（85.0）**的任务</td></tr><tr><td><strong>HumanEval</strong></td><td><strong>69.0 最高</strong>（Locus 66.6）</td><td>4 个基座模型上 AIBuildAI 都是 Agent 最高分</td></tr><tr><td>ArenaHard Writing</td><td>与领先者差 &#x3C; 2</td><td>成对偏好评判 = 数据选择问题</td></tr><tr><td>GPQA</td><td>持平</td><td>通用问答</td></tr><tr><td>HealthBench</td><td>与领先者差 &#x3C; 2</td><td>医生撰写评分标准，需要偏好优化不让评判者奖励冗长</td></tr><tr><td>GSM8K</td><td>与领先者差 &#x3C; 2</td><td>GSM8K</td></tr></tbody></table>
+<hr>
+<h2 id="九两个案例agent-如何一步步把分数做上去">九、两个案例：Agent 如何一步步把分数做上去</h2>
+<p>两次运行都部署开源权重教师模型写训练数据，一次规划一个阶段，依据实测决定下一步。</p>
+<h3 id="healthbench--qwen3-4b-base">HealthBench × Qwen3-4B-Base</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>分数</th></tr></thead><tbody><tr><td>基座</td><td>13.4</td></tr><tr><td>Claude Code</td><td>40.9</td></tr><tr><td>SFT 1（教师 4.8 万条回复）</td><td>46.2</td></tr><tr><td>SFT 2（教师 6,800 段更长多轮对话 + 小子集筛 + 完整评测确认）</td><td><strong>48.6</strong></td></tr></tbody></table>
+<h3 id="arenahard-writing--smollm3-3b-base">ArenaHard Writing × SmolLM3-3B-Base</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>阶段</th><th>分数</th></tr></thead><tbody><tr><td>基座</td><td>0.4</td></tr><tr><td>Claude Code</td><td>69.7</td></tr><tr><td>SFT 1（教师 ~2 万条语料 + 最后 3 个 checkpoint 权重平均）</td><td>74.2</td></tr><tr><td>拒绝采样 + 权重平均（从学生自己回复挑教师最优）</td><td><strong>74.6</strong></td></tr></tbody></table>
+<blockquote>
+<p>两次运行绝大部分增益都来自在教师数据上的第一轮完整训练；此后每个阶段的结果，只有在完整评测集上确认有效才会保留。</p>
+</blockquote>
+<hr>
+<h2 id="十更长远的判断">十、更长远的判断</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>当前</th><th>PostTrain Agent 自主完成后训练</th></tr></thead><tbody><tr><td>未来</td><td>范式可覆盖：预训练 / 数据生成 / 模型架构设计 / 推理优化 / 评测 / 安全对齐 / 部署</td></tr></tbody></table>
+<p>最终形态：人类只需定义目标 + 约束 + 价值标准，AI 在给定资源下搜索实现目标的最佳模型和算法。</p>
+<blockquote>
+<p>当模型能够参与改进下一代模型，AI 研发将不再完全受限于人类专家的时间、经验和试错速度，而可能演化为一个由机器规模化执行、由实验反馈持续驱动的过程。</p>
+</blockquote>
+<hr>
+<h2 id="十一对-sam-的-3-点启示">十一、对 Sam 的 3 点启示</h2>
+<ol>
+<li>“系统增益超过模型升级一代”——AIBuildAI 系统 + 11.6 分 vs Claude Code 升级到 Fable 5 也只 + 6.8 分。Sam 设计 Hermes Agent 时，“包装层”（知识 + 元搜索）比”底层模型升级”性价比更高</li>
+<li>知识文件剔除评测基准——这是防数据污染的核心。Hermes Sam 的 skill 评测集必须独立于训练数据，否则会”自己训自己”虚高分</li>
+<li>元搜索阶段性决策——程序不必在开跑前把整次运行定死，每个阶段基于实测决定下一步。这正是 Sam 之前 OpenClaw <code>&#x3C;persistent_tasks></code> + <code>&#x3C;compact_fallback></code> 的设计哲学：不预设长链路，根据会话内反馈实时调整</li>
+</ol>
+<hr>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://www.163.com/news/a/L8L8T28T0511AQHO.html">网易新闻（机器之心 Pro）原文</a></li>
+<li><a href="https://github.com/aibuildai-inc/aibuildai-llm-posttrain-agent">GitHub: aibuildai-llm-posttrain-agent</a></li>
+<li><a href="https://github.com/aibuildai-inc/aibuildai-knowledge-base">GitHub: aibuildai-knowledge-base</a></li>
+<li><a href="https://github.com/aibuildai-inc/aibuildai-llm-posttrain-agent/blob/main/docs/aibuildai-llm-post-train-agent.pdf">技术报告 PDF</a></li>
+<li>PostTrainBench（Rank et al., ICML 2026）</li>
+<li>AIBuildAI 论文（Zhang et al., 2026）</li>
+</ul>
+<h2 id="配图">配图</h2>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/aibuildai-posttrain-agent-self-evolving/image-01.jpg" alt="AIBuildAI PostTrain Agent 系统总览" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：AIBuildAI PostTrain Agent——元 Agent 调研任务后写出由 Agent + Program + Search 三种单元组成的搜索程序（机器之心 Pro · 2026-10-07）</p>
+</div> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

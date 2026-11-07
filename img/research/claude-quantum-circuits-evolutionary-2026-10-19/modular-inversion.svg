@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-label="Modular inversion breakthrough: divsteps becomes viable for reversible">
+  <title>Modular inversion 突破：divsteps 算法变得可逆可用</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-name   { font: 600 14px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-stat   { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-eq     { font: italic 500 14px "Latin Modern Math", "STIX Two Math", "Cambria Math", serif; fill: #172033; }
+    </style>
+    <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#fee2e2" />
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#fecaca" stroke-width="2" />
+    </pattern>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">第 8 个任务突破：divsteps 变得可逆可用</text>
+  <text x="40" y="54" class="t-detail">prime-field modular inversion · 可逆整数算术的关键操作</text>
+
+  <!-- BEFORE: Traditional reversible approach (impractical) -->
+  <g>
+    <rect x="40" y="100" width="420" height="280" rx="10" fill="url(#crosshatch)" stroke="#dc2626" stroke-width="2" />
+
+    <text x="60" y="130" class="t-name" fill="#991b1b">之前 (state of the art)</text>
+    <text x="60" y="148" class="t-detail" fill="#991b1b">传统可逆架构：必须存完整分支历史</text>
+
+    <g transform="translate(60, 170)">
+      <text x="0" y="0" class="t-detail" font-weight="600" fill="#172033">问题：</text>
+      <text x="0" y="22" class="t-detail">• 经典 divsteps 算法非常高效（线性时间）</text>
+      <text x="0" y="40" class="t-detail">• 但它**不可逆**——会丢弃中间分支</text>
+      <text x="0" y="58" class="t-detail">• 强转可逆 = 存全部历史 = qubit 数爆炸</text>
+    </g>
+
+    <g transform="translate(60, 260)">
+      <text x="0" y="0" class="t-stat" fill="#991b1b">传统方案：高 qubit × 高 Toffoli</text>
+      <text x="0" y="20" class="t-detail" fill="#991b1b" font-style="italic">"divsteps 之前对可逆整数算术不实用"</text>
+    </g>
+
+    <g transform="translate(60, 310)">
+      <rect x="0" y="0" width="380" height="56" rx="6" fill="white" stroke="#dc2626" />
+      <text x="12" y="22" class="t-detail" font-weight="600" fill="#991b1b">实际后果：</text>
+      <text x="12" y="42" class="t-detail" fill="#991b1b">椭圆曲线密码学 / Shor 算法在量子上跑得不划算</text>
+    </g>
+  </g>
+
+  <!-- Arrow between -->
+  <g transform="translate(470, 240)">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#5b6475" stroke-width="2" marker-end="url(#arrow3)" />
+    <text x="25" y="-12" text-anchor="middle" class="t-detail" font-weight="600">Claude 找到</text>
+  </g>
+  <defs>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6475" />
+    </marker>
+  </defs>
+
+  <!-- AFTER: Claude's new reversible architecture -->
+  <g>
+    <rect x="540" y="100" width="380" height="280" rx="10" fill="#dcfce7" stroke="#6BCB77" stroke-width="2" />
+
+    <text x="560" y="130" class="t-name" fill="#166534">Claude 的新架构 ★</text>
+    <text x="560" y="148" class="t-detail" fill="#166534">新的可逆设计：无需存完整分支历史</text>
+
+    <g transform="translate(560, 170)">
+      <text x="0" y="0" class="t-detail" font-weight="600" fill="#172033">突破：</text>
+      <text x="0" y="22" class="t-detail">• 用一种新方式处理可逆性</text>
+      <text x="0" y="40" class="t-detail">• 让 divsteps **对可逆计算变得实用**</text>
+      <text x="0" y="58" class="t-detail">• 大幅改善 Toffoli × qubit 权衡</text>
+    </g>
+
+    <g transform="translate(560, 260)">
+      <text x="0" y="0" class="t-stat" fill="#166534">新方案：低 qubit × 低 Toffoli</text>
+      <text x="0" y="20" class="t-detail" fill="#166534" font-style="italic">"By handling reversibility differently"</text>
+    </g>
+
+    <g transform="translate(560, 310)">
+      <rect x="0" y="0" width="340" height="56" rx="6" fill="white" stroke="#6BCB77" />
+      <text x="12" y="22" class="t-detail" font-weight="600" fill="#166534">应用前景：</text>
+      <text x="12" y="42" class="t-detail" fill="#166534">Shor 算法 / 椭圆曲线密码学 量子化路径打通</text>
+    </g>
+  </g>
+
+  <!-- Bottom takeaway -->
+  <g transform="translate(40, 410)">
+    <text x="0" y="0" class="t-title" font-size="14">⭐ 关键观察：Claude 找到的不是"更小的电路"，是"新的算法"</text>
+    <text x="0" y="22" class="t-detail">这是论文 arXiv 2610.22367 真正的 novelty —— 不只是 SOTA 优化，而是 AI 提出的算法结构</text>
+    <text x="0" y="44" class="t-detail">论文原话："open the door for evaluator-guided LLM co-design of new algorithmic structures"</text>
+  </g>
+</svg>

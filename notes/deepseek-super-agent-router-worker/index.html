@@ -1,0 +1,395 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>DeepSeek 提出 Super-agent 架构：Router 与 Worker 双层设计，Agent 从&quot;单会话工具&quot;走向&quot;常驻系统&quot; · Samvortex Hub</title><meta name="description" content="DeepSeek Harness 团队发布 Super-agent 设计探索：Router 层统一承接人类交互、维护全局上下文并分派任务，Worker 层在隔离会话中并发执行、只向 Router 汇报。配套事件驱动两级过滤、Thread 订阅、Chain of Recall 链式召回、投机执行、异步 ReAct Loop 与独立 Watchdog。合成负载实测任务完成 p95 15.7 分钟，单 Session 方案 29.5 分钟。"><link rel="canonical" href="https://samvortex.com/notes/deepseek-super-agent-router-worker/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="DeepSeek 提出 Super-agent 架构：Router 与 Worker 双层设计，Agent 从&#34;单会话工具&#34;走向&#34;常驻系统&#34; · Samvortex Hub"><meta property="og:description" content="DeepSeek Harness 团队发布 Super-agent 设计探索：Router 层统一承接人类交互、维护全局上下文并分派任务，Worker 层在隔离会话中并发执行、只向 Router 汇报。配套事件驱动两级过滤、Thread 订阅、Chain of Recall 链式召回、投机执行、异步 ReAct Loop 与独立 Watchdog。合成负载实测任务完成 p95 15.7 分钟，单 Session 方案 29.5 分钟。"><meta property="og:url" content="https://samvortex.com/notes/deepseek-super-agent-router-worker/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="DeepSeek 提出 Super-agent 架构：Router 与 Worker 双层设计，Agent 从&#34;单会话工具&#34;走向&#34;常驻系统&#34; · Samvortex Hub"><meta name="twitter:description" content="DeepSeek Harness 团队发布 Super-agent 设计探索：Router 层统一承接人类交互、维护全局上下文并分派任务，Worker 层在隔离会话中并发执行、只向 Router 汇报。配套事件驱动两级过滤、Thread 订阅、Chain of Recall 链式召回、投机执行、异步 ReAct Loop 与独立 Watchdog。合成负载实测任务完成 p95 15.7 分钟，单 Session 方案 29.5 分钟。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-11-01T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-11-01T00:00:00.000Z">2026年11月1日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">DeepSeek 提出 Super-agent 架构：Router 与 Worker 双层设计，Agent 从&quot;单会话工具&quot;走向&quot;常驻系统&quot;</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">DeepSeek Harness 团队发布 Super-agent 设计探索：Router 层统一承接人类交互、维护全局上下文并分派任务，Worker 层在隔离会话中并发执行、只向 Router 汇报。配套事件驱动两级过滤、Thread 订阅、Chain of Recall 链式召回、投机执行、异步 ReAct Loop 与独立 Watchdog。合成负载实测任务完成 p95 15.7 分钟，单 Session 方案 29.5 分钟。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/DeepSeek/" class="tag">#DeepSeek</a><a href="/tags/DeepSeek Harness/" class="tag">#DeepSeek Harness</a><a href="/tags/Super-agent/" class="tag">#Super-agent</a><a href="/tags/Router/" class="tag">#Router</a><a href="/tags/Worker/" class="tag">#Worker</a><a href="/tags/Agent 架构/" class="tag">#Agent 架构</a><a href="/tags/多智能体/" class="tag">#多智能体</a><a href="/tags/事件驱动/" class="tag">#事件驱动</a><a href="/tags/Thread/" class="tag">#Thread</a><a href="/tags/Watchdog/" class="tag">#Watchdog</a><a href="/tags/异步 ReAct Loop/" class="tag">#异步 ReAct Loop</a><a href="/tags/Chain of Recall/" class="tag">#Chain of Recall</a><a href="/tags/投机执行/" class="tag">#投机执行</a><a href="/tags/BYOM/" class="tag">#BYOM</a><a href="/tags/Fairwind/" class="tag">#Fairwind</a><a href="/tags/Claude Code/" class="tag">#Claude Code</a><a href="/tags/多会话并行/" class="tag">#多会话并行</a><a href="/tags/自主 Agent/" class="tag">#自主 Agent</a><a href="/tags/Token Plan/" class="tag">#Token Plan</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>DeepSeek 明确指出<strong>主流 Agent 仍以单一 Session 为基本单位</strong>，一个人通常只能同时跟进 3 至 5 个活跃 Session。他们提出的解法是把 Agent 从”被动响应指令的单任务工具”升级为”持续在线、能并行处理多项任务的自主协作者”——<strong>核心是 Router / Worker 双层架构</strong>，配套事件驱动、链式召回、投机执行、异步 ReAct Loop 与独立 Watchdog 五件套。论文原话：<em>“随着大模型执行单个任务时越来越不需要人的干预，限制生产力进一步提升的因素正逐渐转向人的注意力。”</em></p>
+</blockquote>
+<hr>
+<h2 id="一-为什么要做-super-agent单会话的天花板">一、⭐ 为什么要做 Super-agent：单会话的天花板 ⭐</h2>
+<p>DeepSeek 的出发点是一个具体的观察：<strong>一个人通常只能同时跟进 3 至 5 个活跃 Session</strong>。</p>
+<p>现有主流设计的问题在于 Session 之间相互独立。用户并行推进多项工作时，需要手动切换并维护各个 Session 的上下文。即使通过 CLI、MCP 或外部连接器把本地 Agent 扩展出去，仍然会撞上三类墙：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>墙</th><th>具体表现</th></tr></thead><tbody><tr><td><strong>单会话同步阻塞</strong></td><td>上一件事没做完，下一件事排不进来</td></tr><tr><td><strong>多任务上下文混乱</strong></td><td>几个 Session 各自持有一段互不知情的上下文</td></tr><tr><td><strong>本地设备离线后任务停止</strong></td><td>Agent 绑死在你的笔记本上</td></tr></tbody></table>
+<p>即使不扩展开、多开 Session 这条路，本质问题也没解决：<strong>限制生产力提升的因素已经从”模型不够强”转移到了”人的注意力不够用”</strong>。</p>
+<p>DeepSeek 把这种新型 Agent 形态称为 <strong>Super-agent</strong>，并归纳出四项基础特征：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>特征</th><th>含义</th></tr></thead><tbody><tr><td><strong>连续</strong></td><td>用户可以在即时通讯、GitHub 评论等不同渠道与同一个 Agent 交互</td></tr><tr><td><strong>高效</strong></td><td>能够并行处理多个复杂任务</td></tr><tr><td><strong>主动</strong></td><td>系统持续观察环境事件，自行推进值得处理的事项</td></tr><tr><td><strong>持久</strong></td><td>始终在线，并能在长期运行中从异常状态恢复</td></tr></tbody></table>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-01.jpg" alt="同一个任务在 IM 群聊与 GitHub Pull Request 评审之间连续推进" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 1：同一个任务在 IM 群聊与 GitHub Pull Request 评审之间连续推进</p>
+</div>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-02.jpg" alt="持续关注公共群聊，在无人 @ 的情况下主动识别缺陷并提交修复 Pull Request" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 2：持续关注公共群聊，在无人 @ 的情况下主动识别缺陷并提交修复 Pull Request</p>
+</div>
+<hr>
+<h2 id="二-双层架构router-与-worker">二、⭐ 双层架构：Router 与 Worker ⭐</h2>
+<p>这是整套设计的地基。</p>
+<ul>
+<li><strong>Router 层</strong>：承接人类交互、维护全局上下文、分派任务</li>
+<li><strong>Worker 层</strong>：在相互隔离的会话中并发执行具体工作</li>
+</ul>
+<p>一条关键的设计约定：<strong>Worker 不直接向用户回复，而是将状态和结果汇报给 Router，由后者统一对外沟通。</strong></p>
+<p>这条约定的分量很重。它意味着<strong>对外表达只有一条通道</strong>，所以上下文一致性、语气统一、回复时序都由 Router 单点保证；同时 Worker 之间彻底隔离，一个 Worker 崩了不会污染其他 Worker 的上下文，也不需要 Worker 知道”外面还有谁在说话”。</p>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-03.jpg" alt="双层架构：Router 层统一负责路由与对外交互，多个 Worker Session 隔离并发执行任务" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 3：双层架构：Router 层统一负责路由与对外交互，多个 Worker Session 隔离并发执行任务</p>
+</div>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-04.jpg" alt="Super-agent 整体系统架构" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 4：Super-agent 整体系统架构</p>
+</div>
+<p>整体架构由五部分组成：<strong>双层架构、事件驱动、面向人的交互、计算与状态及环境分离、Watchdog</strong>。</p>
+<hr>
+<h2 id="三-事件驱动trigger-与两级过滤">三、⭐ 事件驱动：Trigger 与两级过滤 ⭐</h2>
+<p>Super-agent 的输入不是”用户发来一句话”，而是<strong>事件</strong>。DeepSeek 把群聊消息、邮件与日程提醒、代码审查评论、CI 运行结果等外部信息统称为 <strong>Trigger</strong>。</p>
+<p>处理链路是<strong>两级过滤</strong>：</p>
+<ol>
+<li><strong>程序规则过滤</strong> —— 先由程序层策略筛除大部分无关消息</li>
+<li><strong>语义层判断</strong> —— 再交由大模型判断是否需要采取行动</li>
+</ol>
+<p>这个顺序值得注意：<strong>先便宜后昂贵</strong>。绝大多数噪音在程序层就被挡掉，只有幸存者才消耗 LLM 推理。</p>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-05.jpg" alt="两级过滤：先由程序层策略筛除大部分无关消息，再交由语义层策略判断" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 5：两级过滤：先由程序层策略筛除大部分无关消息，再交由语义层策略判断</p>
+</div>
+<h3 id="thread让-worker-订阅自己的事件流">Thread：让 Worker 订阅自己的事件流</h3>
+<p><strong>已经分配任务的事件流，Worker 可以订阅对应的 Thread</strong>，后续相关事件由程序直接发送给 Worker，<strong>无需每次都经过 Router</strong>——从而降低路由负载。</p>
+<p><strong>Thread 的定义</strong>：同一个 IM 话题、或同一个 GitHub Pull Request 下的连续 Trigger 构成一条 Thread。</p>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-06.jpg" alt="Thread 示例：同一个 IM 话题或同一个 GitHub Pull Request 下的连续 Trigger 构成一条 Thread" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 6：Thread 示例：同一个 IM 话题或同一个 GitHub Pull Request 下的连续 Trigger 构成一条 Thread</p>
+</div>
+<h3 id="inline--spill-与-chain-of-recall">Inline &#x26; Spill 与 Chain of Recall</h3>
+<p>两个上下文管理机制：</p>
+<ul>
+<li><strong>Inline &#x26; Spill</strong>：近期可能用到的信息直接放入模型上下文窗口；超出预算或低频使用的内容保留在窗口之外，供模型按需读取</li>
+<li><strong>链式召回（Chain of Recall）</strong>：通过 Trigger、Thread 和 Worker Session 等对象之间的引用关系，让模型沿关联 ID <strong>逐步找回</strong>历史任务信息</li>
+</ul>
+<p>后者与前者是互补的：Inline &#x26; Spill 管”当前窗口里放什么”，Chain of Recall 管”历史上怎么找回来”。</p>
+<hr>
+<h2 id="四-面向人的交互投机执行--异步-react-loop">四、⭐ 面向人的交互：投机执行 + 异步 ReAct Loop ⭐</h2>
+<h3 id="投机执行speculative-execution">投机执行（Speculative Execution）</h3>
+<p>根据环境信号在后台提前开展工作。DeepSeek 给了两个例子：</p>
+<ul>
+<li><strong>日历场景</strong>：收到会议邀约后，先检查日程冲突、搜集背景资料、准备回复草稿</li>
+<li><strong>研发协作场景</strong>：在群聊讨论问题时，尝试复现故障、寻找修复方案，<strong>只有确认问题并找到简单修复方式后才向用户交付结果</strong></li>
+</ul>
+<p>第二个例子的设计意图值得留意：<strong>Agent 不把半成品丢给人</strong>。它自己先跑通，确认了才交付。</p>
+<h3 id="异步-react-loop">异步 ReAct Loop</h3>
+<p>把耗时工具调用改为异步的 <code>start()</code> 和 <code>stop()</code>：Agent 启动后台任务后即可返回 <code>Started</code> 状态，不必等待任务完成，<strong>后台结果随后作为新事件进入会话</strong>。这样前台对话可以继续接收用户的新消息。</p>
+<blockquote>
+<p>⚠️ DeepSeek 特别说明：这项异步任务机制<strong>已经在 DeepSeek Harness 中实现，但尚未默认开启</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="五-计算与状态及环境分离--watchdog">五、⭐ 计算与状态及环境分离 + Watchdog ⭐</h2>
+<h3 id="计算与状态及环境分离">计算与状态及环境分离</h3>
+<p>Super-agent 把 Agent Loop 的<strong>计算、会话状态和执行环境</strong>解耦：</p>
+<ul>
+<li><strong>计算与持久化状态放在云端</strong></li>
+<li><strong>执行环境可以留在用户本地设备</strong>，仅部署负责执行命令和返回结果的轻量 daemon</li>
+</ul>
+<p>由此支持 <strong>BYOM（Bring Your Own Machine）</strong>——把用户日常使用的开发机或个人电脑接入云端 Agent；也支持连接云端托管机器，或按需创建的计算环境。</p>
+<h3 id="watchdog-session">Watchdog Session</h3>
+<p>主架构之外另设一个<strong>独立的 Watchdog Session</strong>，形成外部控制回路。它做两件事：</p>
+<ol>
+<li>监控基础设施问题（接口报错、状态恢复失败等）</li>
+<li><strong>通过模型判断 Worker 是否取得实质进展、执行方向是否偏离目标</strong>，发现异常时介入修复</li>
+</ol>
+<p>第二点是关键：Watchdog 不只是看”服务还活着吗”，而是看<strong>Agent 是不是在假装干活</strong>。</p>
+<hr>
+<h2 id="六-实测数据与它的边界">六、⭐ 实测数据与它的边界 ⭐</h2>
+<p>DeepSeek 团队做了初步实验，对比四种方案：Super-agent、去掉事件直通机制的 Super-agent，以及两种提示词配置下的单 Session + Subagent 方案。</p>
+<p><strong>实验设置</strong>：每次约 300 条消息，其中约 20 条为工作请求，每种方案重复运行 5 次。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>方案</th><th>任务完成时间 p50</th><th>任务完成时间 p95</th></tr></thead><tbody><tr><td><strong>Super-agent</strong></td><td><strong>12.4 分钟</strong></td><td><strong>15.7 分钟</strong></td></tr><tr><td>单 Session + Subagent（中性提示）</td><td>—</td><td>29.5 分钟</td></tr></tbody></table>
+<h3 id="router-层压力测试">Router 层压力测试</h3>
+<p>Trigger 到达速率从<strong>每分钟约 1 条提升至约 40 条</strong>时：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>指标</th><th>变化</th></tr></thead><tbody><tr><td>平均批处理大小</td><td>1.0 → <strong>2.8</strong></td></tr><tr><td>单次请求耗时</td><td>2.5 秒 → 3.9 秒</td></tr><tr><td><strong>单个决定分摊的推理时间</strong></td><td>6.4 秒 → <strong>1.6 秒</strong></td></tr></tbody></table>
+<p>结论：事件突发时，<strong>Router 可以通过合并积压事件提高有效吞吐</strong>。</p>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-07.jpg" alt="工作请求的累计到达曲线与四种方案的累计完成曲线" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 7：工作请求的累计到达曲线与四种方案的累计完成曲线（5 次实验运行均值；消息间隔与工作时长按 1/4 缩放，模型调用耗时为真实值）</p>
+</div>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-08.jpg" alt="每种方案重复运行 5 次；任务完成时间指从工作请求到结果消息的耗时" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 8：每种方案重复运行 5 次；任务完成时间指从工作请求到结果消息的耗时</p>
+</div>
+<div style="margin: 2rem 0; text-align: center;">
+<img src="/img/research/deepseek-super-agent-router-worker/image-09.jpg" alt="不同 Trigger 到达速率下 Router Session 的 batch 大小、单次请求耗时与单个决定的分摊推理时间" style="max-width: 100%; border-radius: 8px;">
+<p style="color: rgba(8, 24, 68, 0.6); font-size: 0.875rem; margin-top: 0.5rem;">图 9：不同 Trigger 到达速率下 Router Session 的 batch 大小、单次请求耗时与单个决定的分摊推理时间</p>
+</div>
+<blockquote>
+<p>⚠️ <strong>必须注意的数据边界</strong>：DeepSeek 团队自己指出，这些实验<strong>基于合成负载和简化环境，主要评估系统调度与协作能力，并不衡量单个任务的实际执行能力</strong>。</p>
+<p>换句话说：12.4 / 15.7 vs 29.5 分钟这组数字衡量的是<strong>调度效率</strong>，不是”Super-agent 干的活更好”。别拿它当单任务能力基准。</p>
+</blockquote>
+<hr>
+<h2 id="七-官方点名的-5-个未解问题">七、⭐ 官方点名的 5 个未解问题 ⭐</h2>
+<p>这套架构并不完备。DeepSeek 自己列出的待解决问题：</p>
+<ol>
+<li><strong>Router 层如何随任务规模扩展</strong></li>
+<li><strong>跨月乃至更长时间跨度的长程记忆</strong></li>
+<li><strong>脱离 Session 后的人机协作方式</strong></li>
+<li><strong>不同 Agent 实例之间的 A2A 通信</strong></li>
+<li><strong>安全与隐私保护</strong></li>
+</ol>
+<p>第 5 条被特别展开：<em>“尤其是云端 Agent 接入本地设备后，提示词注入、端侧凭据泄露和跨设备权限风险都需要进一步解决。”</em></p>
+<hr>
+<h2 id="八-开源原型dsh-superagent-prototype">八、⭐ 开源原型：dsh-superagent-prototype ⭐</h2>
+<p>DeepSeek 提供了名为 <strong><code>dsh-superagent-prototype</code></strong> 的原型实现（GitHub：<code>deepseek-ai/dsh-superagent-prototype</code>，MIT 协议，2.5k star / 222 fork），<strong>但明确指出”该插件用于验证技术路线，并非 DeepSeek 正式产品”</strong>。</p>
+<p>README 的自陈很坦率：</p>
+<blockquote>
+<p><em>“Research prototype for reference only, not an official DeepSeek product… Treat it as research code, not production-ready software. It may still contain bugs, and its coding style and engineering practices may be inconsistent. Review and adapt it before using it in your own environment.”</em></p>
+</blockquote>
+<p>还有一句同样重要：</p>
+<blockquote>
+<p><em>“We have adapted it for publication, so it is not identical to our internal version or the implementation described in [the article]. <strong>Some designs discussed in the article are directions for future development and are not implemented in this prototype.</strong>”</em></p>
+</blockquote>
+<p><strong>即：论文里讲的一部分设计，原型里根本没实现。</strong></p>
+<h3 id="原型实际是什么">原型实际是什么</h3>
+<p>README 描述的 <code>dsh-superagent</code> 是<strong>面向单个 GitHub 仓库的主动式编码 Agent</strong>，以插件包形式随 DeepSeek Harness 分发：</p>
+<ul>
+<li>监听 GitHub，可选监听飞书</li>
+<li>被允许后，<strong>开一个 work item，在自己的 Agent session 和目录里干活，然后在原对话里回复</strong>（例如提交一个 PR）</li>
+<li>一个 web 面板显示”哪些事需要人来看”</li>
+</ul>
+<p>它体现的工作哲学值得单独摘出来：</p>
+<blockquote>
+<p><em>“An agent that can act for a whole team can also waste a whole team’s attention, so it <strong>acts only when asked or when a rule the team wrote allows it</strong>, and <strong>speaks only when someone must act or can use a result</strong>.”</em></p>
+</blockquote>
+<h3 id="文档结构编号即依赖顺序">文档结构（编号即依赖顺序）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>文档</th><th>内容</th></tr></thead><tbody><tr><td><code>000-philosophy.md</code></td><td>设计哲学，以及它对运维者的要求</td></tr><tr><td><code>001-domain.md</code></td><td>领域模型（Trigger / Thread / Worker Session）</td></tr><tr><td><code>002-authorization.md</code></td><td>授权模型</td></tr><tr><td><code>003-execution.md</code></td><td>执行</td></tr><tr><td><code>004-prompts.md</code></td><td>提示词</td></tr><tr><td><code>005-panel.md</code></td><td>面板</td></tr><tr><td><code>006-deployment.md</code></td><td>手动安装、配置、升级、排障</td></tr><tr><td><code>007-architecture.md</code></td><td>架构</td></tr><tr><td><code>008-cookbook.md</code></td><td>加一个 Source 的做法</td></tr></tbody></table>
+<p>安装方式很特别——<strong>让 Agent 读 SETUP.md 带着你装</strong>：</p>
+<blockquote>
+<p><em>“Read SETUP.md in this repository and set up dsh-superagent with me. It asks one short question at a time, shows the full plan once, and then installs and configures everything.”</em></p>
+</blockquote>
+<hr>
+<h2 id="九-对照我们自己的栈哪些已有哪些真缺">九、⭐ 对照我们自己的栈：哪些已有、哪些真缺 ⭐</h2>
+<p>把这套设计与我们现有形态逐项对照，结论是：<strong>架构层面我们已经高度同构，缺口不在”要不要改成双层”，而在三块具体机制。</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Super-agent 组件</th><th>我们这边的对应物</th><th>状态</th></tr></thead><tbody><tr><td>Router（承接交互 + 全局上下文 + 分派）</td><td><code>agent:main:main</code> 主会话</td><td>✅ 已有</td></tr><tr><td>Worker（隔离会话并发执行）</td><td>molly / stitch / rax / lux 四条 Worker</td><td>✅ 已有</td></tr><tr><td>Watchdog（判断 Worker 是否在假装干活）</td><td><code>heartbeat-watchdog</code> 每 15 分钟</td><td>✅ 已有</td></tr><tr><td>事件驱动 Trigger</td><td>8 个 cron automation + 一批 cron 脚本</td><td>✅ 部分</td></tr><tr><td><strong>Thread（Worker 订阅自己的事件流）</strong></td><td>事件是”散”的：各自 cron、各自日志</td><td>❌ <strong>缺</strong></td></tr><tr><td><strong>异步 ReAct Loop（start/stop）</strong></td><td>长任务会阻塞整轮回复</td><td>❌ <strong>缺</strong></td></tr><tr><td><strong>Chain of Recall（结构化引用链）</strong></td><td>靠 <code>memory_search</code> 语义检索</td><td>⚠️ 语义 ≠ 结构化</td></tr><tr><td>Inline &#x26; Spill</td><td>上下文预算 + compaction</td><td>✅ 已有</td></tr><tr><td>计算/状态/环境分离 + BYOM</td><td>单机</td><td>❌ 缺（但单机场景也未必需要）</td></tr></tbody></table>
+<p><strong>三个真缺口的差别很大：</strong></p>
+<ol>
+<li>
+<p><strong>Thread 抽象</strong> —— 我们的事件是”散”的（各自 cron、各自日志），没有”同一个话题/PR 下的连续触发构成一条 Thread”这层。Router 压力大时我们只能靠 agent 自己扛；DeepSeek 是让 Worker 直接订阅 Thread 绕过 Router。<strong>这一条最值得做</strong>，因为它同时缓解 Router 压力和上下文混乱两个问题——而我们现在的痛点恰恰是”每次心跳要串行处理一堆 cron 结果”。</p>
+</li>
+<li>
+<p><strong>异步 ReAct Loop</strong> —— 我们这边 exec 长任务会阻塞整轮回复，Sam 已经撞过多次（“20:32 那趟心跳跑满 600s 超时被切断”）。DeepSeek 那套已经实现但没默认开启，说明<strong>这不是必须先做的</strong>，但方向明确。</p>
+</li>
+<li>
+<p><strong>Chain of Recall</strong> —— 我们靠语义检索找历史，多 session 并行时”关联 ID 链”比”语义相似”更可靠。</p>
+</li>
+</ol>
+<p>而 DeepSeek 自己列的未解问题里，<strong>第 5 条（云端 Agent 接入本地设备的提示词注入 / 端侧凭据泄露 / 跨设备权限）我们几乎正面撞上</strong>——我们正在做多 agent 编排：Zam 协调四个 agent、每个 agent 有自己的 MEMORY.md、还有嵌套 git 仓库。BYOM 一旦引入，这几个风险就变成我们自己的问题。</p>
+<hr>
+<h2 id="十-落地建议">十、⭐ 落地建议 ⭐</h2>
+<ol>
+<li><strong>先做 Thread 抽象</strong>，收益最高：把散装 cron 的 Trigger 收敛成”事件 → Thread → Worker 订阅”模型。这直接缓解我们当前最痛的点（心跳串行处理所有 cron 结果）。</li>
+<li><strong>异步 ReAct Loop</strong> 次之。我们已经有 <code>sessions_spawn</code>（mode=run）和后台进程，但**“返回 Started、结果作为新事件进入会话”这个闭环没有**——目前子代理完成后走的是 completion event 回传，形态上接近，但缺 <code>start()/stop()</code> 的显式控制。</li>
+<li><strong>暂不引入 BYOM</strong>。它是解决”云端 Agent 用你的本地设备”的问题，而我们本来就在单机，收益为零、风险（凭据/权限/注入）全在我们头上。</li>
+<li><strong>不抄”主动提交 PR”那部分</strong>。DeepSeek 自己的原型也强调”只在被要求、或团队写的规则允许时才行动”。这条纪律我们已经在用（<code>perception-liveness</code> 的”不要因为调度器在跑就报正常”就是同一类约束）。<strong>照抄会让 Agent 有权在没授权的情况下写代码 —— 那是把”可回收的误报”换成”不可回收的脏 PR”。</strong></li>
+</ol>
+<hr>
+<h2 id="来源">来源</h2>
+<ul>
+<li><a href="https://c.m.163.com/news/a/LAJOI3N40511B8LM.html">网易新闻（IT之家）· 原文</a></li>
+<li><a href="https://github.com/deepseek-ai/dsh-superagent-prototype">GitHub: deepseek-ai/dsh-superagent-prototype</a>（MIT，2.5k star；官方声明为研究原型、非正式产品）</li>
+<li>同期相关报道：<a href="https://c.m.163.com/news/a/LAJO2OLL0511DSSR.html">量子位《刚刚，DeepSeek 重磅开源：Agent 底座架构！》</a>、<a href="https://c.m.163.com/news/a/LAK4NI2E051288FS.html">通信世界《DeepSeek 开源 Agent 底座：智能体从”单会话”走向”常驻系统”》</a>、<a href="https://c.m.163.com/news/a/L6ACIBNA0511AQHO.html">机器之心《Agent 长时工作如何不跑偏？WorkSwarm 用「永续会话」给出解法》</a></li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Cloudflare Pages 静态站托管全栈评估 · Samvortex Hub</title><meta name="description" content="在集团 IT 场景下对 Cloudflare Pages 做完整的选型评估：性能、价格、CI/CD、Git 集成、安全、可观测性，与 Vercel / Netlify / GitHub Pages 横评。"><link rel="canonical" href="https://samvortex.com/evaluation/cloudflare-pages-fullstack-evaluation/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Cloudflare Pages 静态站托管全栈评估 · Samvortex Hub"><meta property="og:description" content="在集团 IT 场景下对 Cloudflare Pages 做完整的选型评估：性能、价格、CI/CD、Git 集成、安全、可观测性，与 Vercel / Netlify / GitHub Pages 横评。"><meta property="og:url" content="https://samvortex.com/evaluation/cloudflare-pages-fullstack-evaluation/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Cloudflare Pages 静态站托管全栈评估 · Samvortex Hub"><meta name="twitter:description" content="在集团 IT 场景下对 Cloudflare Pages 做完整的选型评估：性能、价格、CI/CD、Git 集成、安全、可观测性，与 Vercel / Netlify / GitHub Pages 横评。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-09-24T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.CK7TN65K.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 评估 </a><a href="/notes/" class="hover:text-brand-600 "> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/evaluation/" class="hover:text-brand-600">评估</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">评估</span> <time datetime="2026-09-24T00:00:00.000Z">2026年9月24日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Cloudflare Pages 静态站托管全栈评估</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">在集团 IT 场景下对 Cloudflare Pages 做完整的选型评估：性能、价格、CI/CD、Git 集成、安全、可观测性，与 Vercel / Netlify / GitHub Pages 横评。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Cloudflare Pages/" class="tag">#Cloudflare Pages</a><a href="/tags/静态托管/" class="tag">#静态托管</a><a href="/tags/评估/" class="tag">#评估</a><a href="/tags/WCC/" class="tag">#WCC</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <blockquote>
+<p>这是一篇<strong>纯评估</strong>文章，目的是为「要不要把集团外宣/知识站点迁到 CF Pages」这个问题提供决策依据。</p>
+</blockquote>
+<h2 id="1-评估对象与场景">1. 评估对象与场景</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>描述</th></tr></thead><tbody><tr><td>候选</td><td>Cloudflare Pages, Vercel, Netlify, GitHub Pages</td></tr><tr><td>场景</td><td>集团外宣站、知识库、文档站、轻量 SaaS 前端</td></tr><tr><td>规模</td><td>月 PV 50–200 万，100–500 个静态资源</td></tr><tr><td>关键诉求</td><td>全球访问快、零运维、CI/CD 自动化、域名与 DNS 在 CF 一体化</td></tr></tbody></table>
+<h2 id="2-评估维度与权重">2. 评估维度与权重</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>权重</th><th>评估要点</th></tr></thead><tbody><tr><td>性能与 CDN</td><td>25%</td><td>TTFB、缓存命中率、PoP 数量</td></tr><tr><td>价格</td><td>20%</td><td>流量/构建/函数计费</td></tr><tr><td>Git 集成</td><td>15%</td><td>PR Preview、多分支、可回滚</td></tr><tr><td>安全</td><td>15%</td><td>DDoS、WAF、Access、Turnstile</td></tr><tr><td>可观测性</td><td>10%</td><td>日志、Analytics、Web Vitals</td></tr><tr><td>生态与可移植性</td><td>10%</td><td>框架支持、导出难度</td></tr><tr><td>运维成本</td><td>5%</td><td>配置复杂度、文档质量</td></tr></tbody></table>
+<h2 id="3-各家打分10-分制">3. 各家打分（10 分制）</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>维度</th><th>CF Pages</th><th>Vercel</th><th>Netlify</th><th>GH Pages</th></tr></thead><tbody><tr><td>性能与 CDN</td><td><strong>9</strong></td><td>8</td><td>8</td><td>6</td></tr><tr><td>价格</td><td><strong>9</strong></td><td>6</td><td>6</td><td>10</td></tr><tr><td>Git 集成</td><td>9</td><td><strong>10</strong></td><td><strong>10</strong></td><td>7</td></tr><tr><td>安全</td><td><strong>10</strong></td><td>8</td><td>7</td><td>6</td></tr><tr><td>可观测性</td><td>8</td><td>9</td><td>8</td><td>5</td></tr><tr><td>生态可移植</td><td>8</td><td>9</td><td>9</td><td><strong>10</strong></td></tr><tr><td>运维成本</td><td><strong>10</strong></td><td>8</td><td>8</td><td><strong>10</strong></td></tr><tr><td><strong>加权总分</strong></td><td><strong>9.05</strong></td><td>7.95</td><td>7.65</td><td>7.50</td></tr></tbody></table>
+<blockquote>
+<p>加权算法：<code>Σ(分项得分 × 权重) / 10</code>。CF Pages 凭借<strong>全球 Anycast 网络 + 域名在 CF 时 0 跳转 + 极简计费</strong>，总评第一。</p>
+</blockquote>
+<h2 id="4-关键能力对比">4. 关键能力对比</h2>
+<h3 id="41-构建与部署">4.1 构建与部署</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>能力</th><th>CF Pages</th><th>Vercel</th><th>Netlify</th></tr></thead><tbody><tr><td>构建时间免费额度</td><td>500 次/月</td><td>6000 分钟/月</td><td>300 分钟/月</td></tr><tr><td>并发构建</td><td>1 次（免费）/ 5 次（Pro）</td><td>1 次</td><td>1 次</td></tr><tr><td>PR Preview URL</td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td>一键回滚</td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td>自定义域名 SSL</td><td>自动</td><td>自动</td><td>自动</td></tr></tbody></table>
+<h3 id="42-functions边缘函数">4.2 Functions（边缘函数）</h3>
+<p>CF Pages Functions 基于 <strong>Workers</strong> 运行时，单个账户免费额度：</p>
+<ul>
+<li>请求：10 万次/天</li>
+<li>CPU 时间：30 秒 × 10 万次/天</li>
+<li>KV / D1 / R2：单独计费（KV 读写 100 万次免费）</li>
+</ul>
+<p>实际项目里 Function 用得克制（<strong>核心计算</strong>——只做认证、表单、Edge 重写），其他走预构建。</p>
+<h2 id="5-风险">5. 风险</h2>
+<ol>
+<li><strong>平台切换成本低 → 高</strong>：CF Pages Git 集成后<strong>无法切到 Direct Upload</strong>，但导出很容易（只是 <code>dist/</code>）。</li>
+<li><strong>Functions 与 Workers 不互通</strong>：CF Pages 的 Function 部署到 Pages 项目里；如果你后面想用 Workers KV / D1，要在 Pages Function 里手动绑 binding。</li>
+<li><strong>构建时长有限</strong>：单次构建 20 分钟（免费）/ 40 分钟（Pro），大型站（MPA 500+ 页）要小心。</li>
+<li><strong>国内访问</strong>：CF 在国内没有 PoP，访问要走香港/新加坡。如果你的核心读者在国内，建议再加一个国内 CDN 镜像（阿里云 OSS + 阿里云 CDN）。</li>
+</ol>
+<h2 id="6-决策建议">6. 决策建议</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>场景</th><th>推荐</th></tr></thead><tbody><tr><td><strong>海外读者为主</strong>（默认）</td><td><strong>CF Pages</strong> ✅</td></tr><tr><td>国内用户占比 > 30%</td><td>阿里云 OSS + CDN + 国内外双写</td></tr><tr><td>已重度使用 Next.js / ISR</td><td>Vercel</td></tr><tr><td>已有 Netlify 团队</td><td>维持 Netlify</td></tr><tr><td>完全不想管事（学生/博客）</td><td>GitHub Pages</td></tr></tbody></table>
+<h2 id="7-行动项">7. 行动项</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" checked disabled> 把 <code>samvortex.com</code> 迁移到 CF Pages（站点用 Astro）</li>
+<li class="task-list-item"><input type="checkbox" disabled> 给集团外宣站做同样迁移</li>
+<li class="task-list-item"><input type="checkbox" disabled> 评估 CF Zero Trust 替代 VPN（下一篇文章）</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>TL;DR</strong>：CF Pages 在「性能 + 安全 + 价格」三个最关键维度同时拿第一，是个人与中小型企业静态站的<strong>最优解</strong>；前提是你的 DNS 也在 CF，或者愿意迁过去。</p>
+</blockquote> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>
