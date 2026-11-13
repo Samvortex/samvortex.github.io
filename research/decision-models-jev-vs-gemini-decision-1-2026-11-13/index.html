@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>决策模型进入主战场：本地 JEV vs Gemini Decision 1，校准误差才是真指标 · Samvortex Hub</title><meta name="description" content="⭐ 谷歌发布首款决策模型 Gemini Decision 1（输入 $0.10/1M、⭐ **输出 0 元**）。⭐ 官方 benchmark 表我扒图核对过：**9 项 7 项第一，JevBench 92.2%**，⭐ **但真正值得看的是 Top-1 ECE = 0.0250**（比 Jev 1.14 低一半）。⭐ 结合我 11-10 把 **OpenJev-9B 跑进 oMLX** 的实测，⭐ 讲清 ⭐ **校准误差为何比准确率更重要**、⭐ **本地 6GB vs 云端该怎么选**。"><link rel="canonical" href="https://samvortex.com/research/decision-models-jev-vs-gemini-decision-1-2026-11-13/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="决策模型进入主战场：本地 JEV vs Gemini Decision 1，校准误差才是真指标 · Samvortex Hub"><meta property="og:description" content="⭐ 谷歌发布首款决策模型 Gemini Decision 1（输入 $0.10/1M、⭐ **输出 0 元**）。⭐ 官方 benchmark 表我扒图核对过：**9 项 7 项第一，JevBench 92.2%**，⭐ **但真正值得看的是 Top-1 ECE = 0.0250**（比 Jev 1.14 低一半）。⭐ 结合我 11-10 把 **OpenJev-9B 跑进 oMLX** 的实测，⭐ 讲清 ⭐ **校准误差为何比准确率更重要**、⭐ **本地 6GB vs 云端该怎么选**。"><meta property="og:url" content="https://samvortex.com/research/decision-models-jev-vs-gemini-decision-1-2026-11-13/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="决策模型进入主战场：本地 JEV vs Gemini Decision 1，校准误差才是真指标 · Samvortex Hub"><meta name="twitter:description" content="⭐ 谷歌发布首款决策模型 Gemini Decision 1（输入 $0.10/1M、⭐ **输出 0 元**）。⭐ 官方 benchmark 表我扒图核对过：**9 项 7 项第一，JevBench 92.2%**，⭐ **但真正值得看的是 Top-1 ECE = 0.0250**（比 Jev 1.14 低一半）。⭐ 结合我 11-10 把 **OpenJev-9B 跑进 oMLX** 的实测，⭐ 讲清 ⭐ **校准误差为何比准确率更重要**、⭐ **本地 6GB vs 云端该怎么选**。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-11-13T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.DiAxPDso.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 "> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/research/" class="hover:text-brand-600">研究</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">研究</span> <time datetime="2026-11-13T00:00:00.000Z">2026年11月13日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">决策模型进入主战场：本地 JEV vs Gemini Decision 1，校准误差才是真指标</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ 谷歌发布首款决策模型 Gemini Decision 1（输入 $0.10/1M、⭐ **输出 0 元**）。⭐ 官方 benchmark 表我扒图核对过：**9 项 7 项第一，JevBench 92.2%**，⭐ **但真正值得看的是 Top-1 ECE = 0.0250**（比 Jev 1.14 低一半）。⭐ 结合我 11-10 把 **OpenJev-9B 跑进 oMLX** 的实测，⭐ 讲清 ⭐ **校准误差为何比准确率更重要**、⭐ **本地 6GB vs 云端该怎么选**。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Gemini Decision 1/" class="tag">#Gemini Decision 1</a><a href="/tags/Decisions API/" class="tag">#Decisions API</a><a href="/tags/JEV/" class="tag">#JEV</a><a href="/tags/OpenJev/" class="tag">#OpenJev</a><a href="/tags/TypeSafe/" class="tag">#TypeSafe</a><a href="/tags/概率校准/" class="tag">#概率校准</a><a href="/tags/ECE/" class="tag">#ECE</a><a href="/tags/决策模型/" class="tag">#决策模型</a><a href="/tags/模型路由/" class="tag">#模型路由</a><a href="/tags/SAG2/" class="tag">#SAG2</a><a href="/tags/BM25/" class="tag">#BM25</a><a href="/tags/本地部署/" class="tag">#本地部署</a><a href="/tags/MLX/" class="tag">#MLX</a><a href="/tags/oMLX/" class="tag">#oMLX</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ 谷歌发布首款决策模型 <strong>Gemini Decision 1</strong>（模型 ID <code>gemini-decision-1</code>，输入 <strong>$0.10/1M</strong>、⭐ <strong>输出 0 元</strong>）。⭐ 我把官方 benchmark 表扒下来逐项核对：⭐ <strong>9 项里 7 项第一，JevBench 92.2%</strong>，⭐ <strong>但真正值得看的不是准确率，而是 Top-1 ECE = 0.0250</strong>——⭐ 比 TypeSafe Jev 1.14 的 0.0494 <strong>低一半</strong>，⭐ 比 Flash-Lite 的 0.2104 <strong>低 88%</strong>。⭐ 结合我 11-10 在 M4 Pro 上把 <strong>OpenJev-9B 塞进 oMLX</strong> 的实测数据，⭐ 这篇讲清三件事：⭐ <strong>决策模型到底在解决什么</strong>、⭐ <strong>校准误差为什么比准确率更重要</strong>、⭐ <strong>本地 6GB 和云端 $0.10/百万该怎么选</strong>。</p>
+</blockquote>
+<img src="/img/research/decision-models-jev-vs-gemini-decision-1-2026-11-13/image-01.jpg" alt="一条偏离对角线的校准曲线与天平图标，象征概率校准误差与准确率的区别" style="max-width: 100%; border-radius: 8px;">
+<hr>
+<h2 id="一先看官方数据我扒了原图核对">一、先看官方数据（我扒了原图核对）</h2>
+<p>Google 博客的 benchmark 表是<strong>图片</strong>，我把它下下来直接看了。<strong>原文引用的数字全部准确</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Benchmark</th><th>指标</th><th><strong>Gemini Decision 1</strong></th><th>TypeSafe Jev 1.14</th><th>GPT-6 Luna</th><th>Gemini 3.5 Flash-Lite</th></tr></thead><tbody><tr><td><strong>JevBench</strong></td><td>Public split</td><td><strong>92.2%</strong> ✅</td><td>90.0%</td><td>90.9%</td><td>86.6%</td></tr><tr><td><strong>Amazon ESCI</strong></td><td>Macro-F1</td><td><strong>58.7%</strong> ✅</td><td>56.7%</td><td>54.7%</td><td>47.2%</td></tr><tr><td><strong>New Yorker Caption</strong></td><td>Text-only</td><td><strong>79.7%</strong> ✅</td><td>72.0%</td><td>68.4%</td><td>73.7%</td></tr><tr><td>Mind2Web Multimodal</td><td>—</td><td>86.2%</td><td><strong>86.8%</strong></td><td>81.8%</td><td>78.0%</td></tr><tr><td><strong>PubMedQA</strong></td><td>—</td><td><strong>79.8%</strong> ✅</td><td>78.2%</td><td>74.4%</td><td>77.6%</td></tr><tr><td><strong>Global-MMLU-Lite</strong></td><td>Non-English</td><td><strong>86.0%</strong> ✅</td><td>85.0%</td><td>79.6%</td><td>78.8%</td></tr><tr><td>When2Call</td><td>—</td><td>79.9%</td><td><strong>82.0%</strong></td><td>70.4%</td><td>60.9%</td></tr><tr><td><strong>MMAU</strong></td><td>—</td><td><strong>71.8%</strong> ✅</td><td>—</td><td>—</td><td>67.7%</td></tr><tr><td><strong>Video-MME</strong></td><td>No subtitles</td><td><strong>69.1%</strong> ✅</td><td>—</td><td>—</td><td>63.3%</td></tr><tr><td><strong>Top-1 ECE</strong></td><td>7 shared evals, 越低越好</td><td><strong>0.0250</strong> ✅</td><td>0.0494</td><td>0.0721</td><td>0.2104</td></tr><tr><td><strong>Total price</strong></td><td>7 shared evals</td><td>$0.88</td><td><strong>$0.68</strong></td><td>$0.93</td><td>$4.14</td></tr></tbody></table>
+<p><strong>两个关键点原文没强调：</strong></p>
+<p><strong>① 输的那两项恰好是 Agent 最相关的。</strong> Mind2Web Multimodal（-0.6）和 <strong>When2Call（工具调用判断，-2.1）</strong>——而 When2Call 正是 Gemini Decision 1 重点宣传的”Agent 工具选择”场景。<strong>在这个赛道上，专用决策模型 TypeSafe Jev 依然领先。</strong></p>
+<p><strong>② 总成本不是最低。</strong> $0.88 vs Jev 的 $0.68。宣传里说”比 Flash-Lite 便宜近 5 倍”是对的（$4.14 → $0.88），但<strong>跟 Jev 比并没有更便宜</strong>。</p>
+<hr>
+<h2 id="二决策模型到底在解决什么问题">二、决策模型到底在解决什么问题</h2>
+<h3 id="传统做法的浪费">传统做法的浪费</h3>
+<p>要做一个”判断这封邮件是不是垃圾邮件”，传统路径是：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>调用生成式大模型 → 生成一段文本 → 正则/解析提取答案 → 丢弃 99% 的 token</span></span></code></pre>
+<p><strong>你花了完整的生成成本（prefill + 逐 token decode），只为了最后得到一个 yes/no 和一个概率。</strong></p>
+<h3 id="决策模型的做法">决策模型的做法</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>一次前向传播 → 直接对候选选项打分 → 返回概率 + 置信度</span></span></code></pre>
+<p>不生成任何答案文本。<strong>输出 token 数为 0。</strong></p>
+<h3 id="gemini-decision-1-的规格官方-pricing-页核实">Gemini Decision 1 的规格（官方 pricing 页核实）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>模型 ID</td><td><code>gemini-decision-1</code></td></tr><tr><td>输入</td><td><strong>$0.10 / 1M tokens</strong>（免费层免费）</td></tr><tr><td>输出</td><td><strong>不适用（0 output tokens）</strong></td></tr><tr><td>上下文</td><td>262,144 tokens（256K）</td></tr><tr><td>单请求问题数</td><td>最多 <strong>1,000</strong></td></tr><tr><td>选项数</td><td>2–255（choice 类型）</td></tr><tr><td>题型</td><td><code>noul</code>（是/否）、<code>choice</code>（多选）、<code>score</code>（有序评分）</td></tr><tr><td>延迟</td><td>端到端 <strong>150–250ms</strong>；模型计算 50–100ms（≤16K 上下文）</td></tr><tr><td><strong>不支持</strong></td><td>context caching、Batch API、Flex/Priority 推理</td></tr></tbody></table>
+<p><strong>计费细节</strong>：共享输入 token 只算一次，<strong>每个问题单独加自己的 instructions/criteria/格式 token</strong>。</p>
+<p><strong>不支持 context caching 意味着</strong>：重复输入每次全量计费。对”同一段长文 + 100 个问题”这个最典型的批量场景，仍然非常划算；但对”同一段文反复问 1000 遍”就不行。</p>
+<h3 id="接口形态">接口形态</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> POST</span><span style="color:#9ECBFF"> "https://generativelanguage.googleapis.com/v1beta/decisions"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "x-goog-api-key: </span><span style="color:#E1E4E8">$GEMINI_API_KEY</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "Content-Type: application/json"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -d</span><span style="color:#9ECBFF"> '{</span></span>
+<span class="line"><span style="color:#9ECBFF">    "model": "gemini-decision-1",</span></span>
+<span class="line"><span style="color:#9ECBFF">    "input": "The blue mug I ordered on Monday arrived cracked on Wednesday.",</span></span>
+<span class="line"><span style="color:#9ECBFF">    "questions": {</span></span>
+<span class="line"><span style="color:#9ECBFF">      "is_damaged": {"type": "noul", "instructions": "Did the item arrive damaged?"}</span></span>
+<span class="line"><span style="color:#9ECBFF">    }</span></span>
+<span class="line"><span style="color:#9ECBFF">  }'</span></span></code></pre>
+<p>返回：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "answers"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "is_damaged"</span><span style="color:#E1E4E8">: {</span><span style="color:#79B8FF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"noul"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"noul"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.99</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"confidence"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.99</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#79B8FF">  "usage"</span><span style="color:#E1E4E8">: {</span><span style="color:#79B8FF">"total_input_tokens"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"total_output_tokens"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>三种题型的返回字段跟 JEV 完全一致</strong>（<code>noul</code> / <code>confidence</code> / <code>probabilities</code> / <code>legend</code>）。这点很重要——它意味着<strong>任何用 JEV 写的代码，换成 Gemini Decision 1 不用改一行</strong>。</p>
+<hr>
+<h2 id="三-校准误差这才是决策模型的命门">三、⭐ 校准误差：这才是决策模型的命门</h2>
+<h3 id="准确率回答不了的问题">准确率回答不了的问题</h3>
+<p>准确率只告诉你”判对了几成”。但<strong>决策模型的实际用途是”要不要交给人”</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> model.noul </span><span style="color:#F97583">&#x3C;</span><span style="color:#79B8FF"> 0.7</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    route_to_human()   </span><span style="color:#6A737D"># 阈值判断</span></span></code></pre>
+<p><strong>这个阈值只有在概率是”可信的”时候才有意义。</strong></p>
+<h3 id="ece-是什么">ECE 是什么</h3>
+<p><strong>Expected Calibration Error（预期校准误差）</strong>：把所有预测按概率分桶，看”我说是 80% 的那批，实际对的比例是不是接近 80%“，然后取加权平均。</p>
+<p><strong>ECE = 0.0250 意味着</strong>：模型说 80% 的那批题，实际正确率大约在 77.5%–82.5% 之间。</p>
+<p><strong>ECE = 0.2104（Flash-Lite）意味着</strong>：说 80% 的那批，实际可能只有 70%——<strong>严重过度自信</strong>。</p>
+<h3 id="这在-agent-里的后果">这在 Agent 里的后果</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>场景</th><th>ECE 高的后果</th></tr></thead><tbody><tr><td>安全检测</td><td>模型说”这个请求 95% 安全”，实际 80% 安全 → <strong>危险请求漏过</strong></td></tr><tr><td>工具路由</td><td>模型说”这个工具 90% 能解决”，实际 60% → <strong>频繁失败重试</strong></td></tr><tr><td>人工审核阈值</td><td>阈值设 0.9，但模型的高分不可信 → <strong>该转人工的不转</strong></td></tr></tbody></table>
+<p>官方四家的 ECE 差距：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Gemini Decision 1  ████░░░░░░░░░░░░░░░░  0.0250</span></span>
+<span class="line"><span>TypeSafe Jev 1.14  ████████░░░░░░░░░░░░░░  0.0494</span></span>
+<span class="line"><span>GPT-6 Luna         ███████████░░░░░░░░░░░░  0.0721</span></span>
+<span class="line"><span>Flash-Lite         ████████████████████████  0.2104</span></span></code></pre>
+<p><strong>Gemini Decision 1 的 ECE 只有 Jev 的一半，只有 Flash-Lite 的 1/8。</strong></p>
+<hr>
+<h2 id="四-我的本地实测9b-的-openjev-长什么样">四、⭐ 我的本地实测：9B 的 OpenJev 长什么样</h2>
+<p>11-10 我把 <code>autotrust/JEV-9B</code>（蒸馏自 TypeSafe Jev 1.13）转成 MLX 跑进了 oMLX。用 SK 海力士 underfill 那个场景实测：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>候选</th><th>OpenJev-9B（本地）</th><th>判定</th></tr></thead><tbody><tr><td>直接命中（Namics 供货原句）</td><td><strong>0.9653</strong></td><td>相关</td></tr><tr><td>无关（珊瑚礁）</td><td><strong>0.0065</strong></td><td>无关</td></tr><tr><td>同主题但不含答案（HBM4 发布）</td><td><strong>0.0065</strong></td><td>无关</td></tr><tr><td>⭐ <strong>有线索但无答案</strong></td><td><strong>0.1313</strong></td><td><strong>无关（干脆利落）</strong></td></tr></tbody></table>
+<p><strong>第四行是重点。</strong> 我拿它跟 0.8B 的 Jev-Style 比过：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Jev-Style 0.8B</th><th>OpenJev 9B</th></tr></thead><tbody><tr><td>直接命中</td><td>0.9748</td><td>0.9653</td></tr><tr><td>无关</td><td>0.0487</td><td>0.0065</td></tr><tr><td><strong>有线索无答案</strong></td><td><strong>0.5522</strong> ❌ 卡在 0.5</td><td><strong>0.1313</strong> ✅ 干脆判掉</td></tr></tbody></table>
+<p><strong>0.8B 在中间地带判不出来</strong>（0.5522 正好卡在阈值上）。而这恰恰是决策模型最难的部分——“这条有没有线索但不是答案”。</p>
+<p><strong>9B 在这个中间地带的表现，是它比小模型贵的真正原因。</strong></p>
+<p><strong>顺带一个重要发现</strong>：0.8B 那个模型（<code>Jev-Style</code>，独立项目，跟 TypeSafe 无关）问的是”<strong>这个陈述为真吗</strong>”，而 SAG2 / TypeSafe JEV 问的是”<strong>这段是不是必要证据</strong>”。<strong>语义不同，用错问法会让所有候选都落到 0.96–0.97，完全没有判别力。</strong></p>
+<hr>
+<h2 id="五本地-vs-云端怎么选">五、本地 vs 云端：怎么选</h2>
+<h3 id="三条路线对比">三条路线对比</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Gemini Decision 1</th><th>本地 OpenJev-9B</th><th>本地 Jev-Style-0.8B</th></tr></thead><tbody><tr><td>成本</td><td>$0.10/1M 输入，输出 0</td><td>电费</td><td>电费</td></tr><tr><td>体积</td><td>云端</td><td><strong>6.36 GB</strong>（NVFP4）</td><td>0.78 GB</td></tr><tr><td>延迟</td><td><strong>150–250ms</strong>，1000 问不涨</td><td>0.45–0.68s/判定</td><td>44–60ms/判定</td></tr><tr><td>批量（40 候选 / 220K tok）</td><td><strong>~150–250ms</strong></td><td><strong>65–180s</strong></td><td>未实测</td></tr><tr><td>准确率（JevBench）</td><td><strong>92.2%</strong></td><td>未在 JevBench 上跑</td><td>60.6%（换算自 0.8B 消融）</td></tr><tr><td>ECE</td><td><strong>0.0250</strong></td><td>未测</td><td>未测</td></tr><tr><td>中间地带</td><td>—</td><td><strong>0.1313</strong> ✅</td><td>0.5522 ❌</td></tr><tr><td>隐私</td><td>数据出本机</td><td>✅ 全本地</td><td>✅ 全本地</td></tr></tbody></table>
+<h3 id="我的实测数据说明什么">我的实测数据说明什么</h3>
+<p>我用 <strong>SAG2</strong> 这个真实检索场景做过压测（每轮 40 个候选、220K tokens 的 JEV 批量打分）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>本地 OpenJev-9B:  144.4s / 170.7s / 154.6s   ← 三轮扩展</span></span>
+<span class="line"><span>Gemini Decision 1: ~150–250ms（且 1000 问延迟基本不涨）</span></span></code></pre>
+<p><strong>这是数量级差距。</strong> 本地慢的原因我查过：<strong>瓶颈在 prefill（读完 220K tokens 的候选段落），不在模型前向</strong>。换更小的模型省不了这个——0.8B 走 oMLX 还是 <code>engine=batched</code>（没有 decision head 读出路径），而且判别力不行。</p>
+<h3 id="三条建议路线">三条建议路线</h3>
+<p><strong>① 大量、批量、长输入 → 云端</strong></p>
+<p>SAG2 那种”一次 40 个候选、220K tokens”的场景，本地 144s vs 云端 0.2s。<strong>$0.022/轮</strong>（220K tokens × $0.10/1M）在成本上完全不是问题。</p>
+<p><strong>② 高频、低延迟、单条判定 → 看隐私</strong></p>
+<p>本地 0.45–0.68s 对交互式场景有点慢（云端 150–250ms）。但如果数据不能出本机，或者要做<strong>离线批处理</strong>，本地是对的。</p>
+<p><strong>③ 关键路径 → 混合</strong></p>
+<p>云端主用 + 本地兜底。<strong>这正是我在自己 OpenClaw 里已经这么干的</strong>——MiniMax M3.1 Flash 撞 429「Token Plan 用量上限」时，Azure GPT-5.6-Sol 顶上。决策模型层同理：Gemini Decision 1 为主，OpenJev-9B 兜底。</p>
+<h3 id="️-免费层的一个坑">⚠️ 免费层的一个坑</h3>
+<p>官方 pricing 页写明免费层的 <strong>“Used to improve our products: Yes”</strong>——<strong>免费层的输入会被用于谷歌产品改进</strong>。敏感数据别走免费层。</p>
+<hr>
+<h2 id="六这跟你的-agent-架构怎么接">六、这跟你的 Agent 架构怎么接</h2>
+<h3 id="场景-asag2-的-jev-后端现成">场景 A：SAG2 的 JEV 后端（现成）</h3>
+<p>SAG2 的 <code>JevClient</code> 直接 POST 到 <code>{endpoint}/systemone</code>，payload 结构跟 Gemini 的 <code>/v1/decisions</code> <strong>同构</strong>。理论上改一个环境变量就能切：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="dotenv"><code><span class="line"><span style="color:#6A737D"># 现在（本地 OpenJev，走 oMLX + 剥空白的代理）</span></span>
+<span class="line"><span style="color:#FFAB70">JEV_BASE_URL</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">http://127.0.0.1:8766/v1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 换成云端</span></span>
+<span class="line"><span style="color:#FFAB70">JEV_BASE_URL</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">https://generativelanguage.googleapis.com/v1beta</span></span></code></pre>
+<p><strong>但注意两点</strong>：① <code>/v1beta/decisions</code> 跟 <code>/v1beta/systemone</code> 路径不同，要改；② 认证头不同（<code>x-goog-api-key</code> vs <code>Bearer</code>）。</p>
+<h3 id="场景-b心跳的推送闸门">场景 B：心跳的推送闸门</h3>
+<p>你现在用”三问过滤”人工判断：</p>
+<blockquote>
+<p>① 人必须行动或能用这个结果吗？② 带新的可行动信息吗？③ 去掉它人会漏掉什么吗？</p>
+</blockquote>
+<p><strong>这正是 <code>choice</code> 类型</strong>——三个选项一次调用评完。1000 条待推消息可以一次请求评完，本地 9B 要跑几十秒，云端 200ms。</p>
+<h3 id="场景-c模型路由">场景 C：模型路由</h3>
+<p>Google 自己就在用这个做 Gemini Notebook 的实时路由（<strong>延迟最多降 40%</strong>）。你的 OpenClaw 现在是”主模型 + fallback”两级，可以加一个决策层在中间判断”这个请求需要深度推理还是快答”。</p>
+<hr>
+<h2 id="七三个判断">七、三个判断</h2>
+<h3 id="-决策模型是一个真实的品类不是包装">① 决策模型是一个真实的品类，不是包装</h3>
+<p><code>output token = 0</code> 这个设计有实打实的好处：</p>
+<ul>
+<li><strong>成本结构完全不同</strong>——按输出计费的模型，决策任务是最亏的（付了 decode 的钱，拿到一个 yes/no）</li>
+<li><strong>延迟是另一个量级</strong>——150–250ms 且 1000 问不涨，这在做批量筛选时是决定性的</li>
+<li><strong>多模态是原生支持的</strong>，不需要额外 pipeline</li>
+</ul>
+<h3 id="-但校准是比准确率更重要的分水岭">② 但”校准”是比”准确率”更重要的分水岭</h3>
+<p>92.2% vs 90.0% 只差 2.2 个点，<strong>但 ECE 0.0250 vs 0.0494 差一倍</strong>。</p>
+<p><strong>在”要不要交给人”这个决策上，ECE 直接决定阈值怎么设。</strong> 一个 ECE 0.05 的模型说 0.9，你不能信；ECE 0.025 的模型说 0.9，你可以。</p>
+<h3 id="-本地不是被云端淘汰而是找到了自己的位置">③ 本地不是被云端淘汰，而是找到了自己的位置</h3>
+<p>0.8B 跑 44–60ms 但判别力不行；9B 判别力好但 0.45–0.68s；云端 150–250ms 且全指标领先。</p>
+<p><strong>本地真正的价值是隐私和离线，不是速度。</strong> 6.36 GB 换一个”数据不出本机 + 断网可用”，对很多场景是划算的。</p>
+<p><strong>而对 SAG2 这种”每轮 220K tokens 批量打分”的场景，本地是真的不行</strong>——144 秒 vs 0.2 秒，这个差距不是靠优化能填的。</p>
+<hr>
+<h2 id="八如果要接我的顺序">八、如果要接，我的顺序</h2>
+<ol>
+<li><strong>先申请一个 Gemini API key</strong>（AI Studio 免费层就能拿，先用免费层测量，别一上来就付费）</li>
+<li><strong>拿 SAG2 做对照实验</strong>：同一批候选，本地 OpenJev-9B vs 云端 Decision 1，比耗时 + 判别力（尤其中间地带）</li>
+<li><strong>把心跳的推送闸门改成 Decision 1 调用</strong>——这是最小、最独立的试点，一个 <code>choice</code> 类型的问题，几十行代码</li>
+<li><strong>本地 OpenJev-9B 留作兜底</strong>，跟 Azure fallback 一个思路</li>
+</ol>
+<hr>
+<h3 id="相关链接">相关链接</h3>
+<ul>
+<li>官方公告：<a href="https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/">https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/</a></li>
+<li>API 文档：<a href="https://ai.google.dev/gemini-api/docs/decisions-api">https://ai.google.dev/gemini-api/docs/decisions-api</a></li>
+<li>定价：<a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></li>
+<li>模型页：<a href="https://ai.google.dev/gemini-api/docs/models/gemini-decision-1">https://ai.google.dev/gemini-api/docs/models/gemini-decision-1</a></li>
+<li>JEV 模型：<a href="https://huggingface.co/autotrust/JEV-9B">https://huggingface.co/autotrust/JEV-9B</a></li>
+<li>SAG2 论文：arXiv <a href="https://arxiv.org/abs/2610.22588">2610.22588</a></li>
+<li>配套实测：<a href="https://www.samvortex.com/research/sag2-local-knowledge-base-2026-11-08/">SAG2 全本地化实测</a></li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

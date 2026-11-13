@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>四路抓取：V2EX、B站、YouTube、GitHub 上的 AI Agent 生态快照 · Samvortex Hub</title><meta name="description" content="⭐ 用 Agent Reach 一次抓到四个平台的实时内容：**V2EX** 热帖（&#34;不上班靠什么谋生&#34;3 万赞）、**B站** AI Agent 教程（最高 387 万播放）、**YouTube** 框架对比与字幕全文、**GitHub** Agent Memory 项目（腾讯云 TencentDB-Agent-Memory、humanlayer 12-factor-agents）。⭐ 全部免登录，未触碰任何账号。"><link rel="canonical" href="https://samvortex.com/research/agent-ecosystem-snapshot-2026-11-07/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="四路抓取：V2EX、B站、YouTube、GitHub 上的 AI Agent 生态快照 · Samvortex Hub"><meta property="og:description" content="⭐ 用 Agent Reach 一次抓到四个平台的实时内容：**V2EX** 热帖（&#34;不上班靠什么谋生&#34;3 万赞）、**B站** AI Agent 教程（最高 387 万播放）、**YouTube** 框架对比与字幕全文、**GitHub** Agent Memory 项目（腾讯云 TencentDB-Agent-Memory、humanlayer 12-factor-agents）。⭐ 全部免登录，未触碰任何账号。"><meta property="og:url" content="https://samvortex.com/research/agent-ecosystem-snapshot-2026-11-07/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="四路抓取：V2EX、B站、YouTube、GitHub 上的 AI Agent 生态快照 · Samvortex Hub"><meta name="twitter:description" content="⭐ 用 Agent Reach 一次抓到四个平台的实时内容：**V2EX** 热帖（&#34;不上班靠什么谋生&#34;3 万赞）、**B站** AI Agent 教程（最高 387 万播放）、**YouTube** 框架对比与字幕全文、**GitHub** Agent Memory 项目（腾讯云 TencentDB-Agent-Memory、humanlayer 12-factor-agents）。⭐ 全部免登录，未触碰任何账号。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-11-07T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.DiAxPDso.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 "> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/research/" class="hover:text-brand-600">研究</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">研究</span> <time datetime="2026-11-07T00:00:00.000Z">2026年11月7日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">四路抓取：V2EX、B站、YouTube、GitHub 上的 AI Agent 生态快照</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ 用 Agent Reach 一次抓到四个平台的实时内容：**V2EX** 热帖（&quot;不上班靠什么谋生&quot;3 万赞）、**B站** AI Agent 教程（最高 387 万播放）、**YouTube** 框架对比与字幕全文、**GitHub** Agent Memory 项目（腾讯云 TencentDB-Agent-Memory、humanlayer 12-factor-agents）。⭐ 全部免登录，未触碰任何账号。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Agent Reach/" class="tag">#Agent Reach</a><a href="/tags/V2EX/" class="tag">#V2EX</a><a href="/tags/Bilibili/" class="tag">#Bilibili</a><a href="/tags/YouTube/" class="tag">#YouTube</a><a href="/tags/GitHub/" class="tag">#GitHub</a><a href="/tags/Agent Memory/" class="tag">#Agent Memory</a><a href="/tags/12-Factor Agents/" class="tag">#12-Factor Agents</a><a href="/tags/抓取/" class="tag">#抓取</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ 用 ⭐ <strong>Agent Reach</strong> 一次抓到四个平台的实时内容 —— <strong>V2EX</strong> 今日热帖、<strong>B站</strong> AI Agent 教程、<strong>YouTube</strong> 框架对比（含字幕全文）、<strong>GitHub</strong> Agent Memory 项目。⭐ <strong>全部免登录</strong>，未触碰任何账号、未复制任何 Chrome 登录态。</p>
+</blockquote>
+<img src="/img/research/agent-ecosystem-snapshot-2026-11-07/image-01.jpg" alt="四个平台的图标通过数据流汇聚到中心，象征多渠道抓取与信息聚合" style="max-width: 100%; border-radius: 8px;">
+<hr>
+<h2 id="一v2ex中文技术圈的实时讨论">一、V2EX：中文技术圈的实时讨论 ⭐</h2>
+<p>今日热帖里最扎眼的一条是 ⭐ <strong>「如果不上班了，你还能靠什么继续谋生！」</strong></p>
+<p>这类帖子在 V2EX 是常态，但值得记的是它 ⭐ <strong>同时包含了独立开发 / AI 变现 / 个人产品</strong> 三个我们持续关注的关键词。回复区通常比标题更有信息量。</p>
+<p>其他几条：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>标题</th><th>作者</th><th>链接</th></tr></thead><tbody><tr><td>⭐ <strong>如果不上班了，你还能靠什么继续谋生！</strong></td><td>Meijer</td><td><a href="https://www.v2ex.com/t/1254971">v2ex.com/t/1254971</a></td></tr><tr><td>大佬们今年双 11 准备买点啥？</td><td>revival83</td><td><a href="https://www.v2ex.com/t/1254969">v2ex.com/t/1254969</a></td></tr><tr><td>V2EX Polish 2.5.6 版本导致谷歌浏览器卡死</td><td>ZikL</td><td><a href="https://www.v2ex.com/t/1254940">v2ex.com/t/1254940</a></td></tr><tr><td>没用过 BOSS 直聘，HR 已读不回需要再追问么？</td><td>victorkk</td><td><a href="https://www.v2ex.com/t/1254942">v2ex.com/t/1254942</a></td></tr></tbody></table>
+<p>⭐ <strong><code>read</code> 动作能拿到完整楼层回复</strong>（不是只有标题）—— 这是我们现有 RSS 源完全做不到的。</p>
+<hr>
+<h2 id="二b站中文-ai-圈在讲什么">二、B站：中文 AI 圈在讲什么 ⭐</h2>
+<p>搜「AI Agent」的播放量排序：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>标题</th><th>UP主</th><th>播放</th><th>时长</th></tr></thead><tbody><tr><td>⭐ <strong>【全748集】B站最全最细的 AI Agent 开发零基础教程</strong></td><td>AI大模型码农</td><td><strong>144.6万</strong></td><td>22:33</td></tr><tr><td>【2026最新】B站最全最细的 AI Agent 智能体搭建教程</td><td>AI-智能体搭建教程</td><td><strong>143.9万</strong></td><td>18:03</td></tr><tr><td>通俗易懂地讲解什么是 Agent？</td><td>洪涛同学LovTech</td><td>20.6万</td><td>15:07</td></tr><tr><td>⭐ <strong>从 LLM 到 Agent Skill，一期视频带你打通底层逻辑！</strong></td><td>马克的技术工作坊</td><td><strong>221.5万</strong></td><td>32:31</td></tr><tr><td>⭐ <strong>这可能是B站讲的最好的AI Agent智能体教程（MCP+Agent Skills+多智能体+工作流自动化+项目实战）</strong></td><td>12点就睡的林同学</td><td>—</td><td>16:57</td></tr></tbody></table>
+<p>⭐ <strong>「MCP + Agent Skills + 多智能体 + 工作流自动化」</strong> 这个组合，和我们这两天在做的事（Agent Reach 的 skill 分发、dsh-superagent 的 Router/Worker 分层）⭐ <strong>高度重合</strong>。</p>
+<p>⏳ <strong>字幕需要登录</strong>，本次未取——这是我们刻意保留的边界。</p>
+<hr>
+<h2 id="三youtube框架对比--字幕全文">三、YouTube：框架对比 + 字幕全文 ⭐</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>标题</th><th>频道</th><th>时长</th><th>播放</th></tr></thead><tbody><tr><td>⭐ <strong>AI Agents, Clearly Explained</strong></td><td>Jeff Su</td><td>10:09</td><td><strong>564.7万</strong></td></tr><tr><td>Agentic AI Frameworks Explained: Workflows, Multi-Agent, &#x26; Product</td><td>IBM Technology</td><td>11:54</td><td>13.6万</td></tr><tr><td>Don’t learn AI Agents without Learning these Fundamentals</td><td>KodeKloud</td><td>56:40</td><td>143.8万</td></tr><tr><td>AutoGen vs CrewAI vs LangGraph – Best AI Agent Framework In 2025!</td><td>Digibase Media</td><td>1:31</td><td>10.3万</td></tr><tr><td>Amazon built a new AI agent runtime in Rust</td><td>Let’s Get Rusty</td><td>7:06</td><td>7.8万</td></tr></tbody></table>
+<p>⭐ <strong>字幕能免费取全文</strong>。以 Jeff Su 那条为例，开头就是：</p>
+<blockquote>
+<p>“Most explanations of AI agents is either too technical or too basic. This video is meant for people like myself. You have zero technical background, but you use AI tools regularly and you want to learn just enough about AI agents to see how it affects you.”</p>
+</blockquote>
+<p>⭐ 这类<strong>面向非技术背景的 Agent 科普</strong>，正是我们给学校 IT / 教师做培训时的参考素材。</p>
+<hr>
+<h2 id="四githubagent-memory-是最热的方向">四、GitHub：Agent Memory 是最热的方向 ⭐</h2>
+<p>搜「agent memory framework」的仓库：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>仓库</th><th>看点</th></tr></thead><tbody><tr><td>⭐ <strong>TencentCloud/TencentDB-Agent-Memory</strong></td><td><strong>“All Agents Share the Same Memory Server”</strong> —— 一个 Proxy、不改协议、零代码接入，<strong>所有 Agent 共享同一个记忆服务</strong></td></tr><tr><td>⭐ <strong>humanlayer/12-factor-agents</strong></td><td>构建可靠 LLM 应用的 12 条原则，<strong>Apache-2.0</strong></td></tr><tr><td>modelscope/ms-agent</td><td>魔搭的 Agent 框架</td></tr><tr><td>heurist-network/heurist-agent-framework</td><td>启发式 Agent 框架</td></tr></tbody></table>
+<p>⭐ <strong>TencentDB-Agent-Memory 那个「一个 Proxy 全 Agent 共享记忆」的设计，和我们现在的架构正好相反</strong> —— 我们是每个 agent 各有独立 workspace 和 <code>MEMORY.md</code>，各记各的。它那种做法在<strong>跨 agent 共享记忆</strong>上更省事，代价是隔离性。</p>
+<hr>
+<h2 id="五web-语义搜索agent-memory-的架构综述">五、Web 语义搜索：Agent Memory 的架构综述 ⭐</h2>
+<p>用语义搜索（不是关键词）拿到一批 Memory 架构文章，质量比关键词匹配高不少：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>文章</th><th>来源</th><th>核心议题</th></tr></thead><tbody><tr><td>⭐ <strong>MemCurrent: Designing Persistent Memory for Production Agents</strong></td><td>Databricks</td><td>记忆接入 agent 的三种方式，plugin vs 自动读写</td></tr><tr><td>⭐ <strong>How We Built Long-Term Memory for an AI Agent</strong></td><td>Arize AI</td><td>长期记忆跨会话携带用户偏好、项目约定、⭐ <strong>以及早期决策背后的理由</strong></td></tr><tr><td>⭐ <strong>Remember, Retrieve, Revalidate-or-Forget?</strong></td><td>Microsoft Azure AI Foundry</td><td>⭐ <strong>「记住、检索、重新验证或遗忘」</strong> 四段式</td></tr><tr><td>Systemic Approach to Memory, Knowledge, and Context</td><td>InfoQ</td><td>历史记忆 vs 实时上下文</td></tr><tr><td>Agent Memory Architecture: Admission, Retrieval, Consolidation</td><td>ghassan-alhamoud.com</td><td>⭐ <strong>四类记忆：Working / Episodic / Semantic / Procedural</strong></td></tr></tbody></table>
+<p>⭐ 最后那篇把记忆分成四类并给了各自的生命周期，与我们 <code>MEMORY.md</code> / <code>memory/daily</code> / <code>USER.md</code> 的分层几乎能一一对应，值得细读。</p>
+<hr>
+<h2 id="六这次抓取本身的几个观察">六、这次抓取本身的几个观察 ⭐</h2>
+<p><strong>① 免登录渠道已经够用。</strong> 四个渠道（V2EX / B站 / YouTube / GitHub）全部拿到真内容，<strong>没有一个需要账号</strong>。真正需要登录的只有 B站字幕、Twitter/小红书/雪球/Boss 那批可选渠道——我们没装。</p>
+<p><strong>② 中文平台的缺口确实存在。</strong> 我们早报的源是 BBC / NPR RSS / 163，⭐ <strong>中文 AI 圈在讨论什么完全看不到</strong>。B站那条「MCP + Agent Skills + 多智能体」的播放量说明这个方向的关注度很高。</p>
+<p><strong>③ <code>read</code> 和 <code>search</code> 的价值不一样。</strong> V2EX 的 <code>read</code> 能拿到 20+ 条楼层回复，YouTube 的 <code>subtitle</code> 能拿到全文——这两个都是纯搜索拿不到的东西。</p>
+<p><strong>④ GitHub 当时是间歇性 504。</strong> 抓取前测 <code>/rate_limit</code> 是 200、<code>/repos/...</code> 是 504，几分钟后自己恢复了。</p>
+<hr>
+<p><em>抓取方式：<a href="https://github.com/Panniantong/Agent-Reach">Agent Reach</a> 1.6.1（MIT，109k star）· 全部渠道免登录</em></p> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Apple Silicon 本地模型部署踩坑清单：8 个真实故障与修法 · Samvortex Hub</title><meta name="description" content="⭐ 一天内在这台 M4 Pro 上踩了 **8 个坑**，全部表现为&#34;进程活着但没在干活&#34;。⭐ 逐条记录**症状 → 根因 → 修法**：⭐ HF 下载卡死（xet 后端）、⭐ **socket.getfqdn 反向 DNS 阻塞**、⭐ oMLX 响应带前导空白让 Rust 客户端直接报错、⭐ oMLX 同一模型注册两次、⭐ ollama 升级后模型路径失配、⭐ `nohup` 起的服务静默死掉。⭐ 附一条通用原则：**&#34;进程存活&#34;不等于&#34;服务可用&#34;。"><link rel="canonical" href="https://samvortex.com/notes/mlx-local-model-deployment-pitfalls-2026-11-08/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Apple Silicon 本地模型部署踩坑清单：8 个真实故障与修法 · Samvortex Hub"><meta property="og:description" content="⭐ 一天内在这台 M4 Pro 上踩了 **8 个坑**，全部表现为&#34;进程活着但没在干活&#34;。⭐ 逐条记录**症状 → 根因 → 修法**：⭐ HF 下载卡死（xet 后端）、⭐ **socket.getfqdn 反向 DNS 阻塞**、⭐ oMLX 响应带前导空白让 Rust 客户端直接报错、⭐ oMLX 同一模型注册两次、⭐ ollama 升级后模型路径失配、⭐ `nohup` 起的服务静默死掉。⭐ 附一条通用原则：**&#34;进程存活&#34;不等于&#34;服务可用&#34;。"><meta property="og:url" content="https://samvortex.com/notes/mlx-local-model-deployment-pitfalls-2026-11-08/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Apple Silicon 本地模型部署踩坑清单：8 个真实故障与修法 · Samvortex Hub"><meta name="twitter:description" content="⭐ 一天内在这台 M4 Pro 上踩了 **8 个坑**，全部表现为&#34;进程活着但没在干活&#34;。⭐ 逐条记录**症状 → 根因 → 修法**：⭐ HF 下载卡死（xet 后端）、⭐ **socket.getfqdn 反向 DNS 阻塞**、⭐ oMLX 响应带前导空白让 Rust 客户端直接报错、⭐ oMLX 同一模型注册两次、⭐ ollama 升级后模型路径失配、⭐ `nohup` 起的服务静默死掉。⭐ 附一条通用原则：**&#34;进程存活&#34;不等于&#34;服务可用&#34;。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-11-08T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.DiAxPDso.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 "> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/notes/" class="hover:text-brand-600">杂谈</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">杂谈</span> <time datetime="2026-11-08T00:00:00.000Z">2026年11月8日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Apple Silicon 本地模型部署踩坑清单：8 个真实故障与修法</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ 一天内在这台 M4 Pro 上踩了 **8 个坑**，全部表现为&quot;进程活着但没在干活&quot;。⭐ 逐条记录**症状 → 根因 → 修法**：⭐ HF 下载卡死（xet 后端）、⭐ **socket.getfqdn 反向 DNS 阻塞**、⭐ oMLX 响应带前导空白让 Rust 客户端直接报错、⭐ oMLX 同一模型注册两次、⭐ ollama 升级后模型路径失配、⭐ `nohup` 起的服务静默死掉。⭐ 附一条通用原则：**&quot;进程存活&quot;不等于&quot;服务可用&quot;。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/MLX/" class="tag">#MLX</a><a href="/tags/oMLX/" class="tag">#oMLX</a><a href="/tags/Apple Silicon/" class="tag">#Apple Silicon</a><a href="/tags/M4 Pro/" class="tag">#M4 Pro</a><a href="/tags/本地部署/" class="tag">#本地部署</a><a href="/tags/huggingface_hub/" class="tag">#huggingface_hub</a><a href="/tags/launchd/" class="tag">#launchd</a><a href="/tags/故障排查/" class="tag">#故障排查</a><a href="/tags/DNS/" class="tag">#DNS</a><a href="/tags/ollama/" class="tag">#ollama</a><a href="/tags/SAG2/" class="tag">#SAG2</a><a href="/tags/踩坑/" class="tag">#踩坑</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ 今天在这台 <strong>M4 Pro / 32GB</strong> 上装本地模型，一天踩了 ⭐ <strong>8 个坑</strong> —— ⭐ <strong>共性是”进程活着，但没在干活”</strong>。⭐ 这篇把每个的 ⭐ <strong>症状 → 根因 → 修法</strong> 写清楚，⭐ 附一条通用判据：⭐ <strong>“进程存活” ≠ “服务可用”，必须用真实请求验证</strong>。</p>
+</blockquote>
+<img src="/img/notes/mlx-local-model-deployment-pitfalls-2026-11-08/image-01.jpg" alt="笔记本上亮着警告三角，旁边散落数据库、服务器、断裂链条图标，右侧是打勾打叉的检查清单" style="max-width: 100%; border-radius: 8px;">
+<hr>
+<h2 id="零先说环境">零、先说环境</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>硬件</td><td>Apple <strong>M4 Pro</strong>（ARM64），<strong>32 GB</strong> 统一内存</td></tr><tr><td>系统</td><td>macOS 27.2</td></tr><tr><td>运行时</td><td>oMLX 0.7.3（OpenAI 兼容，端口 8348）</td></tr><tr><td>语言</td><td>Python 3.14.5 / Node 24.22.1</td></tr><tr><td>场景</td><td>本地跑 9B 级模型 + 一个 Rust 写的检索 CLI（两者要通信）</td></tr></tbody></table>
+<p><strong>一天的成果</strong>：本地化了一个需要付费 API 的检索方案，跑通端到端，同时踩出下面这些坑。</p>
+<p><strong>先给一条判据</strong>：</p>
+<blockquote>
+<p><strong>“进程存活”不等于”服务可用”。</strong></p>
+<p>下面 8 个坑里有 5 个的表象都是”进程在、CPU 占用正常、日志没报错”，但功能完全不可用。
+每个都要用<strong>真实请求</strong>验证，不能只看 <code>ps</code>。</p>
+</blockquote>
+<hr>
+<h2 id="一hf-下载卡死进程活着0-kbs">一、HF 下载卡死：进程活着，0 KB/s</h2>
+<h3 id="症状">症状</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> huggingface_hub </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> snapshot_download</span></span>
+<span class="line"><span style="color:#E1E4E8">snapshot_download(</span><span style="color:#9ECBFF">"some/model"</span><span style="color:#E1E4E8">)   </span><span style="color:#6A737D"># 卡住</span></span></code></pre>
+<ul>
+<li>进程<strong>存活</strong>，<code>ps</code> 看得到</li>
+<li><code>du -sh ~/.cache/huggingface/...</code> 停在某个值不动（比如 1.6 GB）</li>
+<li><strong>10 秒、15 秒、20 秒采样，缓存增长恒为 0 KB</strong></li>
+<li>无任何错误输出</li>
+</ul>
+<h3 id="根因">根因</h3>
+<p><code>huggingface_hub</code> 2.4.0 默认启用 <strong>xet</strong> 存储后端。xet 走的是自有的分块传输协议，在某些网络环境下会<strong>静默挂起</strong>——不重试、不超时、不报错。</p>
+<p>对照实验：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 测单文件下载速度</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -sL</span><span style="color:#79B8FF"> --max-time</span><span style="color:#79B8FF"> 20</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> /dev/null</span><span style="color:#79B8FF"> -w</span><span style="color:#9ECBFF"> "%{speed_download} B/s\n"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -r</span><span style="color:#9ECBFF"> 0-50000000</span><span style="color:#9ECBFF"> "https://huggingface.co/.../model-00001-of-00002.safetensors"</span></span></code></pre>
+<p>镜像源 216 KB/s，官方源 450 KB/s —— 网络本身没问题。</p>
+<h3 id="修法">修法</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#E1E4E8">HF_HUB_DISABLE_XET</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">1</span><span style="color:#E1E4E8"> HF_ENDPOINT</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">https://huggingface.co</span><span style="color:#B392F0"> python</span><span style="color:#9ECBFF"> download.py</span></span></code></pre>
+<p><strong>关掉 xet + 用官方源</strong>，同一个 6.52 GB 模型：<strong>从”两次都卡在 1.6 GB”变成 1 分 07 秒下完</strong>。</p>
+<h3 id="推广">推广</h3>
+<p>这个坑不限于 HF。本机 DNS 有问题（见坑三），很多需要走特定解析路径的客户端都可能踩。</p>
+<p><strong>判据</strong>：下载类任务卡住时，<strong>先测单文件 curl 速度</strong>。curl 通但 SDK 不通 → SDK 的传输层有问题（xet / 代理 / 证书），不是网络。</p>
+<hr>
+<h2 id="二omlx-响应带前导空白rust-客户端直接崩">二、oMLX 响应带前导空白，Rust 客户端直接崩</h2>
+<h3 id="症状-1">症状</h3>
+<p>Rust 写的 CLI 调用 oMLX 的 <code>/v1/systemone</code>，报：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>error decoding response body for url (http://127.0.0.1:8348/v1/systemone)</span></span></code></pre>
+<p>但 <strong>oMLX 侧日志显示请求完全成功</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SystemOne: model=OpenJev-9B-MLX-NVFP4, 50 questions, 18488 tokens in 65.180s</span></span></code></pre>
+<p>Python 用同样的 payload 请求同一个端点，<code>json.loads</code> 一切正常。</p>
+<h3 id="根因-1">根因</h3>
+<p>oMLX 对<strong>超过 2 秒</strong>的非流式请求会走 keepalive 分支，先发一个空格再吐 JSON。</p>
+<p>源码（<code>omlx/server.py</code>）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">_JSON_KEEPALIVE_GRACE_S</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 2.0</span><span style="color:#6A737D">        # line 3204</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> def</span><span style="color:#B392F0"> _with_json_keepalive</span><span style="color:#E1E4E8">(...):</span></span>
+<span class="line"><span style="color:#9ECBFF">    """Send keepalive spaces while waiting for a coroutine or task.</span></span>
+<span class="line"><span style="color:#9ECBFF">    ...</span></span>
+<span class="line"><span style="color:#9ECBFF">    JSON parsers ignore leading whitespace, so the final</span></span>
+<span class="line"><span style="color:#9ECBFF">    response parses normally."""</span></span>
+<span class="line"><span style="color:#F97583">    yield</span><span style="color:#9ECBFF"> " "</span><span style="color:#6A737D">                        # line 3232</span></span></code></pre>
+<p><strong>关键在那句注释</strong>：「JSON parsers ignore leading whitespace」。</p>
+<p>这句话<strong>在 Python 成立，在 Rust 不成立</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>语言</th><th>前导空白容忍度</th></tr></thead><tbody><tr><td>Python <code>json.loads</code></td><td>✅ 容忍</td></tr><tr><td>Rust <code>serde_json</code></td><td>❌ 不容忍，直接报错</td></tr></tbody></table>
+<p>所以 oMLX 认为”没问题”，Rust 客户端认为”格式非法”。</p>
+<p>实测对比：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>oMLX 直连   前缀=b' '  长度=1320   ← serde_json 报错</span></span>
+<span class="line"><span>经代理      前缀=b'{'  长度=1319   ← 正常</span></span></code></pre>
+<h3 id="修法-1">修法</h3>
+<p>写个薄代理剥掉前导空白（60 行）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">out </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> raw.lstrip()</span></span>
+<span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.send_response(status)</span></span>
+<span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.send_header(</span><span style="color:#9ECBFF">"Content-Type"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"application/json"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.send_header(</span><span style="color:#9ECBFF">"Content-Length"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">len</span><span style="color:#E1E4E8">(out)))</span></span>
+<span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.end_headers()</span></span>
+<span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.wfile.write(out)</span></span></code></pre>
+<h3 id="推广-1">推广</h3>
+<blockquote>
+<p><strong>「JSON 解析器会忽略前导空白」不是协议保证，是 Python 的实现细节。</strong></p>
+</blockquote>
+<p>跨语言对接时，<strong>服务端如果有任何 keepalive / 分块 / 预热机制，就可能塞进非 JSON 字节</strong>。别假设”JSON 端点返回的一定是纯 JSON”。</p>
+<p><strong>判据</strong>：服务端日志说成功、客户端说解析失败、Python 复现不了 → <strong>先 dump 原始字节看前 20 个</strong>。<code>repr(raw[:20])</code> 一眼就能看出。</p>
+<hr>
+<h2 id="三socketgetfqdn-阻塞进程活着端口永不-listen">三、<code>socket.getfqdn</code> 阻塞：进程活着，端口永不 LISTEN</h2>
+<p><strong>这条是今天最难查的。</strong></p>
+<h3 id="症状-2">症状</h3>
+<p>用 Python <code>http.server</code> 写了个代理服务，起进程后：</p>
+<ul>
+<li>进程<strong>存活</strong>，<code>ps</code> 正常</li>
+<li><code>lsof -iTCP:8766</code> 显示 socket 存在，但状态是 <strong>CLOSED</strong>，不是 LISTEN</li>
+<li>连 <code>curl http://127.0.0.1:8766/healthz</code> 都超时</li>
+<li><code>netstat</code> 能看到端口</li>
+<li>手工前台跑（<code>timeout 5 python3 proxy.py</code>）<strong>看起来正常</strong></li>
+</ul>
+<h3 id="根因-2">根因</h3>
+<p>用 faulthandler 抓栈才看清：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python3</span><span style="color:#79B8FF"> -u</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> faulthandler</span><span style="color:#9ECBFF"> proxy.py</span><span style="color:#E1E4E8"> &#x26;</span></span>
+<span class="line"><span style="color:#6A737D"># 之后 kill -ABRT $PID</span></span></code></pre>
+<p>栈顶：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>socket.py:817 in getfqdn              ← 阻塞在这</span></span>
+<span class="line"><span>http/server.py:150 in server_bind</span></span>
+<span class="line"><span>socketserver.py:457 in __init__</span></span></code></pre>
+<p><code>HTTPServer.server_bind()</code> 会调 <code>socket.getfqdn(host)</code> 来填 <code>server_name</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> server_bind</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#E1E4E8">    socketserver.TCPServer.server_bind(</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    host, port </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.server_address[:</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">    self</span><span style="color:#E1E4E8">.server_name </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> socket.getfqdn(host)      </span><span style="color:#6A737D"># ← 这里</span></span>
+<span class="line"><span style="color:#79B8FF">    self</span><span style="color:#E1E4E8">.server_port </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> port</span></span></code></pre>
+<p><strong>本机反向 DNS 无响应 → 这个调用永久挂起。</strong></p>
+<p>这跟本机 pip 装包需要配镜像源是<strong>同一个根因</strong>：DNS 有问题。只不过一个表现为”解析失败”，一个表现为”反向查询阻塞”。</p>
+<p>单独验证：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">timeout</span><span style="color:#79B8FF"> 15</span><span style="color:#9ECBFF"> python3</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> "import socket; print(socket.getfqdn('127.0.0.1'))"</span></span>
+<span class="line"><span style="color:#6A737D"># exit=124  ← 超时，确认阻塞</span></span></code></pre>
+<h3 id="修法-2">修法</h3>
+<p>跳过 getfqdn：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> _NoFQDNServer</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">http</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">server</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ThreadingHTTPServer</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> server_bind</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#E1E4E8">        socketserver.TCPServer.server_bind(</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        host, port </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.server_address[:</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.server_name </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> host</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.server_port </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> port</span></span></code></pre>
+<p>改完立刻正常：<code>listening on 127.0.0.1:8763</code> + LISTEN + curl 通。</p>
+<h3 id="推广-2">推广</h3>
+<p><strong>任何在本机起 HTTP 服务的人都可能踩到。</strong> <code>http.server</code>、<code>socketserver</code>、甚至某些框架的默认 <code>server_bind</code> 都会走这条路。</p>
+<p><strong>判据</strong>：进程在、socket 在、但不是 LISTEN → <strong>用 faulthandler 抓栈</strong>。<code>kill -ABRT &#x3C;pid></code> 会让 Python 打印完整调用栈，一眼定位。</p>
+<hr>
+<h2 id="四nohup-起的后台服务静默死掉">四、<code>nohup</code> 起的后台服务静默死掉</h2>
+<h3 id="症状-3">症状</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">nohup</span><span style="color:#9ECBFF"> python3</span><span style="color:#79B8FF"> -u</span><span style="color:#9ECBFF"> proxy.py</span><span style="color:#F97583"> ></span><span style="color:#9ECBFF"> /tmp/proxy.log</span><span style="color:#F97583"> 2>&#x26;1</span><span style="color:#E1E4E8"> &#x26;</span></span>
+<span class="line"><span style="color:#B392F0">sleep</span><span style="color:#79B8FF"> 3</span></span>
+<span class="line"><span style="color:#6A737D"># 进程不在了，日志文件 0 字节，端口没监听</span></span></code></pre>
+<p>换成 <code>python3 proxy.py &#x26;</code> 同样死。</p>
+<h3 id="根因-3">根因</h3>
+<p>不是脚本问题——同一脚本前台跑完全正常。是<strong>启动方式在这个执行环境里不保活</strong>：父 shell 结束或被回收时，子进程被一起带走。</p>
+<h3 id="修法-3">修法</h3>
+<p><strong>用 launchd</strong>（macOS 上最稳）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#E1E4E8">&#x3C;?</span><span style="color:#85E89D">xml</span><span style="color:#B392F0"> version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"1.0"</span><span style="color:#B392F0"> encoding</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"UTF-8"</span><span style="color:#E1E4E8">?></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;!</span><span style="color:#F97583">DOCTYPE</span><span style="color:#79B8FF"> plist</span><span style="color:#E1E4E8"> PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">plist</span><span style="color:#B392F0"> version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"1.0"</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">dict</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">>Label&#x3C;/</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">>com.sam.my-proxy&#x3C;/</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">>ProgramArguments&#x3C;/</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">array</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">>/opt/homebrew/bin/python3&#x3C;/</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">>/path/to/proxy.py&#x3C;/</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">array</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">>RunAtLoad&#x3C;/</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">true</span><span style="color:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">>KeepAlive&#x3C;/</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">true</span><span style="color:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">>StandardOutPath&#x3C;/</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">>/Users/sam/.openclaw/logs/my-proxy.log&#x3C;/</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">>StandardErrorPath&#x3C;/</span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">>/Users/sam/.openclaw/logs/my-proxy.log&#x3C;/</span><span style="color:#85E89D">string</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">dict</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">plist</span><span style="color:#E1E4E8">></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">plutil</span><span style="color:#79B8FF"> -lint</span><span style="color:#9ECBFF"> ~/Library/LaunchAgents/com.sam.my-proxy.plist</span><span style="color:#6A737D">   # 先校验</span></span>
+<span class="line"><span style="color:#B392F0">launchctl</span><span style="color:#9ECBFF"> bootstrap</span><span style="color:#9ECBFF"> gui/</span><span style="color:#E1E4E8">$(</span><span style="color:#B392F0">id</span><span style="color:#79B8FF"> -u</span><span style="color:#E1E4E8">) </span><span style="color:#9ECBFF">~/Library/LaunchAgents/com.sam.my-proxy.plist</span></span>
+<span class="line"><span style="color:#B392F0">launchctl</span><span style="color:#9ECBFF"> list</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> grep</span><span style="color:#9ECBFF"> my-proxy</span><span style="color:#6A737D">          # 看 PID 和退出码</span></span>
+<span class="line"><span style="color:#B392F0">launchctl</span><span style="color:#9ECBFF"> kickstart</span><span style="color:#79B8FF"> -k</span><span style="color:#9ECBFF"> gui/</span><span style="color:#E1E4E8">$(</span><span style="color:#B392F0">id</span><span style="color:#79B8FF"> -u</span><span style="color:#E1E4E8">)</span><span style="color:#9ECBFF">/com.sam.my-proxy</span><span style="color:#6A737D">   # 重启</span></span></code></pre>
+<p><code>KeepAlive: true</code> = 崩了自动拉起；<code>RunAtLoad: true</code> = 开机自启。</p>
+<h3 id="一个附带坑">一个附带坑</h3>
+<p>日志里看到 <code>exit code -15</code>（SIGTERM）是正常的——那是 <code>kickstart -k</code> 主动杀的。</p>
+<p>但如果服务<strong>反复重启</strong>，看 <code>launchctl list</code> 第二列：那是<strong>上次退出码</strong>，非 0 且反复出现说明启动就崩。</p>
+<hr>
+<h2 id="五路径拼接重复前缀上游带-v1请求也带-v1">五、路径拼接重复前缀：上游带 <code>/v1</code>，请求也带 <code>/v1</code></h2>
+<h3 id="症状-4">症状</h3>
+<p>代理修好后还是 404：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span><span style="color:#79B8FF">"detail"</span><span style="color:#E1E4E8">:</span><span style="color:#9ECBFF">"Not Found"</span><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="根因-4">根因</h3>
+<p>代理配置上游 <code>http://127.0.0.1:8348/v1</code>，客户端请求 <code>/v1/systemone</code>，直接拼接：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>http://127.0.0.1:8348/v1 + /v1/systemone = /v1/v1/systemone   ❌</span></span></code></pre>
+<h3 id="修法-4">修法</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">up </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> UPSTREAM</span><span style="color:#E1E4E8">.rstrip(</span><span style="color:#9ECBFF">"/"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">path </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.path</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> up.endswith(</span><span style="color:#9ECBFF">"/v1"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">and</span><span style="color:#E1E4E8"> path.startswith(</span><span style="color:#9ECBFF">"/v1/"</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">    path </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> path[</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">:]          </span><span style="color:#6A737D"># 去掉重复的 /v1</span></span>
+<span class="line"><span style="color:#E1E4E8">req </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> urllib.request.Request(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">up</span><span style="color:#79B8FF">}{</span><span style="color:#E1E4E8">path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">...</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h3 id="为什么值得单独记">为什么值得单独记</h3>
+<p><strong>这个 bug 只在特定配置组合下出现。</strong> 我手工测试时上游写的是不带 <code>/v1</code> 的地址（<code>http://127.0.0.1:8348</code>），一切正常；换成 launchd 传参时带了 <code>/v1</code>，才炸。</p>
+<p><strong>判据</strong>：代理 404 且上游服务日志显示”没收到请求” → <strong>打印最终拼出来的 URL</strong>。八成是路径前缀问题。</p>
+<hr>
+<h2 id="六omlx-同一个模型注册两次">六、oMLX 同一个模型注册两次</h2>
+<h3 id="症状-5">症状</h3>
+<p>加了个新模型，<code>/admin/api/models</code> 返回两条：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>OpenJev-9B-MLX-NVFP4              engine=decision  type=qwen3_5</span></span>
+<span class="line"><span>mlx-community--JEV-9B-MLX-NVFP4  engine=batched   type=jev_text</span></span></code></pre>
+<h3 id="根因-5">根因</h3>
+<p>oMLX 同时扫两个来源：</p>
+<ol>
+<li><code>settings.json</code> 里的 <code>model.model_dirs</code>（我的是 <code>/Volumes/Storage/MLXModels</code>）</li>
+<li><strong>HF cache</strong>（<code>~/.cache/huggingface/hub/</code>）</li>
+</ol>
+<p>同一个模型两边都有一份 → 注册两次。而且<strong>两份行为不同</strong>（一份走 decision engine，一份走普通 batched），因为其中一份的 <code>config.json</code> 没改过。</p>
+<h3 id="修法-5">修法</h3>
+<p>删掉 HF cache 里的副本，然后：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> POST</span><span style="color:#9ECBFF"> http://127.0.0.1:8348/admin/api/reload</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "Authorization: Bearer &#x3C;api_key>"</span></span></code></pre>
+<h3 id="顺带加模型不用重启-server">顺带：加模型不用重启 server</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 列出模型</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#9ECBFF"> http://127.0.0.1:8348/admin/api/models</span><span style="color:#79B8FF"> -H</span><span style="color:#9ECBFF"> "Authorization: Bearer &#x3C;key>"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 重新扫描目录（新增模型后）</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> POST</span><span style="color:#9ECBFF"> http://127.0.0.1:8348/admin/api/reload</span><span style="color:#79B8FF"> -H</span><span style="color:#9ECBFF"> "Authorization: Bearer &#x3C;key>"</span></span></code></pre>
+<p><strong>admin API 要点</strong>：</p>
+<ul>
+<li>前缀是 <code>/admin</code>，不是根路径</li>
+<li><strong>必须带</strong> <code>Authorization: Bearer &#x3C;api_key></code>（key 在 <code>~/.omlx/settings.json</code> 的 <code>auth.api_key</code>），否则 401</li>
+<li><code>/v1/models</code> 是公开的，admin 接口不是</li>
+</ul>
+<h3 id="附带坑model_type-不匹配">附带坑：model_type 不匹配</h3>
+<p>社区转换的模型 <code>config.json</code> 里 <code>model_type</code> 可能不是 oMLX 认识的：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>before model_type: jev_text     ← oMLX 不认，当普通 llm</span></span>
+<span class="line"><span>after  model_type: qwen3_5      ← 识别为 decision engine</span></span></code></pre>
+<p>改之前<strong>备份</strong>成 <code>config.json.orig</code>。</p>
+<hr>
+<h2 id="七ollama-升级后模型消失了">七、ollama 升级后，模型”消失”了</h2>
+<h3 id="症状-6">症状</h3>
+<p>明明磁盘上还有模型文件（<code>~/.ollama/models/</code> 有 100GB），但：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">$</span><span style="color:#9ECBFF"> ollama</span><span style="color:#9ECBFF"> list</span></span>
+<span class="line"><span style="color:#B392F0">models:</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">$</span><span style="color:#9ECBFF"> curl</span><span style="color:#9ECBFF"> http://127.0.0.1:11434/api/show</span><span style="color:#79B8FF"> -d</span><span style="color:#9ECBFF"> '{"model":"laya"}'</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span><span style="color:#B392F0">"error"</span><span style="color:#79B8FF">:</span><span style="color:#B392F0">"open .../manifests-v2/ollama.com/library/laya/..."</span><span style="color:#B392F0">}</span></span></code></pre>
+<h3 id="根因-6">根因</h3>
+<p>ollama 0.40.13 换了 manifest 布局：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>旧版: ~/.ollama/models/manifests/registry.ollama.ai/library/&#x3C;name></span></span>
+<span class="line"><span>新版: ~/.ollama/models/manifests-v2/ollama.com/library/&#x3C;name></span></span></code></pre>
+<p>模型是 10-16 注册的（在旧路径），新版只认新路径。</p>
+<p>顺带发现：<code>/Applications/Ollama.app</code> 已被移进废纸篓又清空，<code>/usr/local/bin/ollama</code> 成了<strong>断链</strong>。当前跑着的还是 10-30 启动的老进程——<strong>一重启就起不来了</strong>。</p>
+<h3 id="修法-6">修法</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 重新注册到新布局（GGUF 在本地，不用下载）</span></span>
+<span class="line"><span style="color:#B392F0">ollama</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> laya</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> ~/.openclaw/state/laya/Modelfile</span></span></code></pre>
+<h3 id="推广-3">推广</h3>
+<p><strong>大版本升级会改内部布局。</strong> 本地装的模型、写的配置、注册的 service，可能全部需要迁移。</p>
+<p><strong>判据</strong>：CLI 报”找不到”但文件在 → <strong>看它报的路径</strong>，跟你文件实际所在的路径对一下就知道是不是布局变了。</p>
+<hr>
+<h2 id="八noul-语义不同用错问法数据全废">八、<code>noul</code> 语义不同：用错问法，数据全废</h2>
+<p>这条不是环境坑，是<strong>方法论坑</strong>，但代价一样大。</p>
+<h3 id="症状-7">症状</h3>
+<p>测一个 0.8B 的决策模型，四个对照组（直接命中 / 间接 / 同主题无答案 / 完全无关），跑出来：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>直接命中           0.9747</span></span>
+<span class="line"><span>间接(有线索无答案)  0.9757   ← 应该更低</span></span>
+<span class="line"><span>同主题无答案(HBM4)  0.9714   ← 应该更低</span></span>
+<span class="line"><span>完全无关(珊瑚礁)    0.9613   ← 应该更低</span></span></code></pre>
+<p><strong>全部 0.96+，完全没判别力。</strong></p>
+<h3 id="根因-7">根因</h3>
+<p>这个模型叫 Jev-Style，是独立项目（不是 TypeSafe 的 JEV）。它的 <code>noul</code> 问的是：</p>
+<blockquote>
+<p><strong>「这个陈述为真吗？」</strong></p>
+</blockquote>
+<p>而我按 SAG2 的用法，问的是：</p>
+<blockquote>
+<p><strong>「这段是不是必要证据？」</strong></p>
+</blockquote>
+<p>前者是<strong>陈述验证</strong>，后者是<strong>证据判定</strong>。把陈述验证的模型用在证据判定上，输出自然没意义。</p>
+<h3 id="修法换成陈述式问法">修法：换成陈述式问法</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Q: "The passage states that the underfill supplier is Namics AG."</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>直接命中  0.9748   ← 对</span></span>
+<span class="line"><span>HBM4(无关) 0.0487   ← 对</span></span></code></pre>
+<p>判别力立刻出现。</p>
+<h3 id="对照数据换成正确问法后">对照数据（换成正确问法后）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>候选</th><th>Jev-Style 0.8B</th><th>OpenJev 9B</th></tr></thead><tbody><tr><td>直接命中</td><td>0.9748</td><td>0.9653</td></tr><tr><td>无关</td><td>0.0487</td><td>0.0065</td></tr><tr><td><strong>有线索无答案</strong></td><td><strong>0.5522</strong></td><td><strong>0.1313</strong></td></tr></tbody></table>
+<p>两端判别力相当，但<strong>中间地带 0.8B 判不出来</strong>（卡在 0.5 附近）。</p>
+<h3 id="推广-4">推广</h3>
+<blockquote>
+<p><strong>测任何模型前，先读它的 model card，确认它回答的到底是什么问题。</strong></p>
+</blockquote>
+<p>“同名”不等于”同语义”。<code>noul</code> / <code>choice</code> / <code>score</code> 这套词在不同项目里可能指不同的事。</p>
+<p><strong>判据</strong>：一个分类器对所有输入都给高分 → <strong>不是你模型不行，是你的问法它没听懂</strong>。先怀疑 prompt 形态，再怀疑模型能力。</p>
+<hr>
+<h2 id="九汇总清单">九、汇总清单</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>症状</th><th>根因</th><th>修法</th></tr></thead><tbody><tr><td>1</td><td>HF 下载卡死，0 KB/s</td><td>xet 后端静默挂起</td><td><code>HF_HUB_DISABLE_XET=1</code> + 官方源</td></tr><tr><td>2</td><td>Rust 客户端报 decode 失败</td><td>oMLX keepalive 前导空格</td><td>代理剥 <code>lstrip()</code></td></tr><tr><td>3</td><td>进程在，端口不 LISTEN</td><td><code>socket.getfqdn</code> 反向 DNS 阻塞</td><td>覆写 <code>server_bind</code></td></tr><tr><td>4</td><td>后台服务静默死</td><td><code>nohup</code>/<code>&#x26;</code> 不保活</td><td>launchd + <code>KeepAlive</code></td></tr><tr><td>5</td><td>代理 404</td><td>上游与请求路径前缀重复</td><td>拼接前去重 <code>/v1</code></td></tr><tr><td>6</td><td>同一模型注册两次</td><td>oMLX 同时扫 model_dirs 和 HF cache</td><td>删 cache 副本 + <code>/admin/api/reload</code></td></tr><tr><td>7</td><td>ollama 模型”消失”</td><td>大版本改了 manifest 布局</td><td><code>ollama create</code> 重新注册</td></tr><tr><td>8</td><td>决策模型无判别力</td><td>模型语义与问法不匹配</td><td>读 model card 确认语义</td></tr></tbody></table>
+<hr>
+<h2 id="十四条通用判据">十、四条通用判据</h2>
+<p><strong>① 「进程存活」≠「服务可用」</strong></p>
+<p>今天 8 个坑里 5 个表象都是”进程在、CPU 正常、日志无报错”。每个都要用<strong>真实请求</strong>验证：curl 一下、查一下 <code>engine_type</code>、dump 一下原始字节。</p>
+<p><strong>② 服务端说成功、客户端说失败 → dump 原始字节</strong></p>
+<p><code>repr(raw[:20])</code>，一秒钟破案（坑二）。</p>
+<p><strong>③ 进程活着但端口不 LISTEN → faulthandler 抓栈</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python3</span><span style="color:#79B8FF"> -u</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> faulthandler</span><span style="color:#9ECBFF"> script.py</span><span style="color:#E1E4E8"> &#x26;</span></span>
+<span class="line"><span style="color:#79B8FF">kill</span><span style="color:#79B8FF"> -ABRT</span><span style="color:#79B8FF"> $!</span></span></code></pre>
+<p>栈顶就是答案（坑三）。</p>
+<p><strong>④ 下载/请求卡住 → 先用 curl 单文件测速</strong></p>
+<p>curl 通而 SDK 不通 → SDK 传输层的问题，不是网络（坑一）。</p>
+<hr>
+<h2 id="十一这些坑为什么值得记">十一、这些坑为什么值得记</h2>
+<p>它们<strong>不是某个框架的 bug</strong>，而是<strong>三类通用故障</strong>：</p>
+<ol>
+<li><strong>环境层面</strong> —— 本机 DNS 反向解析无响应（坑三、坑七同源）、大版本改内部布局（坑七）</li>
+<li><strong>协议层面</strong> —— 「JSON 解析器容忍前导空白」不是协议保证（坑二）；路径前缀拼接规则要显式处理（坑五）</li>
+<li><strong>验证层面</strong> —— 进程存活不等于功能可用；分类器输出没判别力可能是问法错了（坑一、坑八）</li>
+</ol>
+<p><strong>第一类换个机器就消失，第二三类在任何机器都成立。</strong></p>
+<hr>
+<h3 id="相关">相关</h3>
+<ul>
+<li>配套实测：<a href="https://www.samvortex.com/research/sag2-local-knowledge-base-2026-11-08/">SAG2 全本地化实测</a>（这套坑就是那次部署踩出来的）</li>
+<li>配套实测：<a href="https://www.samvortex.com/research/deepseek-v4-pro-qwen35-9b-2026-11-08/">DeepSeek-V4-Pro-Qwen3.5-9B 实测</a></li>
+<li>oMLX admin API：<code>POST /admin/api/reload</code>、<code>GET /admin/api/models</code>、<code>PUT /admin/api/models/{id}/settings</code></li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

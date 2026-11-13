@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Agent 成本的真相：牌价、缓存命中率，和订阅制下根本不适用的那套算法 · Samvortex Hub</title><meta name="description" content="⭐ &#34;MiniMax M3.1 Flash 把 Agent 成本打下来 70%？&#34;——⭐ **我把两家官方定价表拉下来核对了：牌价没毛病，但&#34;缓存贵 5 倍&#34;这个结论在真实混合负载下不成立**（实测倍数只有 1.1–1.7x，撞上 DeepSeek 高峰时段 MiniMax 反而更便宜 15%–46%）。⭐ 更关键的是：**如果你用 M Plan 订阅制，整篇按 token 计价的算法对你根本不适用**。⭐ 这篇讲清三件事：⭐ **牌价降幅 ≠ 任务成本降幅**、⭐ **缓存 5 倍差只在纯缓存命中时成立**、⭐ **订阅制下该看的是额度窗口和返工率**。"><link rel="canonical" href="https://samvortex.com/research/agent-cost-pricing-vs-subscription-2026-11-09/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Agent 成本的真相：牌价、缓存命中率，和订阅制下根本不适用的那套算法 · Samvortex Hub"><meta property="og:description" content="⭐ &#34;MiniMax M3.1 Flash 把 Agent 成本打下来 70%？&#34;——⭐ **我把两家官方定价表拉下来核对了：牌价没毛病，但&#34;缓存贵 5 倍&#34;这个结论在真实混合负载下不成立**（实测倍数只有 1.1–1.7x，撞上 DeepSeek 高峰时段 MiniMax 反而更便宜 15%–46%）。⭐ 更关键的是：**如果你用 M Plan 订阅制，整篇按 token 计价的算法对你根本不适用**。⭐ 这篇讲清三件事：⭐ **牌价降幅 ≠ 任务成本降幅**、⭐ **缓存 5 倍差只在纯缓存命中时成立**、⭐ **订阅制下该看的是额度窗口和返工率**。"><meta property="og:url" content="https://samvortex.com/research/agent-cost-pricing-vs-subscription-2026-11-09/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Agent 成本的真相：牌价、缓存命中率，和订阅制下根本不适用的那套算法 · Samvortex Hub"><meta name="twitter:description" content="⭐ &#34;MiniMax M3.1 Flash 把 Agent 成本打下来 70%？&#34;——⭐ **我把两家官方定价表拉下来核对了：牌价没毛病，但&#34;缓存贵 5 倍&#34;这个结论在真实混合负载下不成立**（实测倍数只有 1.1–1.7x，撞上 DeepSeek 高峰时段 MiniMax 反而更便宜 15%–46%）。⭐ 更关键的是：**如果你用 M Plan 订阅制，整篇按 token 计价的算法对你根本不适用**。⭐ 这篇讲清三件事：⭐ **牌价降幅 ≠ 任务成本降幅**、⭐ **缓存 5 倍差只在纯缓存命中时成立**、⭐ **订阅制下该看的是额度窗口和返工率**。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-11-09T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.DiAxPDso.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 "> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/research/" class="hover:text-brand-600">研究</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">研究</span> <time datetime="2026-11-09T00:00:00.000Z">2026年11月9日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Agent 成本的真相：牌价、缓存命中率，和订阅制下根本不适用的那套算法</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ &quot;MiniMax M3.1 Flash 把 Agent 成本打下来 70%？&quot;——⭐ **我把两家官方定价表拉下来核对了：牌价没毛病，但&quot;缓存贵 5 倍&quot;这个结论在真实混合负载下不成立**（实测倍数只有 1.1–1.7x，撞上 DeepSeek 高峰时段 MiniMax 反而更便宜 15%–46%）。⭐ 更关键的是：**如果你用 M Plan 订阅制，整篇按 token 计价的算法对你根本不适用**。⭐ 这篇讲清三件事：⭐ **牌价降幅 ≠ 任务成本降幅**、⭐ **缓存 5 倍差只在纯缓存命中时成立**、⭐ **订阅制下该看的是额度窗口和返工率**。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Agent 成本/" class="tag">#Agent 成本</a><a href="/tags/MiniMax/" class="tag">#MiniMax</a><a href="/tags/M3.1-Flash/" class="tag">#M3.1-Flash</a><a href="/tags/DeepSeek/" class="tag">#DeepSeek</a><a href="/tags/V4.1-Flash/" class="tag">#V4.1-Flash</a><a href="/tags/缓存命中/" class="tag">#缓存命中</a><a href="/tags/M Plan/" class="tag">#M Plan</a><a href="/tags/订阅制/" class="tag">#订阅制</a><a href="/tags/Token 计价/" class="tag">#Token 计价</a><a href="/tags/返工成本/" class="tag">#返工成本</a><a href="/tags/Artificial Analysis/" class="tag">#Artificial Analysis</a><a href="/tags/选型/" class="tag">#选型</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ “M3.1 Flash 把 Agent 成本打下来 70%” —— ⭐ <strong>牌价没错，但结论要打两个折扣</strong>。⭐ 第一，⭐ <strong>“缓存贵 5 倍”是纯缓存对比</strong>，⭐ 真实混合负载下只有 <strong>1.1–1.7 倍</strong>，⭐ 而且撞上 DeepSeek 高峰时段 MiniMax 反而<strong>便宜 15%–46%</strong>。⭐ 第二，也是本文最关键的：⭐ <strong>如果你是 M Plan 订阅用户，整篇按 token 计价的算法对你不适用</strong> —— ⭐ 你付的是订阅费，⭐ 消耗的是<strong>额度窗口</strong>，⭐ <strong>缓存单价差 5 倍这件事，在订阅制下根本不会出现在你的账单上</strong>。</p>
+</blockquote>
+<img src="/img/research/agent-cost-pricing-vs-subscription-2026-11-09/image-01.jpg" alt="左侧订阅卡与右侧金币堆的天平，下方光点分流成两条路径，象征订阅制与按量计费两套成本模型" style="max-width: 100%; border-radius: 8px;">
+<hr>
+<h2 id="〇先说结论适用性这篇文章对谁有用">〇、先说结论适用性：这篇文章对谁有用</h2>
+<p>这篇的核心分析基于<strong>按量计费</strong>（per-token pricing）。但很多人用的是<strong>订阅制</strong>。</p>
+<p><strong>如果你在用 M Plan 这类订阅套餐，本文第 1–4 节的按 token 算账部分对你不适用。</strong> 我自己就是 M Plan 用户，所以下面会专门有一节讲订阅制下该怎么看。</p>
+<hr>
+<h2 id="一牌价核对文章的数字都对">一、牌价核对：文章的数字都对</h2>
+<p>原始说法（阿鑫讲ai，2026-10-27）：</p>
+<blockquote>
+<p>MiniMax M3.1 Flash 的官方口径很漂亮：输入 1 元/百万 Token，输出 4 元/百万 Token，缓存读取 0.1 元/百万 Token，Agent 任务综合成本较前代降低 70%。</p>
+</blockquote>
+<p>我把两家官方定价表都拉下来了（DeepSeek 按 1 USD = 6.68 换算）：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>模型</th><th>缓存命中</th><th>缓存未命中</th><th>输出</th></tr></thead><tbody><tr><td><strong>MiniMax-M3.1-Flash</strong></td><td>0.10 元</td><td>1.00 元</td><td>4.00 元</td></tr><tr><td><strong>DeepSeek-V4.1-Flash</strong> 闲时</td><td><strong>0.020 元</strong></td><td>1.002 元</td><td>4.008 元</td></tr><tr><td><strong>DeepSeek-V4.1-Flash</strong> 高峰</td><td>0.040 元</td><td>2.004 元</td><td>8.016 元</td></tr></tbody></table>
+<p>（DeepSeek 官方标美元：$0.003 / $0.15 / $0.60。闲时 = 高峰价一半，
+<strong>高峰时段 = 周一至周五 UTC 01:00–04:00 与 06:00–10:00</strong>，即<strong>北京时间工作日 09:00–12:00、14:00–18:00</strong>。）</p>
+<p><strong>逐条验证文章的说法</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>文章主张</th><th>核验</th><th>结论</th></tr></thead><tbody><tr><td>输入 1 元、输出 4 元，与 DeepSeek 一样</td><td>DS 闲时 1.002 元 / 高峰 2.004 元</td><td>✅ 闲时基本相同</td></tr><tr><td>缓存 0.1 元 vs 0.02 元，<strong>差 5 倍</strong></td><td>0.10 ÷ 0.020 = <strong>5.0</strong></td><td>✅ 精确</td></tr><tr><td>“降 70%” 的参照系是 M3 而非 DeepSeek</td><td>M3 ≤512k：4.20/16.80/0.84；M3.1-Flash：1.00/4.00/0.10</td><td>✅ 倍数对得上</td></tr></tbody></table>
+<p><strong>所以文章的原始数字全部准确。</strong> 问题出在它从数字推出的结论。</p>
+<hr>
+<h2 id="二缓存贵-5-倍在真实负载下不成立">二、“缓存贵 5 倍”在真实负载下不成立</h2>
+<p>文章把”DeepSeek 缓存是 MiniMax 的 1/5”直接当作结论。但这<strong>只在纯缓存命中的输入上成立</strong>——真实 Agent 负载里，未命中输入和输出两边同价，把差距稀释了。</p>
+<p>我按不同负载建模（输入 100K + 输出 5K 的一次调用）：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>缓存命中率</th><th>MiniMax</th><th>DS 闲时</th><th>倍数</th><th>DS 高峰</th><th>倍数</th></tr></thead><tbody><tr><td>0%</td><td>0.1200 元</td><td>0.1202 元</td><td>1.00x</td><td>0.2405 元</td><td><strong>0.50x</strong></td></tr><tr><td>50%</td><td>0.0750 元</td><td>0.0711 元</td><td>1.05x</td><td>0.1423 元</td><td><strong>0.53x</strong></td></tr><tr><td>80%</td><td>0.0480 元</td><td>0.0417 元</td><td>1.15x</td><td>0.0834 元</td><td><strong>0.58x</strong></td></tr><tr><td>90%</td><td>0.0390 元</td><td>0.0319 元</td><td>1.22x</td><td>0.0637 元</td><td><strong>0.61x</strong></td></tr><tr><td>95%</td><td>0.0345 元</td><td>0.0270 元</td><td>1.28x</td><td>0.0539 元</td><td><strong>0.64x</strong></td></tr><tr><td>99%</td><td>0.0309 元</td><td>0.0230 元</td><td>1.34x</td><td>0.0461 元</td><td><strong>0.67x</strong></td></tr></tbody></table>
+<p><strong>换几种负载结构（命中率 95%）：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>负载</th><th>MiniMax</th><th>DS 闲时</th><th>倍数</th><th>DS 高峰</th><th>倍数</th></tr></thead><tbody><tr><td>100K 输入 / 1K 输出</td><td>0.0185 元</td><td>0.0109 元</td><td>1.69x</td><td>0.0218 元</td><td><strong>0.85x</strong></td></tr><tr><td>100K / 5K（典型 Agent）</td><td>0.0345 元</td><td>0.0270 元</td><td><strong>1.28x</strong></td><td>0.0539 元</td><td><strong>0.64x</strong></td></tr><tr><td>10K / 2K（短问答）</td><td>0.0095 元</td><td>0.0087 元</td><td><strong>1.09x</strong></td><td>0.0174 元</td><td><strong>0.54x</strong></td></tr><tr><td>200K / 20K（重生成）</td><td>0.1090 元</td><td>0.0940 元</td><td>1.16x</td><td>0.1880 元</td><td><strong>0.58x</strong></td></tr></tbody></table>
+<h3 id="三个结论">三个结论</h3>
+<p><strong>① 差距从没到过 5 倍。</strong> 最高 1.69x，多数落在 1.1–1.3x。5 倍是<strong>纯缓存项</strong>的对比，不是账单对比。</p>
+<p><strong>② 撞上 DeepSeek 高峰时段，MiniMax 反而更便宜。</strong> 高峰时 DeepSeek 输出价翻倍（$0.60→$1.20），MiniMax 输出价固定 4 元不变。而<strong>北京时间工作日 09:00–12:00、14:00–18:00 正是 DeepSeek 高峰</strong>——这恰好覆盖大部分 Agent 活跃时段。</p>
+<p><strong>③ 输出占比越高，MiniMax 越吃亏。</strong> 输出单价两边相同（4 元 vs 4.008 元），所以<strong>输出越多，缓存那点小优势越被稀释</strong>。短问答场景 MiniMax 优势只有 1.09x，高峰时甚至只有 0.54x（DeepSeek 更便宜一倍）。</p>
+<hr>
+<h2 id="三真正决定账单的是返工不是单价">三、真正决定账单的是返工，不是单价</h2>
+<p>文章这部分说得很好，而且引用的两个数据比价目表重要得多：</p>
+<p><strong>① 同一任务重复运行，token 消耗可达 30 倍。</strong></p>
+<p><strong>② Artificial Analysis 的独立测算</strong>：M3.1 Flash 在 Intelligence Index 上平均 <strong>$0.22/任务</strong>，M3 是 <strong>$0.51</strong>，降幅 <strong>57%</strong>，比官方宣称的 70% 低 13 个百分点。</p>
+<p><strong>③ 腾讯云架构评审那句话最该记住</strong>：</p>
+<blockquote>
+<p>降价七成是调用价，不是你的任务账单。</p>
+</blockquote>
+<p><strong>“牌价降幅”和”任务成本降幅”之间的距离，隔着三样东西</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>因素</th><th>影响机制</th></tr></thead><tbody><tr><td><strong>任务成功率</strong></td><td>同一个任务跑 1 次 vs 跑 5 次才成功 → 成本差 5 倍</td></tr><tr><td><strong>重试率</strong></td><td>工具调用失败、超时、限流后的重试</td></tr><tr><td><strong>人工接管率</strong></td><td>模型搞不定、转人工的部分 → 不只是 token 成本，还有你的时间</td></tr></tbody></table>
+<p><strong>一个便宜 70% 但需要重试 3 次的模型，比贵 20% 但一次过的模型更贵。</strong></p>
+<hr>
+<h2 id="四能力分化没有一边倒">四、能力分化：没有一边倒</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>MiniMax M3.1 Flash</th><th>DeepSeek V4.1 Flash</th></tr></thead><tbody><tr><td>Automation-Bench v1.0.6</td><td><strong>62.2</strong></td><td>60.5</td></tr><tr><td>DeepSWE v1.1</td><td>73.7</td><td><strong>77.0</strong></td></tr><tr><td>输出速度</td><td>200+ TPS（中位 170+）</td><td>—</td></tr><tr><td>上下文</td><td>1M</td><td>1M</td></tr></tbody></table>
+<p><strong>跨 SaaS 自动化工作流 MiniMax 反超，软件工程 DeepSeek 领先 3.3 分。</strong></p>
+<p>选型要点：</p>
+<ul>
+<li><strong>工具编排 / 跨系统自动化</strong> → M3.1 Flash</li>
+<li><strong>代码 / 软件工程</strong> → DeepSeek</li>
+<li><strong>长上下文低输出</strong>（如一次性喂大文档做摘要）→ M3.1 Flash 优势最明显（1.69x）</li>
+<li><strong>高频短问答</strong> → 两者几乎打平，DS 高峰期反而更优</li>
+</ul>
+<hr>
+<h2 id="五-如果你用的是-m-plan整篇按-token-算账对你不适用">五、⭐ 如果你用的是 M Plan：整篇按 token 算账对你不适用</h2>
+<p><strong>这是我写这篇时最想说的。</strong></p>
+<p>我自己的 OpenClaw 配置是：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#9ECBFF">"minimax-portal"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">  "baseUrl"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"https://api.minimaxi.com/anthropic"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "api"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"anthropic-messages"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "apiKey"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"&#x3C;订阅 Key>"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "models"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"MiniMax-M3"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"MiniMax-M3.1-Flash"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>订阅 Key</strong>——不是按量计费的 API Key。这两者在 M Plan 文档里是明确分开的：</p>
+<blockquote>
+<p>改用按量计费：需要使用套餐覆盖范围之外的资源，或用于生产环境时，可使用普通按量计费 API Key，费用从开放平台账户余额中扣除。<strong>它与订阅 Key 相互独立，不能混用。</strong></p>
+</blockquote>
+<h3 id="订阅制的成本模型完全不同">订阅制的成本模型完全不同</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>按量计费</th><th>M Plan 订阅</th></tr></thead><tbody><tr><td>付什么</td><td>每次调用的 token 费</td><td>固定月费</td></tr><tr><td>成本函数</td><td>token 数 × 单价</td><td><strong>是否超过额度窗口</strong></td></tr><tr><td>缓存单价差 5 倍</td><td><strong>直接影响账单</strong></td><td><strong>完全不影响</strong></td></tr><tr><td>边际成本</td><td>线性增长</td><td>窗口内为 0</td></tr><tr><td>该优化什么</td><td>减少 token</td><td><strong>减少额度消耗 + 减少返工</strong></td></tr></tbody></table>
+<p><strong>在 M Plan 下，“缓存贵 5 倍”这件事根本不会出现在你的账单上。</strong> 你消耗的是额度窗口，而额度消耗的计量维度是<strong>模型、上下文长度、任务复杂度、思考深度</strong>——跟缓存单价无关。</p>
+<h3 id="m-plan-的额度机制">M Plan 的额度机制</h3>
+<p><strong>三个档位</strong>（额度相对 Go 档）：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>档位</th><th>用量</th><th>定位</th></tr></thead><tbody><tr><td>Go</td><td>1x（基准）</td><td>入门，简单调研 / 轻量写作 / 小范围代码修改</td></tr><tr><td>Explore</td><td>3x</td><td>日常主力，日常辅助编程、长任务</td></tr><tr><td>Build</td><td>12x</td><td>高频使用，长上下文、复杂编程、大量多模态</td></tr></tbody></table>
+<p><strong>两个独立的额度窗口</strong>：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>5 小时窗口</th><th>周窗口</th></tr></thead><tbody><tr><td>适用</td><td>非视频模型（文本/图像/音频）</td><td><strong>所有模型</strong>（含视频）</td></tr><tr><td>周期</td><td>5 小时</td><td>7 天</td></tr><tr><td>刷新</td><td>到点恢复上限，<strong>未用完不累积、不结转</strong></td><td>同左</td></tr></tbody></table>
+<blockquote>
+<p>两个窗口都从<strong>第一次使用</strong>开始计时。比如 10:00 首次使用，5 小时窗口就在 15:00 结束——<strong>即使 12:00 就用完了，也得等到 15:00 才恢复</strong>。</p>
+</blockquote>
+<p><strong>这跟按量计费有个关键差别</strong>：按量计费是<strong>用多少付多少</strong>，订阅制是<strong>窗口内随便用、超了要等</strong>。所以订阅制下真正要优化的是：</p>
+<ol>
+<li><strong>别撞窗口上限</strong> —— 撞了就得等 5 小时</li>
+<li><strong>别在窗口末尾启动长任务</strong> —— 5 小时窗口从首次使用起算，不是从你开始跑任务起算</li>
+</ol>
+<h3 id="订阅制下真正消耗额度的四个维度">订阅制下真正消耗额度的四个维度</h3>
+<p>M Plan FAQ 明确列了：</p>
+<ul>
+<li><strong>模型与模态</strong>：视频生成消耗远高于文本</li>
+<li><strong>上下文长度</strong>：对话越长、读的文件代码越多，每次请求处理得越多</li>
+<li><strong>任务复杂度</strong>：多步骤 Agent 任务会连续发多次请求 + 调工具，<strong>消耗明显高于单次问答</strong></li>
+<li><strong>思考深度</strong>：思考深度越高，生成的思考内容越多，消耗越多</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong><code>MiniMax-M3.1-Flash</code> 始终开启思考，无法关闭</strong>，运行时不要用 <code>/think off</code>。</p>
+</blockquote>
+<p><strong>第三条对 Agent 场景特别重要</strong>——这也是为什么”返工”在订阅制下同样是成本主线：多步骤 Agent 任务消耗明显更高，重试就是重复消耗。</p>
+<h3 id="怎么查自己的额度">怎么查自己的额度</h3>
+<p>三种方式：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># ① MiniMax CLI（最方便）</span></span>
+<span class="line"><span style="color:#B392F0">mmx</span><span style="color:#9ECBFF"> quota</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># ② API</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> --location</span><span style="color:#9ECBFF"> 'https://www.minimax.cn/v1/token_plan/remains'</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#E1E4E8">--header </span><span style="color:#9ECBFF">'Authorization: Bearer &#x3C;API Key>'</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#E1E4E8">--header </span><span style="color:#9ECBFF">'Content-Type: application/json'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># ③ 网页控制台</span></span>
+<span class="line"><span style="color:#6A737D"># https://platform.minimax.cn/console/usage</span></span></code></pre>
+<blockquote>
+<p>我实测 ② 这个接口用订阅 Key 会返回 <code>status_code: 1004 / login fail</code>，
+说明<strong>订阅 Key 和按量 API Key 在这个接口上也是分开的</strong>——或者需要用 <code>minimax.cn</code> 域名的按量 Key。
+最可靠的还是 <code>mmx quota</code> 或网页控制台。</p>
+</blockquote>
+<hr>
+<h2 id="六所以订阅制用户该怎么选型">六、所以订阅制用户该怎么选型</h2>
+<p><strong>别再用”每百万 token 多少钱”来做决策。</strong> 换成这三个问题：</p>
+<h3 id="-你的额度窗口会用满吗">① 你的额度窗口会用满吗？</h3>
+<p>如果你的负载<strong>稳定低于额度</strong>，那两家贵 5 倍还是 1.2 倍<strong>毫无意义</strong>——你根本没按量付费。</p>
+<p><strong>真正的问题是：会不会撞窗口？</strong> 如果会，用量大的模型就是”更早撞上限”的意思（因为它消耗额度更快，或者它更贵）。</p>
+<p>M Plan FAQ 提到的限流叠加机制值得注意：</p>
+<blockquote>
+<p>额度限制与请求速率限制分别计算。即使还有套餐额度，短时间内发送过多请求，或遇到高峰时段的动态限流，也可能暂时无法调用。</p>
+</blockquote>
+<h3 id="-哪个返工少">② 哪个返工少？</h3>
+<p>这在订阅制下<strong>更关键</strong>，因为返工消耗的是额度窗口。</p>
+<p>对照基准：</p>
+<ul>
+<li><strong>DeepSWE v1.1</strong>：DeepSeek 77.0 vs M3.1 Flash 73.7 → <strong>代码任务 DeepSeek 少返工</strong></li>
+<li><strong>Automation-Bench v1.0.6</strong>：M3.1 Flash 62.2 vs DeepSeek 60.5 → <strong>跨系统自动化 M3.1 Flash 少返工</strong></li>
+</ul>
+<p><strong>任务成功率直接换成额度消耗。</strong> 一个多返工 10% 的模型，等于多消耗 10% 的窗口。</p>
+<h3 id="-你的任务类型分布如何">③ 你的任务类型分布如何？</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>你的主要负载</th><th>建议</th></tr></thead><tbody><tr><td>跨 SaaS 编排 / 工具调用</td><td>M3.1 Flash（Automation-Bench 反超 + 200+ TPS）</td></tr><tr><td>代码 / 软件工程</td><td>DeepSeek V4.1 Flash（DeepSWE 领先 3.3 分）</td></tr><tr><td>长上下文低输出</td><td>M3.1 Flash（输出少 → 思考少 → 额度消耗低）</td></tr><tr><td>短问答高频</td><td>看额度够不够，两者差异不大</td></tr></tbody></table>
+<hr>
+<h2 id="七免费档的坑顺手记一下">七、免费档的坑（顺手记一下）</h2>
+<p>文章提到 OpenCode 有个限时免费档 <code>minimax-m3.1-flash-free</code>，但有个硬限制：</p>
+<blockquote>
+<p>这个免费档只认 OpenCode 客户端——你用 curl 或自己的程序直连它的推理接口，会返回 <strong>403 FreeTierError</strong>。</p>
+</blockquote>
+<p>想在自有代码里免费用，得走 <strong>OpenRouter 的 <code>:free</code> 版本</strong>。Vercel AI Gateway 也提供过 <code>npx vercel ai-gateway setup</code>，然后在 Agent 里选 <code>minimax/minimax-m3.1-flash</code>。</p>
+<p><strong>免费档的限流和功能限制，决定了它只能用来”感受一下”，不能拿来跑真实的长任务账单。</strong></p>
+<hr>
+<h2 id="八给不同人的行动清单">八、给不同人的行动清单</h2>
+<h3 id="如果你用按量计费">如果你用按量计费</h3>
+<ol>
+<li><strong>算你自己的负载</strong>——别用”缓存差 5 倍”这个结论，用你的实际缓存命中率 × 输入输出比</li>
+<li><strong>非紧急任务排到深夜</strong>——DeepSeek 闲时（北京时间 00:00–09:00 及周末）成本直接减半，比纠结选谁有效</li>
+<li><strong>盯返工率</strong>——那 30 倍的 token 消耗才是账单主线</li>
+</ol>
+<h3 id="如果你用订阅制像我">如果你用订阅制（像我）</h3>
+<ol>
+<li><strong>忽略所有按 token 的比价</strong>——你付的是订阅费</li>
+<li><strong>定期 <code>mmx quota</code></strong>——知道离窗口上限还有多远，比知道单价有用</li>
+<li><strong>把长任务安排在窗口早期</strong>——5 小时窗口从首次使用起算，不是从任务起算</li>
+<li><strong>用基准分数选型，不用价格选型</strong>——返工率决定你多久撞一次上限</li>
+<li><strong>降低思考深度</strong>（如果模型支持）——M3.1 Flash 不行，但 M3 可以；思考内容直接吃额度</li>
+</ol>
+<hr>
+<h2 id="九我保留的两点">九、我保留的两点</h2>
+<p>文章里两个数字我没找到独立信源：</p>
+<ul>
+<li><strong>“重复运行同一任务消耗的 Token 最多可达 30 倍”</strong> —— 引用的是掘金转引的研究，我没定位到原始论文</li>
+<li><strong>Artificial Analysis 的 $0.22 / $0.51</strong> —— 是它自己的 Intelligence Index 测算，两边工作负载不完全相同，文章自己也承认了</li>
+</ul>
+<p>其余的（两家定价表、基准分、403 限制、Claude Code / OpenCode / Vercel 的配置方法）我都从官方文档核对过了。</p>
+<hr>
+<h3 id="相关链接">相关链接</h3>
+<ul>
+<li>MiniMax 定价：<a href="https://platform.minimaxi.com/docs/guides/pricing">https://platform.minimaxi.com/docs/guides/pricing</a></li>
+<li>MiniMax M Plan 概览：<a href="https://platform.minimaxi.com/docs/m-plan/intro">https://platform.minimaxi.com/docs/m-plan/intro</a></li>
+<li>M Plan 用量规则：<a href="https://platform.minimaxi.com/docs/m-plan/usage-rules">https://platform.minimaxi.com/docs/m-plan/usage-rules</a></li>
+<li>M Plan FAQ：<a href="https://platform.minimaxi.com/docs/m-plan/faq">https://platform.minimaxi.com/docs/m-plan/faq</a></li>
+<li>OpenClaw 接入 M Plan：<a href="https://platform.minimaxi.com/docs/m-plan/openclaw">https://platform.minimaxi.com/docs/m-plan/openclaw</a></li>
+<li>DeepSeek 定价：<a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>
