@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-label="Public benefit fund growth mechanism: 5% + 2% per 50% valuation increase">
+  <title>基金增长机制：5% 基线 + 估值涨 50% 加 2%</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-row    { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-stat   { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #166534; }
+      .t-formula{ font: italic 600 14px "Latin Modern Math", serif; fill: #5b6475; }
+      .t-trigger{ font: 700 11px ui-sans-serif, system-ui, sans-serif; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">基金增长机制：5% 基线 + 估值每涨 50% 加 2%</text>
+  <text x="40" y="54" class="t-detail">Anthropic Public Benefit Fund · 2026-10-18 公告 · 董事会酌情触发</text>
+
+  <!-- Formula box -->
+  <g>
+    <rect x="40" y="80" width="880" height="80" rx="8" fill="#f0f9ff" stroke="#5EB1FF" stroke-width="1.5" />
+    <text x="60" y="108" class="t-row">触发规则（Anthropic 原 release 原文）</text>
+    <text x="60" y="132" class="t-formula">Fund stake = 5% + ⌊(valuation − baseline) / (0.5 × baseline)⌋ × 2%  (上限 100% · 董事会酌情)</text>
+    <text x="60" y="152" class="t-detail">即估值每较"基线"涨 50%，董事会可酌情再加 2% 股份给基金。Anthropic 自己说"几个月内"会公布具体里程碑。</text>
+  </g>
+
+  <!-- Trajectory table: 4 scenarios -->
+  <g transform="translate(40, 190)">
+    <text x="0" y="0" class="t-title" font-size="14">⭐ 实际轨迹（基于 163 文披露的估值 + 公告规则推算）</text>
+
+    <!-- Row 1: Feb 2026 baseline -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="880" height="56" rx="6" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="20" y="22" class="t-row">📅 2026-02 基线</text>
+      <text x="20" y="44" class="t-detail">估值 $380B · 5% 初始股份进基金 ≈ $19B</text>
+      <text x="500" y="22" class="t-stat" fill="#172033">5.0%</text>
+      <text x="500" y="44" class="t-detail">$19B · 创始人 80% 股权承诺</text>
+    </g>
+
+    <!-- Row 2: May 2026 (94% growth) -->
+    <g transform="translate(0, 96)">
+      <rect x="0" y="0" width="880" height="56" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" />
+      <text x="20" y="22" class="t-row">📅 2026-05 估值翻 2.5× → $965B</text>
+      <text x="20" y="44" class="t-detail">比基线涨 ~154%（已超 50% 触发一次）</text>
+      <text x="500" y="22" class="t-stat">+ 2% → 7%</text>
+      <text x="500" y="44" class="t-detail">$48B ≈ 3200 亿 RMB（163 标题的数字）</text>
+    </g>
+
+    <!-- Row 3: 2026-10 current -->
+    <g transform="translate(0, 162)">
+      <rect x="0" y="0" width="880" height="56" rx="6" fill="#dcfce7" stroke="#6BCB77" stroke-width="1.5" />
+      <text x="20" y="22" class="t-row">📅 2026-10 公告日 · 估值"市场聊"$2T+</text>
+      <text x="20" y="44" class="t-detail">比基线涨 ~426%（约触发 8 次"涨 50%"）</text>
+      <text x="500" y="22" class="t-stat">+ 16% → 21%（理论）</text>
+      <text x="500" y="44" class="t-detail">实际 5% 起步 · 后续 2% 触发等董事会</text>
+    </g>
+
+    <!-- Row 4: 2030 projection (per Jack Clark IMF) -->
+    <g transform="translate(0, 228)">
+      <rect x="0" y="0" width="880" height="56" rx="6" fill="#dbeafe" stroke="#5EB1FF" stroke-width="1.5" />
+      <text x="20" y="22" class="t-row">📈 2030 推演（Anthropic 自家 SI 路径）</text>
+      <text x="20" y="44" class="t-detail">如果按 Anthropic 自己的推演持续增长，5% 起步 + 多次触发</text>
+      <text x="500" y="22" class="t-stat">→ 上限 100%</text>
+      <text x="500" y="44" class="t-detail">理论极限：整家公司最终"归公共"</text>
+    </g>
+  </g>
+
+  <!-- Bottom: critical observations -->
+  <g transform="translate(40, 450)">
+    <text x="0" y="0" class="t-detail" font-weight="600" fill="#dc2626">⭐ 关键观察：</text>
+    <text x="80" y="0" class="t-detail">这不是"一次性捐款"——是<tspan font-weight="600" fill="#172033">"与估值永久挂钩的开放规则"</tspan>。公司越值钱，给社会的部分自动越多。</text>
+  </g>
+</svg>
