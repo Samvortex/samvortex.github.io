@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" role="img" aria-label="Evolutionary search loop for LLM-designed quantum circuits">
+  <title>Evolutionary framework: LLM 提议 + 独立评估器打分 + 反馈迭代</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-node   { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #ffffff; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-label  { font: 500 11px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+    </style>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6475" />
+    </marker>
+    <marker id="arrowFeedback" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6BCB77" stroke-width="1" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">Evolutionary Framework：LLM 提议 + 独立评估器打分</text>
+  <text x="40" y="54" class="t-detail">Andi Gu et al. (arXiv 2610.22367) · Anthropic STEM Fellows + Harvard (Lukin) + QuEra</text>
+
+  <!-- Stage 1: Task spec -->
+  <g>
+    <rect x="40" y="100" width="180" height="100" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+    <text x="130" y="124" text-anchor="middle" class="t-detail" font-weight="600" font-size="13" fill="#172033">① 任务规格（plain language）</text>
+    <text x="50" y="148" class="t-detail">• 化学 / 优化 / 物理模拟</text>
+    <text x="50" y="166" class="t-detail">• 数论 / 数值计算</text>
+    <text x="50" y="184" class="t-detail">（8 类任务）</text>
+  </g>
+
+  <!-- Stage 2: LLM (Claude) -->
+  <g>
+    <rect x="280" y="100" width="180" height="100" rx="10" fill="#dbeafe" stroke="#5EB1FF" stroke-width="2" />
+    <text x="370" y="124" text-anchor="middle" class="t-detail" font-weight="600" font-size="13" fill="#172033">② Claude (LLM) 提议</text>
+    <text x="290" y="148" class="t-detail">生成 Python 代码</text>
+    <text x="290" y="166" class="t-detail">构造量子电路</text>
+    <text x="290" y="184" class="t-detail">（"evolutionary agent"）</text>
+  </g>
+
+  <!-- Stage 3: Independent evaluator -->
+  <g>
+    <rect x="520" y="100" width="180" height="100" rx="10" fill="#fce7f3" stroke="#FF8AAB" stroke-width="2" />
+    <text x="610" y="124" text-anchor="middle" class="t-detail" font-weight="600" font-size="13" fill="#172033">③ 独立评估器</text>
+    <text x="530" y="148" class="t-detail">验证正确性</text>
+    <text x="530" y="166" class="t-detail">按 Toffoli × qubit 打分</text>
+    <text x="530" y="184" class="t-detail">（与 LLM 独立）</text>
+  </g>
+
+  <!-- Stage 4: Output -->
+  <g>
+    <rect x="760" y="100" width="180" height="100" rx="10" fill="#cffafe" stroke="#00C2C7" stroke-width="2" />
+    <text x="850" y="124" text-anchor="middle" class="t-detail" font-weight="600" font-size="13" fill="#172033">④ 选出最优电路</text>
+    <text x="770" y="148" class="t-detail">比 state of the art 更小</text>
+    <text x="770" y="166" class="t-detail">Toffoli / qubit 同步降</text>
+    <text x="770" y="184" class="t-detail">（或新架构）</text>
+  </g>
+
+  <!-- Arrows between stages (forward) -->
+  <g fill="none" stroke="#5b6475" stroke-width="1.5" marker-end="url(#arrow2)">
+    <line x1="220" y1="150" x2="280" y2="150" />
+    <line x1="460" y1="150" x2="520" y2="150" />
+    <line x1="700" y1="150" x2="760" y2="150" />
+  </g>
+
+  <!-- Feedback loop (back to LLM) -->
+  <g fill="none" stroke="#6BCB77" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrowFeedback)">
+    <path d="M 700 220 Q 600 290 280 220 Q 230 200 280 200" />
+  </g>
+  <text x="490" y="290" text-anchor="middle" class="t-detail" font-weight="600" fill="#6BCB77">评分反馈 → Claude 改进下一轮</text>
+
+  <!-- Bottom: key design properties -->
+  <g transform="translate(40, 360)">
+    <text x="0" y="0" class="t-title" font-size="14">⭐ 关键设计：3 个独立层</text>
+
+    <g transform="translate(0, 24)">
+      <rect x="0" y="0" width="280" height="56" rx="6" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="12" y="20" class="t-detail" font-weight="600" fill="#172033">LLM 不自我评估</text>
+      <text x="12" y="40" class="t-detail">防止"幻觉电路"——评估器独立验证</text>
+    </g>
+
+    <g transform="translate(296, 24)">
+      <rect x="0" y="0" width="280" height="56" rx="6" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="12" y="20" class="t-detail" font-weight="600" fill="#172033">评分 = Toffoli × qubit</text>
+      <text x="12" y="40" class="t-detail">可数值验证，可对比 SOTA</text>
+    </g>
+
+    <g transform="translate(592, 24)">
+      <rect x="0" y="0" width="280" height="56" rx="6" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="12" y="20" class="t-detail" font-weight="600" fill="#172033">Python 代码作为电路</text>
+      <text x="12" y="40" class="t-detail">LLM 擅长的表达格式 — natural fit</text>
+    </g>
+  </g>
+</svg>

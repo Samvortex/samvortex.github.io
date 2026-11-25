@@ -1,0 +1,415 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" type="image/x-icon"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="alternate" type="application/rss+xml" title="Samvortex Hub" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><!-- SEO --><title>Agent API 接入的四层：协议兼容、流式处理、扩展能力与成本结构 · Samvortex Hub</title><meta name="description" content="⭐ DeepSeek 刚开源的 `chat-demo`（⭐4,316，⭐ 5 天新仓库）看着像 UI demo，⭐ **其实是「Agent 接 API 该怎么做」的参考实现**。⭐ 我拆了它的 `src/services/api/`（39 文件），⭐ 提炼出 ⭐ **四层：协议兼容 → 流式 → 扩展能力 → 成本结构**。⭐ 附 ⭐ **兼容边界**（字段被忽略、`cache_control` 失效），⭐ 以及 ⭐ **反直觉结论**：⭐ DeepSeek 缓存命中 0.02 元/百万，⭐ **跟 Gemini Decision 1 同价**，⭐ 输出贵 4 元。"><link rel="canonical" href="https://samvortex.com/research/agent-api-integration-four-layers-2026-11-17/"><!-- Open Graph --><meta property="og:site_name" content="Samvortex Hub"><meta property="og:title" content="Agent API 接入的四层：协议兼容、流式处理、扩展能力与成本结构 · Samvortex Hub"><meta property="og:description" content="⭐ DeepSeek 刚开源的 `chat-demo`（⭐4,316，⭐ 5 天新仓库）看着像 UI demo，⭐ **其实是「Agent 接 API 该怎么做」的参考实现**。⭐ 我拆了它的 `src/services/api/`（39 文件），⭐ 提炼出 ⭐ **四层：协议兼容 → 流式 → 扩展能力 → 成本结构**。⭐ 附 ⭐ **兼容边界**（字段被忽略、`cache_control` 失效），⭐ 以及 ⭐ **反直觉结论**：⭐ DeepSeek 缓存命中 0.02 元/百万，⭐ **跟 Gemini Decision 1 同价**，⭐ 输出贵 4 元。"><meta property="og:url" content="https://samvortex.com/research/agent-api-integration-four-layers-2026-11-17/"><meta property="og:type" content="article"><meta property="og:image" content="https://samvortex.com/og-default.png"><meta property="og:locale" content="zh-CN"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Agent API 接入的四层：协议兼容、流式处理、扩展能力与成本结构 · Samvortex Hub"><meta name="twitter:description" content="⭐ DeepSeek 刚开源的 `chat-demo`（⭐4,316，⭐ 5 天新仓库）看着像 UI demo，⭐ **其实是「Agent 接 API 该怎么做」的参考实现**。⭐ 我拆了它的 `src/services/api/`（39 文件），⭐ 提炼出 ⭐ **四层：协议兼容 → 流式 → 扩展能力 → 成本结构**。⭐ 附 ⭐ **兼容边界**（字段被忽略、`cache_control` 失效），⭐ 以及 ⭐ **反直觉结论**：⭐ DeepSeek 缓存命中 0.02 元/百万，⭐ **跟 Gemini Decision 1 同价**，⭐ 输出贵 4 元。"><meta name="twitter:image" content="https://samvortex.com/og-default.png"><meta property="article:published_time" content="2026-11-17T00:00:00.000Z"><!-- 字体：system fallback + 可选 Google Font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"><!-- 暗色模式：避免闪烁脚本 --><script>
+        const t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      </script><!-- Cloudflare Web Analytics — 部署后替换 data-site-key --><!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{\"token\":\"REPLACE_ME\"}"></script> --><link rel="stylesheet" href="/_astro/_slug_.COD9vaTa.css">
+<style>.sv-logo[data-astro-cid-tvrurpns]{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;line-height:1}.sv-mark[data-astro-cid-tvrurpns]{display:inline-block;width:var(--sv-size);height:var(--sv-size);flex-shrink:0;transform:translateY(2px);transition:transform .35s cubic-bezier(.2,.7,.2,1)}.sv-wordmark[data-astro-cid-tvrurpns]{display:inline-flex;align-items:baseline;font-size:1.125em;font-weight:600;letter-spacing:-.02em}.sv-name[data-astro-cid-tvrurpns]{color:var(--sv-fg, #0a0a0a)}.dark .sv-name[data-astro-cid-tvrurpns]{color:#fafafa}.sv-hub[data-astro-cid-tvrurpns]{color:var(--sv-muted, #737373);font-weight:400;margin-left:.375em;font-size:.78em}.dark .sv-hub[data-astro-cid-tvrurpns]{color:#a3a3a3}.sv-static[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear infinite;transform-origin:50% 50%}.sv-header[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:sv-intro 1.4s cubic-bezier(.2,.8,.2,1) both}.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation:sv-rotate 60s linear 1.4s infinite;transform-origin:50% 50%}.sv-hero[data-astro-cid-tvrurpns]:hover .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns]{animation-duration:4s}@keyframes sv-rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes sv-intro{0%{opacity:0;transform:translateY(2px) scale(.6) rotate(-30deg);filter:blur(8px)}60%{filter:blur(0)}to{opacity:1;transform:translateY(2px) scale(1) rotate(0);filter:blur(0)}}@media(prefers-reduced-motion:reduce){.sv-header[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns] svg[data-astro-cid-tvrurpns],.sv-hero[data-astro-cid-tvrurpns] .sv-mark[data-astro-cid-tvrurpns]{animation:none!important}}
+</style></head> <body class="min-h-screen flex flex-col">  <header class="border-b border-neutral-200 dark:border-neutral-800 sticky top-0 backdrop-blur bg-white/80 dark:bg-neutral-950/80 z-40"> <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between"> <a href="/" class="sv-logo sv-logo--header sv-logo--auto sv-header" aria-label="Samvortex Hub" style="--sv-size:24px" data-astro-cid-tvrurpns> <span class="sv-mark" aria-hidden="true" data-astro-cid-tvrurpns> <svg viewBox="0 0 64 64" width="24" height="24" data-astro-cid-tvrurpns> <defs data-astro-cid-tvrurpns> <linearGradient id="sv-g-header" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#2563eb" data-astro-cid-tvrurpns></stop> <stop offset=".55" stop-color="#0891b2" data-astro-cid-tvrurpns></stop> <stop offset="1" stop-color="#7c3aed" data-astro-cid-tvrurpns></stop> </linearGradient> <radialGradient id="sv-d-header" cx="50%" cy="42%" r="55%" data-astro-cid-tvrurpns> <stop offset="0" stop-color="#000" stop-opacity="0.22" data-astro-cid-tvrurpns></stop> <stop offset="0.65" stop-color="#000" stop-opacity="0" data-astro-cid-tvrurpns></stop> </radialGradient> </defs> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-g-header)" data-astro-cid-tvrurpns></rect> <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#sv-d-header)" data-astro-cid-tvrurpns></rect> <g fill="#F0EDE3" data-astro-cid-tvrurpns> <path d="M48.78 25.10 C50.50 27.99 50.86 30.86 49.55 33.69 C48.10 36.83 45.43 38.79 41.66 39.71 C37.79 40.65 33.94 40.16 30.86 38.18 C29.49 37.31 28.46 36.20 27.71 34.90 C26.85 33.40 26.45 31.79 27.19 30.16 C27.96 28.46 29.43 27.49 31.27 27.13 C33.71 26.65 36.10 26.99 38.27 28.13 C39.71 28.90 40.71 30.04 40.96 31.66 C41.13 32.79 40.78 33.74 40.00 34.51" data-astro-cid-tvrurpns></path> <path d="M37.96 49.71 C35.07 51.43 32.20 51.79 29.37 50.48 C26.23 49.03 24.27 46.36 23.35 42.59 C22.41 38.72 22.90 34.87 24.88 31.79 C25.75 30.42 26.86 29.39 28.16 28.64 C29.66 27.78 31.27 27.38 32.90 28.12 C34.60 28.89 35.57 30.36 35.93 32.20 C36.41 34.64 36.07 37.03 34.93 39.20 C34.16 40.64 33.02 41.64 31.40 41.89 C30.27 42.06 29.32 41.71 28.55 40.93" data-astro-cid-tvrurpns></path> <path d="M13.35 38.89 C11.63 36.00 11.27 33.13 12.58 30.30 C14.03 27.16 16.70 25.20 20.47 24.28 C24.34 23.34 28.19 23.83 31.27 25.81 C32.64 26.68 33.67 27.79 34.42 29.09 C35.28 30.59 35.68 32.20 34.94 33.83 C34.17 35.53 32.70 36.50 30.86 36.86 C28.42 37.34 26.03 37.00 23.86 35.86 C22.42 35.09 21.42 33.95 21.17 32.33 C21.00 31.20 21.35 30.25 22.13 29.48" data-astro-cid-tvrurpns></path> </g> <circle cx="32" cy="32" r="2.4" fill="#F0EDE3" data-astro-cid-tvrurpns></circle> </svg> </span> <span class="sv-wordmark" data-astro-cid-tvrurpns> <span class="sv-name" data-astro-cid-tvrurpns>Samvortex</span><span class="sv-hub" data-astro-cid-tvrurpns>Hub</span> </span> </a>  <nav class="hidden md:flex items-center gap-5 text-sm"> <a href="/" class="hover:text-brand-600 ">首页</a> <a href="/research/" class="hover:text-brand-600 text-brand-600 dark:text-brand-500"> 研究 </a><a href="/compare/" class="hover:text-brand-600 "> 对比 </a><a href="/evaluation/" class="hover:text-brand-600 "> 评估 </a><a href="/notes/" class="hover:text-brand-600 "> 杂谈 </a><a href="/sports/" class="hover:text-brand-600 "> 体育 </a> <a href="/morning-brief/" class="hover:text-brand-600 ">
+新闻
+</a> <a href="/about/" class="hover:text-brand-600 ">关于</a> </nav> <div class="flex items-center gap-3"> <button id="theme-toggle" aria-label="切换主题" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button> <div id="weather-widget" class="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400" data-state="loading" data-astro-cid-ulnddiwq> <button id="weather-btn" type="button" class="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors" aria-label="查看天气（点击升级到精确位置）" title="点击升级到精确位置" data-astro-cid-ulnddiwq> <span id="weather-icon" class="weather-icon weather-icon-loading" data-astro-cid-ulnddiwq> <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-ulnddiwq> <circle cx="12" cy="12" r="4" class="weather-pulse" data-astro-cid-ulnddiwq></circle> </svg> </span> <span id="weather-temp" class="font-medium tabular-nums hidden sm:inline" data-astro-cid-ulnddiwq>--°</span> <span id="weather-loc" class="hidden md:inline text-xs text-neutral-500 dark:text-neutral-500 max-w-[6rem] truncate" data-astro-cid-ulnddiwq>--</span> </button> </div>  <script type="module" src="/_astro/WeatherWidget.astro_astro_type_script_index_0_lang.CR4gPl7q.js"></script> <a href="/search/" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100" aria-label="搜索"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </a> </div> </div> </header> <script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script> <main class="flex-1"> <article class="max-w-3xl mx-auto px-4 sm:px-6 py-10"> <nav class="text-sm text-neutral-500 mb-6"> <a href="/" class="hover:text-brand-600">首页</a> <span class="mx-2">/</span> <a href="/research/" class="hover:text-brand-600">研究</a> </nav> <header class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-800"> <div class="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3"> <span class="text-brand-600 dark:text-brand-500 font-medium">研究</span> <time datetime="2026-11-17T00:00:00.000Z">2026年11月17日</time>  </div> <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">Agent API 接入的四层：协议兼容、流式处理、扩展能力与成本结构</h1> <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">⭐ DeepSeek 刚开源的 `chat-demo`（⭐4,316，⭐ 5 天新仓库）看着像 UI demo，⭐ **其实是「Agent 接 API 该怎么做」的参考实现**。⭐ 我拆了它的 `src/services/api/`（39 文件），⭐ 提炼出 ⭐ **四层：协议兼容 → 流式 → 扩展能力 → 成本结构**。⭐ 附 ⭐ **兼容边界**（字段被忽略、`cache_control` 失效），⭐ 以及 ⭐ **反直觉结论**：⭐ DeepSeek 缓存命中 0.02 元/百万，⭐ **跟 Gemini Decision 1 同价**，⭐ 输出贵 4 元。</p> <div class="flex flex-wrap gap-2 mt-5"> <a href="/tags/Agent API/" class="tag">#Agent API</a><a href="/tags/DeepSeek/" class="tag">#DeepSeek</a><a href="/tags/chat-demo/" class="tag">#chat-demo</a><a href="/tags/Anthropic 兼容/" class="tag">#Anthropic 兼容</a><a href="/tags/SSE/" class="tag">#SSE</a><a href="/tags/模型路由/" class="tag">#模型路由</a><a href="/tags/成本结构/" class="tag">#成本结构</a><a href="/tags/缓存命中/" class="tag">#缓存命中</a><a href="/tags/协议兼容/" class="tag">#协议兼容</a><a href="/tags/OpenClaw/" class="tag">#OpenClaw</a><a href="/tags/Provider/" class="tag">#Provider</a> </div> </header> <div class="prose prose-neutral dark:prose-invert max-w-none"> <h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>⭐ DeepSeek 刚开源的 <code>chat-demo</code>（⭐4,316，<strong>才 5 天的仓库</strong>）看着像个 UI demo，⭐ <strong>其实是「Agent 接第三方 API 该怎么做」的完整参考实现</strong>。⭐ 我拆了它的 <code>src/services/api/</code>（39 文件 / 237KB），⭐ 提炼出 ⭐ <strong>四层模型：协议兼容 → 流式处理 → 扩展能力 → 成本结构</strong>。⭐ 顺带把 ⭐ <strong>DeepSeek 的 Anthropic 兼容边界</strong>查清楚了（哪些字段被忽略、模型名怎么映射、<code>cache_control</code> 为什么无效），⭐ 以及 ⭐ <strong>一个反直觉的成本结论</strong>：⭐ DeepSeek 缓存命中 <strong>0.02 元/百万</strong>，⭐ <strong>跟 Gemini Decision 1 完全同价</strong>，⭐ 但输出贵 4 元——⭐ 所以「只判不生成」和「要写东西」该选的根本不是同一个。</p>
+</blockquote>
+<img src="/img/research/agent-api-integration-four-layers-2026-11-17/image-01.jpg" alt="四层堆叠架构：底层 HTTPS 端点、其上是流式数据包、再上是工具分支能力树、顶部是浏览器窗口" style="max-width: 100%; border-radius: 8px;">
+<hr>
+<h2 id="一先看这个仓库是什么">一、先看这个仓库是什么</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>仓库</td><td><code>deepseek-ai/chat-demo</code> ⭐4,316 / fork 924 / MIT / TypeScript</td></tr><tr><td>时间</td><td>创建 2026-11-12，最后推送 <strong>11-13</strong>（5 天）</td></tr><tr><td>在线</td><td><a href="https://deepseek-ai.github.io/chat-demo/">https://deepseek-ai.github.io/chat-demo/</a></td></tr><tr><td>离线包</td><td>Releases 有 <code>chat-demo-v0.1.1.zip</code>（1.8MB）</td></tr><tr><td>部署</td><td>GitHub Actions → GitHub Pages</td></tr><tr><td>技术栈</td><td>rspack + React 18 + TypeScript 7.0.2 + zustand，oxlint/oxfmt</td></tr><tr><td>体积</td><td>188 个文件，<code>src/</code> 里 <code>components</code> 302KB + <code>services</code> 237KB</td></tr></tbody></table>
+<p><strong>架构一句话：纯静态，无后端。</strong></p>
+<blockquote>
+<p>No application backend is required: the browser connects directly to the configured API service.</p>
+</blockquote>
+<p>API key 存 localStorage，会话和附件存 IndexedDB，按浏览器 profile + 站点 origin 隔离。</p>
+<p><strong>功能面比一般 demo 完整得多</strong>：多会话、自动标题、重命名、编辑 prompt、重新生成、<strong>消息分支</strong>、流式回复、深度思考、<strong>联网搜索</strong>、<strong>链接阅读</strong>、来源引用、附件上传/粘贴/拖拽、<strong>语音输入 + 朗读</strong>、Markdown/高亮/KaTeX/Mermaid、简中英双语、亮暗主题、<strong>历史记录 ZIP 导入导出</strong>。</p>
+<p><strong>但这个仓库真正的价值不在 UI，在 <code>src/services/api/</code>。</strong> 那 39 个文件、237KB，是把「一个前端怎么正确地跟 Claude 风格的 Messages API 对话」这件事写清楚了。</p>
+<hr>
+<h2 id="二四层模型">二、四层模型</h2>
+<h3 id="第-1-层协议兼容--像-anthropic和是-anthropic是两件事">第 1 层：协议兼容 —— 「像 Anthropic」和「是 Anthropic」是两件事</h3>
+<p>DeepSeek 提供了 Anthropic 格式端点：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>POST https://api.deepseek.com/anthropic/v1/messages</span></span></code></pre>
+<p>SDK 用户的写法是：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_BASE_URL</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">https://api.deepseek.com/anthropic</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_API_KEY</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">${YOUR_API_KEY}</span></span></code></pre>
+<p><strong>但兼容不等于等价。</strong> 官方文档列了一张详细的字段支持表，我把关键项摘出来：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>字段</th><th>支持情况</th></tr></thead><tbody><tr><td><code>anthropic-version</code></td><td><strong>忽略</strong></td></tr><tr><td><code>anthropic-beta</code></td><td><strong>忽略</strong>（除非 <code>source.type=file</code> 的图片引用，需 <code>files-api-2025-04-14</code>）</td></tr><tr><td><code>container</code> / <code>mcp_servers</code> / <code>service_tier</code> / <code>top_k</code></td><td><strong>忽略</strong></td></tr><tr><td><code>max_tokens</code></td><td>支持，但<strong>思考模式下会被兼容性处理抬高</strong>，不构成严格上限</td></tr><tr><td><code>cache_control</code>（tool 与 content 里）</td><td><strong>忽略</strong></td></tr><tr><td><code>citations</code>（content 里）</td><td><strong>忽略</strong></td></tr><tr><td><code>temperature</code></td><td>[0.0, 2.0]，<strong>思考模式下固定 1.0</strong></td></tr><tr><td><code>top_p</code></td><td>依赖模型和模式，行为不统一</td></tr><tr><td><code>thinking.budget_tokens</code></td><td><strong>忽略</strong></td></tr><tr><td><code>output_config</code></td><td>只支持 <code>effort</code></td></tr><tr><td><code>stop_sequences</code></td><td>支持，最多 16 个，每个 ≤512 字节</td></tr><tr><td><code>tool_choice: "tool"</code></td><td><strong>思考模式下返回 400</strong></td></tr></tbody></table>
+<p><strong>最值得注意的两条：</strong></p>
+<p><strong>① <code>cache_control</code> 被忽略。</strong></p>
+<p>这在 Anthropic 生态里是个大事——Claude 生态大量依赖 <code>cache_control: {type: "ephemeral"}</code> 手动标记缓存断点。<strong>DeepSeek 忽略它</strong>，意味着缓存行为不由客户端控制，而是由服务端按前缀自动判定。</p>
+<p><strong>② 模型名映射。</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>claude-opus*   → deepseek-v4-pro</span></span>
+<span class="line"><span>claude-haiku*  → deepseek-flash</span></span>
+<span class="line"><span>claude-sonnet* → deepseek-flash</span></span>
+<span class="line"><span>其他 claude*   → deepseek-flash</span></span>
+<span class="line"><span>不以 claude 开头 → 400</span></span></code></pre>
+<p>官方还专门说明了这个映射的用途：</p>
+<blockquote>
+<p>With this mapping, when using the developer mode of the new Claude Desktop APP, you can bypass the APP’s model name restrictions by simply changing the <code>base_url</code> and <code>api_key</code> to connect to DeepSeek models.</p>
+</blockquote>
+<p><strong>注意 <code>claude-opus*</code> 映射到 <code>deepseek-v4-pro</code>——按 V4 Pro 的价格计费</strong>，不是 Flash。</p>
+<h3 id="第-2-层流式处理--sse-的四个坑">第 2 层：流式处理 —— SSE 的四个坑</h3>
+<p>chat-demo 的 <code>src/services/api/sse.ts</code> 是按 <strong>WHATWG EventSource 规范</strong>手写的解码器，注释写得很清楚：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>字节流 → UTF-8 解码 → 按 CRLF / LF / CR 切行 → 字段累积 → 空行派发事件</span></span></code></pre>
+<p>四个容易写错的地方它都处理了：</p>
+<p><strong>① CRLF 被拆在两个 chunk 里。</strong> 它的处理是：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// 结尾的 CR 可能是 CRLF 的前半，等下一段再判断</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (match[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">===</span><span style="color:#9ECBFF"> '</span><span style="color:#79B8FF">\r</span><span style="color:#9ECBFF">'</span><span style="color:#F97583"> &#x26;&#x26;</span><span style="color:#79B8FF"> LINE_BREAK</span><span style="color:#E1E4E8">.lastIndex </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.buffer.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  break</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>② 保活注释行。</strong> 服务端发的 <code>: keep-alive</code> 直接忽略——<strong>不忽略的话会被当成事件派发出去</strong>。</p>
+<p><strong>③ <code>retry</code> 字段不处理。</strong> 因为这只对 <code>EventSource</code> 自动重连有意义，手动 SSE 用不上。</p>
+<p><strong>④ 流的四种失败被严格区分。</strong> <code>errors.ts</code> 里定义了五类：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> type</span><span style="color:#B392F0"> ApiErrorKind</span><span style="color:#F97583"> =</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'http'</span><span style="color:#6A737D">        // 非 2xx</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'stream'</span><span style="color:#6A737D">      // 流中返回的错误帧（如等待生成超时）</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'network'</span><span style="color:#6A737D">     // 请求没到服务端（断网、跨域被拦）</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'interrupted'</span><span style="color:#6A737D"> // 流在 message_stop 之前结束</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'protocol'</span><span style="color:#6A737D">    // 响应不符合协议（如非 SSE 响应）</span></span></code></pre>
+<p><strong><code>interrupted</code> 这一类特别值得注意。</strong> 流式请求最危险的失败模式<strong>不是断开</strong>（那会立即报错），而是<strong>看起来还活着但其实不动了</strong>。chat-demo 把它单列一类，就是为了让上层能区分「服务端出错」和「连接被掐」。</p>
+<p>配套的 <code>errors.ts</code> 还做了一件很聪明的事——<strong>把 HTTP 状态码映射成语义类别，但不让它生成文案</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> type</span><span style="color:#B392F0"> ApiErrorCondition</span><span style="color:#F97583"> =</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'unauthorized'</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> 'insufficientBalance'</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> 'tooLarge'</span></span>
+<span class="line"><span style="color:#F97583">  |</span><span style="color:#9ECBFF"> 'rateLimited'</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> 'serverBusy'</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> 'network'</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> 'other'</span></span></code></pre>
+<blockquote>
+<p>各调用方按自己的场景给同一种情况配不同文案，例如余额不足在回答、上传、朗读里措辞不同，所以这里只归类，不生成文案。</p>
+</blockquote>
+<p><strong>同一类错误，在「回答」「上传附件」「朗读」三个界面上应该有三套说法。</strong> 把分类和文案分开，是这类代码最容易写错的地方。</p>
+<h3 id="第-3-层扩展能力--deepseek-原生提供的">第 3 层：扩展能力 —— DeepSeek 原生提供的</h3>
+<p>这些是 chat-demo 用的、也是我们目前自建或者没有的：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>扩展</th><th>说明</th></tr></thead><tbody><tr><td><code>deepseek_web_search</code></td><td>联网搜索。区分 <code>search</code> / <code>deep_search</code> / <code>image_search</code> / <code>deep_image_search</code> 四种 kind</td></tr><tr><td><code>deepseek_read_url</code></td><td>网页链接阅读（加密在结果块的 <code>signature</code> 里）</td></tr><tr><td><code>safety_check.level</code></td><td><code>high</code> 开启模型内容安全；<code>low</code> 或不传则关闭</td></tr><tr><td><code>title</code></td><td>开启后返回会话标题</td></tr><tr><td>Files API</td><td>附件上传，<code>files-api-2025-04-14</code> beta 头</td></tr><tr><td>ASR / TTS</td><td>语音识别与合成</td></tr></tbody></table>
+<p><strong>两个约束值得记住：</strong></p>
+<p><strong>① 联网工具不能跟别的 server tool 混用。</strong></p>
+<blockquote>
+<p>To use the web tools, declare the server tools <code>deepseek_web_search</code> and <code>deepseek_read_url</code>. <strong>No other server tools can be declared together with them.</strong></p>
+</blockquote>
+<p><strong>② 客户端自定义 tool 只能有 <code>name</code> / <code>input_schema</code> / <code>description</code>，不能有 <code>type</code>。</strong></p>
+<blockquote>
+<p>The <code>type</code> field selects a server tool; passing <code>type: "custom"</code> for a client tool returns a <strong>422</strong> error.</p>
+</blockquote>
+<p><strong>③ 思考模式下 <code>tool_choice</code> 的行为会变。</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>值</th><th>思考模式下的行为</th></tr></thead><tbody><tr><td><code>none</code></td><td>支持</td></tr><tr><td><code>auto</code></td><td>支持（<code>disable_parallel_tool_use</code> 被忽略）</td></tr><tr><td><code>any</code></td><td>有 server tool 时等同 <code>auto</code>；<strong>只有 client tool 时返回 400</strong></td></tr><tr><td><code>tool</code></td><td><strong>返回 400</strong></td></tr></tbody></table>
+<h3 id="第-4-层成本结构--同样一个模型量词不一样">第 4 层：成本结构 —— 同样一个模型，量词不一样</h3>
+<p>这是最容易被忽略、但对 Agent 架构影响最大的一层。</p>
+<p><strong>DeepSeek 定价（元/百万 token，2026-11-17 核对）：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>空闲时段</th><th>高峰时段</th></tr></thead><tbody><tr><td>输入（缓存命中）</td><td><strong>0.02</strong></td><td>0.04</td></tr><tr><td>输入（未命中）</td><td>1.00</td><td>2.00</td></tr><tr><td>输出</td><td>4.00</td><td>8.00</td></tr></tbody></table>
+<p><strong>高峰时段 = 北京时间周一至周五 09:00–12:00、14:00–18:00</strong>（不含中国法定节假日）；其余时段 + 周末全天 = 闲时，价格是高峰的一半。</p>
+<p><strong>附加能力按次计费：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项目</th><th>价格</th></tr></thead><tbody><tr><td>搜索（文字、图片）</td><td>5 元/1000 次</td></tr><tr><td>网页抓取</td><td>5 元/1000 次</td></tr><tr><td>文件解析 / OCR</td><td>1.5 元/1000 页</td></tr><tr><td>TTS</td><td>3 元/万字符（限时 5 折 1.5 元）</td></tr><tr><td>ASR</td><td>0.78 元/小时（限时 5 折 0.39 元）</td></tr></tbody></table>
+<hr>
+<h2 id="三-一个反直觉的成本结论">三、⭐ 一个反直觉的成本结论</h2>
+<p>把三个模型放一起比（都换算成元/百万 token）：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>缓存命中输入</th><th>未命中输入</th><th><strong>输出</strong></th></tr></thead><tbody><tr><td><strong>DeepSeek V4.1 Flash</strong>（闲时）</td><td><strong>0.02</strong></td><td>1.00</td><td><strong>4.00</strong></td></tr><tr><td><strong>DeepSeek V4.1 Flash</strong>（高峰）</td><td>0.04</td><td>2.00</td><td>8.00</td></tr><tr><td><strong>Gemini Decision 1</strong></td><td>0.015</td><td>0.015</td><td><strong>0</strong></td></tr><tr><td><strong>GPT-6 Luna</strong>（参考）</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
+<p><strong>注意 DeepSeek 和 Gemini 的缓存命中价几乎完全一样（0.02 vs 0.015）。</strong></p>
+<p>但输出差了一个量级：<strong>DeepSeek 4 元，Gemini 0 元</strong>。</p>
+<p><strong>所以结论不是”谁更便宜”，而是”你这个任务需不需要生成”：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>任务类型</th><th>该选谁</th></tr></thead><tbody><tr><td><strong>只判不生成</strong>（分类、路由、审核、证据判定）</td><td><strong>Gemini Decision 1</strong> —— 输出 0 元是决定性的</td></tr><tr><td><strong>要写东西</strong>（生成正文、代码、改写）</td><td><strong>DeepSeek 闲时</strong> —— 缓存命中同价，输出按量</td></tr></tbody></table>
+<p><strong>这个区分我自己就是活例子。</strong> 我的 OpenClaw 现在三个 provider：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>minimax-portal   M Plan 订阅 → 窗口内 0 边际成本</span></span>
+<span class="line"><span>azure-openai     gpt-5.6-sol → 按量（已有额度）</span></span>
+<span class="line"><span>omlx-local       本地模型 → 0 元，只花硬件</span></span></code></pre>
+<p><strong>在这个组合下，接一个 DeepSeek 按量 API 并不是”更便宜”，而是”M Plan 额度用爆后的兜底”。</strong> DeepSeek 官方文档正好有一页专门讲怎么接 Claude Code / OpenClaw这些 Agent 工具——<strong>它自己就把 Agent 接入当成主要场景</strong>。</p>
+<p><strong>顺便一个更实用的观察</strong>：<strong>输出单价 4 元 vs 8 元的差别，靠”把任务挪到深夜”就能抹平。</strong> DeepSeek 闲时是高峰的一半——北京时间 00:00–09:00 和周末全天都算闲时。<strong>非紧急的批量 Agent 任务排到深夜，成本直接减半。</strong></p>
+<hr>
+<h2 id="四chat-demo-里值得直接抄的三段">四、chat-demo 里值得直接抄的三段</h2>
+<h3 id="-sse-解码器apissets">① SSE 解码器（<code>api/sse.ts</code>）</h3>
+<p>按 WHATWG 规范手写的增量解码器，处理了 CRLF 跨界、保活注释、<code>retry</code> 字段不适用这三件事。<strong>自己写 <code>fetch</code> + <code>ReadableStream</code> 的话，这段可以直接拿来改。</strong></p>
+<h3 id="-错误分类与文案分离apierrorsts">② 错误分类与文案分离（<code>api/errors.ts</code>）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#B392F0"> classifyStatus</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">status</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> undefined</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> ApiErrorCondition</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (status </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 401</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> 'unauthorized'</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (status </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 402</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> 'insufficientBalance'</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (status </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 413</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> 'tooLarge'</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (status </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 429</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> 'rateLimited'</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> ((status </span><span style="color:#F97583">??</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 500</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> 'serverBusy'</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#9ECBFF"> 'other'</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>402 单独映射成”余额不足”这个细节很到位</strong> —— 通用错误分类里很少有人把 402 挑出来，但它在按量计费的 API 上非常常见。</p>
+<h3 id="-协议类型只抄用得上的部分apitypests">③ 协议类型只抄用得上的部分（<code>api/types.ts</code>）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D"> * Messages API（Anthropic 兼容格式）协议类型，只取本应用用到的部分。</span></span>
+<span class="line"><span style="color:#6A737D"> * 文档：https://api-docs.deepseek.com/zh-cn/api/create-message</span></span>
+<span class="line"><span style="color:#6A737D"> */</span></span></code></pre>
+<p><strong>「只取用得上的部分」这个做法值得学。</strong> 全量抄 Anthropic 的类型定义会引入几十个自己永远不会用到的字段，而且每次 SDK 升级都要跟着改。</p>
+<hr>
+<h2 id="五我的结论">五、我的结论</h2>
+<p><strong>① chat-demo 是 API 接入的参考实现，不是要装的产品。</strong></p>
+<p>它的 UI 部分（React + rspack）对我们没什么用——我们是 OpenClaw，不用自己写前端。<strong>但 <code>src/services/api/</code> 那 39 个文件是真东西。</strong></p>
+<p><strong>② 选型要按「任务类型」分，不能按「谁便宜」分。</strong></p>
+<p>判断型任务看输出价（Gemini 0 元完胜），生成型任务看整体（DeepSeek 闲时同价）。<strong>用错模型的代价比选错供应商大得多。</strong></p>
+<p><strong>③ 兼容层有边界，别假设”支持 Anthropic 格式 = 兼容 Anthropic 生态”。</strong></p>
+<p><code>cache_control</code> 被忽略这件事就足以让一批 Claude 生态的缓存优化策略失效。<strong>接之前要读那张支持表，而不是看到”兼容”两个字就放心。</strong></p>
+<p><strong>④ 时间就是钱。</strong></p>
+<p>DeepSeek 高峰时段是工作日 09:00–12:00 / 14:00–18:00，闲时价格腰斩。<strong>同一个模型，同一个任务，调度时间不同，账单差一倍。</strong></p>
+<hr>
+<h3 id="相关链接">相关链接</h3>
+<ul>
+<li>源码：<a href="https://github.com/deepseek-ai/chat-demo">https://github.com/deepseek-ai/chat-demo</a></li>
+<li>在线体验：<a href="https://deepseek-ai.github.io/chat-demo/">https://deepseek-ai.github.io/chat-demo/</a></li>
+<li>Anthropic API 指南（含完整兼容表）：<a href="https://api-docs.deepseek.com/guides/anthropic_api">https://api-docs.deepseek.com/guides/anthropic_api</a></li>
+<li>Messages API 参考：<a href="https://api-docs.deepseek.com/zh-cn/api/create-message">https://api-docs.deepseek.com/zh-cn/api/create-message</a></li>
+<li>模型与价格：<a href="https://api-docs.deepseek.com/zh-cn/quick_start/pricing">https://api-docs.deepseek.com/zh-cn/quick_start/pricing</a></li>
+<li>配套实测：<a href="https://www.samvortex.com/research/decision-models-jev-vs-gemini-decision-1-2026-11-13/">Gemini Decision 1 决策模型对比</a></li>
+</ul> </div> <footer class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500"> <div class="flex items-center gap-2"> <span>作者：</span> <span class="font-medium text-neutral-700 dark:text-neutral-300">Sam Xu</span> </div> </footer> </article> </main> <footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800"> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400 flex flex-col sm:flex-row gap-2 justify-between"> <div>
+© 2026 Sam Xu. 保留所有权利。
+</div> <div class="flex gap-4"> <a href="/rss.xml" class="hover:text-brand-600">RSS</a> <a href="https://github.com/Samvortex/samvortex.github.io" class="hover:text-brand-600" target="_blank" rel="noopener">源码</a> <a href="/about/" class="hover:text-brand-600">关于</a> </div> </div> </footer>  </body></html>

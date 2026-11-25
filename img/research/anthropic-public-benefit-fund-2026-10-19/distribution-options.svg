@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-label="What the fund CAN do vs what 163 speculated (UBI)">
+  <title>基金能干啥 vs 163 暗示的（UBI）：从"特定人群"到"大胆方法"</title>
+  <defs>
+    <style>
+      .t-title  { font: 600 18px ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .t-axis   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #5b6475; }
+      .t-row    { font: 600 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #172033; }
+      .t-detail { font: 400 12px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+      .t-quote  { font: italic 500 13px ui-sans-serif, system-ui, "PingFang SC", sans-serif; fill: #5b6475; }
+    </style>
+    <pattern id="speculationBg" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#fef2f2" />
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#fecaca" stroke-width="2" />
+    </pattern>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="34" class="t-title">基金能干啥：Anthropic 自己说 vs 163 推测</text>
+  <text x="40" y="54" class="t-detail">重点：Anthropic **没有**说 UBI · **没有**说人均 $140 · "specific populations" 是开放问题</text>
+
+  <!-- LEFT: Anthropic 自己说的 (确凿) -->
+  <g>
+    <rect x="40" y="90" width="420" height="340" rx="10" fill="#dcfce7" stroke="#6BCB77" stroke-width="2" />
+    <text x="60" y="118" class="t-row" fill="#166534" font-size="14">✓ Anthropic 原 release 说能做的</text>
+
+    <g transform="translate(60, 142)">
+      <!-- Use case 1 -->
+      <rect x="0" y="0" width="380" height="50" rx="6" fill="white" stroke="#6BCB77" />
+      <text x="12" y="22" class="t-row" font-size="12" fill="#166534">① 传统大额捐赠给非营利</text>
+      <text x="12" y="40" class="t-quote" fill="#172033">"large donations to traditional nonprofits"</text>
+
+      <!-- Use case 2 -->
+      <rect x="0" y="62" width="380" height="50" rx="6" fill="white" stroke="#6BCB77" />
+      <text x="12" y="84" class="t-row" font-size="12" fill="#166534">② 直接发放给"特定人群"</text>
+      <text x="12" y="102" class="t-quote" fill="#172033">"direct distributions to specific populations"</text>
+
+      <!-- Use case 3 -->
+      <rect x="0" y="124" width="380" height="50" rx="6" fill="white" stroke="#6BCB77" />
+      <text x="12" y="146" class="t-row" font-size="12" fill="#166534">③ 劳动力市场影响研究</text>
+      <text x="12" y="164" class="t-quote" fill="#172033">"Anthropic 已承诺 $200M · 仍需更激进方法"</text>
+
+      <!-- Use case 4 -->
+      <rect x="0" y="186" width="380" height="50" rx="6" fill="white" stroke="#6BCB77" />
+      <text x="12" y="208" class="t-row" font-size="12" fill="#166534">④ "更大胆的方法"（开放）</text>
+      <text x="12" y="226" class="t-quote" fill="#172033">"bolder approaches may be needed" — 未具体</text>
+
+      <!-- Bottom constraint -->
+      <rect x="0" y="248" width="380" height="48" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" />
+      <text x="12" y="270" class="t-row" font-size="12" fill="#991b1b">⚠️ 明确禁止</text>
+      <text x="12" y="286" class="t-detail" fill="#991b1b">禁游说 · 禁政治捐款（美国国内外）</text>
+    </g>
+  </g>
+
+  <!-- RIGHT: 163 推测的 (不一定) -->
+  <g>
+    <rect x="500" y="90" width="420" height="340" rx="10" fill="url(#speculationBg)" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 3" />
+    <text x="520" y="118" class="t-row" fill="#991b1b" font-size="14">⚠️ 163 推测但 Anthropic 没确认</text>
+
+    <g transform="translate(520, 142)">
+      <!-- 163 claim 1 -->
+      <rect x="0" y="0" width="380" height="50" rx="6" fill="white" stroke="#dc2626" />
+      <text x="12" y="22" class="t-row" font-size="12" fill="#991b1b">❌ "全球版 UBI"（AI 博主说）</text>
+      <text x="12" y="40" class="t-quote" fill="#172033">Anthropic 原 release **没用 UBI 这个词**</text>
+
+      <!-- 163 claim 2 -->
+      <rect x="0" y="62" width="380" height="50" rx="6" fill="white" stroke="#dc2626" />
+      <text x="12" y="84" class="t-row" font-size="12" fill="#991b1b">❌ "人人有份"（163 文暗示）</text>
+      <text x="12" y="102" class="t-quote" fill="#172033">Anthropic 明确说"specific populations" · 选定目标人群</text>
+
+      <!-- 163 math -->
+      <rect x="0" y="124" width="380" height="50" rx="6" fill="white" stroke="#dc2626" />
+      <text x="12" y="146" class="t-row" font-size="12" fill="#991b1b">❌ "每人 $140 美国 / $6 全球"（163 自算）</text>
+      <text x="12" y="164" class="t-quote" fill="#172033">是 163 假设"平分" · 不是 Anthropic 计划</text>
+
+      <!-- 163 math 2 -->
+      <rect x="0" y="186" width="380" height="50" rx="6" fill="white" stroke="#dc2626" />
+      <text x="12" y="208" class="t-row" font-size="12" fill="#991b1b">❌ "3200 亿捐给普通人"（163 标题）</text>
+      <text x="12" y="226" class="t-quote" fill="#172033">3200 亿 RMB = $48B = 5% × $965B · 是基金起步 · 用途未明</text>
+
+      <!-- Musk claim -->
+      <rect x="0" y="248" width="380" height="48" rx="6" fill="white" stroke="#f59e0b" />
+      <text x="12" y="270" class="t-row" font-size="12" fill="#92400e">🟡 "马斯克辣评"（163 写）</text>
+      <text x="12" y="286" class="t-detail" fill="#92400e">**事实反转**：是 Anthropic 主动把 Tesla 薪酬当反面教材</text>
+    </g>
+  </g>
+
+  <!-- Bottom: the open question -->
+  <g transform="translate(40, 446)">
+    <text x="0" y="0" class="t-title" font-size="13" fill="#172033">⭐ 真正未公开的问题：</text>
+    <text x="170" y="0" class="t-detail">"specific populations" 是谁？几个月内 Anthropic 会公布基金结构和治理，到时候才能判断"是否真向 UBI 倾斜"。</text>
+  </g>
+</svg>
